@@ -10,6 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.IYoutubeApi
 {
     public interface IYoutubeApi
     {
-        Task GetAndDocumentVideoDataAsync(string videoTitle, string gameId, Activity activity);
+        Task GetAndDocumentVideoDataAsync(Activity activity, string videoTitle, string gameId, List<string> teamNames);
     }
 }

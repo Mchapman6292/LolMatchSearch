@@ -5,13 +5,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Apis.YoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
 using LolMatchFilterNew.Domain.ILeaguepediaApis;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain;
 using LolMatchFilterNew.Infastructure.HttpJsonServices;
 using LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices;
-using LolMatchFilterNew.Domain.Apis;
+using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
+using LolMatchFilterNew.Domain.Helpers.ApiHelper;
+using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.YoutubeService.YoutubeTitleMatcher;
+using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
+
+using Activity = System.Diagnostics.Activity;
 
 namespace LolMatchFilterNew.Presentation
 {
@@ -23,10 +30,10 @@ namespace LolMatchFilterNew.Presentation
             var services = ConfigureServices();
 
             using var serviceProvider = services.BuildServiceProvider();
-            var leaguepediaApi = serviceProvider.GetRequiredService<ILeaguepediaApi>();
-            var logger = serviceProvider.GetRequiredService<IAppLogger>();
-            var youtubeApi = serviceProvider.GetRequiredService<IYoutubeApi>();
             var applogger = serviceProvider.GetRequiredService<IAppLogger>();
+            var leaguepediaApi = serviceProvider.GetRequiredService<ILeaguepediaApi>();
+            var youtubeApi = serviceProvider.GetRequiredService<IYoutubeApi>();
+
 
 
             try
@@ -34,14 +41,15 @@ namespace LolMatchFilterNew.Presentation
                 await leaguepediaApi.GetCapsAhriMatchesAsync(activity);
                 Console.WriteLine("GetCapsAhriMatchesAsync completed successfully.");
 
+                List<string> teamNames = new List<string> { "G2", "MDK" };
                 string videoTitle = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
-                string gameId = "LEC/2024 Season/Season Finals_Round 1_2_2";
-                await youtubeApi.GetAndDocumentVideoDataAsync(videoTitle, gameId, activity);
+                string gameId = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
+                await youtubeApi.GetAndDocumentVideoDataAsync(activity, gameId, videoTitle, teamNames);
                 Console.WriteLine("YouTube video data retrieval and documentation completed successfully.");
             }
             catch (Exception ex)
             {
-                logger.Error($"An error occurred while calling GetCapsAhriMatchesAsync: {ex.Message}");
+                applogger.Error($"An error occurred while calling GetCapsAhriMatchesAsync: {ex.Message}");
                 Console.WriteLine($"An error occurred while calling GetCapsAhriMatchesAsync: {ex.Message}");
             }
 
@@ -54,7 +62,8 @@ namespace LolMatchFilterNew.Presentation
             var services = new ServiceCollection();
 
             var configurationBuilder = new ConfigurationBuilder()
-                .AddJsonFile("AppSettings.json", optional: false, reloadOnChange: false)
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddEnvironmentVariables();
 
             IConfiguration configuration = configurationBuilder.Build();
@@ -64,6 +73,8 @@ namespace LolMatchFilterNew.Presentation
             services.AddTransient<IYoutubeApi, YoutubeApi>();
             services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
             services.AddTransient<IHttpJsonService, HttpJsonService>();
+            services.AddTransient<IApiHelper, ApiHelper>();
+            services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
 
             services.AddHttpClient("YouTube", client =>
             {

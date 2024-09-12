@@ -9,9 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
 {
     public interface IAppLogger
     {
-        void LogActivity(string methodName, Action<Activity> logAction, Action<Activity> action);
-        void LogUpdates(string methodName, params (string Name, object Value)[] updates);
-        Task LogUpdatesAsync(string methodName, params (string Name, object Value)[] updates);
+
         void Info(string message);
         void Info(string message, params object[] propertyValues);
         void Debug(string message);
@@ -23,6 +21,22 @@ namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
         void Error(string message, params object[] propertyValues);
         void Fatal(string message);
         void Fatal(string message, Exception ex);
+
+
+
+        Task InfoAsync(string message);
+        Task InfoAsync(string message, params object[] propertyValues);
+        Task DebugAsync(string message);
+        Task DebugAsync(string message, params object[] propertyValues);
+        Task WarningAsync(string message);
+        Task WarningAsync(string message, params object[] propertyValues);
+        Task ErrorAsync(string message, Exception ex);
+        Task ErrorAsync(string message, Exception ex, params object[] propertyValues);
+        Task ErrorAsync(string message, params object[] propertyValues);
+        Task FatalAsync(string message);
+        Task FatalAsync(string message, Exception ex);
+
+
 
     }
 }

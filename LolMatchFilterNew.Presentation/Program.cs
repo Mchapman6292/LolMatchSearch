@@ -7,7 +7,7 @@ using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Apis.YoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
-using LolMatchFilterNew.Domain.ILeaguepediaApis;
+using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain;
 using LolMatchFilterNew.Infastructure.HttpJsonServices;
@@ -17,8 +17,11 @@ using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.YoutubeService.YoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
+using LolMatchFilterNew.Infrastructure.Logging.ActivityService;
+using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 
 using Activity = System.Diagnostics.Activity;
+using Serilog;
 
 namespace LolMatchFilterNew.Presentation
 {
@@ -26,31 +29,44 @@ namespace LolMatchFilterNew.Presentation
     {
         public static async Task Main(string[] args)
         {
-            using var activity = new Activity("Application Start");
             var services = ConfigureServices();
-
             using var serviceProvider = services.BuildServiceProvider();
-            var applogger = serviceProvider.GetRequiredService<IAppLogger>();
+
+            var appLogger = serviceProvider.GetRequiredService<IAppLogger>();
+            var activitySource = serviceProvider.GetRequiredService<ActivitySource>();
             var leaguepediaApi = serviceProvider.GetRequiredService<ILeaguepediaApi>();
             var youtubeApi = serviceProvider.GetRequiredService<IYoutubeApi>();
 
-
-
-            try
+            using var activityListener = new ActivityListener
             {
-                await leaguepediaApi.GetCapsAhriMatchesAsync(activity);
-                Console.WriteLine("GetCapsAhriMatchesAsync completed successfully.");
+                ShouldListenTo = _ => true,
+                Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
+                ActivityStarted = activity => appLogger.Info($"Activity started: {activity.DisplayName}"),
+                ActivityStopped = activity => appLogger.Info($"Activity stopped: {activity.DisplayName}")
+            };
+            ActivitySource.AddActivityListener(activityListener);
 
-                List<string> teamNames = new List<string> { "G2", "MDK" };
-                string videoTitle = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
-                string gameId = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
-                await youtubeApi.GetAndDocumentVideoDataAsync(activity, gameId, videoTitle, teamNames);
-                Console.WriteLine("YouTube video data retrieval and documentation completed successfully.");
-            }
-            catch (Exception ex)
+            using (var activity = activitySource.StartActivity("Application Start"))
             {
-                applogger.Error($"An error occurred while calling GetCapsAhriMatchesAsync: {ex.Message}");
-                Console.WriteLine($"An error occurred while calling GetCapsAhriMatchesAsync: {ex.Message}");
+                try
+                {
+                    await leaguepediaApi.GetCapsAhriMatchesAsync();
+                    appLogger.Info("GetCapsAhriMatchesAsync completed successfully.");
+
+                    List<string> teamNames = new List<string> { "G2", "MDK" };
+                    string videoTitle = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
+                    string gameId = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
+                    await youtubeApi.GetAndDocumentVideoDataAsync(activity, gameId, videoTitle, teamNames);
+                    appLogger.Info("YouTube video data retrieval and documentation completed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    appLogger.Error($"An error occurred: {ex.Message}", ex);
+                }
+                finally
+                {
+                    Log.CloseAndFlush();
+                }
             }
 
             Console.WriteLine("Press any key to exit...");
@@ -70,11 +86,15 @@ namespace LolMatchFilterNew.Presentation
 
             services.AddSingleton<IConfiguration>(configuration);
             services.AddSingleton<IAppLogger, AppLogger>();
+            services.AddSingleton(new ActivitySource("LolMatchFilterNew"));
+
+
             services.AddTransient<IYoutubeApi, YoutubeApi>();
             services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
             services.AddTransient<IHttpJsonService, HttpJsonService>();
             services.AddTransient<IApiHelper, ApiHelper>();
             services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
+            services.AddTransient<IActivityService, ActivityService>();
 
             services.AddHttpClient("YouTube", client =>
             {

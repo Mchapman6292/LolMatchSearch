@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Ignore appsettings.json to prevent accidental commits of sensitive data
-appsettings.json
+AppSettings.json
 
 # User-specific files
 *.rsuser

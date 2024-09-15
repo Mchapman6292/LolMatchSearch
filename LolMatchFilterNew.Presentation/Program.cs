@@ -15,7 +15,7 @@ using LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices;
 using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.YoutubeService.YoutubeTitleMatcher;
+using LolMatchFilterNew.Domain.YoutubeVideoInfo.YoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Infrastructure.Logging.ActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;

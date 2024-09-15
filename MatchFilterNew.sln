@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Common", "Common\LolMatchFilterNew.Common.csproj", "{138B3540-509A-4D84-965F-6E331A586833}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Domain", "LolMatchFilterNew.Domain\LolMatchFilterNew.Domain.csproj", "{CBA92F1A-D698-477B-A9D1-7F40B7A48126}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Infrastructure", "LolMatchFilterNew.Infrastructure\LolMatchFilterNew.Infrastructure.csproj", "{7B910FFB-A388-41D3-8DFE-18E3818580A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Application", "LolMatchFilterNew.Application\LolMatchFilterNew.Application.csproj", "{5090885F-DA71-4050-A43D-07A81CD07F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LolMatchFilterNew.Presentation", "LolMatchFilterNew.Presentation\LolMatchFilterNew.Presentation.csproj", "{902F8C85-2DF1-4003-8409-4EACF285D9DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Presentation", "LolMatchFilterNew.Presentation\LolMatchFilterNew.Presentation.csproj", "{902F8C85-2DF1-4003-8409-4EACF285D9DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{138B3540-509A-4D84-965F-6E331A586833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{138B3540-509A-4D84-965F-6E331A586833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{138B3540-509A-4D84-965F-6E331A586833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{138B3540-509A-4D84-965F-6E331A586833}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CBA92F1A-D698-477B-A9D1-7F40B7A48126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CBA92F1A-D698-477B-A9D1-7F40B7A48126}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBA92F1A-D698-477B-A9D1-7F40B7A48126}.Release|Any CPU.ActiveCfg = Release|Any CPU

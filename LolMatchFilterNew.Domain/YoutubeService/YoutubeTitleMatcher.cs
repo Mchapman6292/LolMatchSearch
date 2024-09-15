@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
-namespace LolMatchFilterNew.Domain.YoutubeService.YoutubeTitleMatcher
+namespace LolMatchFilterNew.Domain.YoutubeVideoInfo.YoutubeTitleMatcher
 {
     public class YoutubeTitleMatcher : IYoutubeTitleMatcher
     {

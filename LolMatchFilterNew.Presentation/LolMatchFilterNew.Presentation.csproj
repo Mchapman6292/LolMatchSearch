@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\LolMatchFilterNew.Common.csproj" />
     <ProjectReference Include="..\LolMatchFilterNew.Application\LolMatchFilterNew.Application.csproj" />
     <ProjectReference Include="..\LolMatchFilterNew.Domain\LolMatchFilterNew.Domain.csproj" />
     <ProjectReference Include="..\LolMatchFilterNew.Infrastructure\LolMatchFilterNew.Infrastructure.csproj" />

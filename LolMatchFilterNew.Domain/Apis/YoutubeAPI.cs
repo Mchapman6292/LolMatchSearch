@@ -21,6 +21,8 @@ using LolMatchFilterNew.Domain.Entities;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
+using LolMatchFilterNew.Domain.Interfaces.IActivityService;
+using System.Linq.Expressions;
 
 
 namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
@@ -33,14 +35,16 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
         private readonly IAppLogger _appLogger;
         private readonly IApiHelper _apiHelper;
         private readonly IYoutubeTitleMatcher _youtubeTitleMatcher;
+        private readonly IActivityService _activityService;
         private const string BaseUrl = "https://www.googleapis.com/youtube/v3";
 
-        public YoutubeApi(IConfiguration configuration, IAppLogger appLgger, IApiHelper apiHelper, IYoutubeTitleMatcher youtubeTitleMatcher)
+        public YoutubeApi(IConfiguration configuration, IAppLogger appLgger, IApiHelper apiHelper, IYoutubeTitleMatcher youtubeTitleMatcher, IActivityService activityService)
         {
-             _apiKey = configuration["YouTubeApiKey"];
+            _apiKey = configuration["YouTubeApiKey"];
             _appLogger = appLgger;
             _apiHelper = apiHelper;
             _youtubeTitleMatcher = youtubeTitleMatcher;
+            _activityService = activityService;
             _youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
                 ApiKey = _apiKey,
@@ -51,6 +55,46 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
 
         }
+
+
+        public async Task<List<PlaylistItem>> GetYoutubeVideosFromPlayList(Activity activity, string playlistId)
+        {
+            _appLogger.Info($"Starting {nameof(GetYoutubeVideosFromPlayList)} TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+
+            List<PlaylistItem> playListResults = new List<PlaylistItem>();
+            var nextPageToken = "";
+
+            do
+            {
+                var playlistItemsListRequest = _youtubeService.PlaylistItems.List("snippet");
+                playlistItemsListRequest.PlaylistId = playlistId;
+                playlistItemsListRequest.MaxResults = 50;
+                playlistItemsListRequest.PageToken = nextPageToken;
+
+                try
+                {
+                    var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+
+                    playListResults.AddRange(playlistItemsListResponse.Items);
+
+                    nextPageToken = playlistItemsListResponse.NextPageToken;
+
+                }
+                catch (Exception ex)
+                {
+                    _appLogger.Error($"Error during {nameof(GetYoutubeVideosFromPlayList)}.", ex);
+                    throw;
+                }
+            }
+            while (!string.IsNullOrEmpty(nextPageToken));
+            {
+                _appLogger.Info($"Retrieved {playListResults.Count} videos from playlist {playlistId}");
+                return playListResults;
+            }
+        }
+
+
+
 
         public async Task GetAndDocumentVideoDataAsync(Activity activity, string videoTitle, string gameId, List<string> teamNames)
         {
@@ -157,10 +201,44 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
 
 
-        public async Task GetPlaylistVideosAsync(System.Diagnostics.Activity activity, string playlistId)
+
+
+        public async Task<List<PlaylistItem>> GetYoutubeVideoPlaylistAsync(string videoId)
         {
+            Activity activity = null;
+            try
+            {
+                activity = await _activityService.StartActivityAsync(nameof(GetYoutubeVideoPlaylistAsync));
+
+                var playlistItemsListRequest = _youtubeService.PlaylistItems.List("snippet");
+                playlistItemsListRequest.VideoId = videoId;
+                playlistItemsListRequest.MaxResults = 50;
+
+                var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+
+                if (playlistItemsListResponse.Items.Count > 0)
+                {
+                    _appLogger.Info($"The video with ID {videoId} is in {playlistItemsListResponse.Items.Count} playlists.");
+                    return playlistItemsListResponse.Items.ToList();
+                }
+                else
+                {
+                    _appLogger.Info($"The video with ID {videoId} is not in any playlists.");
+                    return new List<PlaylistItem>();
+                }
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"An error occurred while fetching playlists for video {videoId}.", ex);
+                throw;
+            }
+            finally
+            {
+                if (activity != null)
+                {
+                    await _activityService.StopActivityAsync(activity);
+                }
+            }
         }
-
-
     }
 }

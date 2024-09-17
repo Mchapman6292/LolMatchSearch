@@ -39,8 +39,8 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
                 var query = HttpUtility.ParseQueryString(string.Empty);
                 query["action"] = "cargoquery";
                 query["tables"] = "ScoreboardPlayers=SP,ScoreboardGames=SG";
-                query["join_on"] = "SP.GameId=SG.GameId";
-                query["fields"] = "SP.GameId,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2,SP.Champion,SP.Role,SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks";
+                query["join_on"] = "SP.LeaguepediaGameIdAndTitle=SG.LeaguepediaGameIdAndTitle";
+                query["fields"] = "SP.LeaguepediaGameIdAndTitle,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2,SP.Champion,SP.Role,SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks";
                 query["where"] = "SP.Link='Caps' AND SP.Champion='Ahri'";
                 query["order_by"] = "SG.DateTime_UTC DESC";
                 query["limit"] = "5";

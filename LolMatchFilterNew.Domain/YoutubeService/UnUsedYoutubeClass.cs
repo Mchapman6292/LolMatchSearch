@@ -9,9 +9,9 @@ using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using Google.Apis.YouTube.v3;
 
 
-namespace LolMatchFilterNew.Domain.YoutubeVideoInfo
+namespace LolMatchFilterNew.Domain.UnUsedYoutubeClass
 {
-    public class YoutubeVideoInfo
+    public class UnUsedYoutubeClass
     {
         private readonly IAppLogger _appLogger;
         private readonly IActivityService _activityService;
@@ -20,7 +20,7 @@ namespace LolMatchFilterNew.Domain.YoutubeVideoInfo
 
 
 
-        public YoutubeVideoInfo(IAppLogger appLogger, IActivityService activityService)
+        public UnUsedYoutubeClass(IAppLogger appLogger, IActivityService activityService)
         {
             _appLogger = appLogger;
             _activityService = activityService;

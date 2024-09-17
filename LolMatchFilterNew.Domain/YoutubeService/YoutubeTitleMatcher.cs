@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Google.Apis.YouTube.v3;
 using Activity = System.Diagnostics.Activity;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoData;
+using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
 using LolMatchFilterNew.Domain.Entities;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
-namespace LolMatchFilterNew.Domain.YoutubeVideoInfo.YoutubeTitleMatcher
+namespace LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher
 {
     public class YoutubeTitleMatcher : IYoutubeTitleMatcher
     {

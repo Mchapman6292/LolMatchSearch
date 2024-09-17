@@ -15,13 +15,19 @@ using LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices;
 using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.YoutubeVideoInfo.YoutubeTitleMatcher;
+using LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Infrastructure.Logging.ActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
+using Microsoft.EntityFrameworkCore.Design;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Hosting;
 
 using Activity = System.Diagnostics.Activity;
 using Serilog;
+using LolMatchFilterNew.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace LolMatchFilterNew.Presentation
 {
@@ -29,79 +35,96 @@ namespace LolMatchFilterNew.Presentation
     {
         public static async Task Main(string[] args)
         {
-            var services = ConfigureServices();
-            using var serviceProvider = services.BuildServiceProvider();
+            var host = CreateHostBuilder(args).Build();
 
-            var appLogger = serviceProvider.GetRequiredService<IAppLogger>();
-            var activitySource = serviceProvider.GetRequiredService<ActivitySource>();
-            var leaguepediaApi = serviceProvider.GetRequiredService<ILeaguepediaApi>();
-            var youtubeApi = serviceProvider.GetRequiredService<IYoutubeApi>();
+            // Log the connection string
+            var connectionString = host.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
+            Console.WriteLine($"Connection String: {connectionString}");
 
-            using var activityListener = new ActivityListener
+            // Test database connection
+            using (var scope = host.Services.CreateScope())
             {
-                ShouldListenTo = _ => true,
-                Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
-                ActivityStarted = activity => appLogger.Info($"Activity started: {activity.DisplayName}"),
-                ActivityStopped = activity => appLogger.Info($"Activity stopped: {activity.DisplayName}")
-            };
-            ActivitySource.AddActivityListener(activityListener);
-
-            using (var activity = activitySource.StartActivity("Application Start"))
-            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<LolMatchFilterDbContext>();
                 try
                 {
-                    await leaguepediaApi.GetCapsAhriMatchesAsync();
-                    appLogger.Info("GetCapsAhriMatchesAsync completed successfully.");
-
-                    List<string> teamNames = new List<string> { "G2", "MDK" };
-                    string videoTitle = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
-                    string gameId = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
-                    await youtubeApi.GetAndDocumentVideoDataAsync(activity, gameId, videoTitle, teamNames);
-                    appLogger.Info("YouTube video data retrieval and documentation completed successfully.");
+                    await dbContext.Database.OpenConnectionAsync();
+                    Console.WriteLine("Successfully connected to the database.");
                 }
                 catch (Exception ex)
                 {
-                    appLogger.Error($"An error occurred: {ex.Message}", ex);
-                }
-                finally
-                {
-                    Log.CloseAndFlush();
+                    Console.WriteLine($"Failed to connect to the database: {ex.Message}");
                 }
             }
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var appLogger = services.GetRequiredService<IAppLogger>();
+                var activitySource = services.GetRequiredService<ActivitySource>();
+                var leaguepediaApi = services.GetRequiredService<ILeaguepediaApi>();
+                var youtubeApi = services.GetRequiredService<IYoutubeApi>();
+
+                using var activityListener = new ActivityListener
+                {
+                    ShouldListenTo = _ => true,
+                    Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
+                    ActivityStarted = activity => appLogger.Info($"Activity started: {activity.DisplayName}"),
+                    ActivityStopped = activity => appLogger.Info($"Activity stopped: {activity.DisplayName}")
+                };
+                ActivitySource.AddActivityListener(activityListener);
+
+                using (var activity = activitySource.StartActivity("Application Start"))
+                {
+                    try
+                    {
+                        await leaguepediaApi.GetCapsAhriMatchesAsync();
+                        appLogger.Info("GetCapsAhriMatchesAsync completed successfully.");
+
+                        List<string> teamNames = new List<string> { "G2", "MDK" };
+                        string videoTitle = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
+                        string gameId = "G2 vs MDK Highlights Game 2 | LEC Season Finals 2024 Upper Round 1 | G2 Esports vs MAD Lions KOI G2";
+                        string youtubePlaylistId = "PLJwuLHutaYuLMHzkyblz2q0HlDd7otgJA";
+                        await youtubeApi.GetAndDocumentVideoDataAsync(activity, gameId, videoTitle, teamNames);
+                        appLogger.Info("YouTube video data retrieval and documentation completed successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        appLogger.Error($"An error occurred: {ex.Message}", ex);
+                    }
+                    finally
+                    {
+                        Log.CloseAndFlush();
+                    }
+                }
+            }
+
+            await host.RunAsync();
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
 
-        private static IServiceCollection ConfigureServices()
-        {
-            var services = new ServiceCollection();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddDbContext<LolMatchFilterDbContext>(options =>
+                        options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")));
 
-            var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                .AddEnvironmentVariables();
+                    services.AddSingleton<IAppLogger, AppLogger>();
+                    services.AddSingleton(new ActivitySource("LolMatchFilterNew"));
+                    services.AddTransient<IYoutubeApi, YoutubeApi>();
+                    services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
+                    services.AddTransient<IHttpJsonService, HttpJsonService>();
+                    services.AddTransient<IApiHelper, ApiHelper>();
+                    services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
+                    services.AddTransient<IActivityService, ActivityService>();
 
-            IConfiguration configuration = configurationBuilder.Build();
-
-            services.AddSingleton<IConfiguration>(configuration);
-            services.AddSingleton<IAppLogger, AppLogger>();
-            services.AddSingleton(new ActivitySource("LolMatchFilterNew"));
-
-
-            services.AddTransient<IYoutubeApi, YoutubeApi>();
-            services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
-            services.AddTransient<IHttpJsonService, HttpJsonService>();
-            services.AddTransient<IApiHelper, ApiHelper>();
-            services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
-            services.AddTransient<IActivityService, ActivityService>();
-
-            services.AddHttpClient("YouTube", client =>
-            {
-                client.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
-            });
-
-            return services;
-        }
+                    services.AddHttpClient("YouTube", client =>
+                    {
+                        client.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
+                    });
+                });
     }
 }

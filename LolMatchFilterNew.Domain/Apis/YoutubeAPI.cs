@@ -14,15 +14,18 @@ using Google.Apis.Services;
 using Google.Apis.YouTube;
 using Google.Apis.YouTube.v3.Data;
 using Google.Apis.YouTube.v3;
-
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoData;
 using Activity = System.Diagnostics.Activity;
 using LolMatchFilterNew.Domain.Entities;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
+using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
 using System.Linq.Expressions;
+using Xceed.Document.NET;
+using LolMatchFilterNew.Domain.DTOs;
+
+// The snippet object contains basic details about the channel, such as its title, description, and thumbnail images. snippet.title, string. The channel's title.
 
 
 namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
@@ -53,13 +56,15 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
 
 
-
         }
 
 
-        public async Task<List<PlaylistItem>> GetYoutubeVideosFromPlayList(Activity activity, string playlistId)
+
+
+
+        public async Task<List<PlaylistItem>> GetAllPlayListItemsFromYoutubePlayListAsync(Activity activity, string playlistId)
         {
-            _appLogger.Info($"Starting {nameof(GetYoutubeVideosFromPlayList)} TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+            _appLogger.Info($"Starting {nameof(GetAllPlayListItemsFromYoutubePlayListAsync)} TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
 
             List<PlaylistItem> playListResults = new List<PlaylistItem>();
             var nextPageToken = "";
@@ -82,7 +87,7 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
                 }
                 catch (Exception ex)
                 {
-                    _appLogger.Error($"Error during {nameof(GetYoutubeVideosFromPlayList)}.", ex);
+                    _appLogger.Error($"Error during {nameof(GetAllPlayListItemsFromYoutubePlayListAsync)}.", ex);
                     throw;
                 }
             }
@@ -92,6 +97,91 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
                 return playListResults;
             }
         }
+
+
+
+
+        public async Task<List<YoutubeVideoResult>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
+        {
+            _appLogger.Info($"Starting {nameof(ConvertPlayListItemsToYouTubeVideoResult)}, TraceId: {activity.TraceId}.");
+            List<YoutubeVideoResult> youtubeVideoResults = new List<YoutubeVideoResult>();
+            try
+            {
+                foreach (PlaylistItem result in youTubePlaylist)
+                {
+                    string videoId = result.Snippet.ResourceId.VideoId;
+                    string title = result.Snippet.Title;
+                    string description = result.Snippet.Description;
+                    DateTime? publishedAt = result.Snippet.PublishedAt;
+                    string thumbnailUrl = result.Snippet.Thumbnails.Default__.Url;
+                    string url = $"https://www.youtube.com/watch?v={videoId}";
+
+                    var youtubeVideoResult = new YoutubeVideoResult(
+                        videoId,
+                        url
+                    );
+
+                    youtubeVideoResults.Add(youtubeVideoResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in {nameof(ConvertPlayListItemsToYouTubeVideoResult)}: {ex.Message}", ex);
+                throw;
+            }
+
+            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to YoutubeVideoResult objects.");
+            return youtubeVideoResults;
+        }
+
+
+
+
+
+
+
+   
+
+
+        public async Task<List<string>> ExtractVideoDetails(Activity activity, List<PlaylistItem> playlistItems)
+        {
+            _appLogger.Info($"Starting {nameof(ExtractVideoDetails)} TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+            var videoDetails = new List<string>();
+
+            try
+            {
+                foreach (var item in playlistItems)
+                {
+                    try
+                    {
+                        videoDetails.Add($"Video ID: {item.Snippet.ResourceId.VideoId}");
+                        videoDetails.Add($"Title: {item.Snippet.Title}");
+                        videoDetails.Add($"Description: {item.Snippet.Description}");
+                        videoDetails.Add($"Published At: {item.Snippet.PublishedAt}");
+                        videoDetails.Add($"Thumbnail URL: {item.Snippet.Thumbnails.Default__.Url}");
+                        videoDetails.Add($"Position in Playlist: {item.Snippet.Position}");
+                        videoDetails.Add("---");
+
+                        _appLogger.Debug($"Extracted details for video ID: {item.Snippet.ResourceId.VideoId}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Warning($"Error extracting details for a video item. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.", ex);
+                        videoDetails.Add($"Error extracting details for a video item: {ex.Message}");
+                        videoDetails.Add("---");
+                    }
+                }
+
+                _appLogger.Info($"Completed extracting details for {playlistItems.Count} videos. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                return videoDetails;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error in {nameof(ExtractVideoDetails)}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}", ex);
+                throw;
+            }
+        }
+
 
 
 
@@ -150,7 +240,7 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
                                 var extractedTeams = await _youtubeTitleMatcher.ExtractTeamNames(activity, retrievedTitle);
                                 if (extractedTeams.Count == 2 && teamNames.All(team => extractedTeams.Contains(team, StringComparer.OrdinalIgnoreCase)))
                                 {
-                                    _appLogger.Info($"Match found for GameId: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                                    _appLogger.Info($"Match found for LeaguepediaGameIdAndTitle: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
 
                                     videoDetails.Add("Match found:");
                                     videoDetails.Add($"Video ID: {videoId}");
@@ -175,8 +265,8 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
                     if (!matchFound)
                     {
-                        _appLogger.Warning($"No matching video found for GameId: {gameId}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
-                        videoDetails.Add($"No matching video found for GameId: {gameId}");
+                        _appLogger.Warning($"No matching video found for LeaguepediaGameIdAndTitle: {gameId}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                        videoDetails.Add($"No matching video found for LeaguepediaGameIdAndTitle: {gameId}");
                     }
                 }
             }
@@ -192,7 +282,7 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoData", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoResult", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

@@ -1,14 +1,14 @@
 ﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities;
+using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.DTOs.LeaguepediaMatchData
+namespace LolMatchFilterNew.Domain.DTOs.LeaguepediaMatchDTOs
 {
-    public class LeaguepediaMatchData
+    public class LeaguepediaMatchDTO
     {
 
         public string LeaguepediaGameId { get; set; }
@@ -19,6 +19,11 @@ namespace LolMatchFilterNew.Domain.DTOs.LeaguepediaMatchData
         public TeamSide Team1Side { get; set; }
         public string Winner { get; set; }
 
-        public virtual ICollection<ProPlayer> Players { get; set; }
+        public ICollection<ProPlayerEntity> Team1Players { get; set; }
+
+        public virtual ICollection<ProPlayerEntity> Team2Players { get; set; }
+
+
+
     }
 }

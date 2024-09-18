@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.DbContexts
+namespace LolMatchFilterNew.Infrastructure.DbContextFactory
 {
 
     // Migrations run at design-time, before application starts & before dependency injection containers & config are available.

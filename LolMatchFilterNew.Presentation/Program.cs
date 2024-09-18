@@ -30,7 +30,7 @@ using Microsoft.Extensions.Hosting;
 
 using Activity = System.Diagnostics.Activity;
 using Serilog;
-using LolMatchFilterNew.Infrastructure.DbContexts;
+using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
 
 namespace LolMatchFilterNew.Presentation

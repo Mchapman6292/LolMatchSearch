@@ -11,7 +11,7 @@ using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 
-namespace LolMatchFilterNew.Infrastructure.DbContexts
+namespace LolMatchFilterNew.Infrastructure.DbContextFactory
 {
     public class LolMatchFilterDbContext : DbContext
     {

@@ -19,6 +19,10 @@ using LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Infrastructure.Logging.ActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
+using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+
+
+
 using Microsoft.EntityFrameworkCore.Design;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.Configuration.Json;

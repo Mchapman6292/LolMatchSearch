@@ -1,6 +1,7 @@
 ﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 
 
 namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
@@ -18,8 +19,11 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
 
         public string YoutubeResultHyperlink { get; set; }
 
-        // Navigation property
-        public virtual LeaguepediaMatchDetailEntity leaguepediaMatch { get; set; }
+        public string LeaguepediaGameIdAndTitle { get; set; }
+
+        [ForeignKey("LeaguepediaGameIdAndTitle")]
+        public virtual LeaguepediaMatchDetailEntity LeaguepediaMatch { get; set; }
+
 
     }
 }

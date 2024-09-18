@@ -57,44 +57,26 @@ namespace LolMatchFilterNew.Infrastructure.DbContexts
                 entity.Property(e => e.Team1).IsRequired();
                 entity.Property(e => e.Team2).IsRequired();
 
-                entity.HasMany(e => e.Team1Navigation)
-                .WithMany(p => p.Matches)  
-                .UsingEntity(j => j.ToTable("Team1Players"));
+                entity.HasOne(e => e.YoutubeVideo)
+                  .WithOne(y => y.LeaguepediaMatch)
+                  .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle);
 
-                
-                entity.HasMany(e => e.Team2Players)
-                .WithMany(p => p.Matches)  
-                .UsingEntity(j => j.ToTable("Team2Players"));
-            });
 
-            modelBuilder.Entity<LeagueTeamEntity>(entity =>
+                modelBuilder.Entity<LeagueTeamEntity>(entity =>
             {
                 entity.HasKey(e => e.TeamName);
-                entity.Property(e => e.TeamName).IsRequired();
 
-               
                 entity.HasMany(t => t.CurrentPlayers)
                     .WithOne(p => p.CurrentTeamNavigation)
                     .HasForeignKey(p => p.CurrentTeam)
                     .OnDelete(DeleteBehavior.SetNull);
 
-                // Relationship with former players
                 entity.HasMany(t => t.FormerPlayers)
                     .WithMany(p => p.PreviousTeams)
                     .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
-
-
-                entity.HasMany(t => t.Matches)
-                    .WithOne() 
-                    .HasForeignKey(m => m.Team1)
-                    .OnDelete(DeleteBehavior.Restrict);
-                entity.HasMany(t => t.Matches)
-                    .WithOne()  
-                    .HasForeignKey(m => m.Team2)
-                    .OnDelete(DeleteBehavior.Restrict);
+            });
             });
         }
+
     }
-
- }
-
+}

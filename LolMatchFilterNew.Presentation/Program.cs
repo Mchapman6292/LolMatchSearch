@@ -114,7 +114,12 @@ namespace LolMatchFilterNew.Presentation
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddDbContext<LolMatchFilterDbContext>(options =>
-                        options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")));
+                        options.UseNpgsql(
+                            hostContext.Configuration.GetConnectionString("DefaultConnection"),
+                            b => b.MigrationsAssembly("LolMatchFilterNew.Infrastructure")
+                                )
+                    );
+
 
                     services.AddSingleton<IAppLogger, AppLogger>();
                     services.AddSingleton(new ActivitySource("LolMatchFilterNew"));

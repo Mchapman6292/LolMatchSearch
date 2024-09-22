@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
             using (var scope = host.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<LolMatchFilterDbContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<Infrastructure.DbContextFactory.MatchFilterDbContexts>();
                 try
                 {
                     await dbContext.Database.OpenConnectionAsync();
@@ -74,18 +74,18 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
          Host.CreateDefaultBuilder(args)
-             .ConfigureServices((hostContext, services) =>
+             .ConfigureServices((Action<HostBuilderContext, IServiceCollection>)((hostContext, services) =>
              {
-                 services.AddDbContext<LolMatchFilterDbContext>(options =>
+                 EntityFrameworkServiceCollectionExtensions.AddDbContext<Infrastructure.DbContextFactory.MatchFilterDbContexts>(services, (Action<DbContextOptionsBuilder>?)(options =>
                      options.UseNpgsql(
                          hostContext.Configuration.GetConnectionString("DefaultConnection"),
                          b => b.MigrationsAssembly("LolMatchFilterNew.Infrastructure")
-                             )
+                             ))
                  );
 
 
                  services.AddSingleton<IAppLogger, AppLogger>();
-                 services.AddSingleton(new ActivitySource("LolMatchFilterNew"));
+                 services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
 
                  services.AddTransient<IYoutubeApi, YoutubeApi>();
                  services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
@@ -100,7 +100,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                  {
                      client.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
                  });
-             });
+             }));
 
     }
 }

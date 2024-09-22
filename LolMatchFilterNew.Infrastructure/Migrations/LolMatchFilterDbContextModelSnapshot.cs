@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
-    [DbContext(typeof(LolMatchFilterDbContext))]
+    [DbContext(typeof(DbContextFactory.MatchFilterDbContext))]
     partial class LolMatchFilterDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

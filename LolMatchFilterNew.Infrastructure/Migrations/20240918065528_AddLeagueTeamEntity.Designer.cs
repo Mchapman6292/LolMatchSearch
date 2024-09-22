@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
-    [DbContext(typeof(LolMatchFilterDbContext))]
+    [DbContext(typeof(DbContextFactory.MatchFilterDbContext))]
     [Migration("20240918065528_AddLeagueTeamEntity")]
     partial class AddLeagueTeamEntity
     {

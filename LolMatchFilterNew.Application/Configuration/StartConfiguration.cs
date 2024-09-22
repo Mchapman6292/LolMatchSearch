@@ -22,6 +22,10 @@ using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
+
+
 using Microsoft.Extensions.Hosting;
 using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +58,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
             using (var scope = host.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<Infrastructure.DbContextFactory.MatchFilterDbContexts>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<DbContextFactory.MatchFilterDbContexts>();
                 try
                 {
                     await dbContext.Database.OpenConnectionAsync();
@@ -93,6 +97,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                  services.AddTransient<IApiHelper, ApiHelper>();
                  services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
                  services.AddTransient<IActivityService, ActivityService>();
+                 services.AddTransient<ILeaguepediaQueryService, LeaguepediaQueryService>();
+
+
                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 

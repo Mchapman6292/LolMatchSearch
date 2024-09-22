@@ -366,3 +366,6 @@ MigrationBackup/
 FodyWeavers.xsd
 # Ignore AppSettings.json
 LolMatchFilterNew.Presentation/appsettings.json
+
+#Practice accidentally added
+LeetcodeAOC/

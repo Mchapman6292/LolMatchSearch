@@ -9,7 +9,7 @@ using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace LolMatchFilterNew.Infastructure.HttpJsonServices
+namespace LolMatchFilterNew.infrastructure.HttpJsonServices
 {
     public class HttpJsonService : IHttpJsonService
     {

@@ -46,6 +46,8 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
 
             try
             {
+                await _leaguepediaApiLimiter.WaitForNextRequestAsync();
+
 
             }
 

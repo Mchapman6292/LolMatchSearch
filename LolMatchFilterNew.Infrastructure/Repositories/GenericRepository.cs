@@ -21,50 +21,173 @@ namespace LolMatchFilterNew.infrastructure.Repositories.GenericRepositories
 
         // Virtual allows for a method to be overridden in derived classes. 
         //Update/RemoveEntity mark the entities as modified or deleted in the change tracker.The actual database operations occur when SaveChanges() or SaveChangesAsync() are called.
+        // Transactions used only for methods that modify data, not read only operations(Get).
         public virtual async Task<T> GetIdAsync(object id)
         {
             if (id == null)
             {
-                _appLogger.Error($"ERROR null parameter for {nameof(GetIdAsync)}.");
+                _appLogger.Error($"Null parameter for {nameof(GetIdAsync)}.");
                 throw new ArgumentNullException(nameof(id), "The id parameter cannot be null");
             }
-            return await _dbSet.FindAsync(id);
+            try
+            {
+                var result = await _dbSet.FindAsync(id);
+                if (result == null)
+                {
+                    _appLogger.Warning($"No entity found with id {id} in {nameof(GetIdAsync)}.");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in {nameof(GetIdAsync)}: {ex.Message}");
+                throw;
+            }
         }
+
 
         public virtual async Task<IEnumerable<T>> GetMultipleIdsAsync(params object[] ids)
         {
             var results = new List<T>();
-
-            foreach (var id in ids)
+            try
             {
-                var searchResult = await _dbSet.FindAsync(id);
-                if (searchResult != null)
+                foreach (var id in ids)
                 {
-                    results.Add(searchResult);
+                    var searchResult = await _dbSet.FindAsync(id);
+                    if (searchResult != null)
+                    {
+                        results.Add(searchResult);
+                    }
+                    else
+                    {
+                        _appLogger.Warning($"No entity found with id {id} in {nameof(GetMultipleIdsAsync)}.");
+                    }
                 }
+                _appLogger.Info($"Retrieved {results.Count} out of {ids.Length} requested entities in {nameof(GetMultipleIdsAsync)}.");
+                return results;
             }
-            return results;
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in {nameof(GetMultipleIdsAsync)}: {ex.Message}");
+                throw;
+            }
         }
+
 
         public virtual async Task AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
+            if (entity == null)
+            {
+                _appLogger.Error($"Null entity parameter in {nameof(AddAsync)}.");
+                throw new ArgumentNullException(nameof(entity), "The entity parameter cannot be null");
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _dbSet.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                _appLogger.Info($"Entity of type {typeof(T).Name} added successfully in {nameof(AddAsync)}.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _appLogger.Error($"Error in {nameof(AddAsync)}: {ex.Message}");
+                throw;
+            }
         }
 
-        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+        public async Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities)
         {
-            await _dbSet.AddRangeAsync(entities);
+            int savedCount = 0;
+            int failedCount = 0;
+            string entityTypeName = typeof(T).Name;
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    try
+                    {
+                        await _dbSet.AddAsync(entity);
+                        await _context.SaveChangesAsync();
+                        savedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Failed to save {entityTypeName} entity: {ex.Message}");
+                        failedCount++;
+                    }
+                }
+
+                if (failedCount > 0)
+                {
+                    await transaction.RollbackAsync();
+                    _appLogger.Warning($"Transaction rolled back. {failedCount} {entityTypeName} entries failed to save.");
+                    return (0, entities.Count());
+                }
+
+                await transaction.CommitAsync();
+                _appLogger.Info($"Successfully added {savedCount} {entityTypeName} entities.");
+                return (savedCount, failedCount);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _appLogger.Error($"Transaction rolled back due to error while saving {entityTypeName} entities: {ex.Message}");
+                return (0, entities.Count());
+            }
         }
 
-        public virtual void RemoveEntity(T entity)
+        public virtual async Task RemoveEntityAsync(T entity)
         {
-            _dbSet.Remove(entity);
+            if (entity == null)
+            {
+                _appLogger.Error($"Null entity parameter in {nameof(RemoveEntityAsync)}.");
+                throw new ArgumentNullException(nameof(entity), "The entity parameter cannot be null");
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                _appLogger.Info($"Entity of type {typeof(T).Name} removed successfully in {nameof(RemoveEntityAsync)}.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _appLogger.Error($"Error in {nameof(RemoveEntityAsync)}: {ex.Message}");
+                throw;
+            }
         }
 
 
-        public virtual void RemoveEntities(IEnumerable<T> entities)
+        public virtual async Task RemoveEntitiesAsync(IEnumerable<T> entities)
         {
-            _dbSet.RemoveRange(entities);
+            if (entities == null || !entities.Any())
+            {
+                _appLogger.Warning($"No entities to remove in {nameof(RemoveEntitiesAsync)}.");
+                return;
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                _dbSet.RemoveRange(entities);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                _appLogger.Info($"{entities.Count()} entities of type {typeof(T).Name} removed successfully in {nameof(RemoveEntitiesAsync)}.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _appLogger.Error($"Error in {nameof(RemoveEntitiesAsync)}: {ex.Message}");
+                throw;
+            }
         }
     }
 }

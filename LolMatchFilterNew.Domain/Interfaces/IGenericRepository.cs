@@ -9,11 +9,11 @@
 
         Task AddAsync(T entity);
 
-        Task AddRangeAsync(IEnumerable<T> entities);
+        Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities);
 
-        void RemoveEntity(T entity);
+        Task RemoveEntityAsync(T entity);
 
-        void RemoveEntities(IEnumerable<T> entities);
+        Task RemoveEntitiesAsync(IEnumerable<T> entities);
     }
 }
 

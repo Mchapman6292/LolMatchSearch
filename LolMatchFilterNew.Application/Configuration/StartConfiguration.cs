@@ -26,6 +26,8 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServ
 using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
 using LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter;
+
 
 
 using Microsoft.Extensions.Hosting;

@@ -3,22 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.ILolMatchFilterDbContext;
+using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
+using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
-    public class LeaguepediaMatchDetailRepository
+    public class LeaguepediaMatchDetailRepository : GenericRepository<LeaguepediaMatchDetailEntity>, ILeaguepediaMatchDetailRepository
     {
         private readonly IAppLogger _appLogger;
-        private readonly ILolMatchFilterDbContext _MatchFilterDbContext;
+        private readonly IMatchFilterDbContext _matchFilterDbContext;
 
-        public LeaguepediaMatchDetailRepository(IAppLogger appLogger, ILolMatchFilterDbContext MatchFilterDbContext)
+        public LeaguepediaMatchDetailRepository(IMatchFilterDbContext dbcontex, IAppLogger appLogger)
+            : base(dbcontex as DbContext, appLogger)
         {
             _appLogger = appLogger;
-            _MatchFilterDbContext = MatchFilterDbContext;
+            _matchFilterDbContext = dbcontex;
+        }
+
+        public async Task AddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails)
+        {
+            int savedCount = 0;
+            int failureCount = 0;
+
+            using var transaction = await _matchFilterDbContext.
+
+            await  AddRangeAsync(matchDetails);
+            await _matchFilterDbContext.SaveChangesAsync();
         }
     }
 }

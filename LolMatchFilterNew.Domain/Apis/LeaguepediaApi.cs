@@ -6,6 +6,7 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using Activity = System.Diagnostics.Activity;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
@@ -20,18 +21,22 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
         private readonly IActivityService _activityService;
         private readonly IApiHelper _apiHelper;
         private readonly ILeaguepediaQueryService _leaguepediaQueryService;
+        private readonly ILeaguepediaAPILimiter _leaguepediaApiLimiter;
+
+
         private static readonly HttpClient client = new HttpClient();
         private static readonly string SaveDirectory = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
     "LolMatchReports");
 
-        public LeaguepediaApi(IHttpJsonService httpJsonService, IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, ILeaguepediaQueryService leaguepediaQueryService)
+        public LeaguepediaApi(IHttpJsonService httpJsonService, IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaAPILimiter leaguepediaAPILimiter)
         {
             _httpJsonService = httpJsonService;
             _appLogger = appLogger;
             _activityService = activityService;
             _apiHelper = apiHelper;
             _leaguepediaQueryService = leaguepediaQueryService;
+            _leaguepediaApiLimiter = leaguepediaAPILimiter;
         }
 
 

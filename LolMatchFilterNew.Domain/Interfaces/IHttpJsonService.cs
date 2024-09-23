@@ -10,6 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices
 {
     public interface IHttpJsonService
     {
-        Task<JObject> FetchJsonDataAsync(Activity activity, string url);
+        Task<JObject> FetchLeaguepediaJsonDataAsync(Activity activity, string url);
     }
 }

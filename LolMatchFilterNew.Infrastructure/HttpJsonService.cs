@@ -24,23 +24,21 @@ namespace LolMatchFilterNew.infrastructure.HttpJsonServices
         }
 
 
-        public async Task<JObject> FetchJsonDataAsync(Activity activity, string url)
+        public async Task<JObject> FetchLeaguepediaJsonDataAsync(Activity activity, string url)
         {
-            _appLogger.Info($"Starting {nameof(FetchJsonDataAsync)} TraceId: {activity.TraceId}.");
-
+            _appLogger.Info($"{nameof(FetchLeaguepediaJsonDataAsync)} Started.");
             try
             {
                 using HttpClient client = _httpClientFactory.CreateClient();
                 using HttpResponseMessage response = await client.GetAsync(url);
 
                 response.EnsureSuccessStatusCode();
-                _appLogger.Info($"Successful response from URL: {url} for {nameof(FetchJsonDataAsync)}, TraceId: {activity.TraceId}.");
+
 
                 string responseBody = await response.Content.ReadAsStringAsync();
-                _appLogger.Info($"Content length: {responseBody.Length} bytes for{nameof(FetchJsonDataAsync)}, TraceId{activity.TraceId}.");
+               
 
                 var result = JObject.Parse(responseBody);
-                _appLogger.Info($"Successfully parsed JSON from URL: {url}, TraceId: {activity.TraceId}.");
 
                 return result;
             }

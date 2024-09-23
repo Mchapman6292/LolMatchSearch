@@ -24,11 +24,14 @@ using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
+using LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 
 
 using Microsoft.Extensions.Hosting;
 using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
+
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -58,7 +61,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
             using (var scope = host.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DbContextFactory.MatchFilterDbContexts>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<MatchFilterDbContext> ();
                 try
                 {
                     await dbContext.Database.OpenConnectionAsync();
@@ -80,7 +83,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
          Host.CreateDefaultBuilder(args)
              .ConfigureServices((Action<HostBuilderContext, IServiceCollection>)((hostContext, services) =>
              {
-                 EntityFrameworkServiceCollectionExtensions.AddDbContext<Infrastructure.DbContextFactory.MatchFilterDbContexts>(services, (Action<DbContextOptionsBuilder>?)(options =>
+                 EntityFrameworkServiceCollectionExtensions.AddDbContext< MatchFilterDbContext>(services, (Action<DbContextOptionsBuilder>?)(options =>
                      options.UseNpgsql(
                          hostContext.Configuration.GetConnectionString("DefaultConnection"),
                          b => b.MigrationsAssembly("LolMatchFilterNew.Infrastructure")

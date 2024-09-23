@@ -8,11 +8,12 @@ using System.Web;
 
 namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 {
-    public class LeaguepediaQueryService<T> : ILeaguepediaQueryService
+    public class LeaguepediaQueryService : ILeaguepediaQueryService
     {
 
+        // Example tournamentName formats "LEC 2024 Season Finals", "LEC 2024 Spring",
         private const string BaseUrl = "https://lol.fandom.com/api.php";
-        public string BuildLeaguepediaQuery(string tournamentName, int limit = 5)
+        public string BuildLeaguepediaQuery(string tournamentName, string split, int year, int limit = 5)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
@@ -26,4 +27,5 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
             return $"{BaseUrl}?{query}";
         }
-
+    }
+}

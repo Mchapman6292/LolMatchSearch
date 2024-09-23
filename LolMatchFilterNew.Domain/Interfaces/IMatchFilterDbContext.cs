@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Interfaces.ILolMatchFilterDbContext
+namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
-    public interface ILolMatchFilterDbContext
+    public interface IMatchFilterDbContext
     {
         DbSet<LeaguepediaMatchDetailEntity> LeaguepediaMatchDetails { get; set; }
         DbSet<LeagueTeamEntity> Teams { get; set; }

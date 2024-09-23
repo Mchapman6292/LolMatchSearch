@@ -10,11 +10,11 @@ using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Interfaces.ILolMatchFilterDbContext;
+using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts
 {
-    public class MatchFilterDbContext : DbContext, ILolMatchFilterDbContext
+    public class MatchFilterDbContext : DbContext, IMatchFilterDbContext
     {
         public MatchFilterDbContext(DbContextOptions<MatchFilterDbContext> options)
             : base(options)

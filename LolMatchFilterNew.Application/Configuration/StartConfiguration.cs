@@ -24,14 +24,13 @@ using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
-using LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 
 
 
 using Microsoft.Extensions.Hosting;
-using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -103,6 +102,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                  services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
                  services.AddTransient<IActivityService, ActivityService>();
                  services.AddTransient<ILeaguepediaQueryService, LeaguepediaQueryService>();
+                 services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
 
 
                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

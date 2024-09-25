@@ -10,6 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis
 {
     public interface ILeaguepediaApi
     {
-        Task GetAllGamesForSeason();
+        Task GetAllGamesForSeason(string tournament, string split, int year);
     }
 }

@@ -12,7 +12,7 @@ using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
-namespace LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts
+namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
     public class MatchFilterDbContext : DbContext, IMatchFilterDbContext
     {

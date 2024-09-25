@@ -8,9 +8,8 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
-using LolMatchFilterNew.Infrastructure.DbContextFactory;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Infrastructure.DbContextFactory.MatchFilterDbContexts;
+using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
@@ -31,9 +30,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
             int savedCount = 0;
             int failureCount = 0;
 
-            using var transaction = await _matchFilterDbContext.
 
-            await  AddRangeAsync(matchDetails);
+
+
             await _matchFilterDbContext.SaveChangesAsync();
         }
     }

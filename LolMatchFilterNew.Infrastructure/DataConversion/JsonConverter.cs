@@ -23,28 +23,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
         }
 
 
-        public async Task<IAsyncEnumerable<LeaguepediaMatchDetailEntity>> ConvertJsonToLeaguepediaEntity(IEnumerable<string> jsonStrings)
-        {
-            return jsonStrings.ToAsyncEnumerable().Select(jsonString =>
-            {
-                try
-                {
-                    var jsonObject = JObject.Parse(jsonString);
-                    return MapToEntity(jsonObject);
-                }
-                catch (Exception ex)
-                {
-                    _appLogger.Error($"Error parsing JSON: {ex.Message}");
-                    return null;
-                }
-            }).Where(entity => entity != null);
-        }
+
+
+
+
+
+
     }
-
-
-
-
-
-
-
 }

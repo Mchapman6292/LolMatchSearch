@@ -22,21 +22,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion
 
         private LeaguepediaMatchDetailEntity MapToEntity(JObject jsonObject)
         {
-            var entity = new LeaguepediaMatchDetailEntity
-            {
-                LeaguepediaGameIdAndTitle = jsonObject["GameId"]?.ToString(),
-                CustomMatchId = GenerateCustomMatchId(jsonObject),
-                DateTimeUTC = ParseDateTime(jsonObject["DateTime UTC"]?.ToString()),
-                Tournament = jsonObject["Tournament"]?.ToString(),
-                Team1 = jsonObject["Team1"]?.ToString(),
-                Team2 = jsonObject["Team2"]?.ToString(),
-                Team1Picks = ParsePicks(jsonObject["Team1Picks"]?.ToString()),
-                Team2Picks = ParsePicks(jsonObject["Team2Picks"]?.ToString()),
-                Team1Side = DetermineTeam1Side(jsonObject["Team1Picks"]?.ToString()),
-                Winner = DetermineWinner(jsonObject)
-            };
-
-            return entity;
+            throw new NotImplementedException();
         }
 
 

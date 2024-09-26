@@ -12,7 +12,6 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string CustomMatchId { get; set; }
         public string YoutubeVideoId { get; set; }
         public string Title { get; set; }
         public DateTime? PublishedAt { get; set; }

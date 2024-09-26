@@ -25,7 +25,6 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         // Primary key for ScoreboardPlayers, ScoreboardGames & ScoreboardTeams
         [Key]
         public string LeaguepediaGameIdAndTitle { get; set; } 
-        public string CustomMatchId { get; set; }
 
         [Required]
         public DateTime DateTimeUTC { get; set; } // ScoreboardPlayers

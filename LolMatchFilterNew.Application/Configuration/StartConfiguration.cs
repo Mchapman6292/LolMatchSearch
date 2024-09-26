@@ -27,6 +27,11 @@ using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
+using LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConverters;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaIDGenerators;
+using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
+
 
 
 
@@ -103,6 +108,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                  services.AddTransient<IActivityService, ActivityService>();
                  services.AddTransient<ILeaguepediaQueryService, LeaguepediaQueryService>();
                  services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
+                 services.AddTransient<IJsonConverter, JsonConverter>();
+                 services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
 
 
                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

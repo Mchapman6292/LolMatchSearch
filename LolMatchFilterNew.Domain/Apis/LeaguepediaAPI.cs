@@ -40,9 +40,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
         }
 
 
-        public async Task GetAllGamesForSeason(string tournament, string split, int year)
+        public async Task GetMatchesForSplit(string tournament, string split, int year)
         {
-            _appLogger.Info($"STarting {nameof(GetAllGamesForSeason)}.");
+            _appLogger.Info($"STarting {nameof(GetMatchesForSplit)}.");
 
 
 

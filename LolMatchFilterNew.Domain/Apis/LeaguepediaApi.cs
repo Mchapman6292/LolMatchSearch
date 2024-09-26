@@ -44,13 +44,11 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
         {
             _appLogger.Info($"STarting {nameof(GetAllGamesForSeason)}.");
 
-            try
-            {
 
-            }
 
 
         }
+
   
            
 

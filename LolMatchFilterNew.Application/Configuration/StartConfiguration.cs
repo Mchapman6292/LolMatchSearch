@@ -10,8 +10,6 @@ using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain;
-using LolMatchFilterNew.infrastructure.HttpJsonServices;
-using LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices;
 using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
@@ -102,7 +100,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
                  services.AddTransient<IYoutubeApi, YoutubeApi>();
                  services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
-                 services.AddTransient<IHttpJsonService, HttpJsonService>();
                  services.AddTransient<IApiHelper, ApiHelper>();
                  services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
                  services.AddTransient<IActivityService, ActivityService>();

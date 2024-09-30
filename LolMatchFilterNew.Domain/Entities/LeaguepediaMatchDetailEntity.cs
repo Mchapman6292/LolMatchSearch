@@ -39,8 +39,9 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         public string Team2 { get; set; } // ScoreboardGames
         public List<string> Team1Picks { get; set; }  // ScoreboardGames
         public List<string> Team2Picks { get; set; }  // ScoreboardGames
-        public TeamSide Team1Side { get; set; }
+        
         public string Winner { get; set; }
+        
 
 
 

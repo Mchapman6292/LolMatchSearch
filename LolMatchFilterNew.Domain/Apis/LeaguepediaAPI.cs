@@ -46,7 +46,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
 
             string query = _leaguepediaQueryService.BuildLeaguepediaQuery(tournament, split, year);
 
-
+             
 
 
 

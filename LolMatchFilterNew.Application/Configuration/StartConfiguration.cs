@@ -61,7 +61,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
 
             var connectionString = host.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
-             _appLogger.Info($"Connection String: {connectionString}");
+             
 
             using (var scope = host.Services.CreateScope())
             {
@@ -111,6 +111,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+
+                 
 
                  services.AddHttpClient("YouTube", client =>
                  {

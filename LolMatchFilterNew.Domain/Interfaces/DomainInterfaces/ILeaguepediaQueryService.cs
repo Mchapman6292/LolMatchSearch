@@ -8,6 +8,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
 {
     public interface ILeaguepediaQueryService
     {
-        public string BuildLeaguepediaQuery(string leagueAbbreviation, string split, int year, int limit = 480);
+        string BuildLeaguepediaQuery(string tournamentName, int limit = 480, int offset = 0);
     }
 }

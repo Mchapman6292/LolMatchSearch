@@ -35,6 +35,9 @@ using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
 
 
@@ -107,8 +110,10 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                  services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
                  services.AddTransient<IJsonConverter, JsonConverter>();
                  services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
+                 services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
 
-
+                 services.AddScoped<IMatchFilterDbContext>(provider =>
+                     provider.GetRequiredService<MatchFilterDbContext>());
                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 

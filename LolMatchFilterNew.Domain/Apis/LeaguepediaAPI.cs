@@ -134,10 +134,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
                     }
 
                     var extractedMatches = matchesData
-                        .Select(match => match["title"] as JObject)
-                        .Where(match => match != null)
-                        .Take(remainingResults)
-                        .ToList();
+                       .Cast<JObject>()
+                       .Take(remainingResults)
+                       .ToList();
 
                     allMatches.AddRange(extractedMatches);
                     _appLogger.Info($"[TEST] Fetched {extractedMatches.Count} matches. Total matches so far: {allMatches.Count}");

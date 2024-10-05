@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatch
 {
     public interface ILeaguepediaMatchDetailRepository
     {
+        Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails);
     }
 }

@@ -365,7 +365,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 # Ignore AppSettings.json
-LolMatchFilterNew.Presentation/appsettings.json
+LolMatchFilterNew.Presentation/AppSettings.json
+LolMatchFilterNew.Application/appsettings.json
 
 #Practice accidentally added
 LeetcodeAOC/

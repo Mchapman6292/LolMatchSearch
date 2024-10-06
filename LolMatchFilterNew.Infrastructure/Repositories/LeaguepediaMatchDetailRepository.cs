@@ -18,22 +18,41 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
-        public LeaguepediaMatchDetailRepository(IMatchFilterDbContext dbcontex, IAppLogger appLogger)
-            : base(dbcontex as DbContext, appLogger)
+        public LeaguepediaMatchDetailRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
+            : base(dbContext as DbContext, appLogger)
         {
             _appLogger = appLogger;
-            _matchFilterDbContext = dbcontex;
+            _matchFilterDbContext = dbContext;
         }
 
-        public async Task AddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails)
+        public async Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails)
         {
-            int savedCount = 0;
-            int failureCount = 0;
+            try
+            {
+                int failedCount = 0;
 
 
+                _matchFilterDbContext.LeaguepediaMatchDetails.AddRange(matchDetails);
 
+                int addedCount = await _matchFilterDbContext.SaveChangesAsync();
 
-            await _matchFilterDbContext.SaveChangesAsync();
+                _appLogger.Info($"Successfully added {addedCount} new matches.");
+
+                return addedCount;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Failed to bulk add matches. Error: {ex.Message}");
+                throw;
+            }
         }
+
+
+
+
+
+
+   
     }
 }
+

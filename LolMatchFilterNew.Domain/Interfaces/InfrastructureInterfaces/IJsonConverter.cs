@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConv
 {
     public interface IJsonConverter
     {
+        Task<IEnumerable<LeaguepediaMatchDetailEntity>> DeserializeLeaguepediaJsonData(IEnumerable<JObject> leaguepediaData);
     }
 }

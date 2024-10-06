@@ -15,7 +15,7 @@ namespace LolMatchFilterNew.Domain.Entities.LeagueTeamEntities
         [Key]
         public string TeamName { get; set; } // Unique identifier for the team
 
-        public virtual ICollection<ProPlayerEntity> CurrentPlayers { get; set; }
+        public virtual ICollection<ProPlayerEntity> CurrentPlayers { get; set; } // Collections are used to define the reverse for these relationships(Each team has current players & former players)
 
         public virtual ICollection<ProPlayerEntity> FormerPlayers { get; set; }
 

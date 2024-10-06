@@ -15,19 +15,20 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         private const string BaseUrl = "https://lol.fandom.com/api.php";
 
         // leagueAbbreviation: Replaces tournamentName and should be the short form of the league (e.g., "LEC").
-        public string BuildLeaguepediaQuery(string leagueAbbreviation, string split, int year, int limit = 480)
+        public string BuildLeaguepediaQuery(string tournamentName, int limit = 480, int offset = 0)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP";
             query["join_on"] = "SG.GameId=SP.GameId";
-            query["fields"] = "SG.GameId, SG.DateTime_UTC, SG.Team1, SG.Team2, " +
-                              "SP.Team, SP.Player, SP.Champion, SP.Role, " +
-                              "SG.Winner, SG.Gamelength_Number, SG.OverviewPage";
-            query["where"] = $"SG.Tournament LIKE '{leagueAbbreviation}/{year} Season/{split}%'";
-            query["group_by"] = "SG.GameId, SG.DateTime_UTC, SG.Team1, SG.Team2, SP.Team, SP.Player, SP.Champion, SP.Role, SG.Winner, SG.Gamelength_Number, SG.OverviewPage";
+            query["fields"] = "SG.GameId, SG.DateTime UTC, SG.Tournament, SG.Team1, SG.Team2, " +
+                              "SG.Winner, SG.Team1Picks, SG.Team2Picks";
+                              
+            query["where"] = $"SG.Tournament = '{tournamentName}'";
+            query["group_by"] = "SG.GameId";
             query["order_by"] = "SG.DateTime_UTC ASC";
             query["limit"] = limit.ToString();
+            query["offset"] = offset.ToString();
             query["format"] = "json";
 
             return $"{BaseUrl}?{query}";

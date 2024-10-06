@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,6 +11,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis
 {
     public interface ILeaguepediaApi
     {
-        Task GetMatchesForSplit(string tournament, string split, int year);
+        Task<IEnumerable<JObject>> FetchLeaguepediaMatchesAsync(string tournament);
+
+        Task<IEnumerable<JObject>> FetchLeaguepediaMatchesForTestingAsync(string tournament, int maxResults);
+
     }
 }

@@ -10,8 +10,6 @@ using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain;
-using LolMatchFilterNew.infrastructure.HttpJsonServices;
-using LolMatchFilterNew.Domain.Interfaces.IHttpJsonServices;
 using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
@@ -37,6 +35,9 @@ using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
 
 
@@ -63,7 +64,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
 
             var connectionString = host.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
-             _appLogger.Info($"Connection String: {connectionString}");
+             
 
             using (var scope = host.Services.CreateScope())
             {
@@ -82,44 +83,51 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
             return host;
         }
 
-    
 
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-         Host.CreateDefaultBuilder(args)
-             .ConfigureServices((Action<HostBuilderContext, IServiceCollection>)((hostContext, services) =>
-             {
-                 EntityFrameworkServiceCollectionExtensions.AddDbContext< MatchFilterDbContext>(services, (Action<DbContextOptionsBuilder>?)(options =>
-                     options.UseNpgsql(
-                         hostContext.Configuration.GetConnectionString("DefaultConnection"),
-                         b => b.MigrationsAssembly("LolMatchFilterNew.Infrastructure")
-                             ))
-                 );
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+          Host.CreateDefaultBuilder(args)
+              .ConfigureServices((hostContext, services) =>
+              {
+                  services.AddDbContext<MatchFilterDbContext>(options =>
+                  {
+                      options.UseNpgsql(
+                          hostContext.Configuration.GetConnectionString("DefaultConnection"),
+                          b => b.MigrationsAssembly("LolMatchFilterNew.Infrastructure")
+                      );
+                      options.EnableSensitiveDataLogging();
+                      options.LogTo(Console.WriteLine);
+                  });
 
 
-                 services.AddSingleton<IAppLogger, AppLogger>();
-                 services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
 
-                 services.AddTransient<IYoutubeApi, YoutubeApi>();
-                 services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
-                 services.AddTransient<IHttpJsonService, HttpJsonService>();
-                 services.AddTransient<IApiHelper, ApiHelper>();
-                 services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
-                 services.AddTransient<IActivityService, ActivityService>();
-                 services.AddTransient<ILeaguepediaQueryService, LeaguepediaQueryService>();
-                 services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
-                 services.AddTransient<IJsonConverter, JsonConverter>();
-                 services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
+                  services.AddSingleton<IAppLogger, AppLogger>();
+                  services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
+
+                  services.AddTransient<IYoutubeApi, YoutubeApi>();
+                  services.AddTransient<ILeaguepediaApi, LeaguepediaApi>();
+                  services.AddTransient<IApiHelper, ApiHelper>();
+                  services.AddTransient<IYoutubeTitleMatcher, YoutubeTitleMatcher>();
+                  services.AddTransient<IActivityService, ActivityService>();
+                  services.AddTransient<ILeaguepediaQueryService, LeaguepediaQueryService>();
+                  services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
+                  services.AddTransient<IJsonConverter, JsonConverter>();
+                  services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
+                  services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
+
+                  services.AddScoped<IMatchFilterDbContext>(provider =>
+                      provider.GetRequiredService<MatchFilterDbContext>());
+                  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
-                 services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
-                 services.AddHttpClient("YouTube", client =>
-                 {
-                     client.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
-                 });
-             }));
+                  services.AddHttpClient("YouTube", client =>
+                  {
+                      client.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
+                  });
+              });
 
     }
 }

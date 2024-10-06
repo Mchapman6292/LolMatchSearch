@@ -44,9 +44,12 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
                 entity.Property(e => e.InGameName).IsRequired();
                 entity.HasOne(p => p.CurrentTeamNavigation)
-                   .WithMany(t => t.CurrentPlayers)
+                   .WithMany(t => t.CurrentPlayers) // WithMany Defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
                    .HasForeignKey(p => p.CurrentTeam)
                    .OnDelete(DeleteBehavior.SetNull);
+                entity.HasMany(p => p.PreviousTeams)
+                   .WithMany(t => t.FormerPlayers)
+                   .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
             });
 
 

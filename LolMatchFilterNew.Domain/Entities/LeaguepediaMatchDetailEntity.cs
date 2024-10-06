@@ -46,7 +46,7 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         
 
 
-
+        // Used by EF to setup relationships between entities
         public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
 
         public virtual LeagueTeamEntity Team1Navigation { get; set; }

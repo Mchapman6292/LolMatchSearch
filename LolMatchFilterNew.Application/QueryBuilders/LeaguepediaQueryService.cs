@@ -21,7 +21,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["action"] = "cargoquery";
             query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP";
             query["join_on"] = "SG.GameId=SP.GameId";
-            query["fields"] = "SG.GameId, SG.DateTime_UTC, SG.Tournament, SG.Team1, SG.Team2, " +
+            query["fields"] = "SG.GameId, SG.DateTime UTC, SG.Tournament, SG.Team1, SG.Team2, " +
                               "SG.Winner, SG.Team1Picks, SG.Team2Picks";
                               
             query["where"] = $"SG.Tournament = '{tournamentName}'";

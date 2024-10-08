@@ -8,6 +8,7 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServ
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using Activity = System.Diagnostics.Activity;
 using System.Text.Json;
+using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
 {
@@ -69,6 +70,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
                         _appLogger.Info($"No more match data found. Total matches fetched: {allMatches.Count}");
                         break;
                     }
+
 
                     var extractedMatches = matchesData
                         .Select(match => match["title"] as JObject)
@@ -160,7 +162,13 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
                     throw;
                 }
             }
+            var firstResult = allMatches.FirstOrDefault();
 
+            foreach(var results in firstResult)
+            {
+                _appLogger.Info($" data: {results}.");  
+            }
+            
             return allMatches;
         }
     }

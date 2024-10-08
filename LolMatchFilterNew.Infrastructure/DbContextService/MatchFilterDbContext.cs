@@ -46,6 +46,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasOne(p => p.CurrentTeamNavigation)
                    .WithMany(t => t.CurrentPlayers) // WithMany Defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
                    .HasForeignKey(p => p.CurrentTeam)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.SetNull);
                 entity.HasMany(p => p.PreviousTeams)
                    .WithMany(t => t.FormerPlayers)
@@ -62,24 +63,40 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Team2).IsRequired();
 
                 entity.HasOne(e => e.YoutubeVideo)
-                  .WithOne(y => y.LeaguepediaMatch)
-                  .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle);
+                    .WithOne(y => y.LeaguepediaMatch)
+                    .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle)
+                    .IsRequired(false);
+
+                entity.HasOne(e => e.Team1Navigation)
+                    .WithMany()
+                    .HasForeignKey("Team1NavigationTeamName")
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(e => e.Team2Navigation)
+                    .WithMany()
+                    .HasForeignKey("Team2NavigationTeamName")
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 
 
-                modelBuilder.Entity<LeagueTeamEntity>(entity =>
+
+            modelBuilder.Entity<LeagueTeamEntity>(entity =>
             {
                 entity.HasKey(e => e.TeamName);
 
                 entity.HasMany(t => t.CurrentPlayers)
                     .WithOne(p => p.CurrentTeamNavigation)
                     .HasForeignKey(p => p.CurrentTeam)
+                    .IsRequired(false)
                     .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasMany(t => t.FormerPlayers)
                     .WithMany(p => p.PreviousTeams)
                     .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
             });
-            });
+            
         }
 
     }

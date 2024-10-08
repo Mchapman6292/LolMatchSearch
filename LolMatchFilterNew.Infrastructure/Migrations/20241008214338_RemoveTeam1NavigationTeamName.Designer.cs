@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class LolMatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008214338_RemoveTeam1NavigationTeamName")]
+    partial class RemoveTeam1NavigationTeamName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +67,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Team1NavigationTeamName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Team1Picks")
@@ -75,6 +79,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Team2NavigationTeamName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Team2Picks")
@@ -105,6 +110,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CurrentTeam")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("InGameName")
@@ -139,6 +145,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("LeaguepediaGameIdAndTitle")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("PublishedAt")
@@ -188,12 +195,14 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasOne("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", "Team1Navigation")
                         .WithMany()
                         .HasForeignKey("Team1NavigationTeamName")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", "Team2Navigation")
                         .WithMany()
                         .HasForeignKey("Team2NavigationTeamName")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Team1Navigation");
 
@@ -205,7 +214,8 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasOne("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", "CurrentTeamNavigation")
                         .WithMany("CurrentPlayers")
                         .HasForeignKey("CurrentTeam")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("CurrentTeamNavigation");
                 });
@@ -214,7 +224,9 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.HasOne("LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities.LeaguepediaMatchDetailEntity", "LeaguepediaMatch")
                         .WithOne("YoutubeVideo")
-                        .HasForeignKey("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", "LeaguepediaGameIdAndTitle");
+                        .HasForeignKey("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", "LeaguepediaGameIdAndTitle")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LeaguepediaMatch");
                 });

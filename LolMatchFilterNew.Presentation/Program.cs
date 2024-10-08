@@ -8,6 +8,7 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDeta
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConverters;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using System.Reflection;
 
 namespace LolMatchFilterNew.Presentation
@@ -23,6 +24,7 @@ namespace LolMatchFilterNew.Presentation
                 var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var jsonConverter = scope.ServiceProvider.GetRequiredService<IJsonConverter>();
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
+                var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
 
                 IEnumerable<JObject> results = await leaguepediaApi.FetchLeaguepediaMatchesForTestingAsync("LEC 2023 Summer Season", 300);
 
@@ -31,6 +33,8 @@ namespace LolMatchFilterNew.Presentation
                     logger.Warning("No results fetched from LeaguepediaApi.");
                     return;
                 }
+
+
 
                 var (totalObjects, nullObjects, nullProperties) = CountObjectsAndNullProperties(results);
                 logger.Info($"Fetched {totalObjects} matches. Null objects: {nullObjects}, Null properties: {nullProperties}");

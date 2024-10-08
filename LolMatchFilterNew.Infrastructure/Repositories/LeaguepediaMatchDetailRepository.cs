@@ -10,6 +10,7 @@ using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
+using System.Runtime.CompilerServices;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
@@ -29,30 +30,78 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         {
             try
             {
-                int failedCount = 0;
+                const int testLimit = 10;
+                int addedCount = 0;
+                int processedCount = 0;
 
+                _appLogger.Info("Starting bulk add operation...");
+                LogTrackedEntities();
 
-                _matchFilterDbContext.LeaguepediaMatchDetails.AddRange(matchDetails);
+                foreach (var matchDetail in matchDetails)
+                {
+                    if (processedCount >= testLimit)
+                    {
+                        _appLogger.Info($"Reached test limit of {testLimit} entities. Stopping processing.");
+                        break;
+                    }
 
-                int addedCount = await _matchFilterDbContext.SaveChangesAsync();
+                    if (matchDetail.DateTimeUTC.Kind != DateTimeKind.Utc)
+                    {
+                        matchDetail.DateTimeUTC = DateTime.SpecifyKind(matchDetail.DateTimeUTC, DateTimeKind.Utc);
+                    }
 
-                _appLogger.Info($"Successfully added {addedCount} new matches.");
+                    _appLogger.Info($"Adding entity: GameId={matchDetail.LeaguepediaGameIdAndTitle}, DateTime={matchDetail.DateTimeUTC}");
+                    _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
+                    processedCount++;
+
+                    if (processedCount % 5 == 0)
+                    {
+                        _appLogger.Info($"Added {processedCount} entities so far.");
+                        LogTrackedEntities();
+                    }
+                }
+
+                _appLogger.Info($"Saving changes for {processedCount} entities...");
+                addedCount = await _matchFilterDbContext.SaveChangesAsync();
+
+                _appLogger.Info($"Successfully added {addedCount} new matches out of {processedCount} processed.");
+                LogTrackedEntities();
 
                 return addedCount;
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 _appLogger.Error($"Failed to bulk add matches. Error: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
+                }
+                LogTrackedEntities();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error during bulk add: {ex.Message}");
+                LogTrackedEntities();
                 throw;
             }
         }
 
 
+        public void LogTrackedEntities()
+        {
+            var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<LeaguepediaMatchDetailEntity>()
+                .Select(e => new
+                {
+                    Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,
+                    State = e.State
+                }).ToList();
 
-
-
-
-   
+            _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
+            foreach (var entity in trackedEntities)
+            {
+                _appLogger.Info($"Tracked entity: Key = {entity.Key}, State = {entity.State}");
+            }
+        }
     }
 }
-

@@ -15,7 +15,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         private const string BaseUrl = "https://lol.fandom.com/api.php";
 
      
-        public string BuildLeaguepediaQuery(string tournamentName, int limit = 480, int offset = 0)
+        public string BuildQueryStringForPlayersChampsInSeason(string tournamentName, int limit = 480, int offset = 0)
         {
             // Ensure the tournament name is properly escaped/ url encoded.
 

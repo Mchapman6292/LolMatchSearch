@@ -1,14 +1,15 @@
 ﻿using LolMatchFilterNew.Application.Configuration.StartConfiguration;
 using Microsoft.Extensions.Hosting;
-using LolMatchFilterNew.Domain.Apis.LeaguepediaApis;
+using LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
+using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using Microsoft.Extensions.DependencyInjection;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConverters;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using System.Reflection;
 
 
@@ -22,32 +23,26 @@ namespace LolMatchFilterNew.Presentation
             var host = await StartConfiguration.InitializeApplicationAsync(args);
             using (var scope = host.Services.CreateScope())
             {
-                var leaguepediaApi = scope.ServiceProvider.GetRequiredService<ILeaguepediaApi>();
+                var leaguepediaDataFetcher = scope.ServiceProvider.GetRequiredService<ILeaguepediaDataFetcher>();
                 var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var jsonConverter = scope.ServiceProvider.GetRequiredService<IJsonConverter>();
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
+                var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
 
-                IEnumerable<JObject> results = await leaguepediaApi.FetchLeaguepediaMatchesForTestingAsync("LEC 2023 Summer Season", 300);
+                string query = leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason("LEC 2023 Summer Season");
 
-                if (results == null || !results.Any())
-                {
-                    logger.Warning("No results fetched from LeaguepediaApi.");
-                    return;
-                }
+                IEnumerable<JObject> apiData = await leaguepediaDataFetcher.FetchAndExtractMatches(query);
 
-
-
-                var (totalObjects, nullObjects, nullProperties) = CountObjectsAndNullProperties(results);
-                logger.Info($"Fetched {totalObjects} matches. Null objects: {nullObjects}, Null properties: {nullProperties}");
-
-                IEnumerable<LeaguepediaMatchDetailEntity> resultsEnumerable = await jsonConverter.DeserializeLeaguepediaJsonData(results);
-                int addedEntries = await leaguepediaRepository.BulkAddLeaguepediaMatchDetails(resultsEnumerable);
+                int addedEntries = await leaguepediaRepository.BulkAddLeaguepediaMatchDetails(apiData);
 
                 logger.Info($"Added {addedEntries} entries to the database.");
             }
             await host.RunAsync();
         }
+
+
+
 
         private static (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
         {

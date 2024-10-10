@@ -103,5 +103,25 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 _appLogger.Info($"Tracked entity: Key = {entity.Key}, State = {entity.State}");
             }
         }
+
+        public async Task<int> DeleteAllRecordsAsync()
+        {
+            try
+            {
+                var allRecords = await _matchFilterDbContext.LeaguepediaMatchDetails.ToListAsync();
+                int count = allRecords.Count;
+
+                _matchFilterDbContext.LeaguepediaMatchDetails.RemoveRange(allRecords);
+                await _matchFilterDbContext.SaveChangesAsync();
+
+                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
+                return count;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error occurred while deleting records: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

@@ -46,22 +46,22 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
                         var entity = new LeaguepediaMatchDetailEntity
                         {
                             LeaguepediaGameIdAndTitle = GetStringValue(matchData, "GameId"),
+                            GameName = GetStringValue(matchData, "Gamename"),
                             DateTimeUTC = ParseDateTime(matchData, "DateTime UTC"),
                             Tournament = GetStringValue(matchData, "Tournament"),
                             Team1 = GetStringValue(matchData, "Team1"),
                             Team2 = GetStringValue(matchData, "Team2"),
-                            Team1Picks = GetStringValue(matchData, "Team1Picks").Split(',').Select(s => s.Trim()).ToList(),
-                            Team2Picks = GetStringValue(matchData, "Team2Picks").Split(',').Select(s => s.Trim()).ToList()
+                            Team1Players = GetValuesAsList(matchData, "Team1Players"),
+                            Team2Players = GetValuesAsList(matchData, "Team2P;ayers"),
+                            Team1Picks = GetValuesAsList(matchData, "Team1Picks"),
+                            Team2Picks = GetValuesAsList(matchData, "Team2Picks"),
+                            WinTeam = GetStringValue(matchData,"WinTeam"),
+                            LossTeam = GetStringValue(matchData, "LossTeam"),
+                            Team1Kills = GetInt32Value(matchData, "Team1Kills"),
+                            Team2Kills = GetInt32Value(matchData, "Team2Kills")
+
                         };
 
-                        _appLogger.Info($"Deserialized entity {processedCount}:");
-                        _appLogger.Info($"  GameId: {entity.LeaguepediaGameIdAndTitle}");
-                        _appLogger.Info($"  DateTime: {entity.DateTimeUTC}");
-                        _appLogger.Info($"  Tournament: {entity.Tournament}");
-                        _appLogger.Info($"  Team1: {entity.Team1}");
-                        _appLogger.Info($"  Team2: {entity.Team2}");
-                        _appLogger.Info($"  Team1Picks: {string.Join(", ", entity.Team1Picks)}");
-                        _appLogger.Info($"  Team2Picks: {string.Join(", ", entity.Team2Picks)}");
 
                         results.Add(entity);
                     }
@@ -76,6 +76,62 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
                 return results;
             });
         }
+
+        private int GetInt32Value(JObject obj, string key)
+        {
+            JToken targetObj = obj[key];
+
+            if (targetObj == null || targetObj.Type != JTokenType.String)
+            {
+                throw new ArgumentNullException($"The value for key '{key}' is null or not a string.");
+            }
+
+            string value = targetObj.ToString();
+
+            if (int.TryParse(value, out int result))
+            {
+                return result; 
+            }
+            else
+            {
+                _appLogger.Error($"Null value detected during {nameof(GetInt32Value)}");
+                throw new FormatException($"The value for key '{key}' ('{value}') is not a valid integer.");
+            }
+        }
+
+        private List<string> GetValuesAsList(JObject obj, string key)
+        {
+            try
+            {
+                var token = obj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Null value encountered for key: {key}. Returning empty list.");
+                    return new List<string>();
+                }
+                if (token.Type == JTokenType.Array)
+                {
+                    return token.ToObject<List<string>>() ?? new List<string>();
+                }
+                if (token.Type == JTokenType.String)
+                {
+                    var value = token.ToString();
+                    return string.IsNullOrWhiteSpace(value)
+                        ? new List<string>()
+                        : value.Split(',').Select(s => s.Trim()).ToList();
+                }
+                _appLogger.Warning($"Unexpected token type for key: {key}. Type: {token.Type}. Returning empty list.");
+                return new List<string>();
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error getting list values for key: {key}. Error: {ex.Message}");
+                return new List<string>();
+            }
+        }
+
+
+
 
         private string GetStringValue(JObject obj, string key)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class LolMatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009235534_AddWinTeamLossTeam")]
+    partial class AddWinTeamLossTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,10 +59,6 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<DateTime>("DateTimeUTC")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("GameName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("LossTeam")
                         .IsRequired()
                         .HasColumnType("text");
@@ -71,9 +70,6 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Team1Kills")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Team1NavigationTeamName")
                         .HasColumnType("text");
 
@@ -81,25 +77,14 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<List<string>>("Team1Players")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<string>("Team2")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Team2Kills")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Team2NavigationTeamName")
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Team2Picks")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<List<string>>("Team2Players")
                         .IsRequired()
                         .HasColumnType("text[]");
 

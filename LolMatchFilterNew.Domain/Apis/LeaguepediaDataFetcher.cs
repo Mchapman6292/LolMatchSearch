@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Web;
-using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
+using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
@@ -10,13 +10,14 @@ using Activity = System.Diagnostics.Activity;
 using System.Text.Json;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System;
+using Npgsql.PostgresTypes;
 
-namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
+namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 {
     // API limits : 500 results per query
     // From help page "Please add a small delay between queries (1-2 seconds). If the server gets stressed as a result of a huge number of queries, you may be rate-limited for some time."
 
-    public class LeaguepediaApi : ILeaguepediaApi
+    public class LeaguepediaDataFetcher : ILeaguepediaDataFetcher
     {
         private readonly IAppLogger _appLogger;
         private readonly IActivityService _activityService;
@@ -24,6 +25,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
         private readonly ILeaguepediaQueryService _leaguepediaQueryService;
         private readonly ILeaguepediaAPILimiter _leaguepediaApiLimiter;
         private readonly IHttpClientFactory _httpClientFactory;
+        const int MaxResultsPerQuery = 490;
+
+
 
 
         private static readonly HttpClient client = new HttpClient();
@@ -31,7 +35,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
     "LolMatchReports");
 
-        public LeaguepediaApi( IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaAPILimiter leaguepediaAPILimiter, IHttpClientFactory httpClientFactory)
+        public LeaguepediaDataFetcher( IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaAPILimiter leaguepediaAPILimiter, IHttpClientFactory httpClientFactory)
         {
             _appLogger = appLogger;
             _activityService = activityService;
@@ -41,7 +45,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
             _httpClientFactory = httpClientFactory;
         }
 
-        // Returns the entire API response as one JObject
+        // Fetches data from the Leaguepedia API and returns the response as a JObject.
         public async Task<JObject> FetchLeaguepediaApiResponse(string urlQuery)
         {
 
@@ -57,7 +61,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
             }
             catch (HttpRequestException ex)
             {
-                _appLogger.Error($"HTTP request failed for Leaguepedia API. URL: {urlQuery}");
+                _appLogger.Error($"HTTP request failed for Leaguepedia API. URL: {urlQuery}", ex);
                 throw;
             }
             catch (JsonException ex)
@@ -67,8 +71,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
             }
         }
 
-        // Splits the data returned by FetchLeaguepediaApiResponse into seperate Json Objects in a list
-        private List<JObject> ParseMatchesFromLeaguepediaApiResponse(JObject jsonMatchData)
+        // Extracts the matches from the "cargoquery" field in the JSON response and returns them as a list of JObject.
+        // 
+        public IEnumerable<JObject> ExtractMatchesFromLeaguepediaApiResponse(JObject jsonMatchData)
         {
             var cargoQueryData = jsonMatchData["cargoquery"] as JArray;
 
@@ -79,20 +84,66 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaApis
             }
             var extractedMatches = cargoQueryData
                 .Cast<JObject>()
-                .Where(match => match != null)
-                .ToList();
-
-            _appLogger.Info($"Extracted {extractedMatches.Count} matches from the API response.");
+                .Where(match => match != null);
+                
+ 
+            _appLogger.Info($"Extracted {extractedMatches.Count()} matches from the API response.");
             return extractedMatches;
         }
 
-        public async Task<List<JObject>> FetchAndExtractMatches(string url)
-        {
-            var allMatches
 
+        // Fetches & extracts one page of matches. 
+        public async Task<IEnumerable<JObject>> FetchPageOfMatches(string baseUrl, int offset, int limit)
+        {
+            string url = $"{baseUrl}&offset={offset}&limit={limit}";
             var apiResponse = await FetchLeaguepediaApiResponse(url);
-            return ParseMatchesFromLeaguepediaApiResponse(apiResponse);
+            return ExtractMatchesFromLeaguepediaApiResponse(apiResponse);
         }
+
+        // Fetches and accumulates matches from the API, handling pagination until maxResults is reached or no more data is available.
+        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string baseUrl, int maxResults = MaxResultsPerQuery)
+        {
+            var allMatches = new List<JObject>();
+            int offset = 0;
+
+            while (allMatches.Count < maxResults)
+            {
+                var pageMatches = await FetchPageOfMatches(baseUrl, offset, MaxResultsPerQuery);
+
+                if (pageMatches.Count() == 0)
+                {
+                    _appLogger.Info("No more matches found. Ending pagination.");
+                    break;
+                }
+
+                allMatches.AddRange(pageMatches.Take(maxResults - allMatches.Count));
+                _appLogger.Info($"Fetched {pageMatches.Count()} matches. Total matches so far: {allMatches.Count}");
+
+                if (pageMatches.Count() < MaxResultsPerQuery)
+                {
+                    _appLogger.Info("Reached end of data. Ending pagination.");
+                    break;
+                }
+
+                offset += pageMatches.Count();
+            }
+
+            return allMatches;
+        }
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
 
 
 

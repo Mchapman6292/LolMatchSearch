@@ -23,6 +23,7 @@ namespace LolMatchFilterNew.Domain.Entities.ProPlayerEntities
 
         [Required]
         public string InGameName { get; set; }
+        public List<string> PreviousInGameNames { get; set; }   
         public string RealName { get; set; }
         public string Role { get; set; }
         public virtual LeagueTeamEntity CurrentTeamNavigation { get; set; }

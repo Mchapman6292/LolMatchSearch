@@ -26,6 +26,8 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         [Key]
         public string LeaguepediaGameIdAndTitle { get; set; } 
 
+        public string GameName { get; set; } // ScoreboardGames
+
         [Required]
         public DateTime DateTimeUTC { get; set; } // ScoreboardPlayers
 
@@ -37,11 +39,22 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
 
         [Required]
         public string Team2 { get; set; } // ScoreboardGames
+
+        public List<string> Team1Players { get; set; } // ScoreboardGames
+
+        public List<string> Team2Players { get; set; } //ScoreboardGames
+
+
         public List<string> Team1Picks { get; set; }  // ScoreboardGames
         public List<string> Team2Picks { get; set; }  // ScoreboardGames
 
-        public int Winner {  get; set; }
-       
+        
+        public string WinTeam {  get; set; } // ScoreboardGames
+        public string LossTeam { get; set; } // ScoreboardGames
+
+        public int Team1Kills { get; set; } // ScoreboardGames
+        public int Team2Kills { get; set; } // ScoreboardGames
+
         // Used by EF to setup relationships between entities
         public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
 

@@ -30,7 +30,6 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         {
             try
             {
-                const int testLimit = 10;
                 int addedCount = 0;
                 int processedCount = 0;
 
@@ -39,11 +38,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
 
                 foreach (var matchDetail in matchDetails)
                 {
-                    if (processedCount >= testLimit)
-                    {
-                        _appLogger.Info($"Reached test limit of {testLimit} entities. Stopping processing.");
-                        break;
-                    }
+
 
                     if (matchDetail.DateTimeUTC.Kind != DateTimeKind.Utc)
                     {

@@ -5,12 +5,14 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using Microsoft.Extensions.DependencyInjection;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConverters;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
+
+
 
 
 
@@ -25,7 +27,7 @@ namespace LolMatchFilterNew.Presentation
             {
                 var leaguepediaDataFetcher = scope.ServiceProvider.GetRequiredService<ILeaguepediaDataFetcher>();
                 var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
-                var jsonConverter = scope.ServiceProvider.GetRequiredService<IJsonConverter>();
+                var leaguepediaApiMapper = scope.ServiceProvider.GetRequiredService<ILeaguepediaApiMapper>();
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
@@ -34,7 +36,9 @@ namespace LolMatchFilterNew.Presentation
 
                 IEnumerable<JObject> apiData = await leaguepediaDataFetcher.FetchAndExtractMatches(query);
 
-                int addedEntries = await leaguepediaRepository.BulkAddLeaguepediaMatchDetails(apiData);
+                IEnumerable<LeaguepediaMatchDetailEntity> leagueEntities = await leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
+
+                int addedEntries = await leaguepediaRepository.BulkAddLeaguepediaMatchDetails(leagueEntities);
 
                 logger.Info($"Added {addedEntries} entries to the database.");
             }

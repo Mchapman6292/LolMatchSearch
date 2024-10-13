@@ -1,5 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IJsonConverters;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System;
 using System.Collections.Generic;
@@ -8,27 +7,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
+namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
-    public class JsonConverter : IJsonConverter
+    public class LeaguepediaApiMapper : ILeaguepediaApiMapper
     {
         private readonly IAppLogger _appLogger;
 
 
-        public JsonConverter(IAppLogger appLogger)
+        public LeaguepediaApiMapper
+            (IAppLogger appLogger)
         {
             _appLogger = appLogger;
         }
 
 
-        public async Task<IEnumerable<LeaguepediaMatchDetailEntity>> DeserializeLeaguepediaJsonData(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<LeaguepediaMatchDetailEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(DeserializeLeaguepediaJsonData)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaDataToEntity)}.");
                 throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>
@@ -79,23 +79,44 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
 
         private int GetInt32Value(JObject obj, string key)
         {
-            JToken targetObj = obj[key];
-
-            if (targetObj == null || targetObj.Type != JTokenType.String)
+            try
             {
-                throw new ArgumentNullException($"The value for key '{key}' is null or not a string.");
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                    _appLogger.Info($"Found nested 'title' object, using it for parsing key: {key}");
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
+                    throw new ArgumentNullException(key, $"The value for key '{key}' is null.");
+                }
+
+                if (token.Type != JTokenType.String && token.Type != JTokenType.Integer)
+                {
+                    _appLogger.Warning($"Unexpected token type for key '{key}'. Type: {token.Type}");
+                    throw new ArgumentException($"The value for key '{key}' is not a string or integer.");
+                }
+
+                string value = token.ToString();
+                if (int.TryParse(value, out int result))
+                {
+                    _appLogger.Info($"Successfully parsed int for key '{key}': {result}");
+                    return result;
+                }
+                else
+                {
+                    _appLogger.Error($"Failed to parse int value for key '{key}': '{value}'");
+                    throw new FormatException($"The value for key '{key}' ('{value}') is not a valid integer.");
+                }
             }
-
-            string value = targetObj.ToString();
-
-            if (int.TryParse(value, out int result))
+            catch (Exception ex)
             {
-                return result; 
-            }
-            else
-            {
-                _appLogger.Error($"Null value detected during {nameof(GetInt32Value)}");
-                throw new FormatException($"The value for key '{key}' ('{value}') is not a valid integer.");
+                _appLogger.Error($"Error in {nameof(GetInt32Value)} for key '{key}': {ex.Message}");
+                throw; 
             }
         }
 
@@ -103,7 +124,14 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.JsonConverters
         {
             try
             {
-                var token = obj[key];
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                    _appLogger.Info("Found nested 'title' object, using it for parsing.");
+                }
+
+                var token = targetObj[key];
                 if (token == null)
                 {
                     _appLogger.Warning($"Null value encountered for key: {key}. Returning empty list.");

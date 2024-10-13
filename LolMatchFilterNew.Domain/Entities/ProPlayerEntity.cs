@@ -29,6 +29,8 @@ namespace LolMatchFilterNew.Domain.Entities.ProPlayerEntities
         public virtual LeagueTeamEntity CurrentTeamNavigation { get; set; }
         public virtual ICollection<LeagueTeamEntity> PreviousTeams { get; set; }
         public virtual ICollection<LeaguepediaMatchDetailEntity> Matches { get; set; }
+        public virtual ICollection<LeaguepediaMatchDetailEntity> Team1Matches { get; set; }
+        public virtual ICollection<LeaguepediaMatchDetailEntity> Team2Matches { get; set; }
 
 
 

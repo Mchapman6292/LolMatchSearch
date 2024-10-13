@@ -12,6 +12,7 @@ using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
+
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
     public class MatchFilterDbContext : DbContext, IMatchFilterDbContext
@@ -58,6 +59,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasMany(p => p.PreviousTeams)
                    .WithMany(t => t.FormerPlayers)
                    .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
+
+                entity.HasMany(e => e.Matches)
+                    .
             });
 
 
@@ -87,6 +91,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .HasForeignKey("Team2NavigationTeamName")
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasMany(m => m.Team1PlayersNav)
+                     .WithMany()
+                     .UsingEntity(j => j.ToTable("MatchTeam1Players"));
+
+                
+                entity.HasMany(m => m.Team2PlayersNav)
+                    .WithMany()
+                    .UsingEntity(j => j.ToTable("MatchTeam2Players"));
             });
 
 

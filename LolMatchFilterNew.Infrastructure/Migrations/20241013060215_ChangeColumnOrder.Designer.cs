@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241010004327_TeamPlayers")]
-    partial class TeamPlayers
+    [Migration("20241013060215_ChangeColumnOrder")]
+    partial class ChangeColumnOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,65 +54,79 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities.LeaguepediaMatchDetailEntity", b =>
                 {
                     b.Property<string>("LeaguepediaGameIdAndTitle")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("DateTimeUTC")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("GameName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(1);
 
                     b.Property<string>("LossTeam")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(11);
 
                     b.Property<string>("ProPlayerEntityLeaguepediaPlayerAllName")
                         .HasColumnType("text");
 
                     b.Property<string>("Team1")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(4);
 
                     b.Property<int>("Team1Kills")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnOrder(12);
 
                     b.Property<string>("Team1NavigationTeamName")
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Team1Picks")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text[]")
+                        .HasColumnOrder(8);
 
                     b.Property<List<string>>("Team1PlayersNavigation")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text[]")
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Team2")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(5);
 
                     b.Property<int>("Team2Kills")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnOrder(13);
 
                     b.Property<string>("Team2NavigationTeamName")
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Team2Picks")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text[]")
+                        .HasColumnOrder(9);
 
                     b.Property<List<string>>("Team2PlayersNavigation")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text[]")
+                        .HasColumnOrder(7);
 
                     b.Property<string>("Tournament")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("WinTeam")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(10);
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 
@@ -138,6 +152,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LeaguepediaPlayerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreviousInGameNames")
                         .IsRequired()
                         .HasColumnType("text");
 

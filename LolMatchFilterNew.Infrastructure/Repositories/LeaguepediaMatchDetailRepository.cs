@@ -10,6 +10,7 @@ using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
+using System.Runtime.CompilerServices;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
@@ -29,30 +30,93 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         {
             try
             {
-                int failedCount = 0;
+                int addedCount = 0;
+                int processedCount = 0;
+
+                _appLogger.Info("Starting bulk add operation...");
+                LogTrackedEntities();
+
+                foreach (var matchDetail in matchDetails)
+                {
 
 
-                _matchFilterDbContext.LeaguepediaMatchDetails.AddRange(matchDetails);
+                    if (matchDetail.DateTimeUTC.Kind != DateTimeKind.Utc)
+                    {
+                        matchDetail.DateTimeUTC = DateTime.SpecifyKind(matchDetail.DateTimeUTC, DateTimeKind.Utc);
+                    }
 
-                int addedCount = await _matchFilterDbContext.SaveChangesAsync();
+                    _appLogger.Info($"Adding entity: GameId={matchDetail.LeaguepediaGameIdAndTitle}, DateTime={matchDetail.DateTimeUTC}");
+                    _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
+                    processedCount++;
 
-                _appLogger.Info($"Successfully added {addedCount} new matches.");
+                    if (processedCount % 5 == 0)
+                    {
+                        _appLogger.Info($"Added {processedCount} entities so far.");
+                        LogTrackedEntities();
+                    }
+                }
+
+                _appLogger.Info($"Saving changes for {processedCount} entities...");
+                addedCount = await _matchFilterDbContext.SaveChangesAsync();
+
+                _appLogger.Info($"Successfully added {addedCount} new matches out of {processedCount} processed.");
+                LogTrackedEntities();
 
                 return addedCount;
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 _appLogger.Error($"Failed to bulk add matches. Error: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
+                }
+                LogTrackedEntities();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error during bulk add: {ex.Message}");
+                LogTrackedEntities();
                 throw;
             }
         }
 
 
+        public void LogTrackedEntities()
+        {
+            var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<LeaguepediaMatchDetailEntity>()
+                .Select(e => new
+                {
+                    Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,
+                    State = e.State
+                }).ToList();
 
+            _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
+            foreach (var entity in trackedEntities)
+            {
+                _appLogger.Info($"Tracked entity: Key = {entity.Key}, State = {entity.State}");
+            }
+        }
 
+        public async Task<int> DeleteAllRecordsAsync()
+        {
+            try
+            {
+                var allRecords = await _matchFilterDbContext.LeaguepediaMatchDetails.ToListAsync();
+                int count = allRecords.Count;
 
+                _matchFilterDbContext.LeaguepediaMatchDetails.RemoveRange(allRecords);
+                await _matchFilterDbContext.SaveChangesAsync();
 
-   
+                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
+                return count;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error occurred while deleting records: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
-

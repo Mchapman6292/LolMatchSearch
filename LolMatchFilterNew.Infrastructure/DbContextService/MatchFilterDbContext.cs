@@ -12,6 +12,7 @@ using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
+
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
     public class MatchFilterDbContext : DbContext, IMatchFilterDbContext
@@ -43,14 +44,25 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             {
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
                 entity.Property(e => e.InGameName).IsRequired();
+                entity.Property(e => e.PreviousInGameNames);
+                       
+
                 entity.HasOne(p => p.CurrentTeamNavigation)
                    .WithMany(t => t.CurrentPlayers) // WithMany Defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
                    .HasForeignKey(p => p.CurrentTeam)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.SetNull);
+
                 entity.HasMany(p => p.PreviousTeams)
                    .WithMany(t => t.FormerPlayers)
                    .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
+
+                entity.HasMany(p => p.Matches)
+                  .WithMany(m => m.Players)
+                  .UsingEntity(j => j.ToTable("MatchPlayers"));
             });
+
+
 
 
             modelBuilder.Entity<LeaguepediaMatchDetailEntity>(entity =>
@@ -62,24 +74,42 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Team2).IsRequired();
 
                 entity.HasOne(e => e.YoutubeVideo)
-                  .WithOne(y => y.LeaguepediaMatch)
-                  .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle);
+                    .WithOne(y => y.LeaguepediaMatch)
+                    .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle)
+                    .IsRequired(false);
 
 
-                modelBuilder.Entity<LeagueTeamEntity>(entity =>
+                entity.HasMany(m => m.Team1PlayersNav)
+                     .WithMany()
+                     .UsingEntity(j => j.ToTable("MatchTeam1Players"));
+
+                entity.HasMany(m => m.Team2PlayersNav)
+                    .WithMany()
+                    .UsingEntity(j => j.ToTable("MatchTeam2Players"));
+
+                entity.HasMany(m => m.Players)
+                     .WithMany(p => p.Matches)
+                     .UsingEntity(j => j.ToTable("MatchPlayers"));
+            
+        });
+
+
+
+            modelBuilder.Entity<LeagueTeamEntity>(entity =>
             {
                 entity.HasKey(e => e.TeamName);
 
                 entity.HasMany(t => t.CurrentPlayers)
                     .WithOne(p => p.CurrentTeamNavigation)
                     .HasForeignKey(p => p.CurrentTeam)
+                    .IsRequired(false)
                     .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasMany(t => t.FormerPlayers)
                     .WithMany(p => p.PreviousTeams)
                     .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
             });
-            });
+            
         }
 
     }

@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
-using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaApis;
+using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using Microsoft.Extensions.Configuration;
 using Google.Apis.Services;

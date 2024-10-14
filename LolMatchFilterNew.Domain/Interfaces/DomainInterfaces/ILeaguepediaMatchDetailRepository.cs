@@ -10,5 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatch
     public interface ILeaguepediaMatchDetailRepository
     {
         Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails);
+        Task<int> DeleteAllRecordsAsync();
     }
 }

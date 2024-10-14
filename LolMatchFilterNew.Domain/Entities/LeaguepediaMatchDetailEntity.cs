@@ -46,16 +46,10 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         public string Team2 { get; set; } // ScoreboardGames
 
         [Column(Order = 6)]
-        public List<string> Team1Players { get; set; } // ScoreboardGames
-
-        [Column(Order = 7)]
-        public List<string> Team2Players { get; set; } //ScoreboardGames
-
-        [Column(Order = 8)]
-        public List<string> Team1Picks { get; set; }  // ScoreboardGames
-
-        [Column(Order = 9)]
-        public List<string> Team2Picks { get; set; }  // ScoreboardGames
+        public string Team1Players { get; set; } // ScoreboardGames
+        public string Team2Players { get; set; } // ScoreboardGames
+        public string Team1Picks { get; set; } // ScoreboardGames
+        public string Team2Picks { get; set; } // ScoreboardGames
 
         [Column(Order = 10)]
         public string WinTeam { get; set; } // ScoreboardGames
@@ -70,25 +64,18 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         public int Team2Kills { get; set; } // ScoreboardGames
 
         [Column(Order = 14)]
-        public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
 
+        public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
         [Column(Order = 15)]
-        public virtual LeagueTeamEntity Team1Navigation { get; set; }
+        public virtual ICollection<ProPlayerEntity> Players { get; set; }
 
         [Column(Order = 16)]
-        public virtual LeagueTeamEntity Team2Navigation { get; set; }
-
-        [Column(Order = 17)]
         public virtual ICollection<ProPlayerEntity> Team1PlayersNav { get; set; }
         
-        [Column(Order = 18)]
+        [Column(Order = 17)]
         public virtual ICollection<ProPlayerEntity> Team2PlayersNav { get; set; }
 
-        [Column(Order = 19)]
-        public string Team1NavigationTeamName { get; set; }
 
-        [Column(Order = 20)]
-        public string Team2NavigationTeamName { get; set; }
 
 
 

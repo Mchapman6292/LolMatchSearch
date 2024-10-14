@@ -44,12 +44,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             {
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
                 entity.Property(e => e.InGameName).IsRequired();
-                entity.Property(e => e.PreviousInGameNames)
-                    // Used to store the list of previous player names as a comma separated string. 
-                    .HasConversion(
-                        v => string.Join(',', v ?? new List<string>()),
-                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-                    );
+                entity.Property(e => e.PreviousInGameNames);
+                       
+
                 entity.HasOne(p => p.CurrentTeamNavigation)
                    .WithMany(t => t.CurrentPlayers) // WithMany Defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
                    .HasForeignKey(p => p.CurrentTeam)
@@ -60,8 +57,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                    .WithMany(t => t.FormerPlayers)
                    .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
 
-                entity.HasMany(e => e.Matches)
-                    .
+                entity.HasMany(p => p.Matches)
+                  .WithMany(m => m.Players)
+                  .UsingEntity(j => j.ToTable("MatchPlayers"));
             });
 
 
@@ -80,27 +78,20 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle)
                     .IsRequired(false);
 
-                entity.HasOne(e => e.Team1Navigation)
-                    .WithMany()
-                    .HasForeignKey("Team1NavigationTeamName")
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.SetNull);
-
-                entity.HasOne(e => e.Team2Navigation)
-                    .WithMany()
-                    .HasForeignKey("Team2NavigationTeamName")
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasMany(m => m.Team1PlayersNav)
                      .WithMany()
                      .UsingEntity(j => j.ToTable("MatchTeam1Players"));
 
-                
                 entity.HasMany(m => m.Team2PlayersNav)
                     .WithMany()
                     .UsingEntity(j => j.ToTable("MatchTeam2Players"));
-            });
+
+                entity.HasMany(m => m.Players)
+                     .WithMany(p => p.Matches)
+                     .UsingEntity(j => j.ToTable("MatchPlayers"));
+            
+        });
 
 
 

@@ -123,7 +123,8 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.Property<string>("Team1Picks")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(8);
 
                     b.Property<string>("Team1Players")
                         .IsRequired()
@@ -141,11 +142,13 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.Property<string>("Team2Picks")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(9);
 
                     b.Property<string>("Team2Players")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(7);
 
                     b.Property<string>("Tournament")
                         .IsRequired()

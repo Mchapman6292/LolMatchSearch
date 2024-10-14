@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241014052413_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241014053639_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,7 +126,8 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.Property<string>("Team1Picks")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(8);
 
                     b.Property<string>("Team1Players")
                         .IsRequired()
@@ -144,11 +145,13 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.Property<string>("Team2Picks")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(9);
 
                     b.Property<string>("Team2Players")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(7);
 
                     b.Property<string>("Tournament")
                         .IsRequired()

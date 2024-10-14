@@ -47,8 +47,14 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
 
         [Column(Order = 6)]
         public string Team1Players { get; set; } // ScoreboardGames
+
+        [Column(Order = 7)]
         public string Team2Players { get; set; } // ScoreboardGames
+
+        [Column(Order = 8)]
         public string Team1Picks { get; set; } // ScoreboardGames
+
+        [Column(Order = 9)]
         public string Team2Picks { get; set; } // ScoreboardGames
 
         [Column(Order = 10)]

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,13 +23,13 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     Team1 = table.Column<string>(type: "text", nullable: false),
                     Team2 = table.Column<string>(type: "text", nullable: false),
                     Team1Players = table.Column<string>(type: "text", nullable: false),
+                    Team2Players = table.Column<string>(type: "text", nullable: false),
+                    Team1Picks = table.Column<string>(type: "text", nullable: false),
+                    Team2Picks = table.Column<string>(type: "text", nullable: false),
                     WinTeam = table.Column<string>(type: "text", nullable: false),
                     LossTeam = table.Column<string>(type: "text", nullable: false),
                     Team1Kills = table.Column<int>(type: "integer", nullable: false),
-                    Team2Kills = table.Column<int>(type: "integer", nullable: false),
-                    Team2Players = table.Column<string>(type: "text", nullable: false),
-                    Team1Picks = table.Column<string>(type: "text", nullable: false),
-                    Team2Picks = table.Column<string>(type: "text", nullable: false)
+                    Team2Kills = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

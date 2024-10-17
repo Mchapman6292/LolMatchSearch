@@ -30,6 +30,8 @@ using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
 using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
+using LolMatchFilterNew.Application.LeaguepediaControllers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
 
 
 
@@ -118,6 +120,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
                   services.AddTransient<ILeaguepediaApiMapper, LeaguepediaApiMapper>();
+                  services.AddTransient<ILeaguepediaController, LeaguepediaController>();
 
                   services.AddScoped<IMatchFilterDbContext>(provider =>
                       provider.GetRequiredService<MatchFilterDbContext>());

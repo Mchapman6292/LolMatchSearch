@@ -100,65 +100,70 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.Property<DateTime>("DateTimeUTC")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(3);
 
                     b.Property<string>("GameName")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(1);
 
+                    b.Property<string>("Tournament")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(2);
+
                     b.Property<string>("LossTeam")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(11);
+                        .HasColumnOrder(12);
 
                     b.Property<string>("Team1")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(5);
 
                     b.Property<int>("Team1Kills")
                         .HasColumnType("integer")
-                        .HasColumnOrder(12);
+                        .HasColumnOrder(13);
 
                     b.Property<string>("Team1Picks")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(8);
+                        .HasColumnOrder(9);
 
                     b.Property<string>("Team1Players")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("Team2")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(6);
 
                     b.Property<int>("Team2Kills")
                         .HasColumnType("integer")
-                        .HasColumnOrder(13);
+                        .HasColumnOrder(14);
 
                     b.Property<string>("Team2Picks")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(9);
+                        .HasColumnOrder(10);
 
                     b.Property<string>("Team2Players")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(8);
 
                     b.Property<string>("Tournament")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(4);
 
                     b.Property<string>("WinTeam")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnOrder(10);
+                        .HasColumnOrder(11);
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 

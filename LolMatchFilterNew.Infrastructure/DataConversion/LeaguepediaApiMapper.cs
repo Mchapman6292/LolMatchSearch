@@ -41,12 +41,12 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     try
                     {
                         _appLogger.Info($"Processing match data {processedCount}:");
-                        _appLogger.Info($"Raw data: {matchData}");
 
                         var entity = new LeaguepediaMatchDetailEntity
                         {
                             LeaguepediaGameIdAndTitle = GetStringValue(matchData, "GameId"),
                             GameName = GetStringValue(matchData, "Gamename"),
+                            League = GetStringValue(matchData, "League"),
                             DateTimeUTC = ParseDateTime(matchData, "DateTime UTC"),
                             Tournament = GetStringValue(matchData, "Tournament"),
                             Team1 = GetStringValue(matchData, "Team1"),
@@ -61,7 +61,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             Team2Kills = GetInt32Value(matchData, "Team2Kills")
 
                         };
-
 
                         results.Add(entity);
                     }
@@ -85,7 +84,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
                 {
                     targetObj = titleObj;
-                    _appLogger.Info($"Found nested 'title' object, using it for parsing key: {key}");
                 }
 
                 var token = targetObj[key];
@@ -104,7 +102,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 string value = token.ToString();
                 if (int.TryParse(value, out int result))
                 {
-                    _appLogger.Info($"Successfully parsed int for key '{key}': {result}");
                     return result;
                 }
                 else
@@ -128,7 +125,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
                 {
                     targetObj = titleObj;
-                    _appLogger.Info("Found nested 'title' object, using it for parsing.");
                 }
 
                 var token = targetObj[key];
@@ -177,11 +173,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             {
                 _appLogger.Warning($"Empty or null value for key: {key}. Token type: {token?.Type.ToString() ?? "null"}");
             }
-            else
-            {
-                _appLogger.Info($"GetStringValue for key '{key}': '{result}'");
-            }
-
             return result;
         }
 
@@ -193,7 +184,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
                 {
                     targetObj = titleObj;
-                    _appLogger.Info("Found nested 'title' object, using it for parsing.");
                 }
 
                 var token = targetObj[key];
@@ -209,15 +199,12 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     _appLogger.Warning($"Value for key '{key}' is null or empty.");
                     return DateTime.MinValue.ToUniversalTime();
                 }
-
-                _appLogger.Info($"Attempting to parse DateTime for key '{key}' with value: '{rawValue}'.");
                 if (DateTime.TryParse(rawValue, out DateTime result))
                 {
                     if (result.Kind != DateTimeKind.Utc)
                     {
                         result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
                     }
-                    _appLogger.Info($"Successfully parsed DateTime for key '{key}': {result} (UTC)");
                     return result;
                 }
                 else

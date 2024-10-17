@@ -48,7 +48,6 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         // Fetches data from the Leaguepedia API and returns the response as a JObject.
         public async Task<JObject> FetchLeaguepediaApiResponse(string urlQuery)
         {
-
             await _leaguepediaApiLimiter.WaitForNextRequestAsync();
             try
             {
@@ -103,6 +102,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         // Fetches and accumulates matches from the API, handling pagination until maxResults is reached or no more data is available.
         public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string baseUrl, int maxResults = MaxResultsPerQuery)
         {
+
+            _appLogger.Info($"URL: {baseUrl}.");
+
             var allMatches = new List<JObject>();
             int offset = 0;
 
@@ -134,78 +136,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
 
-   
 
-
-
-
-
-
-
-
-
-
-
-
-        public async Task<IEnumerable<JObject>> FetchLeaguepediaMatchesAsync(string tournament)
-        {
-            const int chunkSize = 500; // API limit
-            var allMatches = new List<JObject>();
-            int offset = 0;
-
-            while (true)
-            {
-                await _leaguepediaApiLimiter.WaitForNextRequestAsync();
-
-                string url = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason(tournament, offset);
-                _appLogger.Info($"Fetching Leaguepedia matches from URL: {url}");
-
-                try
-                {
-                    using var client = _httpClientFactory.CreateClient();
-                    using var response = await client.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
-                    string content = await response.Content.ReadAsStringAsync();
-                    var result = JObject.Parse(content);
-                    var matchesData = result["cargoquery"] as JArray;
-
-                    if (matchesData == null || !matchesData.Any())
-                    {
-                        _appLogger.Info($"No more match data found. Total matches fetched: {allMatches.Count}");
-                        break;
-                    }
-
-
-                    var extractedMatches = matchesData
-                        .Select(match => match["title"] as JObject)
-                        .Where(match => match != null)
-                        .ToList();
-
-                    allMatches.AddRange(extractedMatches);
-                    _appLogger.Info($"Fetched {extractedMatches.Count} matches. Total matches so far: {allMatches.Count}");
-
-                    if (extractedMatches.Count < chunkSize)
-                    {
-                        _appLogger.Info($"Reached end of data. Total matches fetched: {allMatches.Count}");
-                        break;
-                    }
-
-                    offset += chunkSize;
-                }
-                catch (HttpRequestException ex)
-                {
-                    _appLogger.Error($"HTTP request failed for Leaguepedia API. URL: {url}");
-                    throw;
-                }
-                catch (JsonException ex)
-                {
-                    _appLogger.Error($"JSON parsing failed for Leaguepedia API. URL: {url}");
-                    throw;
-                }
-            }
-
-            return allMatches;
-        }
 
 
         public async Task<IEnumerable<JObject>> FetchLeaguepediaMatchesForTestingAsync(string tournament, int maxResults)

@@ -33,7 +33,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 int addedCount = 0;
                 int processedCount = 0;
 
-                _appLogger.Info("Starting bulk add operation...");
+                int totalCount = matchDetails.Count();
+
+                _appLogger.Info($"Adding {totalCount} entries for {nameof(BulkAddLeaguepediaMatchDetails)}.");
                 LogTrackedEntities();
 
                 foreach (var matchDetail in matchDetails)
@@ -93,10 +95,6 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 }).ToList();
 
             _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
-            foreach (var entity in trackedEntities)
-            {
-                _appLogger.Info($"Tracked entity: Key = {entity.Key}, State = {entity.State}");
-            }
         }
 
         public async Task<int> DeleteAllRecordsAsync()

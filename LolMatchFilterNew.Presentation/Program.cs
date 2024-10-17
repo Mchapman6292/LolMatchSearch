@@ -32,7 +32,8 @@ namespace LolMatchFilterNew.Presentation
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
 
-                string query = leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason("LEC 2023 Summer Season");
+
+                string query = leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason("LoL EMEA Championship");
 
                 IEnumerable<JObject> apiData = await leaguepediaDataFetcher.FetchAndExtractMatches(query);
 

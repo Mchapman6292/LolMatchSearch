@@ -1,5 +1,7 @@
-﻿using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,10 +13,12 @@ namespace LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter
         private static readonly TimeSpan TimeBetweenRequests = TimeSpan.FromSeconds(2);
         private DateTime _lastRequestTime;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly IAppLogger _appLogger;
 
-        public LeaguepediaAPILimiter()
+        public LeaguepediaAPILimiter(IAppLogger appLogger)
         {
             _lastRequestTime = DateTime.UtcNow;
+            _appLogger = appLogger;
         }
 
         public async Task WaitForNextRequestAsync()
@@ -22,12 +26,7 @@ namespace LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter
             await _semaphore.WaitAsync();
             try
             {
-                var timeSinceLastRequest = DateTime.UtcNow - _lastRequestTime;
-                if (timeSinceLastRequest < TimeBetweenRequests)
-                {
-                    await Task.Delay(TimeBetweenRequests - timeSinceLastRequest);
-                }
-                _lastRequestTime = DateTime.UtcNow;
+                await Task.Delay(TimeSpan.FromSeconds(3));
             }
             finally
             {

@@ -11,6 +11,7 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDeta
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
 
 
 
@@ -31,17 +32,19 @@ namespace LolMatchFilterNew.Presentation
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
+                var leaguepediaController = scope.ServiceProvider.GetRequiredService<ILeaguepediaController>();
 
 
-                string query = leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason("LoL EMEA Championship");
 
-                IEnumerable<JObject> apiData = await leaguepediaDataFetcher.FetchAndExtractMatches(query);
+                await leaguepediaRepository.DeleteAllRecordsAsync();
 
-                IEnumerable<LeaguepediaMatchDetailEntity> leagueEntities = await leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
+                string league= "LoL EMEA Championship";
 
-                int addedEntries = await leaguepediaRepository.BulkAddLeaguepediaMatchDetails(leagueEntities);
+                await leaguepediaController.FetchAndAddLeaguepediaData(league);
 
-                logger.Info($"Added {addedEntries} entries to the database.");
+
+             
+
             }
             await host.RunAsync();
         }

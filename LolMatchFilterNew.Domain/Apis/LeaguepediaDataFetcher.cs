@@ -14,7 +14,7 @@ using Npgsql.PostgresTypes;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 {
-    // API limits : 500 results per query
+    // API limits : 500 results per urlQuery
     // From help page "Please add a small delay between queries (1-2 seconds). If the server gets stressed as a result of a huge number of queries, you may be rate-limited for some time."
 
     public class LeaguepediaDataFetcher : ILeaguepediaDataFetcher
@@ -25,7 +25,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         private readonly ILeaguepediaQueryService _leaguepediaQueryService;
         private readonly ILeaguepediaAPILimiter _leaguepediaApiLimiter;
         private readonly IHttpClientFactory _httpClientFactory;
-        const int MaxResultsPerQuery = 490;
+        const int QueryLimit = 490;
 
 
 
@@ -51,7 +51,6 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
             await _leaguepediaApiLimiter.WaitForNextRequestAsync();
             try
             {
-                
                 using var client = _httpClientFactory.CreateClient();
                 using var response = await client.GetAsync(urlQuery);
                 response.EnsureSuccessStatusCode();
@@ -70,8 +69,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
             }
         }
 
-        // Extracts the matches from the "cargoquery" field in the JSON response and returns them as a list of JObject.
-        // 
+        // Extracts the matches from the "cargoquery" field in the JSON response and returns them as a list of JObject
         public IEnumerable<JObject> ExtractMatchesFromLeaguepediaApiResponse(JObject jsonMatchData)
         {
             var cargoQueryData = jsonMatchData["cargoquery"] as JArray;
@@ -92,47 +90,49 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
         // Fetches & extracts one page of matches. 
-        public async Task<IEnumerable<JObject>> FetchPageOfMatches(string baseUrl, int offset, int limit)
+        public async Task<IEnumerable<JObject>> FetchPageOfMatches(string tournamentName, string urlQuery)
         {
-            string url = $"{baseUrl}&offset={offset}&limit={limit}";
-            var apiResponse = await FetchLeaguepediaApiResponse(url);
+            var apiResponse = await FetchLeaguepediaApiResponse(urlQuery);
             return ExtractMatchesFromLeaguepediaApiResponse(apiResponse);
         }
 
-        // Fetches and accumulates matches from the API, handling pagination until maxResults is reached or no more data is available.
-        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string baseUrl, int maxResults = MaxResultsPerQuery)
+        // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
+        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490)
         {
 
-            _appLogger.Info($"URL: {baseUrl}.");
-
-            var allMatches = new List<JObject>();
             int offset = 0;
+            var allMatches = new List<JObject>();
+            bool hasMoreData = true;
+            int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
+            int totalMatchesCount = 0;
 
-            while (allMatches.Count < maxResults)
+            while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
             {
-                var pageMatches = await FetchPageOfMatches(baseUrl, offset, MaxResultsPerQuery);
+                int currentQueryLimit = totalLimit.HasValue
+                    ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
+                    : queryLimit;
 
-                if (pageMatches.Count() == 0)
+                string urlQuery = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason(leagueName, currentQueryLimit, offset);
+
+                _appLogger.Info($"URL for api calls: {urlQuery}, leagueName {leagueName}.");
+
+
+                var pageOfMatches = await FetchPageOfMatches(leagueName,urlQuery);
+                totalMatchesCount += pageOfMatches.Count();
+
+
+                if(!pageOfMatches.Any())
                 {
-                    _appLogger.Info("No more matches found. Ending pagination.");
+                    _appLogger.Info($"No more matches found, ending pagination.");
                     break;
                 }
+                allMatches.AddRange(pageOfMatches);
 
-                allMatches.AddRange(pageMatches.Take(maxResults - allMatches.Count));
-                _appLogger.Info($"Fetched {pageMatches.Count()} matches. Total matches so far: {allMatches.Count}");
-
-                if (pageMatches.Count() < MaxResultsPerQuery)
-                {
-                    _appLogger.Info("Reached end of data. Ending pagination.");
-                    break;
-                }
-
-                offset += pageMatches.Count();
+                hasMoreData = pageOfMatches.Count() > 0;
+                offset += pageOfMatches.Count();
             }
-
             return allMatches;
         }
-
 
 
 

@@ -37,11 +37,13 @@ namespace LolMatchFilterNew.Application.LeaguepediaControllers
         }
 
 
-        public async Task FetchAndAddLeaguepediaData()
+        public async Task FetchAndAddLeaguepediaData(string leagueName)
         {
-            string query = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason("LoL EMEA Championship");
+            int limit = 5;
 
-            IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(query);
+            
+
+            IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName);
 
             IEnumerable<LeaguepediaMatchDetailEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
 

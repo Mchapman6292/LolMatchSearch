@@ -40,7 +40,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     processedCount++;
                     try
                     {
-                        _appLogger.Info($"Processing match data {processedCount}:");
 
                         var entity = new LeaguepediaMatchDetailEntity
                         {
@@ -163,7 +162,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
             {
                 targetObj = titleObj;
-                _appLogger.Info($"Using nested 'title' object for key: {key}");
             }
 
             var token = targetObj[key];

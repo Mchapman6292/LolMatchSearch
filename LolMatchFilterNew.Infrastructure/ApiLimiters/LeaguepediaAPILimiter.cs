@@ -10,7 +10,7 @@ namespace LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter
     // This is to ensure that any calls made observe a delay of 2 seconds to avoid rate limits from Leaguepedia.
     public class LeaguepediaAPILimiter : ILeaguepediaAPILimiter
     {
-        private static readonly TimeSpan TimeBetweenRequests = TimeSpan.FromSeconds(2);
+        private static readonly TimeSpan TimeBetweenRequests = TimeSpan.FromSeconds(4);
         private DateTime _lastRequestTime;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly IAppLogger _appLogger;
@@ -23,14 +23,20 @@ namespace LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter
 
         public async Task WaitForNextRequestAsync()
         {
+            Stopwatch timer = new Stopwatch();
+
+            timer.Start();
             await _semaphore.WaitAsync();
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                await Task.Delay(TimeBetweenRequests);
             }
             finally
             {
                 _semaphore.Release();
+                timer.Stop();
+                TimeSpan duration = timer.Elapsed;
+                _appLogger.Info($"Duration of {nameof(WaitForNextRequestAsync)}: {duration}");
             }
         }
     }

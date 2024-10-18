@@ -8,5 +8,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepedia
 {
     public interface ILeaguepediaController
     {
+        Task FetchAndAddLeaguepediaData(string league);
     }
 }

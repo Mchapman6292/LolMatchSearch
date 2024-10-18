@@ -14,8 +14,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher
         const int MaxResultsPerQuery = 490;
         Task<JObject> FetchLeaguepediaApiResponse(string urlQuery);
         IEnumerable<JObject> ExtractMatchesFromLeaguepediaApiResponse(JObject jsonMatchData);
-        Task<IEnumerable<JObject>> FetchPageOfMatches(string baseUrl, int offset, int limit);
-        Task<IEnumerable<JObject>> FetchAndExtractMatches(string baseUrl, int maxResults = MaxResultsPerQuery);
+        Task<IEnumerable<JObject>> FetchPageOfMatches(string tournamentName, string urlQuery);
+        Task<IEnumerable<JObject>> FetchAndExtractMatches(string tournamentName, int? numberOfPages = null, int queryLimit = 490);
 
 
 

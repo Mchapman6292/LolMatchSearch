@@ -18,7 +18,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         private int MaxResultsPerQuery = 490;
 
 
-        public string BuildQueryStringForPlayersChampsInSeason(string tournamentName, int limit = 490, int offset = 0)
+        public string BuildQueryStringForPlayersChampsInSeason(string tournamentName, int queryLimit, int offset = 0)
         {
             // Ensure the tournament name is properly escaped/ url encoded.
 
@@ -32,9 +32,12 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["where"] = $"T.League = '{tournamentName}'";
             query["group_by"] = "SG.GameId";
             query["order_by"] = "SG.DateTime_UTC ASC";
-            query["limit"] = limit.ToString();
+            query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
+
         }
+
+
     }
 }

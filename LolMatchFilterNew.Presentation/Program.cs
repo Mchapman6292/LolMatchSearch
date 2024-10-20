@@ -36,11 +36,6 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await leaguepediaRepository.DeleteAllRecordsAsync();
-
-                string league= "LoL EMEA Championship";
-
-                await leaguepediaController.FetchAndAddLeaguepediaData(league);
 
 
              

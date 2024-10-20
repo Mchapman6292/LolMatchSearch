@@ -44,7 +44,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                     }
                     _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
                     processedCount++;
-
+                    // Used to log progress at regular intervals(every 20% or 500 items)
                     if (processedCount % Math.Max(totalCount / 5, 500) == 0)
                     {
                         _appLogger.Info($"Processed {processedCount} of {totalCount} entities.");

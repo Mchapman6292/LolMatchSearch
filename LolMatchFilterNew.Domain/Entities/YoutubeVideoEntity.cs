@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using System.Diagnostics.Contracts;
 
 
 namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
@@ -10,14 +11,19 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
     public class YoutubeVideoEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string YoutubeVideoId { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Title { get; set; }
-        public DateTime? PublishedAt { get; set; }
+        public string PlaylistName { get; set; }    
 
+        public DateTime PublishedAt { get; set; }
+
+        [MaxLength(2083)]  // Max length of a URL
         public string YoutubeResultHyperlink { get; set; }
 
+        [MaxLength(2083)]
+        public string ThumbnailUrl { get; set; }
         public string LeaguepediaGameIdAndTitle { get; set; }
 
         [ForeignKey("LeaguepediaGameIdAndTitle")]

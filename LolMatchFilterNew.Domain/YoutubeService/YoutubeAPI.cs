@@ -28,7 +28,7 @@ using LolMatchFilterNew.Domain.DTOs;
 // The snippet object contains basic details about the channel, such as its title, description, and thumbnail images. snippet.title, string. The channel's title.
 
 
-namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
+namespace LolMatchFilterNew.Domain.YoutubeService
 {
     public class YoutubeApi : IYoutubeApi
     {
@@ -60,11 +60,8 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
 
 
-
-
         public async Task<List<PlaylistItem>> GetAllPlayListItemsFromYoutubePlayListAsync(Activity activity, string playlistId)
         {
-            _appLogger.Info($"Starting {nameof(GetAllPlayListItemsFromYoutubePlayListAsync)} TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
 
             List<PlaylistItem> playListResults = new List<PlaylistItem>();
             var nextPageToken = "";
@@ -137,10 +134,6 @@ namespace LolMatchFilterNew.Domain.Apis.YoutubeApi
 
 
 
-
-
-
-   
 
 
         public async Task<List<string>> ExtractVideoDetails(Activity activity, List<PlaylistItem> playlistItems)

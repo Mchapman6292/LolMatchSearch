@@ -33,8 +33,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             modelBuilder.Entity<YoutubeVideoEntity>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).UseIdentityColumn(); // Auto-incremented id column
+                entity.HasKey(e => e.YoutubeVideoId);
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
 
             });
@@ -48,7 +47,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                        
 
                 entity.HasOne(p => p.CurrentTeamNavigation)
-                   .WithMany(t => t.CurrentPlayers) // WithMany Defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
+                   .WithMany(t => t.CurrentPlayers) // WithMany defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
                    .HasForeignKey(p => p.CurrentTeam)
                    .IsRequired(false)
                    .OnDelete(DeleteBehavior.SetNull);

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     LeaguepediaGameIdAndTitle = table.Column<string>(type: "text", nullable: false),
                     GameName = table.Column<string>(type: "text", nullable: false),
+                    League = table.Column<string>(type: "text", nullable: false),
                     DateTimeUTC = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Tournament = table.Column<string>(type: "text", nullable: false),
                     Team1 = table.Column<string>(type: "text", nullable: false),

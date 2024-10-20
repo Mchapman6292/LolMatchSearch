@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Application", "LolMatchFilterNew.Application\LolMatchFilterNew.Application.csproj", "{5090885F-DA71-4050-A43D-07A81CD07F89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Presentation", "LolMatchFilterNew.Presentation\LolMatchFilterNew.Presentation.csproj", "{902F8C85-2DF1-4003-8409-4EACF285D9DE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47186490-1098-457E-A27F-ADB9A6923F33}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Presentation", "LolMatchFilterNew.Presentation\LolMatchFilterNew.Presentation.csproj", "{E6F399F1-D96F-4794-934E-C2853D4251AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,10 @@ Global
 		{5090885F-DA71-4050-A43D-07A81CD07F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5090885F-DA71-4050-A43D-07A81CD07F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5090885F-DA71-4050-A43D-07A81CD07F89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{902F8C85-2DF1-4003-8409-4EACF285D9DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{902F8C85-2DF1-4003-8409-4EACF285D9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{902F8C85-2DF1-4003-8409-4EACF285D9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{902F8C85-2DF1-4003-8409-4EACF285D9DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6F399F1-D96F-4794-934E-C2853D4251AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6F399F1-D96F-4794-934E-C2853D4251AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6F399F1-D96F-4794-934E-C2853D4251AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6F399F1-D96F-4794-934E-C2853D4251AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

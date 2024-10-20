@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Apis.YoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
@@ -29,7 +28,10 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaIDGe
 using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
 using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
-using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
+using LolMatchFilterNew.Application.LeaguepediaControllers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
+using LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
 
 
 
@@ -40,6 +42,7 @@ using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
+using LolMatchFilterNew.Domain.YoutubeService;
 
 
 
@@ -66,7 +69,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
 
             var connectionString = host.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
-             
+            var youtubeApiKey = host.Services.GetRequiredService<IConfiguration>()["YouTubeApiKey"];
 
             using (var scope = host.Services.CreateScope())
             {
@@ -118,6 +121,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
                   services.AddTransient<ILeaguepediaApiMapper, LeaguepediaApiMapper>();
+                  services.AddTransient<ILeaguepediaController, LeaguepediaController>();
+                  services.AddTransient<IYoutubeMapper, YoutubeMapper>();
 
                   services.AddScoped<IMatchFilterDbContext>(provider =>
                       provider.GetRequiredService<MatchFilterDbContext>());

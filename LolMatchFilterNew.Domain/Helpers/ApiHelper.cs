@@ -75,6 +75,49 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
         }
 
 
+        public async Task<string> WritePlaylistsToDocxDocumentAsync(IList<string> playlists)
+        {
+            _appLogger.Info($"Starting {nameof(WritePlaylistsToDocxDocumentAsync)}, Playlists count: {playlists?.Count ?? 0}.");
+            try
+            {
+                Directory.CreateDirectory(_saveDirectory);
+                string fileName = "LolMatchFilterPlaylistvideos.docx";
+                string fullPath = Path.Combine(_saveDirectory, fileName);
+
+                _appLogger.Info($"Full file path for {nameof(WritePlaylistsToDocxDocumentAsync)}: {fullPath}.");
+
+                using (var document = DocX.Create(fullPath))
+                {
+                    document.InsertParagraph("LoL Match Filter Playlist Videos").Bold().FontSize(16);
+
+                    if (playlists != null && playlists.Any())
+                    {
+                        foreach (var playlist in playlists)
+                        {
+                            document.InsertParagraph(playlist);
+                        }
+                    }
+                    else
+                    {
+                        document.InsertParagraph("No playlists found.");
+                    }
+
+                    document.Save();
+                }
+
+                await Task.Delay(100);
+                _appLogger.Info($"File saved to: {fullPath}, Directory: {Path.GetDirectoryName(fullPath)}, Filename: {Path.GetFileName(fullPath)}.");
+                return fullPath;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in WritePlaylistsToDocxDocumentAsync: {ex.Message}");
+                _appLogger.Error($"Stack Trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+
     }
 }
 

@@ -28,38 +28,33 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
 
         public async Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails)
         {
+            int totalCount = matchDetails.Count();
+            _appLogger.Info($"Starting bulk add of {totalCount} Leaguepedia match details.");
+            LogTrackedEntities();
+
             try
             {
-                int addedCount = 0;
                 int processedCount = 0;
-
-                _appLogger.Info("Starting bulk add operation...");
-                LogTrackedEntities();
 
                 foreach (var matchDetail in matchDetails)
                 {
-
-
                     if (matchDetail.DateTimeUTC.Kind != DateTimeKind.Utc)
                     {
                         matchDetail.DateTimeUTC = DateTime.SpecifyKind(matchDetail.DateTimeUTC, DateTimeKind.Utc);
                     }
-
-                    _appLogger.Info($"Adding entity: GameId={matchDetail.LeaguepediaGameIdAndTitle}, DateTime={matchDetail.DateTimeUTC}");
                     _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
                     processedCount++;
-
-                    if (processedCount % 5 == 0)
+                    // Used to log progress at regular intervals(every 20% or 500 items)
+                    if (processedCount % Math.Max(totalCount / 5, 500) == 0)
                     {
-                        _appLogger.Info($"Added {processedCount} entities so far.");
+                        _appLogger.Info($"Processed {processedCount} of {totalCount} entities.");
                         LogTrackedEntities();
                     }
                 }
 
                 _appLogger.Info($"Saving changes for {processedCount} entities...");
-                addedCount = await _matchFilterDbContext.SaveChangesAsync();
-
-                _appLogger.Info($"Successfully added {addedCount} new matches out of {processedCount} processed.");
+                int addedCount = await _matchFilterDbContext.SaveChangesAsync();
+                _appLogger.Info($"Successfully added {addedCount} new matches out of {totalCount} processed.");
                 LogTrackedEntities();
 
                 return addedCount;
@@ -93,10 +88,6 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 }).ToList();
 
             _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
-            foreach (var entity in trackedEntities)
-            {
-                _appLogger.Info($"Tracked entity: Key = {entity.Key}, State = {entity.State}");
-            }
         }
 
         public async Task<int> DeleteAllRecordsAsync()

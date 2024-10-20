@@ -10,5 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
     public interface IApiHelper
     {
         Task<string> WriteToDocxDocumentAsync(Activity activity, string title, List<string> content = null);
+        Task<string> WritePlaylistsToDocxDocumentAsync(IList<string> playlists);
     }
 }

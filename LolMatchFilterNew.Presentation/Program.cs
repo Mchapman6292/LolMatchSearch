@@ -12,6 +12,9 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServ
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
+using LolMatchFilterNew.Domain.YoutubeDataFetcher;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
 
 
 
@@ -33,7 +36,11 @@ namespace LolMatchFilterNew.Presentation
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
                 var leaguepediaController = scope.ServiceProvider.GetRequiredService<ILeaguepediaController>();
+                var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
+                var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
 
+
+                
 
 
 

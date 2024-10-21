@@ -35,8 +35,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             {
                 entity.HasKey(e => e.YoutubeVideoId);
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
+                entity.Property(e => e.LeaguepediaGameIdAndTitle)
+                      .IsRequired(false);
 
+                entity.HasOne(e => e.LeaguepediaMatch)
+                      .WithOne() 
+                      .HasForeignKey<YoutubeVideoEntity>(e => e.LeaguepediaGameIdAndTitle)
+                      .IsRequired(false);
             });
+
 
 
             modelBuilder.Entity<ProPlayerEntity>(entity =>

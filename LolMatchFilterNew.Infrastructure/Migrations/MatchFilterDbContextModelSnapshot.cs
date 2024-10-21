@@ -236,7 +236,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();
 
-                    b.ToTable("YoutubeVideoResults");
+                    b.ToTable("YoutubeVideoEntity");
                 });
 
             modelBuilder.Entity("LeagueTeamEntityProPlayerEntity", b =>

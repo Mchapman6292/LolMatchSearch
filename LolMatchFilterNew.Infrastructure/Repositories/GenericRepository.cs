@@ -3,7 +3,7 @@ using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace LolMatchFilterNew.infrastructure.Repositories.GenericRepositories
+namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

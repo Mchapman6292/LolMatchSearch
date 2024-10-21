@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.infrastructure.Repositories.GenericRepositories;
+using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
@@ -30,7 +30,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         {
             int totalCount = matchDetails.Count();
             _appLogger.Info($"Starting bulk add of {totalCount} Leaguepedia match details.");
-            LogTrackedEntities();
+            LogTrackedLeagueEntities();
 
             try
             {
@@ -48,14 +48,14 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                     if (processedCount % Math.Max(totalCount / 5, 500) == 0)
                     {
                         _appLogger.Info($"Processed {processedCount} of {totalCount} entities.");
-                        LogTrackedEntities();
+                        LogTrackedLeagueEntities();
                     }
                 }
 
                 _appLogger.Info($"Saving changes for {processedCount} entities...");
                 int addedCount = await _matchFilterDbContext.SaveChangesAsync();
                 _appLogger.Info($"Successfully added {addedCount} new matches out of {totalCount} processed.");
-                LogTrackedEntities();
+                LogTrackedLeagueEntities();
 
                 return addedCount;
             }
@@ -66,19 +66,19 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 {
                     _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
                 }
-                LogTrackedEntities();
+                LogTrackedLeagueEntities();
                 throw;
             }
             catch (Exception ex)
             {
                 _appLogger.Error($"Unexpected error during bulk add: {ex.Message}");
-                LogTrackedEntities();
+                LogTrackedLeagueEntities();
                 throw;
             }
         }
 
 
-        public void LogTrackedEntities()
+        public void LogTrackedLeagueEntities()
         {
             var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<LeaguepediaMatchDetailEntity>()
                 .Select(e => new

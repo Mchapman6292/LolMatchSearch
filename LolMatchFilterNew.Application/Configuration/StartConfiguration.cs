@@ -29,7 +29,7 @@ using LolMatchFilterNew.Application.IdGenerators.LeaguepediaIDGenerators;
 using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using LolMatchFilterNew.Application.LeaguepediaControllers;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
 using LolMatchFilterNew.Domain.YoutubeDataFetcher;
@@ -47,6 +47,7 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDeta
 using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 
 
 
@@ -125,7 +126,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ILeaguepediaIDGenerator, LeaguepediaIDGenerator>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
                   services.AddTransient<ILeaguepediaApiMapper, LeaguepediaApiMapper>();
-                  services.AddTransient<ILeaguepediaController, LeaguepediaController>();
+                  services.AddTransient<IAPIControllers, APIControllers>();
                   services.AddTransient<IYoutubeMapper, YoutubeMapper>();
                   services.AddTransient<IYoutubeDataFetcher, YoutubeDataFetcher>();
                   services.AddTransient<IYoutubeVideoRepository, YoutubeVideoRepository>();

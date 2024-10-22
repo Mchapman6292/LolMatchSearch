@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241019231800_AddYoutubeColumns")]
-    partial class AddYoutubeColumns
+    [Migration("20241022052603_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,6 +216,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
+                    b.Property<string>("PlaylistName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -239,7 +243,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();
 
-                    b.ToTable("YoutubeVideoEntity");
+                    b.ToTable("YoutubeVideoResults");
                 });
 
             modelBuilder.Entity("LeagueTeamEntityProPlayerEntity", b =>

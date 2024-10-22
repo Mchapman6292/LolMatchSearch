@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -52,17 +51,17 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 name: "YoutubeVideoResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     YoutubeVideoId = table.Column<string>(type: "text", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    YoutubeResultHyperlink = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    PlaylistName = table.Column<string>(type: "text", nullable: false),
+                    PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    YoutubeResultHyperlink = table.Column<string>(type: "character varying(2083)", maxLength: 2083, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "character varying(2083)", maxLength: 2083, nullable: false),
                     LeaguepediaGameIdAndTitle = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YoutubeVideoResults", x => x.Id);
+                    table.PrimaryKey("PK_YoutubeVideoResults", x => x.YoutubeVideoId);
                     table.ForeignKey(
                         name: "FK_YoutubeVideoResults_LeaguepediaMatchDetails_LeaguepediaGame~",
                         column: x => x.LeaguepediaGameIdAndTitle,

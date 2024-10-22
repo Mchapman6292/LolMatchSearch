@@ -218,7 +218,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             return result;
         }
 
-        public DateTime ParseDateTime(JObject obj, string key)
+        public DateTime GetDateTimeFromJObject(JObject obj, string key)
         {
             try
             {
@@ -262,6 +262,22 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+
+        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime)
+        {
+            if (inputDateTime is DateTime dateTime)
+            {
+                return dateTime.Kind == DateTimeKind.Utc
+                    ? dateTime
+                    : dateTime.ToUniversalTime();
+            }
+            else if (inputDateTime is DateTimeOffset dateTimeOffset)
+            {
+                return dateTimeOffset.UtcDateTime;
+            }
+
+            throw new ArgumentException("Unsupported datetime format");
+        }
 
 
     }

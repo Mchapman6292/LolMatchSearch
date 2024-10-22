@@ -11,6 +11,7 @@ using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
+using System.Numerics;
 
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -33,15 +34,56 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             modelBuilder.Entity<YoutubeVideoEntity>(entity =>
             {
+                entity.ToTable("YoutubeVideoResults");
                 entity.HasKey(e => e.YoutubeVideoId);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PlaylistName)
+                    .IsRequired(false);
+
+                entity.Property(e => e.PublishedAt)
+                    .IsRequired();
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
+
+                entity.Property(e => e.ThumbnailUrl)
+                   .IsRequired(false)
+                   .HasMaxLength(2083);
+
                 entity.Property(e => e.LeaguepediaGameIdAndTitle)
                       .IsRequired(false);
 
-                entity.HasOne(e => e.LeaguepediaMatch)
-                      .WithOne() 
-                      .HasForeignKey<YoutubeVideoEntity>(e => e.LeaguepediaGameIdAndTitle)
+
+                entity.HasOne(e => e.LeaguepediaMatch)           
+                      .WithOne(l => l.YoutubeVideo)             
+                      .HasForeignKey<YoutubeVideoEntity>(       
+                          y => y.LeaguepediaGameIdAndTitle)      
                       .IsRequired(false);
+            });
+
+            modelBuilder.Entity<LeaguepediaMatchDetailEntity>(entity =>
+            {
+                entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
+                entity.Property(e => e.DateTimeUTC).IsRequired();
+                entity.Property(e => e.Tournament).IsRequired();
+                entity.Property(e => e.Team1).IsRequired();
+                entity.Property(e => e.Team2).IsRequired();
+
+
+                entity.HasMany(m => m.Team1PlayersNav)
+                     .WithMany()
+                     .UsingEntity(j => j.ToTable("MatchTeam1Players"));
+
+                entity.HasMany(m => m.Team2PlayersNav)
+                    .WithMany()
+                    .UsingEntity(j => j.ToTable("MatchTeam2Players"));
+
+                entity.HasMany(m => m.Players)
+                     .WithMany(p => p.Matches)
+                     .UsingEntity(j => j.ToTable("MatchPlayers"));
+
             });
 
 
@@ -71,33 +113,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
-            modelBuilder.Entity<LeaguepediaMatchDetailEntity>(entity =>
-            {
-                entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
-                entity.Property(e => e.DateTimeUTC).IsRequired();
-                entity.Property(e => e.Tournament).IsRequired();
-                entity.Property(e => e.Team1).IsRequired();
-                entity.Property(e => e.Team2).IsRequired();
-
-                entity.HasOne(e => e.YoutubeVideo)
-                    .WithOne(y => y.LeaguepediaMatch)
-                    .HasForeignKey<YoutubeVideoEntity>(y => y.LeaguepediaGameIdAndTitle)
-                    .IsRequired(false);
-
-
-                entity.HasMany(m => m.Team1PlayersNav)
-                     .WithMany()
-                     .UsingEntity(j => j.ToTable("MatchTeam1Players"));
-
-                entity.HasMany(m => m.Team2PlayersNav)
-                    .WithMany()
-                    .UsingEntity(j => j.ToTable("MatchTeam2Players"));
-
-                entity.HasMany(m => m.Players)
-                     .WithMany(p => p.Matches)
-                     .UsingEntity(j => j.ToTable("MatchPlayers"));
-            
-        });
+          
 
 
 

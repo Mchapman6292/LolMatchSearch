@@ -47,7 +47,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                             YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
                             Title = _apiHelper.GetStringValue(video, "snippet.title"),
                             PlaylistName = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
-                            PublishedAt = _apiHelper.ParseDateTime(video, "snippet.publishedAt"),
+                            PublishedAt = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
                             LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(video, "leaguepediaGameIdAndTitle") 
@@ -91,7 +91,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                             YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
                             Title = _apiHelper.GetStringValue(video, "snippet.title"),
                             PlaylistName = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
-                            PublishedAt = _apiHelper.ParseDateTime(video, "snippet.publishedAt"),
+                            PublishedAt = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
                             LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(video, "leaguepediaGameIdAndTitle")

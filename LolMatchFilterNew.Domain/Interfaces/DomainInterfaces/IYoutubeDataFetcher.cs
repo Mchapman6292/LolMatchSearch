@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,10 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetch
 {
     public interface IYoutubeDataFetcher
     {
-        Task GetAllPlaylistsFromChannel(string channelId);
+        Task<List<YoutubeVideoEntity>> RetrieveAndMapAllPlaylistVideosToEntities(List<string> playlistIds);
 
-        Task GetFirstTwoPlaylistsFromChannel(string channelId);
+        Task<Dictionary<string, string>> GetPlaylistNames(List<string> playlistIds);
+
+        Task<List<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, string playlistName);
     }
 }

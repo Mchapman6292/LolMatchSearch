@@ -213,6 +213,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
+                    b.Property<string>("PlaylistName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -236,7 +240,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();
 
-                    b.ToTable("YoutubeVideoEntity");
+                    b.ToTable("YoutubeVideoResults");
                 });
 
             modelBuilder.Entity("LeagueTeamEntityProPlayerEntity", b =>

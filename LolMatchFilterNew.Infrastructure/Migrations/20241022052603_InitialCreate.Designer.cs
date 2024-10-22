@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241015064635_InitialCreate")]
+    [Migration("20241022052603_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -110,7 +110,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(1);
 
-                    b.Property<string>("Tournament")
+                    b.Property<string>("League")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(2);
@@ -210,31 +210,35 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("YoutubeVideoId")
+                        .HasColumnType("text");
 
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PublishedAt")
+                    b.Property<string>("PlaylistName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PublishedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .IsRequired()
+                        .HasMaxLength(2083)
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("YoutubeResultHyperlink")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(2083)
+                        .HasColumnType("character varying(2083)");
 
-                    b.Property<string>("YoutubeVideoId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("YoutubeVideoId");
 
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();

@@ -213,6 +213,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
+                    b.Property<string>("PlaylistName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("timestamp with time zone");
 

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers
+namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers
 {
-    public interface ILeaguepediaController
+    public interface IAPIControllers
     {
         Task FetchAndAddLeaguepediaData(string league);
+
+        Task FetchAndAddYoutubeVideo(List<string> playlistIds);
     }
 }

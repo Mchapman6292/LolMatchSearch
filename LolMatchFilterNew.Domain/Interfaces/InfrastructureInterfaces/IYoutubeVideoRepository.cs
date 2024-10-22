@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeV
 {
     public interface IYoutubeVideoRepository
     {
+        Task<int> BulkaddYoutubeDetails(IEnumerable<YoutubeVideoEntity> youtubeVideoDetails);
     }
 }

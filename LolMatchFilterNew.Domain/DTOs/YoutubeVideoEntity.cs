@@ -8,7 +8,7 @@ using Xceed.Document.NET;
 
 namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
 {
-    public class YoutubeVideoResult
+    public class YoutubeVideoEntity
     {
         public string VideoId { get; set; }
         public string Title { get; set; }
@@ -17,7 +17,7 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
         public string YoutubeResultHyperlink { get; set; }
 
 
-        public YoutubeVideoResult(string videoId, string url)
+        public YoutubeVideoEntity(string videoId, string url)
         {
             VideoId = videoId;
             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={videoId}";

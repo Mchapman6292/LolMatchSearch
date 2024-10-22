@@ -98,10 +98,10 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
 
 
-        public async Task<List<YoutubeVideoResult>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
+        public async Task<List<YoutubeVideoEntity>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
         {
             _appLogger.Info($"Starting {nameof(ConvertPlayListItemsToYouTubeVideoResult)}, TraceId: {activity.TraceId}.");
-            List<YoutubeVideoResult> youtubeVideoResults = new List<YoutubeVideoResult>();
+            List<YoutubeVideoEntity> youtubeVideoResults = new List<YoutubeVideoEntity>();
             try
             {
                 foreach (PlaylistItem result in youTubePlaylist)
@@ -113,7 +113,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                     string thumbnailUrl = result.Snippet.Thumbnails.Default__.Url;
                     string url = $"https://www.youtube.com/watch?v={videoId}";
 
-                    var youtubeVideoResult = new YoutubeVideoResult(
+                    var youtubeVideoResult = new YoutubeVideoEntity(
                         videoId,
                         url
                     );
@@ -127,7 +127,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                 throw;
             }
 
-            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to YoutubeVideoResult objects.");
+            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to YoutubeVideoEntity objects.");
             return youtubeVideoResults;
         }
 
@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoResult", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoEntity", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

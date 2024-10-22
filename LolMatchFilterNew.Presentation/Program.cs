@@ -11,7 +11,11 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDeta
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ILeaguepediaControllers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
+using LolMatchFilterNew.Domain.YoutubeDataFetcher;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 
 
 
@@ -32,13 +36,30 @@ namespace LolMatchFilterNew.Presentation
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
                 var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
-                var leaguepediaController = scope.ServiceProvider.GetRequiredService<ILeaguepediaController>();
+                var APIController = scope.ServiceProvider.GetRequiredService<IAPIControllers>();
+                var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
+                var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
+
+                string leagueName = "LoL EMEA Championship";
+
+                var playlistIds = new List<string>
+                    {
+                        "PLJwuLHutaYuLMHzkyblz2q0HlDd7otgJA",
+                        "PLJwuLHutaYuIeTnqWqz4V9Jh-FCwGTpCf"
+
+                    };
+
+
+                await APIController.FetchAndAddYoutubeVideo(playlistIds);
 
 
 
 
 
-             
+
+
+
+
 
             }
             await host.RunAsync();

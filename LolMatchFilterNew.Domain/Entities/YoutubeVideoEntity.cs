@@ -27,7 +27,7 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
         public string LeaguepediaGameIdAndTitle { get; set; }
 
         [ForeignKey("LeaguepediaGameIdAndTitle")]
-        public virtual LeaguepediaMatchDetailEntity LeaguepediaMatch { get; set; }
+        public virtual LeaguepediaMatchDetailEntity? LeaguepediaMatch { get; set; }
 
 
     }

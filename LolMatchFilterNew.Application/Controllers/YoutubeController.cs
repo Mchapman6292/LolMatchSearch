@@ -37,11 +37,11 @@ namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
 
         public async Task FetchYoutubePlaylistsForChannel()
         {
-            string channelId = "4AItVpg8TlM";
+            string channelId = "UC3Lh8yZe1MD-jCIXhBcVtqQ";
 
             Dictionary<string, string> results =  await _youtubeDataFetcher.GetChannelPlaylists(channelId);
 
-            await _apiHelper.WriteToWordDocAsync(results);
+            await _apiHelper.WriteListDictToWordDocAsync(results);
 
            
         }

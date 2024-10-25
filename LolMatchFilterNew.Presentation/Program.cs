@@ -16,6 +16,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideo
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 
 
 
@@ -39,18 +40,21 @@ namespace LolMatchFilterNew.Presentation
                 var APIController = scope.ServiceProvider.GetRequiredService<IAPIControllers>();
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
+                var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
 
                 string leagueName = "LoL EMEA Championship";
 
                 var playlistIds = new List<string>
                     {
-                        "PLJwuLHutaYuLMHzkyblz2q0HlDd7otgJA",
-                        "PLJwuLHutaYuIeTnqWqz4V9Jh-FCwGTpCf"
+                        "PLJwuLHutaYuKP5Pmd8Ry233MM0jO4j6m1"
 
                     };
 
+                await youtubeController.FetchAndAddYoutubeVideo(playlistIds);
 
-                await APIController.FetchAndAddYoutubeVideo(playlistIds);
+         
+
+                
 
 
 

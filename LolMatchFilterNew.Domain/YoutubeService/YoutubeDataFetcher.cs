@@ -202,6 +202,84 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             }
         }
 
+
+
+
+        public async Task<(string ChannelId, string ChannelTitle)> GetChannelInfo(string input)
+        {
+            try
+            {
+      
+                if (!input.StartsWith("@"))
+                {
+                    var videoRequest = _youtubeService.Videos.List("snippet");
+                    videoRequest.Id = input; // Using video ID like "yOXtS-CId5M"
+
+                    var response = await videoRequest.ExecuteAsync();
+                    var video = response.Items.FirstOrDefault();
+
+                    if (video != null)
+                    {
+                        _appLogger.Info($"Found channel through video ID. Channel ID: {video.Snippet.ChannelId}, Name: {video.Snippet.ChannelTitle}");
+                        return (video.Snippet.ChannelId, video.Snippet.ChannelTitle);
+                    }
+                }
+    
+                else
+                {
+                    var searchRequest = _youtubeService.Search.List("snippet");
+                    searchRequest.Q = input.TrimStart('@'); 
+                    searchRequest.Type = "channel";
+                    searchRequest.MaxResults = 1;
+
+                    var response = await searchRequest.ExecuteAsync();
+                    var channel = response.Items.FirstOrDefault();
+
+                    if (channel != null)
+                    {
+                        _appLogger.Info($"Found channel through handle. Channel ID: {channel.Snippet.ChannelId}, Name: {channel.Snippet.ChannelTitle}");
+                        return (channel.Snippet.ChannelId, channel.Snippet.ChannelTitle);
+                    }
+                }
+
+                _appLogger.Warning($"No channel found for input: {input}");
+                return (null, null);
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving channel information for {input}: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<(string ChannelId, string ChannelTitle)> GetChannelInfoFromHandle(string channelHandle)
+        {
+            try
+            {
+                var searchRequest = _youtubeService.Search.List("snippet");
+                searchRequest.Q = channelHandle.TrimStart('@');
+                searchRequest.Type = "channel";
+                searchRequest.MaxResults = 1;
+
+                var response = await searchRequest.ExecuteAsync();
+                var channel = response.Items.FirstOrDefault();
+
+                if (channel != null)
+                {
+                    _appLogger.Info($"Found channel. ID: {channel.Snippet.ChannelId}, Name: {channel.Snippet.ChannelTitle}");
+                    return (channel.Snippet.ChannelId, channel.Snippet.ChannelTitle);
+                }
+
+                _appLogger.Warning($"No channel found for handle: {channelHandle}");
+                return (null, null);
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving channel information for handle {channelHandle}: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 }
 

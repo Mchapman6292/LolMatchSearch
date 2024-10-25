@@ -18,6 +18,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 
         public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime);
 
-        Task<string> WriteToWordDocAsync<T>(T data, string customFileName = null);
+        Task<string> WriteToDocxDocumentAsync(Activity activity, string title, List<string> content = null);
+
+        Task<string> WriteListDictToWordDocAsync<T>(T data, string customFileName = null);
     }
 }

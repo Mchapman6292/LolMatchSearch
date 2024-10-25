@@ -76,15 +76,15 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
-        public async Task<string> WriteToWordDocAsync<T>(T data, string customFileName = null)
+        public async Task<string> WriteListDictToWordDocAsync<T>(T data, string customFileName = null)
         {
-            _appLogger.Info($"Starting {nameof(WriteToWordDocAsync)}, Input type: {typeof(T).Name}");
+            _appLogger.Info($"Starting {nameof(WriteListDictToWordDocAsync)}, Input type: {typeof(T).Name}");
             try
             {
                 Directory.CreateDirectory(_saveDirectory);
                 string fileName = customFileName ?? $"LolMatchFilter_{typeof(T).Name}_{DateTime.Now:yyyyMMdd_HHmmss}.docx";
                 string fullPath = Path.Combine(_saveDirectory, fileName);
-                _appLogger.Info($"Full file path for {nameof(WriteToWordDocAsync)}: {fullPath}.");
+                _appLogger.Info($"Full file path for {nameof(WriteListDictToWordDocAsync)}: {fullPath}.");
 
                 using (var document = DocX.Create(fullPath))
                 {
@@ -153,7 +153,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
             catch (Exception ex)
             {
-                _appLogger.Error($"Error in {nameof(WriteToWordDocAsync)}: {ex.Message}");
+                _appLogger.Error($"Error in {nameof(WriteListDictToWordDocAsync)}: {ex.Message}");
                 _appLogger.Error($"Stack Trace: {ex.StackTrace}");
                 throw;
             }

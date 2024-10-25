@@ -4,10 +4,8 @@ using LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using Microsoft.Extensions.DependencyInjection;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
@@ -15,7 +13,9 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.YoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 
 
 

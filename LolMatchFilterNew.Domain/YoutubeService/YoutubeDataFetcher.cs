@@ -153,6 +153,53 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
 
             return videos;
         }
+    
+
+    public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
+    {
+        var playlists = new Dictionary<string, string>();
+        var nextPageToken = "";
+
+        try
+        {
+            do
+            {
+                var playlistRequest = _youtubeService.Playlists.List("snippet");
+                playlistRequest.ChannelId = channelId;
+                playlistRequest.MaxResults = 50; 
+                playlistRequest.PageToken = nextPageToken;
+
+                var playlistResponse = await playlistRequest.ExecuteAsync();
+
+                foreach (var playlist in playlistResponse.Items)
+                {
+                   
+                    if (!playlists.ContainsKey(playlist.Id))
+                    {
+                        playlists.Add(playlist.Id, playlist.Snippet.Title);
+                    }
+                }
+
+                nextPageToken = playlistResponse.NextPageToken;
+
+                _appLogger.Info($"Retrieved {playlistResponse.Items.Count} playlists from channel. " +
+                               $"Total playlists so far: {playlists.Count}");
+
+            } while (!string.IsNullOrEmpty(nextPageToken));
+
+            _appLogger.Info($"Successfully retrieved all playlists. Total count: {playlists.Count}");
+
+            var samplePlaylists = playlists.Take(3)
+                .Select(p => $"\n\tPlaylist ID: {p.Key}, Name: {p.Value}");
+            _appLogger.Info($"Sample playlists: {string.Join("", samplePlaylists)}");
+
+            return playlists;
+        }
+        catch (Exception ex)
+        {
+            _appLogger.Error($"Error retrieving playlists for channel {channelId}: {ex.Message}");
+            throw;
+        }
     }
 
 

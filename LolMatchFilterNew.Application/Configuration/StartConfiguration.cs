@@ -19,6 +19,8 @@ using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
+using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
 using LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
@@ -36,18 +38,19 @@ using LolMatchFilterNew.Domain.YoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
-
+using LolMatchFilterNew.Application.Controllers.YoutubeControllers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 
 
 
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 
 
 
@@ -130,6 +133,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeMapper, YoutubeMapper>();
                   services.AddTransient<IYoutubeDataFetcher, YoutubeDataFetcher>();
                   services.AddTransient<IYoutubeVideoRepository, YoutubeVideoRepository>();
+                  services.AddTransient<IYoutubeController, YoutubeController>();
+                  services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
 
                   services.AddScoped<IMatchFilterDbContext>(provider =>
                       provider.GetRequiredService<MatchFilterDbContext>());

@@ -5,6 +5,7 @@ using Activity = System.Diagnostics.Activity;
 using Microsoft.Extensions.Configuration;
 using Google.Apis.YouTube.v3.Data;
 using Newtonsoft.Json.Linq;
+using Xceed.Document.NET;
 
 namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 {
@@ -75,32 +76,72 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
-
-        public async Task<string> WritePlaylistsToDocxDocumentAsync(IList<string> playlists)
+        public async Task<string> WriteToWordDocAsync<T>(T data, string customFileName = null)
         {
-            _appLogger.Info($"Starting {nameof(WritePlaylistsToDocxDocumentAsync)}, Playlists count: {playlists?.Count ?? 0}.");
+            _appLogger.Info($"Starting {nameof(WriteToWordDocAsync)}, Input type: {typeof(T).Name}");
             try
             {
                 Directory.CreateDirectory(_saveDirectory);
-                string fileName = "LolMatchFilterPlaylistvideos.docx";
+                string fileName = customFileName ?? $"LolMatchFilter_{typeof(T).Name}_{DateTime.Now:yyyyMMdd_HHmmss}.docx";
                 string fullPath = Path.Combine(_saveDirectory, fileName);
-
-                _appLogger.Info($"Full file path for {nameof(WritePlaylistsToDocxDocumentAsync)}: {fullPath}.");
+                _appLogger.Info($"Full file path for {nameof(WriteToWordDocAsync)}: {fullPath}.");
 
                 using (var document = DocX.Create(fullPath))
                 {
-                    document.InsertParagraph("LoL Match Filter Playlist Videos").Bold().FontSize(16);
+                    string title = data switch
+                    {
+                        Dictionary<string, string> => "LoL Match Filter Playlist Names and IDs",
+                        IList<string> => "LoL Match Filter Playlist Videos",
+                        _ => "LoL Match Filter Data"
+                    };
+                    document.InsertParagraph(title).Bold().FontSize(16);
+                    document.InsertParagraph().SpacingAfter(20);
 
-                    if (playlists != null && playlists.Any())
+                    switch (data)
                     {
-                        foreach (var playlist in playlists)
-                        {
-                            document.InsertParagraph(playlist);
-                        }
-                    }
-                    else
-                    {
-                        document.InsertParagraph("No playlists found.");
+                        case Dictionary<string, string> dictionary:
+                            if (dictionary.Any())
+                            {
+                                var table = document.AddTable(dictionary.Count + 1, 2);
+                                table.Design = TableDesign.LightGrid;
+
+                                table.Rows[0].Cells[0].Paragraphs.First().Append("Playlist ID").Bold();
+                                table.Rows[0].Cells[1].Paragraphs.First().Append("Playlist Name").Bold();
+
+                                int rowIndex = 1;
+                                foreach (var item in dictionary)
+                                {
+                                    table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Key);
+                                    table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.Value);
+                                    rowIndex++;
+                                }
+
+                                document.InsertTable(table);
+                            }
+                            else
+                            {
+                                document.InsertParagraph("No playlist data found.");
+                            }
+                            break;
+
+                        case IList<string> list:
+                            if (list.Any())
+                            {
+                                foreach (var item in list)
+                                {
+                                    document.InsertParagraph(item);
+                                }
+                            }
+                            else
+                            {
+                                document.InsertParagraph("No playlist data found.");
+                            }
+                            break;
+
+                        default:
+                            document.InsertParagraph("Unsupported data type provided.");
+                            _appLogger.Warning($"Unsupported data type: {typeof(T).Name}");
+                            break;
                     }
 
                     document.Save();
@@ -112,12 +153,11 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
             catch (Exception ex)
             {
-                _appLogger.Error($"Error in WritePlaylistsToDocxDocumentAsync: {ex.Message}");
+                _appLogger.Error($"Error in {nameof(WriteToWordDocAsync)}: {ex.Message}");
                 _appLogger.Error($"Stack Trace: {ex.StackTrace}");
                 throw;
             }
         }
-
 
         public int GetInt32Value(JObject obj, string key)
         {

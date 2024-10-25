@@ -189,5 +189,31 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
                 throw;
             }
         }
+
+        public async Task<DateTime> GetEarliestDateTimePublishedAt<TEntity1, TEntity2>()
+                where TEntity1 : class
+                where TEntity2 : class
+        {
+            var query1 = _context.Set<TEntity1>();
+            var query2 = _context.Set<TEntity2>();
+
+ 
+            var count1 = await query1.CountAsync();
+            var count2 = await query2.CountAsync();
+            var lowestCount = Math.Min(count1, count2);
+        }
+
+        public async Task<(List<TEntity1>, List<TEntity2>)> GetAllEntitiesAsync<TEntity1, TEntity2>()
+                where TEntity1 : class
+                where TEntity2 : class
+        {
+            var entity1List = await _context.Set<TEntity1>().ToListAsync();
+            var entity2List = await _context.Set<TEntity2>().ToListAsync();
+
+            return (entity1List, entity2List); 
+        }
+
+
+
     }
 }

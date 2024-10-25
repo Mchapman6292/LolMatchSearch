@@ -7,10 +7,11 @@ using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
 using System.Runtime.CompilerServices;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {

@@ -31,7 +31,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
         private readonly IApiHelper _apiHelper;
         private readonly IYoutubeMapper _youtubeMapper;
         public Dictionary<string, string> YoutubeplaylistNames = new Dictionary<string, string>();
-        
+
 
         public YoutubeDataFetcher(IConfiguration configuration, IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, IYoutubeMapper youtubeMapper)
         {
@@ -124,7 +124,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             var videos = new List<YoutubeVideoEntity>();
             var allItems = new List<PlaylistItem>();
             var nextPageToken = "";
-            
+
             do
             {
                 var playlistItemsRequest = _youtubeService.PlaylistItems.List("snippet,contentDetails");
@@ -153,58 +153,59 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
 
             return videos;
         }
-    
 
-    public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
-    {
-        var playlists = new Dictionary<string, string>();
-        var nextPageToken = "";
 
-        try
+        public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
         {
-            do
+            var playlists = new Dictionary<string, string>();
+            var nextPageToken = "";
+
+            try
             {
-                var playlistRequest = _youtubeService.Playlists.List("snippet");
-                playlistRequest.ChannelId = channelId;
-                playlistRequest.MaxResults = 50; 
-                playlistRequest.PageToken = nextPageToken;
-
-                var playlistResponse = await playlistRequest.ExecuteAsync();
-
-                foreach (var playlist in playlistResponse.Items)
+                do
                 {
-                   
-                    if (!playlists.ContainsKey(playlist.Id))
+                    var playlistRequest = _youtubeService.Playlists.List("snippet");
+                    playlistRequest.ChannelId = channelId;
+                    playlistRequest.MaxResults = 50;
+                    playlistRequest.PageToken = nextPageToken;
+
+                    var playlistResponse = await playlistRequest.ExecuteAsync();
+
+                    foreach (var playlist in playlistResponse.Items)
                     {
-                        playlists.Add(playlist.Id, playlist.Snippet.Title);
+
+                        if (!playlists.ContainsKey(playlist.Id))
+                        {
+                            playlists.Add(playlist.Id, playlist.Snippet.Title);
+                        }
                     }
-                }
 
-                nextPageToken = playlistResponse.NextPageToken;
+                    nextPageToken = playlistResponse.NextPageToken;
 
-                _appLogger.Info($"Retrieved {playlistResponse.Items.Count} playlists from channel. " +
-                               $"Total playlists so far: {playlists.Count}");
+                    _appLogger.Info($"Retrieved {playlistResponse.Items.Count} playlists from channel. " +
+                                   $"Total playlists so far: {playlists.Count}");
 
-            } while (!string.IsNullOrEmpty(nextPageToken));
+                } while (!string.IsNullOrEmpty(nextPageToken));
 
-            _appLogger.Info($"Successfully retrieved all playlists. Total count: {playlists.Count}");
+                _appLogger.Info($"Successfully retrieved all playlists. Total count: {playlists.Count}");
 
-            var samplePlaylists = playlists.Take(3)
-                .Select(p => $"\n\tPlaylist ID: {p.Key}, Name: {p.Value}");
-            _appLogger.Info($"Sample playlists: {string.Join("", samplePlaylists)}");
+                var samplePlaylists = playlists.Take(3)
+                    .Select(p => $"\n\tPlaylist ID: {p.Key}, Name: {p.Value}");
+                _appLogger.Info($"Sample playlists: {string.Join("", samplePlaylists)}");
 
-            return playlists;
+                return playlists;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving playlists for channel {channelId}: {ex.Message}");
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            _appLogger.Error($"Error retrieving playlists for channel {channelId}: {ex.Message}");
-            throw;
-        }
+
     }
-
-
-
-
 }
+
+
+
 
 

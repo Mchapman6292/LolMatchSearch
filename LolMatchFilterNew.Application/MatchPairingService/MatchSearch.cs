@@ -24,7 +24,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService
 
         public async Task<Dictionary<string, string>> MatchHighlightsToData()
         {
-
+            throw new NotImplementedException();
         }
     }
 }

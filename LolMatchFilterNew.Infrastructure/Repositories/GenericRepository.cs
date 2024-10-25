@@ -201,6 +201,10 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             var count1 = await query1.CountAsync();
             var count2 = await query2.CountAsync();
             var lowestCount = Math.Min(count1, count2);
+
+            DateTime test = DateTime.UtcNow;
+
+            return test;
         }
 
         public async Task<(List<TEntity1>, List<TEntity2>)> GetAllEntitiesAsync<TEntity1, TEntity2>()

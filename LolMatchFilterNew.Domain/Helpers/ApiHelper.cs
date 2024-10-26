@@ -26,9 +26,9 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LolMatchReports");
         }
 
-        public async Task<string> WriteToDocxDocumentAsync(Activity activity, string title, List<string> content = null)
+        public async Task<string> WriteToDocxDocumentAsync(string title, List<string> content = null)
         {
-            _appLogger.Info($"Starting {nameof(WriteToDocxDocumentAsync)},  Content items: {content?.Count ?? 0}, TraceId: {activity.TraceId}.");
+            _appLogger.Info($"Starting {nameof(WriteToDocxDocumentAsync)},  Content items: {content?.Count ?? 0}.");
 
             try
             {
@@ -43,7 +43,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                     fullPath = Path.Combine(_saveDirectory, fileName);
                 } while (File.Exists(fullPath));
 
-                _appLogger.Info($"Full file path for {nameof(WriteToDocxDocumentAsync)}: {fullPath}, ParentId: {activity.ParentId}, TraceId: {activity.TraceId}.");
+                _appLogger.Info($"Full file path for {nameof(WriteToDocxDocumentAsync)}: {fullPath}.");
 
                 using (var document = DocX.Create(fullPath))
                 {
@@ -58,12 +58,12 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                     }
                     else
                     {
-                        _appLogger.Info($"No content to add to document ParentId: {activity.ParentId}, TraceId: {activity.TraceId}.");
+                        _appLogger.Info($"No content to add to document for {nameof(WriteToDocxDocumentAsync)}.");
                     }
                     document.Save();
                 }
                 await Task.Delay(100);
-                _appLogger.Info($"File saved to: {fullPath}, Directory: {Path.GetDirectoryName(fullPath)}, Filename: {Path.GetFileName(fullPath)}, ParentId:{activity.ParentId}, TraceId: {activity.TraceId}.");
+                _appLogger.Info($"File saved to: {fullPath}, Directory: {Path.GetDirectoryName(fullPath)}, Filename: {Path.GetFileName(fullPath)}.");
 
                 return fullPath;
             }
@@ -90,9 +90,9 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 {
                     string title = data switch
                     {
-                        Dictionary<string, string> => "LoL Match Filter Playlist Names and IDs",
-                        IList<string> => "LoL Match Filter Playlist Videos",
-                        _ => "LoL Match Filter Data"
+                        Dictionary<string, string> => "LoL DoesMatch Filter Playlist Names and IDs",
+                        IList<string> => "LoL DoesMatch Filter Playlist Videos",
+                        _ => "LoL DoesMatch Filter Data"
                     };
                     document.InsertParagraph(title).Bold().FontSize(16);
                     document.InsertParagraph().SpacingAfter(20);

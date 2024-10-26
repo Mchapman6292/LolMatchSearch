@@ -18,6 +18,8 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
+using LolMatchFilterNew.Domain.Helpers.YoutubeIdHelpers;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 
 namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
@@ -71,7 +73,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                     $"\n\tYoutube URL: {first.YoutubeResultHyperlink}" +
                     $"\n\tThumbnail URL: {first.ThumbnailUrl ?? "N/A"}" +
                     $"\n\tLeaguepedia Game ID: {first.LeaguepediaGameIdAndTitle ?? "N/A"}" +
-                    $"\n\tLeaguepedia Match: {(first.LeaguepediaMatch != null ? "Linked" : "Not Linked")}");
+                    $"\n\tLeaguepedia DoesMatch: {(first.LeaguepediaMatch != null ? "Linked" : "Not Linked")}");
             }
             else
             {
@@ -88,10 +90,9 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                     $"\n\tYoutube URL: {last.YoutubeResultHyperlink}" +
                     $"\n\tThumbnail URL: {last.ThumbnailUrl ?? "N/A"}" +
                     $"\n\tLeaguepedia Game ID: {last.LeaguepediaGameIdAndTitle ?? "N/A"}" +
-                    $"\n\tLeaguepedia Match: {(last.LeaguepediaMatch != null ? "Linked" : "Not Linked")}");
+                    $"\n\tLeaguepedia DoesMatch: {(last.LeaguepediaMatch != null ? "Linked" : "Not Linked")}");
             }
 
-            // Additional summary logging
             if (allVideos.Any())
             {
                 var dateRange = $"{allVideos.Min(v => v.PublishedAt):yyyy-MM-dd} to {allVideos.Max(v => v.PublishedAt):yyyy-MM-dd}";
@@ -119,8 +120,12 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             );
         }
 
+      
+
+
         public async Task<List<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, string playlistName)
         {
+            
             var videos = new List<YoutubeVideoEntity>();
             var allItems = new List<PlaylistItem>();
             var nextPageToken = "";
@@ -138,7 +143,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 {
                     videos.Add(new YoutubeVideoEntity
                     {
-                        YoutubeVideoId = item.ContentDetails.VideoId,
+                        YoutubeVideoId = YoutubeIdHelper.WrapYoutubeIdInQuotationMarks(item.ContentDetails.VideoId),
                         Title = item.Snippet.Title,
                         PlaylistName = playlistName,
                         PublishedAt = _apiHelper.ConvertDateTimeOffSetToUTC(item.Snippet.PublishedAtDateTimeOffset),

@@ -9,6 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeCont
     public interface IYoutubeController
     {
         Task FetchAndAddYoutubeVideo(List<string> playlistIds);
-        Task FetchYoutubePlaylistsForChannel();
+        Task FetchAndAddYoutubePlaylistsForChannel();
     }
 }

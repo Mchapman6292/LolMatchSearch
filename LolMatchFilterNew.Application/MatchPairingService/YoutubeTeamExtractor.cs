@@ -52,6 +52,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
 
                 comparisonResult.Team1 = string.Empty;
                 comparisonResult.Team2 = string.Empty;
+                return true;
             }
         }
     }

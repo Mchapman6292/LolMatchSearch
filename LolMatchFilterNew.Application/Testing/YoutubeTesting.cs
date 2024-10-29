@@ -25,7 +25,7 @@ namespace LolMatchFilterNew.Application.Testing.YoutubeTesting
 
         public Dictionary<string, int> GetCountsOfGames(List<string> games)
         {
-            Dictionary<string, int> results = new Dictionary<string, int>();
+            throw new NotImplementedException();
 
 
         }

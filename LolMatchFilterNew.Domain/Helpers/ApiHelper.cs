@@ -319,6 +319,49 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             throw new ArgumentException("Unsupported datetime format");
         }
 
+        public DateTime ParseDateTime(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
+                    return DateTime.MinValue.ToUniversalTime();
+                }
+
+                var rawValue = token.ToString();
+                if (string.IsNullOrEmpty(rawValue))
+                {
+                    _appLogger.Warning($"Value for key '{key}' is null or empty.");
+                    return DateTime.MinValue.ToUniversalTime();
+                }
+                if (DateTime.TryParse(rawValue, out DateTime result))
+                {
+                    if (result.Kind != DateTimeKind.Utc)
+                    {
+                        result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
+                    }
+                    return result;
+                }
+                else
+                {
+                    _appLogger.Warning($"Failed to parse DateTime for key '{key}' with value: '{rawValue}'. Using default value (UTC).");
+                    return DateTime.MinValue.ToUniversalTime();
+                }
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error while parsing DateTime for key '{key}': {ex.Message}");
+                return DateTime.MinValue.ToUniversalTime();
+            }
+        }
 
     }
 }

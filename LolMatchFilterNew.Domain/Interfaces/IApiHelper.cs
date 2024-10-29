@@ -10,7 +10,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 {
     public interface IApiHelper
     {
+        Task<string> WriteToDocxDocumentAsync(string title, List<string> content = null);
 
+        Task<string> WriteListDictToWordDocAsync<T>(T data, string customFileName = null);
         int GetInt32Value(JObject obj, string key);
         List<string> GetValuesAsList(JObject obj, string key);
         string GetStringValue(JObject obj, string key);
@@ -18,8 +20,11 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 
         public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime);
 
-        Task<string> WriteToDocxDocumentAsync(Activity activity, string title, List<string> content = null);
+        DateTime ParseDateTime(JObject obj, string key);
 
-        Task<string> WriteListDictToWordDocAsync<T>(T data, string customFileName = null);
+
+
+
+
     }
 }

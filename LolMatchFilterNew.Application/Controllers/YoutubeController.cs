@@ -3,6 +3,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideo
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,16 @@ namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
         private readonly IApiHelper _apiHelper;
+        private readonly ILeaguepediaQueryService _leaguepediaQueryService;
 
 
-        public YoutubeController(IAppLogger appLogger, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IApiHelper apiHelper)
+        public YoutubeController(IAppLogger appLogger, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IApiHelper apiHelper, ILeaguepediaQueryService leaguepediaQueryService)
         {
             _appLogger = appLogger;
             _youtubeDataFetcher = youtubeDataFetcher;
             _youtubeVideoRepository = youtubeVideoRepository;
             _apiHelper = apiHelper;
+            _leaguepediaQueryService = leaguepediaQueryService;
         }
 
         public async Task FetchAndAddYoutubeVideo(List<string> playlistIds)
@@ -35,15 +38,18 @@ namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
             await _youtubeVideoRepository.BulkaddYoutubeDetails(retrievedEntities);
         }
 
-        public async Task FetchYoutubePlaylistsForChannel()
+        public async Task FetchAndAddYoutubePlaylistsForChannel()
         {
             string channelId = "UC3Lh8yZe1MD-jCIXhBcVtqQ";
 
             Dictionary<string, string> results =  await _youtubeDataFetcher.GetChannelPlaylists(channelId);
 
             await _apiHelper.WriteListDictToWordDocAsync(results);
+        }
 
-           
+        public async Task FetchAndAddAllTeamNamesForRegion()
+        {
+            string query = _leaguepediaQueryService.BuildQueryStringForTeamsInRegion();
         }
     }
 }

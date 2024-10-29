@@ -10,6 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeam
 {
     public interface IYoutubeTeamExtractor
     {
-        public bool MatchVsPatternAndUpdateMatchComparisonResultEntity(YoutubeVideoEntity youtubeVideo, MatchComparisonResult comparisonResult);
+        
     }
 }

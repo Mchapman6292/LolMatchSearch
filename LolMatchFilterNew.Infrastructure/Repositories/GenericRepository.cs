@@ -98,36 +98,34 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             }
         }
 
-        public async Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities)
+        public virtual async Task BulkAddAsync(List<T> entities)
         {
             int savedCount = 0;
             int failedCount = 0;
             string entityTypeName = typeof(T).Name;
 
+            if(!entities.Any()) 
+            {
+                _appLogger.Error($"No Entities found in parameter {nameof(BulkAddAsync)}.");
+                throw new ArgumentNullException($"No Entites found in parameter {nameof(BulkAddAsync)}");
+            }
+
+        }
+
+
+        public async Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities)
+        {
+            int savedCount = 0;
+            int failedCount = 0;
+            string entityTypeName = typeof(T).Name;
+            var entityCount = entities.Count();
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                foreach (var entity in entities)
-                {
-                    try
-                    {
-                        await _dbSet.AddAsync(entity);
-                        await _context.SaveChangesAsync();
-                        savedCount++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _appLogger.Error($"Failed to save {entityTypeName} entity: {ex.Message}");
-                        failedCount++;
-                    }
-                }
-
-                if (failedCount > 0)
-                {
-                    await transaction.RollbackAsync();
-                    _appLogger.Warning($"Transaction rolled back. {failedCount} {entityTypeName} entries failed to save.");
-                    return (0, entities.Count());
-                }
+                await _dbSet.AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
+                savedCount = entityCount; 
 
                 await transaction.CommitAsync();
                 _appLogger.Info($"Successfully added {savedCount} {entityTypeName} entities.");
@@ -137,7 +135,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             {
                 await transaction.RollbackAsync();
                 _appLogger.Error($"Transaction rolled back due to error while saving {entityTypeName} entities: {ex.Message}");
-                return (0, entities.Count());
+                return (0, entityCount);
             }
         }
 

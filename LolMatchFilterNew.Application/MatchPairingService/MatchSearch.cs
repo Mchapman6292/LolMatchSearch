@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
-using LolMatchFilterNew.Application.MatchComparison;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
@@ -32,20 +31,12 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
         }
 
 
-        public (string, string) CompareTeamNames(string youtubeTitle, List<string>[] leaguepediaTeams)
-        {
 
-            var lastSeperatorIndex = youtubeTitle.LastIndexOf('|');
-            string extractedEnding = lastSeperatorIndex => 0
-                 ? youtubeTitle.Substring(lastSeparatorIndex + 1).Trim()
-                    : youtubeTitle.Trim();
-
-        }
 
 
         public async Task<List<string>> GetTeamsIfTitleIncludesVs(List<YoutubeVideoEntity> youtubeVideos)
         {
-
+            throw new NotImplementedException();
         }
             
           

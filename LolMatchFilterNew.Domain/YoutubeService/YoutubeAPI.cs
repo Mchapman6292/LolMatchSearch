@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoEntity", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync("YoutubeVideoEntity", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

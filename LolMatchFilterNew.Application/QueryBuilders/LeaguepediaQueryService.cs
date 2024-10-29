@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+﻿using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +36,19 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
 
+        }
+
+        public string BuildQueryStringForTeamsInRegion(string region,int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams";
+            query["fields"] = "Name,Short,Region,RenamedTo";
+            query["where"] = $"Region = '{region}'";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
         }
 
 

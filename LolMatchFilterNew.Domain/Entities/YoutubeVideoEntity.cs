@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using System.Diagnostics.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
@@ -11,11 +12,16 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
     public class YoutubeVideoEntity
     {
         [Key]
+
+        [Comment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.")]
+        // Can begin with uppercase letters, numbers, lowercase letters, - and _ 
         public string YoutubeVideoId { get; set; }
+
         [Required]
         [MaxLength(255)]
         public string Title { get; set; }
         public string PlaylistName { get; set; }    
+
 
         public DateTime PublishedAt { get; set; }
 

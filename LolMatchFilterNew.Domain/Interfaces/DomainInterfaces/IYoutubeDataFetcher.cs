@@ -14,5 +14,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetch
         Task<Dictionary<string, string>> GetPlaylistNames(List<string> playlistIds);
 
         Task<List<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, string playlistName);
+
+        Task<Dictionary<string, string>> GetChannelPlaylists(string channelId);
     }
 }

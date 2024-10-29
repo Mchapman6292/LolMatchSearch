@@ -233,9 +233,9 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                                 var extractedTeams = await _youtubeTitleMatcher.ExtractTeamNames(activity, retrievedTitle);
                                 if (extractedTeams.Count == 2 && teamNames.All(team => extractedTeams.Contains(team, StringComparer.OrdinalIgnoreCase)))
                                 {
-                                    _appLogger.Info($"Match found for LeaguepediaGameIdAndTitle: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                                    _appLogger.Info($"DoesMatch found for LeaguepediaGameIdAndTitle: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
 
-                                    videoDetails.Add("Match found:");
+                                    videoDetails.Add("DoesMatch found:");
                                     videoDetails.Add($"Video ID: {videoId}");
                                     videoDetails.Add($"Title: {retrievedTitle}");
                                     videoDetails.Add($"Description: {videoItem.Snippet.Description}");
@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync(activity, "YoutubeVideoEntity", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync("YoutubeVideoEntity", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

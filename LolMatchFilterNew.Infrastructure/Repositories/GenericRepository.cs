@@ -98,36 +98,34 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             }
         }
 
-        public async Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities)
+        public virtual async Task BulkAddAsync(List<T> entities)
         {
             int savedCount = 0;
             int failedCount = 0;
             string entityTypeName = typeof(T).Name;
 
+            if(!entities.Any()) 
+            {
+                _appLogger.Error($"No Entities found in parameter {nameof(BulkAddAsync)}.");
+                throw new ArgumentNullException($"No Entites found in parameter {nameof(BulkAddAsync)}");
+            }
+
+        }
+
+
+        public async Task<(int savedCount, int failedCount)> AddRangeWithTransactionAsync(IEnumerable<T> entities)
+        {
+            int savedCount = 0;
+            int failedCount = 0;
+            string entityTypeName = typeof(T).Name;
+            var entityCount = entities.Count();
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                foreach (var entity in entities)
-                {
-                    try
-                    {
-                        await _dbSet.AddAsync(entity);
-                        await _context.SaveChangesAsync();
-                        savedCount++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _appLogger.Error($"Failed to save {entityTypeName} entity: {ex.Message}");
-                        failedCount++;
-                    }
-                }
-
-                if (failedCount > 0)
-                {
-                    await transaction.RollbackAsync();
-                    _appLogger.Warning($"Transaction rolled back. {failedCount} {entityTypeName} entries failed to save.");
-                    return (0, entities.Count());
-                }
+                await _dbSet.AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
+                savedCount = entityCount; 
 
                 await transaction.CommitAsync();
                 _appLogger.Info($"Successfully added {savedCount} {entityTypeName} entities.");
@@ -137,7 +135,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             {
                 await transaction.RollbackAsync();
                 _appLogger.Error($"Transaction rolled back due to error while saving {entityTypeName} entities: {ex.Message}");
-                return (0, entities.Count());
+                return (0, entityCount);
             }
         }
 
@@ -189,5 +187,35 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
                 throw;
             }
         }
+
+        public async Task<DateTime> GetEarliestDateTimePublishedAt<TEntity1, TEntity2>()
+                where TEntity1 : class
+                where TEntity2 : class
+        {
+            var query1 = _context.Set<TEntity1>();
+            var query2 = _context.Set<TEntity2>();
+
+ 
+            var count1 = await query1.CountAsync();
+            var count2 = await query2.CountAsync();
+            var lowestCount = Math.Min(count1, count2);
+
+            DateTime test = DateTime.UtcNow;
+
+            return test;
+        }
+
+        public async Task<(List<TEntity1>, List<TEntity2>)> GetAllEntitiesAsync<TEntity1, TEntity2>()
+                where TEntity1 : class
+                where TEntity2 : class
+        {
+            var entity1List = await _context.Set<TEntity1>().ToListAsync();
+            var entity2List = await _context.Set<TEntity2>().ToListAsync();
+
+            return (entity1List, entity2List); 
+        }
+
+
+
     }
 }

@@ -4,7 +4,7 @@ using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using Activity = System.Diagnostics.Activity;
 using System.Text.Json;

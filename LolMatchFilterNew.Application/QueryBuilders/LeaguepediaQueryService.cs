@@ -52,5 +52,19 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         }
 
 
+        public string BuildQueryStringForTeamsInRegionTest(string region, int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Tournaments=T,TournamentRosters=TR,Teamnames=TN";
+            query["fields"] = "Name,Short,Region,RenamedTo";
+            query["where"] = $"Region = '{region}'";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+
+
     }
 }

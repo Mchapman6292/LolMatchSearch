@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
 using System.Runtime.CompilerServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
+using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
@@ -21,7 +22,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
         public LeaguepediaMatchDetailRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
-            : base(dbContext as DbContext, appLogger)
+            : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;
             _matchFilterDbContext = dbContext;

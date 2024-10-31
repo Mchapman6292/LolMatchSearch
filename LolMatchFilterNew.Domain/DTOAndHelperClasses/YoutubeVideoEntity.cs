@@ -12,6 +12,7 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
     {
         public string VideoId { get; set; }
         public string Title { get; set; }
+        public string? Teams { get; set; }
         public DateTime? PublishedAt { get; set; }
         public string ThumbnailUrl { get; set; }
         public string YoutubeResultHyperlink { get; set; }
@@ -21,6 +22,11 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
         {
             VideoId = videoId;
             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={videoId}";
+        }
+
+        public void SetYoutubeTeams(string youtubeTeams)
+        {
+            Teams = youtubeTeams;
         }
     }
 }

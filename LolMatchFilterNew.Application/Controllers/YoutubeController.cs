@@ -49,7 +49,7 @@ namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
 
         public async Task FetchAndAddAllTeamNamesForRegion()
         {
-            string query = _leaguepediaQueryService.BuildQueryStringForTeamsInRegion();
+            
         }
     }
 }

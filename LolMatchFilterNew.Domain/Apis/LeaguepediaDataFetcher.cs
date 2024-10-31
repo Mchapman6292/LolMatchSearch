@@ -7,6 +7,7 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using Activity = System.Diagnostics.Activity;
+using Newtonsoft.Json; 
 using System.Text.Json;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System;
@@ -26,10 +27,6 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         private readonly ILeaguepediaAPILimiter _leaguepediaApiLimiter;
         private readonly IHttpClientFactory _httpClientFactory;
         const int QueryLimit = 490;
-
-
-
-
         private static readonly HttpClient client = new HttpClient();
         private static readonly string SaveDirectory = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -62,7 +59,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 _appLogger.Error($"HTTP request failed for Leaguepedia API. URL: {urlQuery}", ex);
                 throw;
             }
-            catch (JsonException ex)
+            catch (System.Text.Json.JsonException ex)
             {
                 _appLogger.Error($"JSON parsing failed for Leaguepedia API. URL: {urlQuery}", ex);
                 throw;
@@ -70,7 +67,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         }
 
         // Extracts the matches from the "cargoquery" field in the JSON response and returns them as a list of JObject
-        public IEnumerable<JObject> ExtractMatchesFromLeaguepediaApiResponse(JObject jsonMatchData)
+        public IEnumerable<JObject> ExtractDataFromLeaguepediaApiResponse(JObject jsonMatchData)
         {
             var cargoQueryData = jsonMatchData["cargoquery"] as JArray;
 
@@ -90,11 +87,18 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
         // Fetches & extracts one page of matches. 
-        public async Task<IEnumerable<JObject>> FetchPageOfMatches(string tournamentName, string urlQuery)
+
+        public async Task<IEnumerable<JObject>> FetchPageOfResults(string urlQuery)
         {
             var apiResponse = await FetchLeaguepediaApiResponse(urlQuery);
-            return ExtractMatchesFromLeaguepediaApiResponse(apiResponse);
+            return ExtractDataFromLeaguepediaApiResponse(apiResponse);
+
         }
+
+
+
+
+
 
         // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
         public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490)
@@ -112,18 +116,23 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                     ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                     : queryLimit;
 
-                string urlQuery = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason(leagueName, currentQueryLimit, offset);
+                string urlQuery = _leaguepediaQueryService.BuildQueryStringForTeamsInRegion(leagueName, currentQueryLimit, offset);
 
                 _appLogger.Info($"URL for api calls: {urlQuery}, leagueName {leagueName}.");
 
 
-                var pageOfMatches = await FetchPageOfMatches(leagueName,urlQuery);
+                var pageOfMatches = await FetchPageOfResults(urlQuery);
                 totalMatchesCount += pageOfMatches.Count();
 
 
                 if(!pageOfMatches.Any())
                 {
                     _appLogger.Info($"No more matches found, ending pagination.");
+ 
+                    var first = allMatches.First();
+                    var last = allMatches.Last();
+                    _appLogger.Info($"First match data: {first.ToString(Formatting.Indented)}");
+                    _appLogger.Info($"Last match data: {last.ToString(Formatting.Indented)}");
                     break;
                 }
                 allMatches.AddRange(pageOfMatches);
@@ -133,6 +142,9 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
             }
             return allMatches;
         }
+
+
+
 
 
 
@@ -191,7 +203,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                     _appLogger.Error($"[TEST] HTTP request failed for Leaguepedia API. URL: {url}");
                     throw;
                 }
-                catch (JsonException ex)
+                catch (System.Text.Json.JsonException ex)
                 {
                     _appLogger.Error($"[TEST] JSON parsing failed for Leaguepedia API. URL: {url}");
                     throw;

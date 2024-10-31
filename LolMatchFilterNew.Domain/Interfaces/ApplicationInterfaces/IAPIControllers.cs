@@ -8,8 +8,10 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 {
     public interface IAPIControllers
     {
-        Task FetchAndAddLeaguepediaData(string league);
+        Task FetchAndAddLeaguepediaDataForLeagueName(string league);
 
         Task FetchAndAddYoutubeVideo(List<string> playlistIds);
+
+        Task FetchAndAddTeamNamesForLeague(string leagueName);
     }
 }

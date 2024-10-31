@@ -12,10 +12,18 @@ namespace LolMatchFilterNew.Domain.Entities.LeagueTeamEntities
 {
     public class LeagueTeamEntity
     {
+        public LeagueTeamEntity()
+        {
+            CurrentPlayers = new List<ProPlayerEntity>();
+            FormerPlayers = new List<ProPlayerEntity>();
+        }
+
         [Key]
         public string TeamName { get; set; } // Unique identifier for the team
 
         public string NameShort { get; set; }
+
+        public string previousTeamNames { get; set; }
 
         public string Region { get; set; }
 

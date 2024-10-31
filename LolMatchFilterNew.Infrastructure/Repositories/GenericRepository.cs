@@ -1,5 +1,6 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
+using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -9,10 +10,10 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
     {
 
         private readonly DbSet<T> _dbSet;
-        private readonly DbContext _context;
+        private readonly MatchFilterDbContext _context;
         private readonly IAppLogger _appLogger;
 
-        public GenericRepository(DbContext context, IAppLogger appLogger)
+        public GenericRepository(MatchFilterDbContext context, IAppLogger appLogger)
         {
             _context = context;
             _dbSet = context.Set<T>();

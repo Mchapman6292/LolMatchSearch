@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryService;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
@@ -18,8 +18,10 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 
-namespace LolMatchFilterNew.Application.LeaguepediaControllers
+namespace LolMatchFilterNew.Application.Controllers
 {
     public class APIControllers : IAPIControllers
     {
@@ -30,9 +32,10 @@ namespace LolMatchFilterNew.Application.LeaguepediaControllers
         private readonly ILeaguepediaMatchDetailRepository _leaguepediaMatchDetailRepository;
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
+        private readonly IGenericRepository<LeagueTeamEntity> _leagueTeamRepository;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository)
+        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
@@ -41,15 +44,15 @@ namespace LolMatchFilterNew.Application.LeaguepediaControllers
             _leaguepediaMatchDetailRepository = leaguepediaMatchDetailRepository;
             _youtubeDataFetcher = youtubeDataFetcher;
             _youtubeVideoRepository = youtubeVideoRepository;
+            _leagueTeamRepository = leagueTeamRepository;
         }
 
 
-        public async Task FetchAndAddLeaguepediaData(string leagueName)
+        public async Task FetchAndAddLeaguepediaDataForLeagueName(string leagueName)
         {
             int limit = 5;
 
-       
-            IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName);
+            IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName, limit);
 
             IEnumerable<LeaguepediaMatchDetailEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
 
@@ -62,6 +65,19 @@ namespace LolMatchFilterNew.Application.LeaguepediaControllers
             IList<YoutubeVideoEntity> retrievedEntities = await _youtubeDataFetcher.RetrieveAndMapAllPlaylistVideosToEntities(playlistIds);
 
             await _youtubeVideoRepository.BulkaddYoutubeDetails(retrievedEntities);
+        }
+
+        public async Task FetchAndAddTeamNamesForLeague(string leagueName)
+        {
+            int limit = 5;
+
+            IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName, limit);
+
+            IEnumerable<LeagueTeamEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToLeagueTeamEntity(apiData);
+
+            await _leagueTeamRepository.AddRangeWithTransactionAsync(leagueEntities);
+
+
         }
 
 

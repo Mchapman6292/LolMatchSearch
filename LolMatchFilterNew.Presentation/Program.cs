@@ -42,7 +42,7 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
 
-                string leagueName = "LoL EMEA Championship";
+                string leagueName = "EMEA";
 
                 var playlistIds = new List<string>
                     {
@@ -50,7 +50,7 @@ namespace LolMatchFilterNew.Presentation
 
                     };
 
-                await youtubeController.FetchAndAddYoutubeVideo(playlistIds);
+                await APIController.FetchAndAddTeamNamesForLeague(leagueName);
 
          
 

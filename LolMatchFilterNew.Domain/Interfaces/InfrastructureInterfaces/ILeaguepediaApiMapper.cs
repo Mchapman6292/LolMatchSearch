@@ -1,4 +1,5 @@
 ﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
     public interface ILeaguepediaApiMapper
     {
         Task<IEnumerable<LeaguepediaMatchDetailEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData);
+
+        Task<IEnumerable<LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
     }
 }

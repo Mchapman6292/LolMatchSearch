@@ -237,6 +237,8 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+      
+
 
 
 
@@ -251,10 +253,6 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             var token = targetObj[key];
             var result = token?.ToString() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(result))
-            {
-                _appLogger.Warning($"Empty or null value for key: {key}. Token type: {token?.Type.ToString() ?? "null"}");
-            }
             return result;
         }
 

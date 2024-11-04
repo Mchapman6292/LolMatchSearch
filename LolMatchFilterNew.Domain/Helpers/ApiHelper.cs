@@ -6,9 +6,27 @@ using Microsoft.Extensions.Configuration;
 using Google.Apis.YouTube.v3.Data;
 using Newtonsoft.Json.Linq;
 using Xceed.Document.NET;
+using Npgsql;
 
 namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 {
+    public static class PostgresExceptionExtensions
+    {
+        public static string GetDetailedErrorMessage(this PostgresException pgEx)
+        {
+            return $@"Postgres Error:
+            Message: {pgEx.MessageText}
+            Detail: {pgEx.Detail}
+            Hint: {pgEx.Hint}
+            Position: {pgEx.Position}
+            SqlState: {pgEx.SqlState}
+            Severity: {pgEx.Severity}
+            Routine: {pgEx.Routine}
+            Line: {pgEx.Line}
+            File: {pgEx.File}";
+        }
+    }
+
     public class ApiHelper : IApiHelper
     {
         private readonly string _saveDirectory;
@@ -106,7 +124,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                                 table.Design = TableDesign.LightGrid;
 
                                 table.Rows[0].Cells[0].Paragraphs.First().Append("Playlist ID").Bold();
-                                table.Rows[0].Cells[1].Paragraphs.First().Append("Playlist Name").Bold();
+                                table.Rows[0].Cells[1].Paragraphs.First().Append("Playlist TeamName").Bold();
 
                                 int rowIndex = 1;
                                 foreach (var item in dictionary)

@@ -27,9 +27,9 @@ namespace LolMatchFilterNew.Domain.Entities.LeagueTeamEntities
 
         public string Region { get; set; }
 
-        public virtual ICollection<ProPlayerEntity>? CurrentPlayers { get; set; } // Collections are used to define the reverse for these relationships(Each team has current players & former players)
+        public virtual ICollection<ProPlayerEntity> CurrentPlayers { get; set; } // Collections are used to define the reverse for these relationships(Each team has current players & former players)
 
-        public virtual ICollection<ProPlayerEntity>? FormerPlayers { get; set; }
+        public virtual ICollection<ProPlayerEntity> FormerPlayers { get; set; }
 
     }
 }

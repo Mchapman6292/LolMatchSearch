@@ -12,6 +12,9 @@ using System.Text.Json;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System;
 using Npgsql.PostgresTypes;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 {
@@ -103,46 +106,98 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
         public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490)
         {
-
-            int offset = 0;
+            
             var allMatches = new List<JObject>();
-            bool hasMoreData = true;
-            int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
-            int totalMatchesCount = 0;
-
-            while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
+            try
             {
-                int currentQueryLimit = totalLimit.HasValue
-                    ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
-                    : queryLimit;
+                int offset = 0;
+                bool hasMoreData = true;
+                int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
+                int totalMatchesCount = 0;
 
-                string urlQuery = _leaguepediaQueryService.BuildQueryStringForTeamsInRegion(leagueName, currentQueryLimit, offset);
+                _appLogger.Info($"Starting match fetch for league: {leagueName}, Pages: {numberOfPages}, Limit: {queryLimit}");
 
-                _appLogger.Info($"URL for api calls: {urlQuery}, leagueName {leagueName}.");
-
-
-                var pageOfMatches = await FetchPageOfResults(urlQuery);
-                totalMatchesCount += pageOfMatches.Count();
-
-
-                if(!pageOfMatches.Any())
+                while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
                 {
-                    _appLogger.Info($"No more matches found, ending pagination.");
- 
-                    var first = allMatches.First();
-                    var last = allMatches.Last();
-                    _appLogger.Info($"First match data: {first.ToString(Formatting.Indented)}");
-                    _appLogger.Info($"Last match data: {last.ToString(Formatting.Indented)}");
-                    break;
-                }
-                allMatches.AddRange(pageOfMatches);
+                    try
+                    {
+                        int currentQueryLimit = totalLimit.HasValue
+                            ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
+                            : queryLimit;
 
-                hasMoreData = pageOfMatches.Count() > 0;
-                offset += pageOfMatches.Count();
+                        string urlQuery = _leaguepediaQueryService.BuildQueryForTeamNameAndAbbreviation(leagueName, currentQueryLimit, offset);
+                        _appLogger.Info($"Fetching page with offset {offset}, limit {currentQueryLimit}");
+                        _appLogger.Debug($"Generated URL: {urlQuery}");
+
+                        var pageOfMatches = await FetchPageOfResults(urlQuery);
+                        totalMatchesCount += pageOfMatches.Count();
+
+                        if (!pageOfMatches.Any())
+                        {
+                            _appLogger.Info($"No more matches found at offset {offset}. Total matches fetched: {totalMatchesCount}");
+
+                            if (allMatches.Any())
+                            {
+                                var first = allMatches.First();
+                                var last = allMatches.Last();
+                                _appLogger.Debug($"First match: {first.ToString(Formatting.Indented)}");
+                                _appLogger.Debug($"Last match: {last.ToString(Formatting.Indented)}");
+                            }
+                            break;
+                        }
+
+                        allMatches.AddRange(pageOfMatches);
+                        hasMoreData = pageOfMatches.Count() > 0;
+                        offset += pageOfMatches.Count();
+
+                        _appLogger.Info($"Successfully fetched {pageOfMatches.Count()} matches. Total so far: {allMatches.Count}");
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        _appLogger.Error($"HTTP request failed at offset {offset}: {ex.Message}");
+                        _appLogger.Error($"Stack trace: {ex.StackTrace}");
+                        throw;
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        _appLogger.Error($"JSON parsing error at offset {offset}: {ex.Message}");
+                        _appLogger.Error($"Path: {ex.Path}, LineNumber: {ex.LineNumber}, LinePosition: {ex.LinePosition}");
+                        throw;
+                    }
+                }
             }
+            catch (PostgresException pgEx)
+            {
+                _appLogger.Error($"Database error occurred: {pgEx.GetDetailedErrorMessage()}");
+                throw;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                if (dbEx.InnerException is PostgresException pgEx)
+                {
+                    _appLogger.Error($"Database update failed: {pgEx.GetDetailedErrorMessage()}");
+                }
+                else
+                {
+                    _appLogger.Error($"Database update failed: {dbEx.Message}");
+                    _appLogger.Error($"Inner exception: {dbEx.InnerException?.Message}");
+                }
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error in FetchAndExtractMatches: {ex.Message}");
+                _appLogger.Error($"Stack trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
+                    _appLogger.Error($"Inner stack trace: {ex.InnerException.StackTrace}");
+                }
+                throw;
+            }
+
             return allMatches;
         }
-
 
 
 

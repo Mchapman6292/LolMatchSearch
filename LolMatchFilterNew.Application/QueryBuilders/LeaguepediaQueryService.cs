@@ -38,7 +38,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
         }
 
-        public string BuildQueryStringForTeamsInRegion(string region,int queryLimit, int offset = 0)
+        public string BuildQueryStringForTeamsInRegion(string region, int queryLimit, int offset = 0)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
@@ -65,6 +65,42 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             return $"{BaseUrl}?{query}";
         }
 
+
+
+        public string BuildQueryStringForTeamsInLeague(string leagueName, int queryLimit, int offset = 0)
+        {
+            const string BaseUrl = "https://lol.fandom.com/api.php";
+
+            leagueName = HttpUtility.UrlEncode(leagueName);
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
+            query["join_on"] = "Teams.Name=TR.Team,TR.Tournament=T.Name";
+            query["fields"] = "DISTINCT Teams.Name, Teams.Short";
+            query["where"] = $"T.League='{leagueName}' AND Teams.Status='Active'";
+            query["group_by"] = "Teams.Name";
+            query["order_by"] = "Teams.Name ASC";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+
+        public string BuildQueryForTeamNameAndAbbreviation(string leagueName, int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
+            query["join_on"] = "Teams.Name=TR.Team,TR.Event=T.Name";
+            query["fields"] = "Teams.Name,Teams.Short,Teams.Region";
+            query["where"] = $"T.League='{leagueName}'";
+            query["group_by"] = "Teams.Name,Teams.Short,Teams.Region";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
 
     }
 }

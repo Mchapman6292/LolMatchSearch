@@ -97,7 +97,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     processedCount++;
                     try
                     {
-                        string teamName = _apiHelper.GetStringValue(teamData, "Name");
+                        string teamName = _apiHelper.GetStringValue(teamData, "TeamName");
 
                         if (string.IsNullOrWhiteSpace(teamName))
                         {
@@ -130,6 +130,67 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
+        public async Task<IEnumerable<LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null || !apiData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapApiDataToLeagueTeamEntityForTeamShort)}.");
+                throw new ArgumentNullException(nameof(apiData), "Input data cannot be null or empty.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<LeagueTeamEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            string teamName = _apiHelper.GetStringValue(titleData, "Name");
+                            if (string.IsNullOrEmpty(teamName))
+                            {
+                                skippedCount++;
+                                _appLogger.Warning($"Skipping record {processedCount} due to null or empty team name. Raw data: {titleData}");
+                                continue;
+                            }
+
+                            var entity = new LeagueTeamEntity
+                            {
+                                TeamName = teamName,
+                                NameShort = _apiHelper.GetStringValue(titleData, "Short"),
+                                Region = _apiHelper.GetStringValue(titleData, "Region"),
+                                CurrentPlayers = new List<ProPlayerEntity>(),
+                                FormerPlayers = new List<ProPlayerEntity>()
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} due to missing or invalid 'title' object. Raw data: {teamData}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records with null/empty team names.");
+                return results;
+            });
+
+
+
+
+        }
     }
 }
 

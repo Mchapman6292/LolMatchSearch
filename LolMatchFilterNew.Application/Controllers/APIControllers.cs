@@ -60,7 +60,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
         }
 
-        public async Task FetchAndAddYoutubeVideo(List<string> playlistIds)
+        public async Task FetchAndAddYoutubeVideos(List<string> playlistIds)
         {
             IList<YoutubeVideoEntity> retrievedEntities = await _youtubeDataFetcher.RetrieveAndMapAllPlaylistVideosToEntities(playlistIds);
 
@@ -73,17 +73,49 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName, limit);
 
-            IEnumerable<LeagueTeamEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToLeagueTeamEntity(apiData);
+            var counts = CountObjectsAndNullProperties(apiData);
+
+            _appLogger.Info($"Object Analysis - Total Objects: {counts.TotalObjects}, " +
+                   $"Null Objects: {counts.NullObjects}, " +
+                   $"Null Properties: {counts.NullProperties}");
+
+
+            IEnumerable<LeagueTeamEntity> leagueEntities = await _leaguepediaApiMapper.MapApiDataToLeagueTeamEntityForTeamShort(apiData);
 
             await _leagueTeamRepository.AddRangeWithTransactionAsync(leagueEntities);
-
-
         }
 
 
+        private  static (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
+        {
+            int totalObjects = 0;
+            int nullObjects = 0;
+            int nullProperties = 0;
 
+            foreach (var item in enumerable)
+            {
+                totalObjects++;
+                if (item == null)
+                {
+                    nullObjects++;
+                    continue;
+                }
 
+                foreach (var property in item.Properties())
+                {
+                    if (property.Value.Type == JTokenType.Null)
+                    {
+                        nullProperties++;
+                    }
+                }
+            }
 
-
+            return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
+        }
     }
 }
+
+
+
+
+

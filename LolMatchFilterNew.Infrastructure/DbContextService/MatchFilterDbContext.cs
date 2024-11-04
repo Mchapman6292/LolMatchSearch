@@ -11,6 +11,7 @@ using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
+using LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities;
 using System.Numerics;
 
 
@@ -27,6 +28,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<ProPlayerEntity> ProPlayers { get; set; }
         public DbSet<LeaguepediaMatchDetailEntity> LeaguepediaMatchDetails { get; set; }
         public DbSet<LeagueTeamEntity> Teams { get; set; }
+        public DbSet<YoutubePlaylistEntity> YoutubePlaylists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

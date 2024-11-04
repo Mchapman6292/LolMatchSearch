@@ -42,7 +42,11 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
 
-                string leagueName = "EMEA";
+                string region = "EMEA";
+
+                string leagueName = "LoL EMEA Championship";
+
+
 
                 var playlistIds = new List<string>
                     {

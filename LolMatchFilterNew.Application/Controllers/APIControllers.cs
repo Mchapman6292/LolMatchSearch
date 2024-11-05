@@ -152,6 +152,12 @@ namespace LolMatchFilterNew.Application.Controllers
                 throw;
             }
         }
+
+
+        public async Task ControllerGetAllCurrentTeamNames()
+        {
+
+        }
     }
 }
 

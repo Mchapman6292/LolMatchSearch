@@ -15,6 +15,8 @@
 
         Task RemoveEntitiesAsync(IEnumerable<T> entities);
 
+        Task<IEnumerable<T>> GetAllValuesAsync();
+
         Task<(List<TEntity1>, List<TEntity2>)> GetAllEntitiesAsync<TEntity1, TEntity2>()
             where TEntity1 : class
             where TEntity2 : class;

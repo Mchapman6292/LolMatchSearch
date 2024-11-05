@@ -48,6 +48,11 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             }
         }
 
+        public virtual async Task<IEnumerable<T>> GetAllValuesAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+
 
         public virtual async Task<IEnumerable<T>> GetMultipleIdsAsync(params object[] ids)
         {

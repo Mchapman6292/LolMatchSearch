@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104035228_RemovePreviousTeamNames")]
+    partial class RemovePreviousTeamNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,34 +197,6 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasKey("LeaguepediaPlayerAllName");
 
                     b.ToTable("ProPlayers");
-                });
-
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.TeamRenamesEntities.TeamRenameEntity", b =>
-                {
-                    b.Property<string>("OriginalName")
-                        .HasColumnType("text")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("NewName")
-                        .HasColumnType("text")
-                        .HasColumnOrder(1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("IsSamePage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NewsId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Verb")
-                        .HasColumnType("text");
-
-                    b.HasKey("OriginalName", "NewName", "Date");
-
-                    b.ToTable("TeamRenames");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities.YoutubePlaylistEntity", b =>

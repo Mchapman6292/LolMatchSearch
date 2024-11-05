@@ -12,6 +12,8 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
@@ -54,11 +56,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             Tournament = _apiHelper.GetStringValue(matchData, "Tournament"),
                             Team1 = _apiHelper.GetStringValue(matchData, "Team1"),
                             Team2 = _apiHelper.GetStringValue(matchData, "Team2"),
-                            Team1Players = string.Join(',',_apiHelper.GetValuesAsList(matchData, "Team1Players")),
+                            Team1Players = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team1Players")),
                             Team2Players = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team2Players")),
                             Team1Picks = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team1Picks")),
                             Team2Picks = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team2Picks")),
-                            WinTeam = _apiHelper.GetStringValue(matchData,"WinTeam"),
+                            WinTeam = _apiHelper.GetStringValue(matchData, "WinTeam"),
                             LossTeam = _apiHelper.GetStringValue(matchData, "LossTeam"),
                             Team1Kills = _apiHelper.GetInt32Value(matchData, "Team1Kills"),
                             Team2Kills = _apiHelper.GetInt32Value(matchData, "Team2Kills")
@@ -79,38 +81,187 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             });
         }
 
-        public async Task<TEntity> MapToEntity<TEntity>(JObject leaguepediaData) where TEntity : class
+        public async Task<IEnumerable<LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
         {
-            try
+            if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                return CreateEntity<TEntity>(leaguepediaData);
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaDataToLeagueTeamEntity)}.");
+                throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
-            catch (Exception ex)
+            return await Task.Run(() =>
             {
-                _appLogger.Error($"Error mapping to {typeof(TEntity).Name}: {ex.Message}", ex);
-                throw;
+                var results = new List<LeagueTeamEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+                foreach (var teamData in leaguepediaData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        string teamName = _apiHelper.GetStringValue(teamData, "TeamName");
+
+                        if (string.IsNullOrWhiteSpace(teamName))
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} due to null or empty team name. Raw data: {teamData}");
+                            continue;
+                        }
+
+                        var entity = new LeagueTeamEntity
+                        {
+                            TeamName = teamName,
+                            NameShort = _apiHelper.GetStringValue(teamData, "ShortName"),
+                            Region = _apiHelper.GetStringValue(teamData, "Region")
+                        };
+                        results.Add(entity);
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records with null/empty team names.");
+                return results;
+            });
+        }
+
+
+
+
+        public async Task<IEnumerable<LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null || !apiData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapApiDataToLeagueTeamEntityForTeamShort)}.");
+                throw new ArgumentNullException(nameof(apiData), "Input data cannot be null or empty.");
             }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<LeagueTeamEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            string teamName = _apiHelper.GetStringValue(titleData, "Name");
+                            if (string.IsNullOrEmpty(teamName))
+                            {
+                                skippedCount++;
+                                _appLogger.Warning($"Skipping record {processedCount} due to null or empty team name. Raw data: {titleData}");
+                                continue;
+                            }
+
+                            var entity = new LeagueTeamEntity
+                            {
+                                TeamName = teamName,
+                                NameShort = _apiHelper.GetStringValue(titleData, "Short"),
+                                Region = _apiHelper.GetStringValue(titleData, "Region")
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} due to missing or invalid 'title' object. Raw data: {teamData}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records with null/empty team names.");
+                return results;
+            });
+        }
+
+
+        public async Task<IEnumerable<TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null)
+            {
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToTeamRenameEntity)}.");
+                throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<TeamRenameEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            string originalName = titleData["OriginalName"]?.ToString();
+                            string newName = titleData["NewName"]?.ToString();
+                            DateTime date = _apiHelper.ParseDateTime(titleData, "Date");
+
+                            if (
+                                string.IsNullOrWhiteSpace(originalName) ||
+                                string.IsNullOrWhiteSpace(newName))
+                            {
+                                skippedCount++;
+                                _appLogger.Warning($"Skipping record {processedCount} due to missing required fields. Raw data: {titleData}");
+                                continue;
+                            }
+
+
+                            string? verb = !string.IsNullOrWhiteSpace(titleData["Verb"]?.ToString())
+                                ? titleData["Verb"]?.ToString()
+                                : null;
+
+                            string? isSamePage = !string.IsNullOrWhiteSpace(titleData["IsSamePage"]?.ToString())
+                                ? titleData["IsSamePage"]?.ToString()
+                                : null;
+
+                            string? newsId = !string.IsNullOrWhiteSpace(titleData["NewsId"]?.ToString())
+                                ? titleData["NewsId"]?.ToString()
+                                : null;
+
+                            var entity = new TeamRenameEntity
+                            {
+                                Date = date,
+                                OriginalName = originalName.Trim(),
+                                NewName = newName.Trim(),
+                                Verb = verb,
+                                IsSamePage = isSamePage,
+                                NewsId = newsId
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} because 'title' is not a JObject. Raw data: {teamData}");
+                        }
+                        processedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                        skippedCount++;
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records.");
+                return results;
+            });
         }
     }
-
-    public async Task<TEntity> MapToEntities<TEntity>(IEnumerable<JObject> leaguepediaData) where TEntity : class
-    {
-        try 
-        {
-            foreach(var result in leaguepediaData)
-            {
-                CreateEntity<TEntity>(Leag)
-            }
-        }
-    }
-
-
-
-    public async Task<TEntity> CreateEntity<TEntity>(JObject leaguepediaData) where TEntity : class
-    {
-        throw new NotFiniteNumberException();
-    }    
-
 }
-
-

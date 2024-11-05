@@ -7,10 +7,15 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using Activity = System.Diagnostics.Activity;
+using Newtonsoft.Json; 
 using System.Text.Json;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using System;
 using Npgsql.PostgresTypes;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using LolMatchFilterNew.Domain.Helpers.ApiHelper;
+using static System.Net.WebRequestMethods;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 {
@@ -26,10 +31,6 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         private readonly ILeaguepediaAPILimiter _leaguepediaApiLimiter;
         private readonly IHttpClientFactory _httpClientFactory;
         const int QueryLimit = 490;
-
-
-
-
         private static readonly HttpClient client = new HttpClient();
         private static readonly string SaveDirectory = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -62,7 +63,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 _appLogger.Error($"HTTP request failed for Leaguepedia API. URL: {urlQuery}", ex);
                 throw;
             }
-            catch (JsonException ex)
+            catch (System.Text.Json.JsonException ex)
             {
                 _appLogger.Error($"JSON parsing failed for Leaguepedia API. URL: {urlQuery}", ex);
                 throw;
@@ -70,7 +71,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
         }
 
         // Extracts the matches from the "cargoquery" field in the JSON response and returns them as a list of JObject
-        public IEnumerable<JObject> ExtractMatchesFromLeaguepediaApiResponse(JObject jsonMatchData)
+        public IEnumerable<JObject> ExtractDataFromLeaguepediaApiResponse(JObject jsonMatchData)
         {
             var cargoQueryData = jsonMatchData["cargoquery"] as JArray;
 
@@ -90,49 +91,119 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
         // Fetches & extracts one page of matches. 
-        public async Task<IEnumerable<JObject>> FetchPageOfMatches(string tournamentName, string urlQuery)
+
+        public async Task<IEnumerable<JObject>> FetchPageOfResults(string urlQuery)
         {
             var apiResponse = await FetchLeaguepediaApiResponse(urlQuery);
-            return ExtractMatchesFromLeaguepediaApiResponse(apiResponse);
+            return ExtractDataFromLeaguepediaApiResponse(apiResponse);
+
         }
+
+
+
+
+
 
         // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
-        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490)
+        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName = "", int? numberOfPages = null, int queryLimit = 490)
         {
-
-            int offset = 0;
+            
             var allMatches = new List<JObject>();
-            bool hasMoreData = true;
-            int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
-            int totalMatchesCount = 0;
-
-            while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
+            try
             {
-                int currentQueryLimit = totalLimit.HasValue
-                    ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
-                    : queryLimit;
+                int offset = 0;
+                bool hasMoreData = true;
+                int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
+                int totalMatchesCount = 0;
 
-                string urlQuery = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason(leagueName, currentQueryLimit, offset);
+                _appLogger.Info($"Starting match fetch for {nameof(FetchAndExtractMatches)} Pages: {numberOfPages}, Limit: {queryLimit}");
 
-                _appLogger.Info($"URL for api calls: {urlQuery}, leagueName {leagueName}.");
-
-
-                var pageOfMatches = await FetchPageOfMatches(leagueName,urlQuery);
-                totalMatchesCount += pageOfMatches.Count();
-
-
-                if(!pageOfMatches.Any())
+                while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
                 {
-                    _appLogger.Info($"No more matches found, ending pagination.");
-                    break;
-                }
-                allMatches.AddRange(pageOfMatches);
+                    try
+                    {
+                        int currentQueryLimit = totalLimit.HasValue
+                            ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
+                        : queryLimit;
 
-                hasMoreData = pageOfMatches.Count() > 0;
-                offset += pageOfMatches.Count();
+                        string rawQuery = "https://lol.fandom.com/api.php?action=cargoquery&format=json&tables=TeamRenames&fields=Date,OriginalName,NewName,Verb,IsSamePage,NewsId";
+
+
+                        string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
+                        _appLogger.Info($"Fetching page with offset {offset}, limit {currentQueryLimit}");
+                        _appLogger.Debug($"Generated URL: {urlQuery}");
+
+                        var pageOfMatches = await FetchPageOfResults(urlQuery);
+                        totalMatchesCount += pageOfMatches.Count();
+
+                        if (!pageOfMatches.Any())
+                        {
+                            _appLogger.Info($"No more matches found at offset {offset}. Total matches fetched: {totalMatchesCount}");
+
+                            if (allMatches.Any())
+                            {
+                                var first = allMatches.First();
+                                var last = allMatches.Last();
+                                _appLogger.Debug($"First match: {first.ToString(Formatting.Indented)}");
+                                _appLogger.Debug($"Last match: {last.ToString(Formatting.Indented)}");
+                            }
+                            break;
+                        }
+
+                        allMatches.AddRange(pageOfMatches);
+                        hasMoreData = pageOfMatches.Count() > 0;
+                        offset += pageOfMatches.Count();
+
+                        _appLogger.Info($"Successfully fetched {pageOfMatches.Count()} matches. Total so far: {allMatches.Count}");
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        _appLogger.Error($"HTTP request failed at offset {offset}: {ex.Message}");
+                        _appLogger.Error($"Stack trace: {ex.StackTrace}");
+                        throw;
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        _appLogger.Error($"JSON parsing error at offset {offset}: {ex.Message}");
+                        _appLogger.Error($"Path: {ex.Path}, LineNumber: {ex.LineNumber}, LinePosition: {ex.LinePosition}");
+                        throw;
+                    }
+                }
             }
+            catch (PostgresException pgEx)
+            {
+                _appLogger.Error($"Database error occurred: {pgEx.GetDetailedErrorMessage()}");
+                throw;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                if (dbEx.InnerException is PostgresException pgEx)
+                {
+                    _appLogger.Error($"Database update failed: {pgEx.GetDetailedErrorMessage()}");
+                }
+                else
+                {
+                    _appLogger.Error($"Database update failed: {dbEx.Message}");
+                    _appLogger.Error($"Inner exception: {dbEx.InnerException?.Message}");
+                }
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error in FetchAndExtractMatches: {ex.Message}");
+                _appLogger.Error($"Stack trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
+                    _appLogger.Error($"Inner stack trace: {ex.InnerException.StackTrace}");
+                }
+                throw;
+            }
+
             return allMatches;
         }
+
+
 
 
 
@@ -191,7 +262,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                     _appLogger.Error($"[TEST] HTTP request failed for Leaguepedia API. URL: {url}");
                     throw;
                 }
-                catch (JsonException ex)
+                catch (System.Text.Json.JsonException ex)
                 {
                     _appLogger.Error($"[TEST] JSON parsing failed for Leaguepedia API. URL: {url}");
                     throw;

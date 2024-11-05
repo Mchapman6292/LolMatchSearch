@@ -22,6 +22,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 
         DateTime ParseDateTime(JObject obj, string key);
 
+        (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable);
+
 
 
 

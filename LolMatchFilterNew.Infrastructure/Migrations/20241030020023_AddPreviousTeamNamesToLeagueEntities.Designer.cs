@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030020023_AddPreviousTeamNamesToLeagueEntities")]
+    partial class AddPreviousTeamNamesToLeagueEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("LeagueTeamEntityProPlayerEntity", b =>
+                {
+                    b.Property<string>("FormerPlayersLeaguepediaPlayerAllName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreviousTeamsTeamName")
+                        .HasColumnType("text");
+
+                    b.HasKey("FormerPlayersLeaguepediaPlayerAllName", "PreviousTeamsTeamName");
+
+                    b.HasIndex("PreviousTeamsTeamName");
+
+                    b.ToTable("TeamFormerPlayers", (string)null);
+                });
 
             modelBuilder.Entity("LeaguepediaMatchDetailEntityProPlayerEntity", b =>
                 {
@@ -77,6 +95,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("previousTeamNames")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -193,49 +215,9 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaPlayerAllName");
 
+                    b.HasIndex("CurrentTeam");
+
                     b.ToTable("ProPlayers");
-                });
-
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.TeamRenamesEntities.TeamRenameEntity", b =>
-                {
-                    b.Property<string>("OriginalName")
-                        .HasColumnType("text")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("NewName")
-                        .HasColumnType("text")
-                        .HasColumnOrder(1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("IsSamePage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NewsId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Verb")
-                        .HasColumnType("text");
-
-                    b.HasKey("OriginalName", "NewName", "Date");
-
-                    b.ToTable("TeamRenames");
-                });
-
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities.YoutubePlaylistEntity", b =>
-                {
-                    b.Property<string>("name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlaylistId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("name");
-
-                    b.ToTable("YoutubePlaylists");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", b =>
@@ -273,6 +255,21 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("YoutubeVideoResults", (string)null);
+                });
+
+            modelBuilder.Entity("LeagueTeamEntityProPlayerEntity", b =>
+                {
+                    b.HasOne("LolMatchFilterNew.Domain.Entities.ProPlayerEntities.ProPlayerEntity", null)
+                        .WithMany()
+                        .HasForeignKey("FormerPlayersLeaguepediaPlayerAllName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", null)
+                        .WithMany()
+                        .HasForeignKey("PreviousTeamsTeamName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LeaguepediaMatchDetailEntityProPlayerEntity", b =>
@@ -320,6 +317,16 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.ProPlayerEntities.ProPlayerEntity", b =>
+                {
+                    b.HasOne("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", "CurrentTeamNavigation")
+                        .WithMany("CurrentPlayers")
+                        .HasForeignKey("CurrentTeam")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("CurrentTeamNavigation");
+                });
+
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", b =>
                 {
                     b.HasOne("LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities.LeaguepediaMatchDetailEntity", "LeaguepediaMatch")
@@ -327,6 +334,11 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasForeignKey("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", "LeaguepediaGameIdAndTitle");
 
                     b.Navigation("LeaguepediaMatch");
+                });
+
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LeagueTeamEntities.LeagueTeamEntity", b =>
+                {
+                    b.Navigation("CurrentPlayers");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities.LeaguepediaMatchDetailEntity", b =>

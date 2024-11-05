@@ -6,9 +6,27 @@ using Microsoft.Extensions.Configuration;
 using Google.Apis.YouTube.v3.Data;
 using Newtonsoft.Json.Linq;
 using Xceed.Document.NET;
+using Npgsql;
 
 namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 {
+    public static class PostgresExceptionExtensions
+    {
+        public static string GetDetailedErrorMessage(this PostgresException pgEx)
+        {
+            return $@"Postgres Error:
+            Message: {pgEx.MessageText}
+            Detail: {pgEx.Detail}
+            Hint: {pgEx.Hint}
+            Position: {pgEx.Position}
+            SqlState: {pgEx.SqlState}
+            Severity: {pgEx.Severity}
+            Routine: {pgEx.Routine}
+            Line: {pgEx.Line}
+            File: {pgEx.File}";
+        }
+    }
+
     public class ApiHelper : IApiHelper
     {
         private readonly string _saveDirectory;
@@ -106,7 +124,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                                 table.Design = TableDesign.LightGrid;
 
                                 table.Rows[0].Cells[0].Paragraphs.First().Append("Playlist ID").Bold();
-                                table.Rows[0].Cells[1].Paragraphs.First().Append("Playlist Name").Bold();
+                                table.Rows[0].Cells[1].Paragraphs.First().Append("Playlist TeamName").Bold();
 
                                 int rowIndex = 1;
                                 foreach (var item in dictionary)
@@ -237,6 +255,8 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+      
+
 
 
 
@@ -251,10 +271,6 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             var token = targetObj[key];
             var result = token?.ToString() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(result))
-            {
-                _appLogger.Warning($"Empty or null value for key: {key}. Token type: {token?.Type.ToString() ?? "null"}");
-            }
             return result;
         }
 
@@ -303,7 +319,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
         }
 
 
-        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime)
+        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime) //Needed to convert Youtube PublishedAt to DateTimeUTC
         {
             if (inputDateTime is DateTime dateTime)
             {
@@ -363,6 +379,34 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+        public  (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
+        {
+            int totalObjects = 0;
+            int nullObjects = 0;
+            int nullProperties = 0;
+
+            foreach (var item in enumerable)
+            {
+                totalObjects++;
+                if (item == null)
+                {
+                    nullObjects++;
+                    continue;
+                }
+
+                foreach (var property in item.Properties())
+                {
+                    if (property.Value.Type == JTokenType.Null)
+                    {
+                        nullProperties++;
+                    }
+                }
+            }
+
+            return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
+        }
     }
 }
+
+    
 

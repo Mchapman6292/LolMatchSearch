@@ -28,7 +28,6 @@ using LolMatchFilterNew.Infrastructure.ApiLimiters.LeaguepediaAPILimiter;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaAPILimiter;
 using LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
-using LolMatchFilterNew.Application.LeaguepediaControllers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
@@ -49,6 +48,7 @@ using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
+using LolMatchFilterNew.Application.Controllers;
 
 
 
@@ -125,14 +125,14 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ILeaguepediaAPILimiter, LeaguepediaAPILimiter>();
                   services.AddTransient<ILeaguepediaApiMapper, LeaguepediaApiMapper>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
-                  services.AddTransient<ILeaguepediaApiMapper, LeaguepediaApiMapper>();
-                  services.AddTransient<IAPIControllers, APIControllers>();
                   services.AddTransient<IYoutubeMapper, YoutubeMapper>();
                   services.AddTransient<IYoutubeDataFetcher, YoutubeDataFetcher>();
                   services.AddTransient<IYoutubeVideoRepository, YoutubeVideoRepository>();
                   services.AddTransient<IYoutubeController, YoutubeController>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
 
+
+                  services.AddScoped<IAPIControllers, APIControllers>();
                   services.AddScoped<IMatchFilterDbContext>(provider =>
                       provider.GetRequiredService<MatchFilterDbContext>());
                   services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

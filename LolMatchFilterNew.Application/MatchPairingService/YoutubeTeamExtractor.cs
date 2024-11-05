@@ -37,23 +37,24 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
             _apiHelper = apiHelper;
         }
 
-        public bool MatchVsPatternAndUpdateMatchComparisonResultEntity(YoutubeVideoEntity youtubeVideo, MatchComparisonResult comparisonResult)
+        public string MatchVsPatternAndUpdateMatchComparisonResultEntity(YoutubeVideoEntity youtubeVideo, MatchComparisonResult comparisonResult)
         {
             var match = TeamNamePattern.Match(youtubeVideo.Title);
 
             if(match.Success)
             {
-                comparisonResult.Team1 = match.Groups[1].Value;
-                comparisonResult.Team2 = match.Groups[2].Value;
-                return true;
+                string Team1 = match.Groups[1].Value;
+                string Team2 = match.Groups[2].Value;
+
+                string result = string.Join(",", Team1, Team2);
+                return result;
             }
             else
             {
-
-                comparisonResult.Team1 = string.Empty;
-                comparisonResult.Team2 = string.Empty;
-                return true;
+                return string.Empty;
             }
         }
+
+
     }
 }

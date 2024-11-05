@@ -20,6 +20,7 @@ using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
 using LolMatchFilterNew.Domain.Helpers.YoutubeIdHelpers;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Google;
 
 
 namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
@@ -68,7 +69,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 _appLogger.Info("First video details:" +
                     $"\n\tYoutubeVideoId: {first.YoutubeVideoId}" +
                     $"\n\tTitle: {first.Title}" +
-                    $"\n\tPlaylist Name: {first.PlaylistName ?? "N/A"}" +
+                    $"\n\tPlaylist TeamName: {first.PlaylistName ?? "N/A"}" +
                     $"\n\tPublished At: {first.PublishedAt:yyyy-MM-dd HH:mm:ss UTC}" +
                     $"\n\tYoutube URL: {first.YoutubeResultHyperlink}" +
                     $"\n\tThumbnail URL: {first.ThumbnailUrl ?? "N/A"}" +
@@ -85,7 +86,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 _appLogger.Info("Last video details:" +
                     $"\n\tYoutubeVideoId: {last.YoutubeVideoId}" +
                     $"\n\tTitle: {last.Title}" +
-                    $"\n\tPlaylist Name: {last.PlaylistName ?? "N/A"}" +
+                    $"\n\tPlaylist TeamName: {last.PlaylistName ?? "N/A"}" +
                     $"\n\tPublished At: {last.PublishedAt:yyyy-MM-dd HH:mm:ss UTC}" +
                     $"\n\tYoutube URL: {last.YoutubeResultHyperlink}" +
                     $"\n\tThumbnail URL: {last.ThumbnailUrl ?? "N/A"}" +
@@ -195,7 +196,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 _appLogger.Info($"Successfully retrieved all playlists. Total count: {playlists.Count}");
 
                 var samplePlaylists = playlists.Take(3)
-                    .Select(p => $"\n\tPlaylist ID: {p.Key}, Name: {p.Value}");
+                    .Select(p => $"\n\tPlaylist ID: {p.Key}, TeamName: {p.Value}");
                 _appLogger.Info($"Sample playlists: {string.Join("", samplePlaylists)}");
 
                 return playlists;
@@ -205,6 +206,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 _appLogger.Error($"Error retrieving playlists for channel {channelId}: {ex.Message}");
                 throw;
             }
+
         }
 
 
@@ -225,7 +227,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
 
                     if (video != null)
                     {
-                        _appLogger.Info($"Found channel through video ID. Channel ID: {video.Snippet.ChannelId}, Name: {video.Snippet.ChannelTitle}");
+                        _appLogger.Info($"Found channel through video ID. Channel ID: {video.Snippet.ChannelId}, TeamName: {video.Snippet.ChannelTitle}");
                         return (video.Snippet.ChannelId, video.Snippet.ChannelTitle);
                     }
                 }
@@ -242,7 +244,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
 
                     if (channel != null)
                     {
-                        _appLogger.Info($"Found channel through handle. Channel ID: {channel.Snippet.ChannelId}, Name: {channel.Snippet.ChannelTitle}");
+                        _appLogger.Info($"Found channel through handle. Channel ID: {channel.Snippet.ChannelId}, TeamName: {channel.Snippet.ChannelTitle}");
                         return (channel.Snippet.ChannelId, channel.Snippet.ChannelTitle);
                     }
                 }
@@ -271,7 +273,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
 
                 if (channel != null)
                 {
-                    _appLogger.Info($"Found channel. ID: {channel.Snippet.ChannelId}, Name: {channel.Snippet.ChannelTitle}");
+                    _appLogger.Info($"Found channel. ID: {channel.Snippet.ChannelId}, TeamName: {channel.Snippet.ChannelTitle}");
                     return (channel.Snippet.ChannelId, channel.Snippet.ChannelTitle);
                 }
 

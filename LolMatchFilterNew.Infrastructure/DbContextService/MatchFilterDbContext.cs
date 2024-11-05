@@ -11,7 +11,10 @@ using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
+using LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities;
 using System.Numerics;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -27,6 +30,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<ProPlayerEntity> ProPlayers { get; set; }
         public DbSet<LeaguepediaMatchDetailEntity> LeaguepediaMatchDetails { get; set; }
         public DbSet<LeagueTeamEntity> Teams { get; set; }
+        public DbSet<YoutubePlaylistEntity> YoutubePlaylists { get; set; }
+        public DbSet<TeamRenameEntity> TeamRenames { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -93,45 +99,44 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
                 entity.Property(e => e.InGameName).IsRequired();
                 entity.Property(e => e.PreviousInGameNames);
-                       
-
-                entity.HasOne(p => p.CurrentTeamNavigation)
-                   .WithMany(t => t.CurrentPlayers) // WithMany defines the reverse relationship, each team(CurrentTeamNavigation) can have many current players.
-                   .HasForeignKey(p => p.CurrentTeam)
-                   .IsRequired(false)
-                   .OnDelete(DeleteBehavior.SetNull);
-
-                entity.HasMany(p => p.PreviousTeams)
-                   .WithMany(t => t.FormerPlayers)
-                   .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
-
+                entity.Property(p => p.CurrentTeam).IsRequired(false);
                 entity.HasMany(p => p.Matches)
-                  .WithMany(m => m.Players)
-                  .UsingEntity(j => j.ToTable("MatchPlayers"));
+                    .WithMany(m => m.Players)
+                    .UsingEntity(j => j.ToTable("MatchPlayers"));
             });
-
-
-
-
-          
-
-
 
             modelBuilder.Entity<LeagueTeamEntity>(entity =>
             {
                 entity.HasKey(e => e.TeamName);
+                entity.Property(e => e.NameShort).IsRequired();
+                entity.Property(e => e.Region).IsRequired();
 
-                entity.HasMany(t => t.CurrentPlayers)
-                    .WithOne(p => p.CurrentTeamNavigation)
-                    .HasForeignKey(p => p.CurrentTeam)
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.SetNull);
+                entity.HasOne<TeamNameHistoryEntity>()
+                .WithOne(t => t.CurrentTeam)
+                .HasForeignKey<TeamNameHistoryEntity>(t => t.CurrentTeamName);
 
-                entity.HasMany(t => t.FormerPlayers)
-                    .WithMany(p => p.PreviousTeams)
-                    .UsingEntity(j => j.ToTable("TeamFormerPlayers"));
             });
-            
+
+            modelBuilder.Entity<TeamRenameEntity>(entity =>
+            {
+                entity.HasKey(t => new { t.OriginalName, t.NewName, t.Date });
+                entity.Property(e => e.Date).IsRequired();
+                entity.Property(e => e.OriginalName).IsRequired();
+                entity.Property(e => e.NewName).IsRequired();
+
+            });
+
+            modelBuilder.Entity<TeamNameHistoryEntity>(entity =>
+            {
+                entity.HasKey(t => t.CurrentTeamName);
+                entity.HasOne(t => t.CurrentTeam)
+               .WithOne()
+               .HasForeignKey<LeagueTeamEntity>(t => t.TeamName);
+
+
+
+            });
+
         }
 
     }

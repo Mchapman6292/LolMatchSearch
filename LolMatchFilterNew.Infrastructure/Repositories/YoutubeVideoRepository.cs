@@ -3,6 +3,7 @@ using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -21,7 +22,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
         public YoutubeVideoRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
-           : base(dbContext as DbContext, appLogger)
+           : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;
             _matchFilterDbContext = dbContext;

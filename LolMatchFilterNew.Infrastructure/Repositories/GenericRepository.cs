@@ -2,6 +2,8 @@
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Npgsql;
 
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
@@ -126,16 +128,52 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             {
                 await _dbSet.AddRangeAsync(entities);
                 await _context.SaveChangesAsync();
-                savedCount = entityCount; 
+                savedCount = entityCount;
 
                 await transaction.CommitAsync();
                 _appLogger.Info($"Successfully added {savedCount} {entityTypeName} entities.");
                 return (savedCount, failedCount);
             }
+            catch (DbUpdateException dbEx)
+            {
+                await transaction.RollbackAsync();
+
+                _appLogger.Error($"Database update error while saving {entityTypeName} entities:");
+                _appLogger.Error($"Main error: {dbEx.Message}");
+
+                if (dbEx.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {dbEx.InnerException.Message}");
+                    if (dbEx.InnerException is PostgresException pgEx)
+                    {
+                        _appLogger.Error($"Postgres error details:");
+                        _appLogger.Error($"Message: {pgEx.MessageText}");
+                        _appLogger.Error($"Detail: {pgEx.Detail}");
+                        _appLogger.Error($"Hint: {pgEx.Hint}");
+                        _appLogger.Error($"SQLState: {pgEx.SqlState}");
+                    }
+                }
+
+                if (entities.Any())
+                {
+                    var firstEntity = entities.First();
+                    _appLogger.Error($"Sample failed entity data: {JsonConvert.SerializeObject(firstEntity)}");
+                }
+
+                return (0, entityCount);
+            }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                _appLogger.Error($"Transaction rolled back due to error while saving {entityTypeName} entities: {ex.Message}");
+                _appLogger.Error($"General error while saving {entityTypeName} entities:");
+                _appLogger.Error($"Error message: {ex.Message}");
+                _appLogger.Error($"Stack trace: {ex.StackTrace}");
+
+                if (ex.InnerException != null)
+                {
+                    _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
+                }
+
                 return (0, entityCount);
             }
         }

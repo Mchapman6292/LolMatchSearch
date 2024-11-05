@@ -20,6 +20,9 @@ using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
+using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using System.Drawing.Printing;
 
 namespace LolMatchFilterNew.Application.Controllers
 {
@@ -33,9 +36,11 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
         private readonly IGenericRepository<LeagueTeamEntity> _leagueTeamRepository;
+        private readonly IGenericRepository<TeamRenameEntity> _teamRenameRepository;
+        private readonly IApiHelper _apiHelper;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository)
+        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> teamRenameRepository, IApiHelper apiHelper)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
@@ -45,6 +50,8 @@ namespace LolMatchFilterNew.Application.Controllers
             _youtubeDataFetcher = youtubeDataFetcher;
             _youtubeVideoRepository = youtubeVideoRepository;
             _leagueTeamRepository = leagueTeamRepository;
+            _teamRenameRepository = teamRenameRepository;
+            _apiHelper = apiHelper;
         }
 
 
@@ -73,7 +80,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName, limit);
 
-            var counts = CountObjectsAndNullProperties(apiData);
+            var counts = _apiHelper.CountObjectsAndNullProperties(apiData);
 
             _appLogger.Info($"Object Analysis - Total Objects: {counts.TotalObjects}, " +
                    $"Null Objects: {counts.NullObjects}, " +
@@ -85,32 +92,65 @@ namespace LolMatchFilterNew.Application.Controllers
             await _leagueTeamRepository.AddRangeWithTransactionAsync(leagueEntities);
         }
 
-
-        private  static (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
+        public async Task FetchAllDataForTeamRenames()
         {
-            int totalObjects = 0;
-            int nullObjects = 0;
-            int nullProperties = 0;
-
-            foreach (var item in enumerable)
+            try
             {
-                totalObjects++;
-                if (item == null)
+                _appLogger.Info("Starting FetchAllDataForTeamRenames");
+
+                if (_leaguepediaDataFetcher == null) throw new InvalidOperationException("_leaguepediaDataFetcher is null");
+                if (_apiHelper == null) throw new InvalidOperationException("_apiHelper is null");
+                if (_leaguepediaApiMapper == null) throw new InvalidOperationException("_leaguepediaApiMapper is null");
+                if (_teamRenameRepository == null) throw new InvalidOperationException("_teamRenameRepository is null");
+
+                var apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches();
+                _appLogger.Info($"API Data fetched: {apiData != null}");
+
+                if (apiData == null)
                 {
-                    nullObjects++;
-                    continue;
+                    _appLogger.Error("FetchAndExtractMatches returned null");
+                    throw new InvalidOperationException("API data fetch returned null");
                 }
 
-                foreach (var property in item.Properties())
+                var counts = _apiHelper.CountObjectsAndNullProperties(apiData);
+                _appLogger.Info($"Object Analysis - Total Objects: {counts.TotalObjects}, " +
+                               $"Null Objects: {counts.NullObjects}, " +
+                               $"Null Properties: {counts.NullProperties}");
+
+                var teamRenameEntities = await _leaguepediaApiMapper.MapJTokenToTeamRenameEntity(apiData);
+                _appLogger.Info($"Team Rename Entities mapped: {teamRenameEntities != null}");
+
+                if (teamRenameEntities == null)
                 {
-                    if (property.Value.Type == JTokenType.Null)
+                    _appLogger.Error("MapJTokenToTeamRenameEntity returned null");
+                    throw new InvalidOperationException("Entity mapping returned null");
+                }
+
+                var entityList = teamRenameEntities.ToList();
+                if (!entityList.Any())
+                {
+                    _appLogger.Warning("No entities to save to database");
+                    return;
+                }
+
+                foreach (var entity in entityList)
+                {
+                    if (entity == null)
                     {
-                        nullProperties++;
+                        _appLogger.Warning("Null entity found in teamRenameEntities");
+                        continue;
                     }
                 }
-            }
 
-            return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
+                var results = await _teamRenameRepository.AddRangeWithTransactionAsync(entityList);
+                _appLogger.Info($"Database operation results - Saved: {results.savedCount}, Failed: {results.failedCount}");
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in FetchAllDataForTeamRenames: {ex.Message}");
+                _appLogger.Error($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }

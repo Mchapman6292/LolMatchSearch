@@ -18,7 +18,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher
         IEnumerable<JObject> ExtractDataFromLeaguepediaApiResponse(JObject jsonMatchData);
 
 
-        Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490);
+        Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName = "", int? numberOfPages = null, int queryLimit = 490);
 
 
 

@@ -13,5 +13,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task FetchAndAddYoutubeVideos(List<string> playlistIds);
 
         Task FetchAndAddTeamNamesForLeague(string leagueName);
+
+        Task FetchAllDataForTeamRenames();
     }
 }

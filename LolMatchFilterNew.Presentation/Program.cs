@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Presentation
 
                     };
 
-                await APIController.FetchAndAddTeamNamesForLeague(leagueName);
+                await APIController.FetchAllDataForTeamRenames();
 
          
 

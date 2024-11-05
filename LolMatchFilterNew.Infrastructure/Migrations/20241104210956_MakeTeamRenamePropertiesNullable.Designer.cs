@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104210956_MakeTeamRenamePropertiesNullable")]
+    partial class MakeTeamRenamePropertiesNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,12 +219,15 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("NewsId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Slot")
+                        .HasColumnType("text");
+
                     b.Property<string>("Verb")
                         .HasColumnType("text");
 
                     b.HasKey("OriginalName", "NewName", "Date");
 
-                    b.ToTable("TeamRenames");
+                    b.ToTable("TeamRenameEntity");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities.YoutubePlaylistEntity", b =>

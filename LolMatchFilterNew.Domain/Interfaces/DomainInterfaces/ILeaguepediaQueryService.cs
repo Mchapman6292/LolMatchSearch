@@ -13,5 +13,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
         string BuildQueryStringForTeamsInRegion(string region, int queryLimit, int offset = 0);
 
         string BuildQueryForTeamNameAndAbbreviation(string leagueName, int queryLimit, int offset = 0);
+
+        string FormatCargoQuery(string rawQuery, int queryLimit = 490, int offset = 0);
     }
 }

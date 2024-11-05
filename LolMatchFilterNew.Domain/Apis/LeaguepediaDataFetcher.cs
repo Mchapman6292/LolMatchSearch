@@ -15,6 +15,7 @@ using Npgsql.PostgresTypes;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
+using static System.Net.WebRequestMethods;
 
 namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 {
@@ -104,7 +105,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
         // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
-        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName, int? numberOfPages = null, int queryLimit = 490)
+        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName = "", int? numberOfPages = null, int queryLimit = 490)
         {
             
             var allMatches = new List<JObject>();
@@ -115,7 +116,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 int? totalLimit = numberOfPages.HasValue ? numberOfPages.Value * queryLimit : null;
                 int totalMatchesCount = 0;
 
-                _appLogger.Info($"Starting match fetch for league: {leagueName}, Pages: {numberOfPages}, Limit: {queryLimit}");
+                _appLogger.Info($"Starting match fetch for {nameof(FetchAndExtractMatches)} Pages: {numberOfPages}, Limit: {queryLimit}");
 
                 while (hasMoreData && (!totalLimit.HasValue || allMatches.Count < totalLimit.Value))
                 {
@@ -123,9 +124,12 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                     {
                         int currentQueryLimit = totalLimit.HasValue
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
-                            : queryLimit;
+                        : queryLimit;
 
-                        string urlQuery = _leaguepediaQueryService.BuildQueryForTeamNameAndAbbreviation(leagueName, currentQueryLimit, offset);
+                        string rawQuery = "https://lol.fandom.com/api.php?action=cargoquery&format=json&tables=TeamRenames&fields=Date,OriginalName,NewName,Verb,IsSamePage,NewsId";
+
+
+                        string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
                         _appLogger.Info($"Fetching page with offset {offset}, limit {currentQueryLimit}");
                         _appLogger.Debug($"Generated URL: {urlQuery}");
 

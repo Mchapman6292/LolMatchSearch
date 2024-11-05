@@ -2,6 +2,7 @@
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -19,6 +20,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
         DbSet<LeagueTeamEntity> Teams { get; set; }
         DbSet<ProPlayerEntity> ProPlayers { get; set; }
         DbSet<YoutubeVideoEntity> YoutubeVideoResults { get; set; }
+
+        DbSet<TeamRenameEntity> TeamRenames { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

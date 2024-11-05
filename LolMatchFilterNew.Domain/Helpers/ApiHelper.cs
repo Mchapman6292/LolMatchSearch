@@ -319,7 +319,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
         }
 
 
-        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime)
+        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime) //Needed to convert Youtube PublishedAt to DateTimeUTC
         {
             if (inputDateTime is DateTime dateTime)
             {
@@ -379,6 +379,34 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+        public  (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
+        {
+            int totalObjects = 0;
+            int nullObjects = 0;
+            int nullProperties = 0;
+
+            foreach (var item in enumerable)
+            {
+                totalObjects++;
+                if (item == null)
+                {
+                    nullObjects++;
+                    continue;
+                }
+
+                foreach (var property in item.Properties())
+                {
+                    if (property.Value.Type == JTokenType.Null)
+                    {
+                        nullProperties++;
+                    }
+                }
+            }
+
+            return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
+        }
     }
 }
+
+    
 

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
@@ -110,9 +111,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         {
                             TeamName = teamName,
                             NameShort = _apiHelper.GetStringValue(teamData, "ShortName"),
-                            Region = _apiHelper.GetStringValue(teamData, "Region"),
-                            CurrentPlayers = new List<ProPlayerEntity>(),
-                            FormerPlayers = new List<ProPlayerEntity>()
+                            Region = _apiHelper.GetStringValue(teamData, "Region")
                         };
                         results.Add(entity);
                     }
@@ -163,9 +162,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             {
                                 TeamName = teamName,
                                 NameShort = _apiHelper.GetStringValue(titleData, "Short"),
-                                Region = _apiHelper.GetStringValue(titleData, "Region"),
-                                CurrentPlayers = new List<ProPlayerEntity>(),
-                                FormerPlayers = new List<ProPlayerEntity>()
+                                Region = _apiHelper.GetStringValue(titleData, "Region")
                             };
 
                             results.Add(entity);
@@ -186,12 +183,85 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records with null/empty team names.");
                 return results;
             });
+        }
 
 
+        public async Task<IEnumerable<TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null)
+            {
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToTeamRenameEntity)}.");
+                throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<TeamRenameEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            string originalName = titleData["OriginalName"]?.ToString();
+                            string newName = titleData["NewName"]?.ToString();
+                            DateTime date = _apiHelper.ParseDateTime(titleData, "Date");
+
+                            if (
+                                string.IsNullOrWhiteSpace(originalName) ||
+                                string.IsNullOrWhiteSpace(newName))
+                            {
+                                skippedCount++;
+                                _appLogger.Warning($"Skipping record {processedCount} due to missing required fields. Raw data: {titleData}");
+                                continue;
+                            }
 
 
+                            string? verb = !string.IsNullOrWhiteSpace(titleData["Verb"]?.ToString())
+                                ? titleData["Verb"]?.ToString()
+                                : null;
+
+                            string? isSamePage = !string.IsNullOrWhiteSpace(titleData["IsSamePage"]?.ToString())
+                                ? titleData["IsSamePage"]?.ToString()
+                                : null;
+
+                            string? newsId = !string.IsNullOrWhiteSpace(titleData["NewsId"]?.ToString())
+                                ? titleData["NewsId"]?.ToString()
+                                : null;
+
+                            var entity = new TeamRenameEntity
+                            {
+                                Date = date,
+                                OriginalName = originalName.Trim(),
+                                NewName = newName.Trim(),
+                                Verb = verb,
+                                IsSamePage = isSamePage,
+                                NewsId = newsId
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} because 'title' is not a JObject. Raw data: {teamData}");
+                        }
+                        processedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                        skippedCount++;
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records.");
+                return results;
+            });
         }
     }
 }
-
-

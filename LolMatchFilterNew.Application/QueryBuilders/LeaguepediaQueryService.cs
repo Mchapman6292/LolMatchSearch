@@ -102,5 +102,20 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             return $"{BaseUrl}?{query}";
         }
 
+        public string FormatCargoQuery(string rawQuery, int queryLimit = 490, int offset = 0)
+        {
+            var uri = new Uri(rawQuery);
+            var query = HttpUtility.ParseQueryString(uri.Query);
+
+            if (query["action"] != "cargoquery" || query["format"] != "json")
+            {
+                throw new ArgumentException("Invalid cargo query format");
+            }
+
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+
+            return $"{BaseUrl}?{query}";
+        }
     }
 }

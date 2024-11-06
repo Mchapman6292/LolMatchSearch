@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Presentation
 
                     };
 
-                await APIController.FetchAllDataForTeamRenames();
+                await APIController.ControllerGetAllCurrentTeamNames();
 
          
 

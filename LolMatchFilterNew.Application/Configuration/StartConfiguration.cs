@@ -41,6 +41,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeControll
 
 
 
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
@@ -49,6 +50,8 @@ using LolMatchFilterNew.Domain.YoutubeService;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Application.Controllers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 
 
 
@@ -130,6 +133,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeVideoRepository, YoutubeVideoRepository>();
                   services.AddTransient<IYoutubeController, YoutubeController>();
                   services.AddTransient<ILeaguepediaMatchDetailRepository, LeaguepediaMatchDetailRepository>();
+                  services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
 
 
                   services.AddScoped<IAPIControllers, APIControllers>();

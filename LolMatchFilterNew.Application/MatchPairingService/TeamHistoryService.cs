@@ -7,6 +7,7 @@ using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 
 namespace LolMatchFilterNew.Application.MatchPairingService.TeamHistoryServices
 {
@@ -23,15 +24,9 @@ namespace LolMatchFilterNew.Application.MatchPairingService.TeamHistoryServices
         }
 
 
-        public async Task<List<string>> GetCurrentNamesFromTeamHistory()
+        public async Task<List<string>> LinkPreviousTeamNamesToCurrentTeamName()
         {
-            if (_TeamRenameGenericRepository == null)
-            {
-                _appLogger.Error($"GenericRepository<TeamRenameEntity> is null for {nameof(GetCurrentNamesFromTeamHistory)}");
-                throw new ArgumentException($"GenericRepository<TeamRenameEntity> is null for {nameof(GetCurrentNamesFromTeamHistory)}");
-            }
 
-            IEnumerable<TeamRenameEntity> teamRenameData = await _TeamRenameGenericRepository.GetAllValuesAsync();
         }
 
 

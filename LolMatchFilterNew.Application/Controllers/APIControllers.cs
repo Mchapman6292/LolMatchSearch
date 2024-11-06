@@ -23,6 +23,7 @@ using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using System.Drawing.Printing;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 
 namespace LolMatchFilterNew.Application.Controllers
 {
@@ -36,11 +37,12 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
         private readonly IGenericRepository<LeagueTeamEntity> _leagueTeamRepository;
-        private readonly IGenericRepository<TeamRenameEntity> _teamRenameRepository;
+        private readonly IGenericRepository<TeamRenameEntity> _genericTeamRenameRepository;
+        private readonly ITeamRenameRepository _teamRenameRepository;
         private readonly IApiHelper _apiHelper;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> teamRenameRepository, IApiHelper apiHelper)
+        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
@@ -50,8 +52,9 @@ namespace LolMatchFilterNew.Application.Controllers
             _youtubeDataFetcher = youtubeDataFetcher;
             _youtubeVideoRepository = youtubeVideoRepository;
             _leagueTeamRepository = leagueTeamRepository;
-            _teamRenameRepository = teamRenameRepository;
+            _genericTeamRenameRepository = genericTeamRenameRepository;
             _apiHelper = apiHelper;
+            _teamRenameRepository = teamRenameRepsitory;
         }
 
 
@@ -101,7 +104,7 @@ namespace LolMatchFilterNew.Application.Controllers
                 if (_leaguepediaDataFetcher == null) throw new InvalidOperationException("_leaguepediaDataFetcher is null");
                 if (_apiHelper == null) throw new InvalidOperationException("_apiHelper is null");
                 if (_leaguepediaApiMapper == null) throw new InvalidOperationException("_leaguepediaApiMapper is null");
-                if (_teamRenameRepository == null) throw new InvalidOperationException("_teamRenameRepository is null");
+                if (_genericTeamRenameRepository == null) throw new InvalidOperationException("_genericTeamRenameRepository is null");
 
                 var apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches();
                 _appLogger.Info($"API Data fetched: {apiData != null}");
@@ -142,7 +145,7 @@ namespace LolMatchFilterNew.Application.Controllers
                     }
                 }
 
-                var results = await _teamRenameRepository.AddRangeWithTransactionAsync(entityList);
+                var results = await _genericTeamRenameRepository.AddRangeWithTransactionAsync(entityList);
                 _appLogger.Info($"Database operation results - Saved: {results.savedCount}, Failed: {results.failedCount}");
             }
             catch (Exception ex)
@@ -156,6 +159,14 @@ namespace LolMatchFilterNew.Application.Controllers
 
         public async Task ControllerGetAllCurrentTeamNames()
         {
+            List<string> renames = await _teamRenameRepository.GetCurrentTeamNamesAsync();
+
+            int total = renames.Count;
+
+            _appLogger.Info($"Number of current team names: {total}");
+
+            await _apiHelper.WriteListDictToWordDocAsync( renames );
+
 
         }
     }

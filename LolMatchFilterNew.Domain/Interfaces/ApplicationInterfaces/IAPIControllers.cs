@@ -15,5 +15,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task FetchAndAddTeamNamesForLeague(string leagueName);
 
         Task FetchAllDataForTeamRenames();
+
+        Task ControllerGetAllCurrentTeamNames();
     }
 }

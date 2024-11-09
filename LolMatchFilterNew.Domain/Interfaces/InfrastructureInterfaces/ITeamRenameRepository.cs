@@ -9,5 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRena
     public interface ITeamRenameRepository
     {
         Task<List<string>> GetCurrentTeamNamesAsync();
+        Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync();
     }
 }

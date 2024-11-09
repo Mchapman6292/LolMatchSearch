@@ -117,5 +117,39 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
             return $"{BaseUrl}?{query}";
         }
+
+        public string BuildQueryForAllResultsInLpediaTeams(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams";
+            query["fields"] = "Teams.*";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+
+
+        public string BuildQueryForAllFieldsInLpediaTeams(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams,TeamRedirects";  // Include both tables
+            query["join_on"] = "Teams.Name=TeamRedirects.AllName"; // Specify the join condition
+            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.Short,Teams.Location,
+                       Teams.TeamLocation,Teams.Region,Teams.OrganizationPage,
+                       Teams.Image,Teams.Twitter,Teams.Youtube,Teams.Facebook,
+                       Teams.Instagram,Teams.Discord,Teams.Snapchat,Teams.Vk,
+                       Teams.Subreddit,Teams.Website,Teams.RosterPhoto,
+                       Teams.IsDisbanded,Teams.RenamedTo,Teams.IsLowercase,
+                       TeamRedirects.OtherName,TeamRedirects.UniqueLine";
+            query["group_by"] = "Teams.Name"; // Group to prevent duplicate team entries
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+
+            return $"{BaseUrl}?{query}";
+        }
     }
 }

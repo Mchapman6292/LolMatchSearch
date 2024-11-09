@@ -405,6 +405,20 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 
             return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
         }
+
+
+        //Used to handle null values in Name column of teams, use the ovewview page name as an alternative. 
+        public string NormalizeOverviewPageToName(string overviewPage)
+        {
+            overviewPage = Path.GetFileNameWithoutExtension(overviewPage);
+            overviewPage = overviewPage.Replace('_', ' ').Replace('-', ' ');
+            overviewPage = System.Web.HttpUtility.UrlDecode(overviewPage);
+
+            overviewPage = string.Join(" ", overviewPage.Split(new[] { ' ' },
+                StringSplitOptions.RemoveEmptyEntries));
+
+            return overviewPage.Trim();
+        }
     }
 }
 

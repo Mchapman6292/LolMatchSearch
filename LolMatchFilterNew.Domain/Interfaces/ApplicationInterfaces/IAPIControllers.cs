@@ -17,5 +17,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task FetchAllDataForTeamRenames();
 
         Task ControllerGetAllCurrentTeamNames();
+
+        Task ControllerAddTeamNameHistoryToDatabase();
+
+        Task ControllerAddLpediaTeamsToDatabase();
     }
 }

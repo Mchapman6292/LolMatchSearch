@@ -126,7 +126,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                         : queryLimit;
 
-                        string rawQuery = "https://lol.fandom.com/api.php?action=cargoquery&format=json&tables=TeamRenames&fields=Date,OriginalName,NewName,Verb,IsSamePage,NewsId";
+                        string rawQuery = _leaguepediaQueryService.BuildQueryForAllFieldsInLpediaTeams(currentQueryLimit);
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);

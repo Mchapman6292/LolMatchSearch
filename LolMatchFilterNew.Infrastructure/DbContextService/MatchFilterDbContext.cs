@@ -15,6 +15,7 @@ using LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities;
 using System.Numerics;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
 
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -32,6 +33,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<LeagueTeamEntity> Teams { get; set; }
         public DbSet<YoutubePlaylistEntity> YoutubePlaylists { get; set; }
         public DbSet<TeamRenameEntity> TeamRenames { get; set; }
+        public DbSet<TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        public DbSet<LpediaTeamEntity> LOLTeams { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -111,9 +115,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.NameShort).IsRequired();
                 entity.Property(e => e.Region).IsRequired();
 
-                entity.HasOne<TeamNameHistoryEntity>()
-                .WithOne(t => t.CurrentTeam)
-                .HasForeignKey<TeamNameHistoryEntity>(t => t.CurrentTeamName);
 
             });
 
@@ -129,12 +130,11 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             modelBuilder.Entity<TeamNameHistoryEntity>(entity =>
             {
                 entity.HasKey(t => t.CurrentTeamName);
-                entity.HasOne(t => t.CurrentTeam)
-               .WithOne()
-               .HasForeignKey<LeagueTeamEntity>(t => t.TeamName);
+            });
 
-
-
+            modelBuilder.Entity<LpediaTeamEntity>(entity =>
+            {
+                entity.HasKey(t => t.Name);
             });
 
         }

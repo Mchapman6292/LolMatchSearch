@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241106072433_TeamHistoryEntityDbSet")]
+    partial class TeamHistoryEntityDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,94 +166,6 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("LeaguepediaMatchDetails");
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LpediaTeamEntities.LpediaTeamEntity", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Discord")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Facebook")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)");
-
-                    b.Property<string>("Instagram")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<bool>("IsDisbanded")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsLowercase")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("OrganizationPage")
-                        .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)");
-
-                    b.Property<string>("OverviewPage")
-                        .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)");
-
-                    b.Property<string>("Region")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("RenamedTo")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("RosterPhoto")
-                        .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)");
-
-                    b.Property<string>("Short")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Snapchat")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Subreddit")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("TeamLocation")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Twitter")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Vk")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Website")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Youtube")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("LOLTeams");
-                });
-
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.ProPlayerEntities.ProPlayerEntity", b =>
                 {
                     b.Property<string>("LeaguepediaPlayerAllName")
@@ -289,15 +204,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("CurrentTeamName")
                         .HasColumnType("text");
 
-                    b.Property<string>("CurrentNameShort")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("NameHistory")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Region")
                         .IsRequired()
                         .HasColumnType("text");
 

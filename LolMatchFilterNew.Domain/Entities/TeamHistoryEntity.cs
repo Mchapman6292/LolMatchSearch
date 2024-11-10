@@ -13,9 +13,12 @@ namespace LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities
         [Key]
         public string CurrentTeamName { get; set; }
 
+        public string CurrentNameShort { get; set; }
+
         public string NameHistory { get; set; }
 
-        // Navigation property to the current team
-        public virtual LeagueTeamEntity CurrentTeam { get; set; }
+        public string Region {  get; set; }
+
+
     }
 }

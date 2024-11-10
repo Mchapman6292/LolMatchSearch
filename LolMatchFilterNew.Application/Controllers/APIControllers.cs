@@ -24,6 +24,12 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using System.Drawing.Printing;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
+using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using System.Runtime.CompilerServices;
+using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
+using System.Runtime.Serialization;
 
 namespace LolMatchFilterNew.Application.Controllers
 {
@@ -38,11 +44,14 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
         private readonly IGenericRepository<LeagueTeamEntity> _leagueTeamRepository;
         private readonly IGenericRepository<TeamRenameEntity> _genericTeamRenameRepository;
+        private readonly IGenericRepository<TeamNameHistoryEntity> _genericTeamHistoryRepository;
+        private readonly IGenericRepository<LpediaTeamEntity> _genericLpediaTeamRepository;
         private readonly ITeamRenameRepository _teamRenameRepository;
         private readonly IApiHelper _apiHelper;
+        private readonly ITeamRenameToHistoryMapper _teamRenameToHistoryMapper;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory)
+        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<LpediaTeamEntity> genericLpediaTeamRepository)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
@@ -55,6 +64,9 @@ namespace LolMatchFilterNew.Application.Controllers
             _genericTeamRenameRepository = genericTeamRenameRepository;
             _apiHelper = apiHelper;
             _teamRenameRepository = teamRenameRepsitory;
+            _teamRenameToHistoryMapper = teamRenameToHistoryMapper;
+            _genericTeamHistoryRepository = genericTeamHistoryRepository;
+            _genericLpediaTeamRepository = genericLpediaTeamRepository;
         }
 
 
@@ -166,8 +178,22 @@ namespace LolMatchFilterNew.Application.Controllers
             _appLogger.Info($"Number of current team names: {total}");
 
             await _apiHelper.WriteListDictToWordDocAsync( renames );
+        }
 
+        public async Task ControllerAddTeamNameHistoryToDatabase()
+        {
+            List<TeamNameHistoryEntity> teamRenameEntities = await _teamRenameToHistoryMapper.MapTeamRenameToHistoryAsync();
 
+           await _genericTeamHistoryRepository.AddRangeWithTransactionAsync(teamRenameEntities);
+        }
+
+        public async Task ControllerAddLpediaTeamsToDatabase()
+        {
+            IEnumerable<JObject> teamEntities = await _leaguepediaDataFetcher.FetchAndExtractMatches();
+
+            IEnumerable<LpediaTeamEntity> mappedEntites = await _leaguepediaApiMapper.MapJTokenToLpediaTeamEntity(teamEntities);
+
+            await _genericLpediaTeamRepository.AddRangeWithTransactionAsync(mappedEntites);
         }
     }
 }

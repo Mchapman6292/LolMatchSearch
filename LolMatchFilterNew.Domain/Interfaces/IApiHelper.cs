@@ -24,6 +24,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 
         (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable);
 
+        string NormalizeOverviewPageToName(string overviewPage);
+
 
 
 

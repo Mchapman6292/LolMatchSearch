@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241109232917_UpdateTeamHistoryEntity")]
+    partial class UpdateTeamHistoryEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,15 +292,15 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("CurrentTeamName")
                         .HasColumnType("text");
 
-                    b.Property<string>("CurrentNameShort")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("NameHistory")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("currentNameShort")
                         .IsRequired()
                         .HasColumnType("text");
 

@@ -14,6 +14,7 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
@@ -263,5 +264,109 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 return results;
             });
         }
+
+
+
+        // For Teams Table in leagupedia
+        public async Task<IEnumerable<LpediaTeamEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null)
+            {
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToLpediaTeamEntity)}.");
+                throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<LpediaTeamEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+                int fallbackNameCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            // Try to get name with fallback to OverviewPage
+                            string name = _apiHelper.GetStringValue(teamData, "Name");
+                            string overviewPage = _apiHelper.GetStringValue(teamData, "OverviewPage");
+
+                            if (string.IsNullOrWhiteSpace(name))
+                            {
+                                if (string.IsNullOrWhiteSpace(overviewPage))
+                                {
+                                    skippedCount++;
+                                    _appLogger.Warning($"Skipping record {processedCount} due to missing both Name and OverviewPage. Raw data: {titleData}");
+                                    continue;
+                                }
+
+                                // Use OverviewPage as name, removing any URL characters
+                                name = _apiHelper.NormalizeOverviewPageToName(overviewPage);
+                                fallbackNameCount++;
+                                _appLogger.Info($"Using normalized OverviewPage as Name: '{overviewPage}' -> '{name}'");
+                            }
+
+                            // Validate name length
+                            if (name.Length > 255)
+                            {
+                                _appLogger.Warning($"Name exceeds maximum length (255): '{name}'. Truncating...");
+                                name = name.Substring(0, 255);
+                            }
+
+                            var entity = new LpediaTeamEntity
+                            {
+                                Name = name,
+                                OverviewPage = overviewPage,
+                                Short = _apiHelper.GetStringValue(teamData, "Short"),
+                                Location = _apiHelper.GetStringValue(teamData, "Location"),
+                                TeamLocation = _apiHelper.GetStringValue(teamData, "TeamLocation"),
+                                Region = _apiHelper.GetStringValue(teamData, "Region"),
+                                OrganizationPage = _apiHelper.GetStringValue(teamData, "OrganizationPage"),
+                                Image = _apiHelper.GetStringValue(teamData, "Image"),
+                                Twitter = _apiHelper.GetStringValue(teamData, "Twitter"),
+                                Youtube = _apiHelper.GetStringValue(teamData, "Youtube"),
+                                Facebook = _apiHelper.GetStringValue(teamData, "Facebook"),
+                                Instagram = _apiHelper.GetStringValue(teamData, "Instagram"),
+                                Discord = _apiHelper.GetStringValue(teamData, "Discord"),
+                                Snapchat = _apiHelper.GetStringValue(teamData, "Snapchat"),
+                                Vk = _apiHelper.GetStringValue(teamData, "Vk"),
+                                Subreddit = _apiHelper.GetStringValue(teamData, "Subreddit"),
+                                Website = _apiHelper.GetStringValue(teamData, "Website"),
+                                RosterPhoto = _apiHelper.GetStringValue(teamData, "RosterPhoto"),
+                                IsDisbanded = _apiHelper.GetStringValue(teamData, "IsDisbanded").Equals("true", StringComparison.OrdinalIgnoreCase),
+                                RenamedTo = _apiHelper.GetStringValue(teamData, "RenamedTo"),
+                                IsLowercase = _apiHelper.GetStringValue(teamData, "IsLowercase").Equals("true", StringComparison.OrdinalIgnoreCase)
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} because 'title' is not a JObject. Raw data: {teamData}");
+                        }
+                        processedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        skippedCount++;
+                        _appLogger.Error($"Error processing team data at record {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+
+                var (totalObjects, nullObjects, nullProperties) = _apiHelper.CountObjectsAndNullProperties(results.Select(r => JObject.FromObject(r)));
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. " +
+                               $"Skipped {skippedCount} records. " +
+                               $"Used fallback names for {fallbackNameCount} records. " +
+                               $"Total objects: {totalObjects}, Null objects: {nullObjects}, Null properties: {nullProperties}");
+
+                return results;
+            });
+        }
+
+
     }
 }

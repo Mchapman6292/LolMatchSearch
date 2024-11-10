@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryService
+namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests
 {
-    public interface ITeamHistoryService
+    public interface ITeamRenameTest
     {
     }
 }

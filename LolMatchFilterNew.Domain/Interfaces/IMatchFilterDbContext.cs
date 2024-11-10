@@ -1,7 +1,9 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
 using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
         DbSet<YoutubeVideoEntity> YoutubeVideoResults { get; set; }
 
         DbSet<TeamRenameEntity> TeamRenames { get; set; }
+        DbSet<TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        DbSet<LpediaTeamEntity> LOLTeams { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

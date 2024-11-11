@@ -8,5 +8,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistory
 {
     public interface ITeamHistoryLogic
     {
+        Task<Dictionary<string, List<string>>> LinkAllCurrentTeamNamesToPreviousTeamNamesAsync();
     }
 }

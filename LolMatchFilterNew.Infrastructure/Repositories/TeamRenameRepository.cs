@@ -1,4 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+﻿using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
@@ -38,6 +39,11 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
                 .Where(newName => !originalNames.Contains(newName))
                 .Distinct()
                 .ToList();
+        }
+
+        public async Task<List<TeamRenameEntity>> GetAllTeamRenameValuesAsync()
+        {
+            return await _matchFilterDbContext.TeamRenames.ToListAsync();
         }
 
 

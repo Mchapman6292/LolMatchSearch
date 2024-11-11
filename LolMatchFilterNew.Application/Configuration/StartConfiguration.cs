@@ -57,7 +57,6 @@ using LolMatchFilterNew.Application.Controllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests;
-using LolMatchFilterNew.Application.Tests.TeamRenameTests;
 
 
 
@@ -75,7 +74,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
         public static async Task<IHost> InitializeApplicationAsync(string[] args)
         {
-
             _appLogger = new AppLogger();
            
             _appLogger.Info($"Starting {nameof(InitializeApplicationAsync)}");
@@ -103,9 +101,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
             return host;
         }
 
-
-
-
         public static IHostBuilder CreateHostBuilder(string[] args) =>
           Host.CreateDefaultBuilder(args)
               .ConfigureServices((hostContext, services) =>
@@ -119,8 +114,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                       options.EnableSensitiveDataLogging();
                       options.LogTo(Console.WriteLine);
                   });
-
-
 
                   services.AddSingleton<IAppLogger, AppLogger>();
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
@@ -142,7 +135,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
                   services.AddTransient<ITeamRenameToHistoryMapper, TeamRenameToHistoryMapper>();
                   services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
-                  services.AddTransient<ITeamRenameTest, TeamRenameTest>();
 
 
                   services.AddScoped<IAPIControllers, APIControllers>();

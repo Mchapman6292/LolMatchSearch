@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Presentation", "LolMatchFilterNew.Presentation\LolMatchFilterNew.Presentation.csproj", "{E6F399F1-D96F-4794-934E-C2853D4251AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C926C0B6-202D-42C2-A5D0-9BE0B7A59C59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LolMatchFilterNew.Tests", "Tests\LolMatchFilterNew.Tests.csproj", "{C926C0B6-202D-42C2-A5D0-9BE0B7A59C59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

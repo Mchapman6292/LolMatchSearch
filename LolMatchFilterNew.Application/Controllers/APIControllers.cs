@@ -27,6 +27,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRe
 using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 using System.Runtime.CompilerServices;
 using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
 using System.Runtime.Serialization;
@@ -194,6 +195,11 @@ namespace LolMatchFilterNew.Application.Controllers
             IEnumerable<LpediaTeamEntity> mappedEntites = await _leaguepediaApiMapper.MapJTokenToLpediaTeamEntity(teamEntities);
 
             await _genericLpediaTeamRepository.AddRangeWithTransactionAsync(mappedEntites);
+        }
+
+        public async Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync()
+        {
+             Dictionary<string, List<string>> teamsWithPreviousNames = new Dictionary<string, List<string>>();
         }
     }
 }

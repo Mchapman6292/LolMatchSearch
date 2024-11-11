@@ -17,6 +17,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaM
 using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 
 
 
@@ -41,6 +42,7 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
+                var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
 
                 string region = "EMEA";
 
@@ -54,7 +56,7 @@ namespace LolMatchFilterNew.Presentation
 
                     };
 
-                await APIController.ControllerAddLpediaTeamsToDatabase();
+                await teamHistoryLogic.LinkAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
          
 

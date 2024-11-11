@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRena
     {
         Task<List<string>> GetCurrentTeamNamesAsync();
         Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync();
+        Task<List<TeamRenameEntity>> GetAllTeamRenameValuesAsync();
     }
 }

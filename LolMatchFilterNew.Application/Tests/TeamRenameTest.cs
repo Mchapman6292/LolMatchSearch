@@ -8,101 +8,92 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests;
+using Xunit;
+
+
 namespace LolMatchFilterNew.Application.Tests.TeamRenameTests
 {
-    public class TeamRenameTest : ITeamRenameTest
+    public class TeamRenameTests : ITeamRenameTest
     {
-        private readonly IAppLogger _appLogger;
+        private readonly IAppLogger _logger;
+        private readonly List<TeamRenameEntity> _testRenameData;
+        private readonly List<TeamNameHistoryEntity> _expectedResults;
 
-        public TeamRenameTest(IAppLogger appLogger)
+        public TeamRenameTests()
         {
-            _appLogger = appLogger;
+            _testRenameData = new List<TeamRenameEntity>
+       {
+           new TeamRenameEntity { NewName = "MAD Lions KOI", OriginalName = "MAD Lions" },
+           new TeamRenameEntity { NewName = "MAD Lions", OriginalName = "Splyce" },
+           new TeamRenameEntity { NewName = "Splyce", OriginalName = "Follow eSports" },
+           new TeamRenameEntity { NewName = "G2 Esports", OriginalName = "Gamers2" },
+           new TeamRenameEntity { NewName = "Gamers2", OriginalName = "Team Nevo" },
+           new TeamRenameEntity { NewName = "Fnatic", OriginalName = "myRevenge" },
+           new TeamRenameEntity { NewName = "SK Gaming", OriginalName = "Dimegio Club" },
+           new TeamRenameEntity { NewName = "Karmine Corp", OriginalName = "Kameto Corp" }
+       };
+
+            _expectedResults = new List<TeamNameHistoryEntity>
+       {
+           new TeamNameHistoryEntity { CurrentTeamName = "MAD Lions KOI", NameHistory = "Follow eSports, MAD Lions, Splyce" },
+           new TeamNameHistoryEntity { CurrentTeamName = "G2 Esports", NameHistory = "Gamers2, Team Nevo" },
+           new TeamNameHistoryEntity { CurrentTeamName = "Fnatic", NameHistory = "myRevenge" },
+           new TeamNameHistoryEntity { CurrentTeamName = "SK Gaming", NameHistory = "Dimegio Club" },
+           new TeamNameHistoryEntity { CurrentTeamName = "Karmine Corp", NameHistory = "Kameto Corp" }
+       };
         }
 
-        // Query that returns all Mad Lions KOI name history
-        /// <summary>
-        /// WITH "TeamChanges" AS (
-        ///     SELECT tr."OriginalName", tr."NewName", tr."Date", t."RenamedTo", t."Region", t."Short"
-        ///     FROM "TeamRenames" tr
-        ///     FULL OUTER JOIN "LOLTeams" t ON tr."NewName" = t."Name"
-        ///     WHERE tr."OriginalName" IN ('Follow eSports', 'Splyce', 'MAD Lions', 'MAD Lions KOI')
-        ///        OR tr."NewName" IN ('Follow eSports', 'Splyce', 'MAD Lions', 'MAD Lions KOI')
-        ///        OR t."Name" IN ('Follow eSports', 'Splyce', 'MAD Lions', 'MAD Lions KOI')
-        ///        OR t."RenamedTo" IN ('Follow eSports', 'Splyce', 'MAD Lions', 'MAD Lions KOI')
-        /// ),
-        /// "CurrentTeamInfo" AS (
-        ///     SELECT DISTINCT 
-        ///         "NewName" as "CurrentTeamName",
-        ///         "Short" as "CurrentNameShort",
-        ///         "Region"
-        ///     FROM "TeamChanges"
-        ///     WHERE "NewName" NOT IN (
-        ///         SELECT DISTINCT "OriginalName"
-        ///         FROM "TeamChanges"
-        ///         WHERE "OriginalName" IS NOT NULL
-        ///     )
-        ///     AND "NewName" IS NOT NULL
-        /// )
-        /// SELECT 
-        ///     cti."CurrentTeamName",
-        ///     cti."CurrentNameShort",
-        ///     STRING_AGG(DISTINCT tc."OriginalName", ', ' ORDER BY tc."OriginalName") as "NameHistory",
-        ///     cti."Region"
-        /// FROM "CurrentTeamInfo" cti
-        /// CROSS JOIN "TeamChanges" tc
-        /// WHERE tc."OriginalName" IS NOT NULL
-        /// GROUP BY cti."CurrentTeamName", cti."CurrentNameShort", cti."Region";
-        /// </summary>
-        /// <returns></returns>
-
-
-
-
-        public List<TeamNameHistoryEntity> GetTeams()
+        [Fact]
+        public void SingleTeamHistory_ShouldMatchExpected()
         {
-            var teams = new List<TeamNameHistoryEntity>
-            {
-                new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = "MAD Lions KOI",
-                    CurrentNameShort = "MDK",
-                    NameHistory = "Follow eSports, MAD Lions, Splyce, Team Dignitas EU",
-                    Region = "EMEA"
-                },
-                new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = "G2 Esports",
-                    CurrentNameShort = "G2",
-                    NameHistory = "Gamers2, Team Nevo",
-                    Region = "EMEA"
-                },
-                new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = "Fnatic",
-                    CurrentNameShort = "FNC",
-                    NameHistory = "myRevenge",
-                    Region = "EMEA"
-                },
-                new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = "SK Gaming",
-                    CurrentNameShort = "SK",
-                    NameHistory = "Dimegio Club",
-                    Region = "EMEA"
-                },
-                new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = "Karmine Corp",
-                    CurrentNameShort = "KC",
-                    NameHistory = "Kameto Corp",
-                    Region = "EMEA"
-                }
-            };
+            var teamName = "MAD Lions KOI";
+            var expected = "Follow eSports, MAD Lions, Splyce";
+            var history = BuildTeamHistory(teamName, _testRenameData);
+            Assert.Equal(expected, history);
+        }
 
-            return teams;
+        [Theory]
+        [InlineData("MAD Lions KOI", "Follow eSports, MAD Lions, Splyce")]
+        [InlineData("G2 Esports", "Gamers2, Team Nevo")]
+        [InlineData("Fnatic", "myRevenge")]
+        public void TeamHistory_MultipleTeams_ShouldMatchExpected(string teamName, string expectedHistory)
+        {
+            var history = BuildTeamHistory(teamName, _testRenameData);
+            Assert.Equal(expectedHistory, history);
+        }
+
+        [Fact]
+        public void TeamWithNoHistory_ShouldReturnNull()
+        {
+            var teamName = "New Team";
+            var history = BuildTeamHistory(teamName, _testRenameData);
+            Assert.Null(history);
+        }
+
+        private string BuildTeamHistory(string currentName, List<TeamRenameEntity> renameData)
+        {
+            var historyList = new List<string>();
+            string nameToSearch = currentName;
+
+            while (true)
+            {
+                var foundOriginalName = renameData
+                    .Where(rename => rename.NewName.Equals(nameToSearch, StringComparison.OrdinalIgnoreCase))
+                    .Select(rename => rename.OriginalName)
+                    .ToList();
+
+                if (foundOriginalName.Any())
+                {
+                    historyList.Add(foundOriginalName.First());
+                    nameToSearch = foundOriginalName.First();
+                }
+                else
+                    break;
+            }
+
+            return historyList.Any() ? string.Join(", ", historyList) : null;
         }
     }
 }
 
-    
 

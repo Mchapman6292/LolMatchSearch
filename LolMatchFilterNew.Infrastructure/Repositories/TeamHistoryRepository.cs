@@ -109,20 +109,6 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<IEnumerable<TeamNameHistoryEntity>> GetTeamsByRegionAsync(string region)
-        {
-            try
-            {
-                return await _matchFilterDbContext.TeamNameHistory
-                    .Where(t => t.Region.ToLower() == region.ToLower())
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _appLogger.Error($"Error retrieving teams for region {region}", ex);
-                throw;
-            }
-        }
 
         public async Task<bool> TeamExistsAsync(string teamName)
         {

@@ -56,7 +56,16 @@ namespace LolMatchFilterNew.Presentation
 
                     };
 
-                await teamHistoryLogic.LinkAllCurrentTeamNamesToPreviousTeamNamesAsync();
+                List<string> teamNames = new List<string>
+                    {
+                        "MAD Lions KOI",
+                        "G2 Esports",
+                        "Fnatic",
+                        "SK Gaming",
+                        "Karmine Corp"
+                    };
+
+                await teamHistoryLogic.GetAllPreviousTeamNamesForCurrentTeamName(teamNames);
 
          
 

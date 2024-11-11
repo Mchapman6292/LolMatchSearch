@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistory
 {
     public interface ITeamHistoryLogic
     {
-        Task<Dictionary<string, List<string>>> LinkAllCurrentTeamNamesToPreviousTeamNamesAsync();
+        List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName);
+        void LogMultipleMatches(Dictionary<string, List<string>> resultsWithMorethanOneOriginalName);
+        Task<List<TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames);
+
     }
 }

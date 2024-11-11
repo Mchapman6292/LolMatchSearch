@@ -27,7 +27,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             _teamHistoryEntity = teamHistoryEntity;
         }
 
-        private List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             var historyList = new List<string>();
             string nameToSearch = currentName;
@@ -53,7 +53,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
         }
 
 
-        private void LogMultipleMatches(Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public void LogMultipleMatches(Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             if (resultsWithMorethanOneOriginalName.Count > 0)
             {
@@ -70,7 +70,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             }
         }
 
-        public async Task<List<TeamNameHistoryEntity>> LinkCurrentTeamNamesToPreviousTeamNamesAsync(List<string> currentNames)
+        public async Task<List<TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames)
         {
             IEnumerable<TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
             var teamHistoryEntities = new List<TeamNameHistoryEntity>();

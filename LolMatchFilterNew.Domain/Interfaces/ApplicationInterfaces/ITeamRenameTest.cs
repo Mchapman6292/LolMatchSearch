@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests
 {
-    public interface ITeamRenameTests
+    public interface ITeamRenameTest
     {
-        void SingleTeamHistory_ShouldMatchExpected();
-        void TeamHistory_MultipleTeams_ShouldMatchExpected(string teamName, string expectedHistory);
-        void TeamWithNoHistory_ShouldReturnNull();
-        List<TeamNameHistoryEntity> GetTestTeamHistory();
-        string BuildTeamHistory(string currentName, List<TeamRenameEntity> renameData);
+
+
+        Task AllTeamsHistory_ShouldMatchExpected();
+        Task SingleTeamHistory_ShouldMatchExpected(string teamName, string expectedHistory);
     }
 }

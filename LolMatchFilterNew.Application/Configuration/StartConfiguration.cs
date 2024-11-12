@@ -48,15 +48,12 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogi
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Application.Controllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests;
 
 
 

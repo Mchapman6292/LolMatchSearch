@@ -13,9 +13,5 @@ namespace LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities
         [Key]
         public string CurrentTeamName { get; set; }
         public string? NameHistory { get; set; }
-
-
-
-
     }
 }

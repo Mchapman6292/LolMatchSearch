@@ -83,7 +83,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                 var teamEntity = new TeamNameHistoryEntity
                 {
                     CurrentTeamName = currentName,
-                    NameHistory = historyList.Any() ? string.Join(", ", historyList) : null
+                    NameHistory = historyList.Any() ? string.Join(", ", historyList) : string.Empty,
                 };
 
                 teamHistoryEntities.Add(teamEntity);

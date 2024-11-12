@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LolMatchFilterNew.Tests.TestLoggers;
 
 namespace LolMatchFilterNew.Tests.TestServiceFactories
 {
@@ -48,8 +49,7 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
                         options.EnableSensitiveDataLogging();
                     });
 
-
-                    services.AddSingleton<IAppLogger, AppLogger>();
+                    services.AddSingleton<TestLogger>();
                     services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
                     services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
                     services.AddScoped<IMatchFilterDbContext>(provider =>
@@ -62,5 +62,8 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
 
         public ITeamHistoryLogic GetTeamHistoryLogic() =>
             _host.Services.GetRequiredService<ITeamHistoryLogic>();
+
+        public TestLogger GetTestLogger() =>
+         _host.Services.GetRequiredService<TestLogger>();
     }
 }

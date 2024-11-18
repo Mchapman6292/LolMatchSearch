@@ -18,6 +18,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Tests.TestLoggers;
+using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
+using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 
 namespace LolMatchFilterNew.Tests.TestServiceFactories
 {
@@ -50,8 +53,10 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
                     });
 
                     services.AddSingleton<TestLogger>();
+                    services.AddSingleton<IAppLogger, AppLogger>();
                     services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
                     services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
+                    services.AddTransient<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
                     services.AddScoped<IMatchFilterDbContext>(provider =>
                         provider.GetRequiredService<MatchFilterDbContext>());
                     services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -65,5 +70,8 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
 
         public TestLogger GetTestLogger() =>
          _host.Services.GetRequiredService<TestLogger>();
+
+        public ITeamNameHistoryFormatter GetTeamNameHistoryFormatter() =>
+            _host.Services.GetRequiredService<ITeamNameHistoryFormatter>();
     }
 }

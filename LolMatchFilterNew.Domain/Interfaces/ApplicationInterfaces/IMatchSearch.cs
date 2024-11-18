@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches
+{
+    public interface IMatchSearch
+    {
+        Task<List<string>> ExtractEndTeamStringFromYoutubeTitleList(List<YoutubeVideoEntity> youtubeVideos);
+    }
+}

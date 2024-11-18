@@ -18,6 +18,9 @@ using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
+using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Infrastructure.Migrations;
 
 
 
@@ -43,34 +46,15 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
+                var teamRenameRepository = scope.ServiceProvider.GetRequiredService<ITeamRenameRepository>();
 
-                string region = "EMEA";
-
-                string leagueName = "LoL EMEA Championship";
-
+     
 
 
-                var playlistIds = new List<string>
-                    {
-                        "PLJwuLHutaYuKP5Pmd8Ry233MM0jO4j6m1"
 
-                    };
 
-                List<string> teamNames = new List<string>
-                    {
-                        "MAD Lions KOI",
-                        "G2 Esports",
-                        "Fnatic",
-                        "SK Gaming",
-                        "Karmine Corp"
-                    };
 
-                await teamHistoryLogic.GetAllPreviousTeamNamesForCurrentTeamName(teamNames);
-
-         
-
-                
-
+                await APIController.ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
 
 

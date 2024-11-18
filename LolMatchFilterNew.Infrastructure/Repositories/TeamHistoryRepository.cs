@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
 {
@@ -34,7 +35,6 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             {
                 return  await _matchFilterDbContext.TeamNameHistory
                     .FirstOrDefaultAsync(t => t.CurrentTeamName.ToLower() == teamName.ToLower());
-   
             }
             catch (Exception ex)
             {

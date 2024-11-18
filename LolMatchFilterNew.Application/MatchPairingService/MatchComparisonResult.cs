@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Application.MatchComparisonResults
+namespace LolMatchFilterNew.Application.MatchPairingService
 {
     public class MatchComparisonResult
     {
@@ -19,5 +19,8 @@ namespace LolMatchFilterNew.Application.MatchComparisonResults
         public DateTime? YoutubePublishDate { get; set; }
         public bool TeamsMatch { get; set; }
         public string? MismatchReason { get; set; }
+
+
+
     }
 }

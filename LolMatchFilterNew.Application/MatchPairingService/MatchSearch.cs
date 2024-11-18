@@ -11,11 +11,14 @@ using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
 using Xceed.Document.NET;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.Helpers.ApiHelper;
+using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
 
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 {
-    public class MatchSearch
+    public class MatchSearch : IMatchSearch
     {
         private readonly IAppLogger _appLogger;
         private readonly ILeaguepediaMatchDetailRepository _leaguepediaMatchDetailRepository;
@@ -33,23 +36,15 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
 
 
-
-        public async Task<List<string>> GetTeamsIfTitleIncludesVs(List<YoutubeVideoEntity> youtubeVideos)
-        {
-            throw new NotImplementedException();
-        }
-            
-          
-
-        public async Task<List<string>> ExtractEndTeamStringFromYoutubeTitle(List<YoutubeVideoEntity> youtubeVideos)
+        public async Task<List<string>> ExtractEndTeamStringFromYoutubeTitleList(List<YoutubeVideoEntity> youtubeVideos)
         {
             List<(string, string)> missingSeperatorResults = new List<(string, string)>();
 
             List<string> ExtractedEndStrings = new List<string>();
 
-            if(youtubeVideos.Count == 0)
+            if (youtubeVideos.Count == 0)
             {
-                _appLogger.Error($"No YoutubeEntities found for parameter in {nameof(ExtractEndTeamStringFromYoutubeTitle)}.");
+                _appLogger.Error($"No YoutubeEntities found for parameter in {nameof(ExtractEndTeamStringFromYoutubeTitleList)}.");
                 throw new ArgumentException("No YoutubeEntities found for parameter");
             }
 
@@ -69,21 +64,49 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
                 ExtractedEndStrings.Add(extractedResult);
             }
-            if(missingSeperatorResults.Count > 0) 
+            if (missingSeperatorResults.Count > 0)
             {
                 var currentDateTime = DateTime.UtcNow;
                 string title = "MissingSeperatorResults" + currentDateTime.ToString();
                 await _apiHelper.WriteListDictToWordDocAsync(missingSeperatorResults, title);
             }
-            return ExtractedEndStrings;   
+            return ExtractedEndStrings;
+        }
+
+
+
+        public async Task<string> ExtractEndTeamStringFromYoutubeTitle(YoutubeVideoEntity youtubeVideo)
+        {
+            if (youtubeVideo == null)
+            {
+                _appLogger.Error($"No YoutubeEntity provided for parameter in {nameof(ExtractEndTeamStringFromYoutubeTitle)}.");
+                throw new ArgumentException("YoutubeEntity parameter is null");
             }
+
+            var title = youtubeVideo.Title;
+            var videoId = youtubeVideo.VideoId;
+
+            int lastSeparatorIndex = title.LastIndexOf('|');
+            if (lastSeparatorIndex == -1)
+            {
+                var missingSeparatorResult = (title, videoId);
+                var currentDateTime = DateTime.UtcNow;
+                string documentTitle = "MissingSeperatorResult" + currentDateTime.ToString();
+
+                await _apiHelper.WriteListDictToWordDocAsync(new List<(string, string)> { missingSeparatorResult }, documentTitle);
+
+                _appLogger.Warning($"Missing separator '|' in video title: {title}. Result logged.");
+                throw new InvalidOperationException($"The title '{title}' does not contain a valid separator '|'.");
+            }
+
+            return title.Substring(lastSeparatorIndex + 1).Trim();
         }
 
 
 
 
-
-
     }
+
+}
 
 

@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
-using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
+using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
 using System.Linq.Expressions;
 using Xceed.Document.NET;
 using LolMatchFilterNew.Domain.DTOs;
@@ -98,10 +98,10 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
 
 
-        public async Task<List<YoutubeVideoEntity>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
+        public async Task<List<YoutubeVideoUnknown>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
         {
             _appLogger.Info($"Starting {nameof(ConvertPlayListItemsToYouTubeVideoResult)}, TraceId: {activity.TraceId}.");
-            List<YoutubeVideoEntity> youtubeVideoResults = new List<YoutubeVideoEntity>();
+            List<YoutubeVideoUnknown> youtubeVideoResults = new List<YoutubeVideoUnknown>();
             try
             {
                 foreach (PlaylistItem result in youTubePlaylist)
@@ -113,7 +113,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                     string thumbnailUrl = result.Snippet.Thumbnails.Default__.Url;
                     string url = $"https://www.youtube.com/watch?v={videoId}";
 
-                    var youtubeVideoResult = new YoutubeVideoEntity(
+                    var youtubeVideoResult = new YoutubeVideoUnknown(
                         videoId,
                         url
                     );

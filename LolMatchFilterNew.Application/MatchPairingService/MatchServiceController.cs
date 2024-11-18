@@ -1,5 +1,6 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;

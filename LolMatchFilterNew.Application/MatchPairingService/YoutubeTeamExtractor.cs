@@ -36,9 +36,9 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
             _apiHelper = apiHelper;
         }
 
-        public string MatchVsPatternAndUpdateMatchComparisonResultEntity(YoutubeVideoEntity youtubeVideo, MatchComparisonResult comparisonResult)
+        public string MatchVsPatternAndUpdateMatchComparisonResultEntity(string youtubeTitle)
         {
-            var match = TeamNamePattern.Match(youtubeVideo.Title);
+            var match = TeamNamePattern.Match(youtubeTitle);
 
             if(match.Success)
             {

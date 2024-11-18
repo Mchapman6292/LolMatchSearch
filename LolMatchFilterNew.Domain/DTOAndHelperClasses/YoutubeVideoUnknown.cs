@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xceed.Document.NET;
 
-namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
+namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults
 {
-    public class YoutubeVideoEntity
+    // Needed? Possible older version of YoutubeVideoEntity
+    public class YoutubeVideoUnknown
     {
         public string VideoId { get; set; }
         public string Title { get; set; }
@@ -18,7 +19,7 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult
         public string YoutubeResultHyperlink { get; set; }
 
 
-        public YoutubeVideoEntity(string videoId, string url)
+        public YoutubeVideoUnknown(string videoId, string url)
         {
             VideoId = videoId;
             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={videoId}";

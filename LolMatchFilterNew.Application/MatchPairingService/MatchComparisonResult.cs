@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Application.MatchPairingService
+namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResults
 {
     public class MatchComparisonResult
     {
+        internal MatchComparisonResult()
+        { }
+
         public DateTime? MatchDate { get; set; }
         public string? LeaguepediaGameId { get; set; }
         public string? Team1 { get; set; }
@@ -19,8 +22,6 @@ namespace LolMatchFilterNew.Application.MatchPairingService
         public DateTime? YoutubePublishDate { get; set; }
         public bool TeamsMatch { get; set; }
         public string? MismatchReason { get; set; }
-
-
 
     }
 }

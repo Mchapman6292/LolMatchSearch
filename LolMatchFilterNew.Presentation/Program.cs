@@ -48,13 +48,12 @@ namespace LolMatchFilterNew.Presentation
                 var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<ITeamRenameRepository>();
 
-     
+
+
+                await youtubeController.FetchAndAddYoutubePlaylistsForChannel();
 
 
 
-
-
-                await APIController.ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
 
 

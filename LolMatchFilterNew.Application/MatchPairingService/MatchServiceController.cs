@@ -1,12 +1,12 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers
 {
@@ -21,14 +21,5 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchServiceControll
             _appLogger = appLogger;
         }
 
-
-        public MatchComparisonResult CreateMatchComparisonResult()
-        {
-            MatchComparisonResult result = new MatchComparisonResult()
-            {
-                TeamsMatch = false
-            };
-            return result;
-        }
     }
 }

@@ -44,6 +44,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogi
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
+using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
 
 
 

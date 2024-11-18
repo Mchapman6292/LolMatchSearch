@@ -14,6 +14,7 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
+using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
@@ -51,7 +52,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
             foreach (var video in youtubeVideos)
             {
                 var title = video.Title;
-                var videoId = video.VideoId;
+                var videoId = video.YoutubeVideoId;
 
                 int lastSeperatorIndex = title.LastIndexOf('|');
                 if (lastSeperatorIndex == -1)
@@ -84,7 +85,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
             }
 
             var title = youtubeVideo.Title;
-            var videoId = youtubeVideo.VideoId;
+            var videoId = youtubeVideo.YoutubeVideoId;
 
             int lastSeparatorIndex = title.LastIndexOf('|');
             if (lastSeparatorIndex == -1)

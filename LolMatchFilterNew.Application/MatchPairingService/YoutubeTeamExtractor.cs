@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Application.MatchComparisonResults;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 
 namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractors

@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities
 {
-    public class TeamNameHistoryEntity
-    {
+        public class TeamNameHistoryEntity
+        {
+        // NEED TO DISTINGUISH BETWEEN ACQUISITIONS/SISTER TEAMS & RENAMES
+
         [Key]
-        public string CurrentTeamName { get; set; }
-        public string? NameHistory { get; set; }
+            public string CurrentTeamName { get; set; }
+
+            // For single renames
+            public string? NameHistory { get; set; }
 
 
-
-
+        }
     }
-}

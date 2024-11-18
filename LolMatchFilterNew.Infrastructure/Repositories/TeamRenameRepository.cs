@@ -41,6 +41,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
                 .ToList();
         }
 
+        // Retrieves all results from TeamReanmes which has kept the format of the data from Leaguepedia. 
         public async Task<List<TeamRenameEntity>> GetAllTeamRenameValuesAsync()
         {
             return await _matchFilterDbContext.TeamRenames.ToListAsync();
@@ -86,10 +87,8 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
 
                     processedNames.Add(nameToCheck);
                 }
-
                 teamNameHistory[currentName] = previousNames;
             }
-
             return teamNameHistory;
         }
 

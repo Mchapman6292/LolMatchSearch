@@ -41,6 +41,9 @@ using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
+using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
+using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
+using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
 
 
 
@@ -48,16 +51,13 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogi
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Application.Controllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamRenameTests;
-using LolMatchFilterNew.Application.Tests.TeamRenameTests;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 
 
 
@@ -75,7 +75,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
         public static async Task<IHost> InitializeApplicationAsync(string[] args)
         {
-
             _appLogger = new AppLogger();
            
             _appLogger.Info($"Starting {nameof(InitializeApplicationAsync)}");
@@ -103,9 +102,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
             return host;
         }
 
-
-
-
         public static IHostBuilder CreateHostBuilder(string[] args) =>
           Host.CreateDefaultBuilder(args)
               .ConfigureServices((hostContext, services) =>
@@ -120,10 +116,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                       options.LogTo(Console.WriteLine);
                   });
 
-
-
                   services.AddSingleton<IAppLogger, AppLogger>();
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
+                  services.AddSingleton<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
                   services.AddTransient<ILeaguepediaDataFetcher, LeaguepediaDataFetcher>();
@@ -142,7 +137,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
                   services.AddTransient<ITeamRenameToHistoryMapper, TeamRenameToHistoryMapper>();
                   services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
-                  services.AddTransient<ITeamRenameTest, TeamRenameTest>();
+                  services.AddTransient<IMatchServiceController, MatchServiceController>();
+        
 
 
                   services.AddScoped<IAPIControllers, APIControllers>();

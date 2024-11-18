@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using System.Collections;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 
+
+
+
 namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
 {
     public class TeamHistoryLogic : ITeamHistoryLogic
@@ -27,12 +30,17 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             _teamHistoryEntity = teamHistoryEntity;
         }
 
-        private List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public  List<TeamNameHistoryEntity> GetAllCurrentTeamsWithHistory()
+        {
+            throw new NotImplementedException();
+        }
+
+        // This is causing Infinite loop when there are no previous teamNames
+        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             var historyList = new List<string>();
             string nameToSearch = currentName;
 
-            while (true)
             {
                 var foundOriginalName = allRenames
                     .Where(rename => rename.NewName.Equals(nameToSearch, StringComparison.OrdinalIgnoreCase))
@@ -46,14 +54,60 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                 }
                 else
                 {
-                    break;
+                    historyList.Add("N/A");
                 }
             }
             return historyList;
         }
 
 
-        private void LogMultipleMatches(Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+
+        public async Task<List<TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames)
+        {
+            _appLogger.Info($"Starting {nameof(GetAllPreviousTeamNamesForCurrentTeamName)} with {currentNames.Count} team names");
+            _appLogger.Info($"Input team names: {string.Join(", ", currentNames)}");
+
+            IEnumerable<TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
+            _appLogger.Info($"Retrieved {allRenames.Count()} total rename records from database");
+
+            var teamHistoryEntities = new List<TeamNameHistoryEntity>();
+            var resultsWithMorethanOneOriginalName = new Dictionary<string, List<string>>();
+
+            foreach (var currentName in currentNames)
+            {
+                _appLogger.Info($"Processing history for team: {currentName}");
+
+                var historyList = FindPreviousTeamNames(currentName, allRenames, resultsWithMorethanOneOriginalName);
+
+                _appLogger.Info(historyList.Any()
+                    ? $"Found {historyList.Count} previous names for {currentName}: {string.Join(", ", historyList)}"
+                    : $"No previous names found for {currentName}");
+
+                var teamEntity = new TeamNameHistoryEntity
+                {
+                    CurrentTeamName = currentName,
+                    NameHistory = historyList.Any() ? string.Join(", ", historyList) : string.Empty,
+                };
+                teamHistoryEntities.Add(teamEntity);
+
+                _appLogger.Info($"Created history entity for {currentName} with history: {teamEntity.NameHistory}");
+            }
+
+            LogMultipleMatches(resultsWithMorethanOneOriginalName);
+
+            foreach (var teamEntity in teamHistoryEntities)
+            {
+                _appLogger.Info($"Final entity - CurrentTeamName: {teamEntity.CurrentTeamName}, NameHistory: {teamEntity.NameHistory}");
+            }
+
+            _appLogger.Info($"Completed {nameof(GetAllPreviousTeamNamesForCurrentTeamName)} - Processed {teamHistoryEntities.Count} teams");
+            return teamHistoryEntities;
+        }
+
+
+
+
+        public void LogMultipleMatches(Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             if (resultsWithMorethanOneOriginalName.Count > 0)
             {
@@ -70,29 +124,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             }
         }
 
-        public async Task<List<TeamNameHistoryEntity>> LinkCurrentTeamNamesToPreviousTeamNamesAsync(List<string> currentNames)
-        {
-            IEnumerable<TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
-            var teamHistoryEntities = new List<TeamNameHistoryEntity>();
-            var resultsWithMorethanOneOriginalName = new Dictionary<string, List<string>>();
-
-            foreach (var currentName in currentNames)
-            {
-                var historyList = FindPreviousTeamNames(currentName, allRenames, resultsWithMorethanOneOriginalName);
-
-                var teamEntity = new TeamNameHistoryEntity
-                {
-                    CurrentTeamName = currentName,
-                    NameHistory = historyList.Any() ? string.Join(", ", historyList) : null
-                };
-
-                teamHistoryEntities.Add(teamEntity);
-            }
-            LogMultipleMatches(resultsWithMorethanOneOriginalName);
-
-            return teamHistoryEntities;
-        }
-
+     
 
 
 

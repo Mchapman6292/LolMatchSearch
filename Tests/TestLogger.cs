@@ -1,22 +1,19 @@
 ﻿using Serilog;
-using Serilog.Context;
-using System;
 using System.Diagnostics;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 
-namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
-{
-    public class AppLogger : IAppLogger
+namespace LolMatchFilterNew.Tests.TestLoggers
+{ 
+    public class TestLogger 
     {
         private readonly Serilog.ILogger _logger;
 
-        public AppLogger()
+        public TestLogger()
         {
             _logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("logs/test/testapp.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
         }
 
@@ -49,6 +46,6 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
         public Task ErrorAsync(string message, Exception ex, params object[] propertyValues) => Task.Run(() => Error(message, ex, propertyValues));
         public Task ErrorAsync(string message, params object[] propertyValues) => Task.Run(() => Error(message, propertyValues));
         public Task FatalAsync(string message) => Task.Run(() => Fatal(message));
-        public Task FatalAsync(string message, Exception ex) => Task.Run(() => Fatal(message,ex));
+        public Task FatalAsync(string message, Exception ex) => Task.Run(() => Fatal(message, ex));
     }
 }

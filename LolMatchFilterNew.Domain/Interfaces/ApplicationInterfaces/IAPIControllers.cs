@@ -21,5 +21,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task ControllerAddTeamNameHistoryToDatabase();
 
         Task ControllerAddLpediaTeamsToDatabase();
+
+        Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
     }
 }

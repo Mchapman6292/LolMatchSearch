@@ -23,7 +23,7 @@ namespace LolMatchFilterNew.Tests.ApplicationTests.YoutubeTests.YoutubeTitleExtr
                 "^[\\w\\s-]+\\s+vs\\s+[\\w\\s-]+\\s+Highlights\\s+ALL\\s+GAMES\\s+\\|\\s+[\\w\\s-]+\\s+\\d{4}\\s+[\\w\\s-]+\\s+\\|\\s+[\\w\\s-]+\\s+vs\\s+[\\w\\s-]+$"
             }
 
-        }
+        };
 
     }
 }

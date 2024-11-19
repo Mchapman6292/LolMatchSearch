@@ -16,7 +16,6 @@ using System.Numerics;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext

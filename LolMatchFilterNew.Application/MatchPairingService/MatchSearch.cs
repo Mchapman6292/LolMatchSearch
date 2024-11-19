@@ -8,12 +8,13 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaM
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
+using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
 using Xceed.Document.NET;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
+using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
 
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
@@ -36,7 +37,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
 
 
-        public async Task<List<string>> ExtractEndTeamStringFromYoutubeTitleList(List<YoutubeVideoEntity> youtubeVideos)
+        public async Task<List<string>> ExtractEndTeamStringForMultiple(List<YoutubeVideoEntity> youtubeVideos)
         {
             List<(string, string)> missingSeperatorResults = new List<(string, string)>();
 
@@ -44,14 +45,14 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
             if (youtubeVideos.Count == 0)
             {
-                _appLogger.Error($"No YoutubeEntities found for parameter in {nameof(ExtractEndTeamStringFromYoutubeTitleList)}.");
+                _appLogger.Error($"No YoutubeEntities found for parameter in {nameof(ExtractEndTeamStringForMultiple)}.");
                 throw new ArgumentException("No YoutubeEntities found for parameter");
             }
 
             foreach (var video in youtubeVideos)
             {
                 var title = video.Title;
-                var videoId = video.VideoId;
+                var videoId = video.YoutubeVideoId;
 
                 int lastSeperatorIndex = title.LastIndexOf('|');
                 if (lastSeperatorIndex == -1)
@@ -75,16 +76,16 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
 
 
-        public async Task<string> ExtractEndTeamStringFromYoutubeTitle(YoutubeVideoEntity youtubeVideo)
+        public async Task<string> ExtractEndTeamString(YoutubeVideoEntity youtubeVideo)
         {
             if (youtubeVideo == null)
             {
-                _appLogger.Error($"No YoutubeEntity provided for parameter in {nameof(ExtractEndTeamStringFromYoutubeTitle)}.");
+                _appLogger.Error($"No YoutubeEntity provided for parameter in {nameof(ExtractEndTeamString)}.");
                 throw new ArgumentException("YoutubeEntity parameter is null");
             }
 
             var title = youtubeVideo.Title;
-            var videoId = youtubeVideo.VideoId;
+            var videoId = youtubeVideo.YoutubeVideoId;
 
             int lastSeparatorIndex = title.LastIndexOf('|');
             if (lastSeparatorIndex == -1)
@@ -100,6 +101,12 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
             }
 
             return title.Substring(lastSeparatorIndex + 1).Trim();
+        }
+
+
+        public async Task CheckYoutubeTitleForVsTeams(YoutubeVideoEntity youtubeVideoEntity)
+        {
+
         }
 
 

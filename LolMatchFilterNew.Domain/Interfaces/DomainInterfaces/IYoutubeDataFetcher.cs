@@ -9,12 +9,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetch
 {
     public interface IYoutubeDataFetcher
     {
-        Task<List<YoutubeVideoEntity>> RetrieveAndMapAllPlaylistVideosToEntities(List<string> playlistIds);
-
-        Task<Dictionary<string, string>> GetPlaylistNames(List<string> playlistIds);
-
-        Task<List<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, string playlistName);
-
+        Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromChannel(string channelId, int? maxResults = null);
+        Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null);
         Task<Dictionary<string, string>> GetChannelPlaylists(string channelId);
+        Task<string> GetChannelIdFromInput(string input);
     }
 }

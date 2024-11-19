@@ -87,12 +87,6 @@ namespace LolMatchFilterNew.Application.Controllers
 
         }
 
-        public async Task FetchAndAddYoutubeVideos(List<string> playlistIds)
-        {
-            IList<YoutubeVideoEntity> retrievedEntities = await _youtubeDataFetcher.RetrieveAndMapAllPlaylistVideosToEntities(playlistIds);
-
-            await _youtubeVideoRepository.BulkaddYoutubeDetails(retrievedEntities);
-        }
 
         public async Task FetchAndAddTeamNamesForLeague(string leagueName)
         {

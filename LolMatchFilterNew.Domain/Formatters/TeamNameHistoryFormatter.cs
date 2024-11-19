@@ -18,6 +18,8 @@ namespace LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters
             _appLogger = appLogger;
         }
 
+        // Used mainly for Testing TeamHistory. 
+
         public  Dictionary<string, List<string>> FormatTeamHistoryToDict(List<TeamNameHistoryEntity> teamHistories)
         {
             return teamHistories

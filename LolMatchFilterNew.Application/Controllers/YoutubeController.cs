@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
+using Google.Apis.YouTube.v3.Data;
 
 namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
 {
@@ -33,23 +34,21 @@ namespace LolMatchFilterNew.Application.Controllers.YoutubeControllers
 
         public async Task FetchAndAddYoutubeVideo(List<string> playlistIds)
         {
-            IList<YoutubeVideoEntity> retrievedEntities = await _youtubeDataFetcher.RetrieveAndMapAllPlaylistVideosToEntities(playlistIds);
 
-            await _youtubeVideoRepository.BulkaddYoutubeDetails(retrievedEntities);
         }
+
+       
 
         public async Task FetchAndAddYoutubePlaylistsForChannel()
         {
             string channelId = "UC3Lh8yZe1MD-jCIXhBcVtqQ";
 
-            Dictionary<string, string> results =  await _youtubeDataFetcher.GetChannelPlaylists(channelId);
+            var videos = await _youtubeDataFetcher.GetVideosFromChannel(channelId);
 
-            await _apiHelper.WriteListDictToWordDocAsync(results);
+            await _youtubeVideoRepository.BulkaddYoutubeDetails(videos);
+
+
         }
 
-        public async Task FetchAndAddAllTeamNamesForRegion()
-        {
-            
-        }
     }
 }

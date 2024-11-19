@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResult;
+﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
@@ -36,21 +36,21 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
             _apiHelper = apiHelper;
         }
 
-        public string MatchVsPatternAndUpdateMatchComparisonResultEntity(YoutubeVideoEntity youtubeVideo, MatchComparisonResult comparisonResult)
+        // Looks for team names either side of vs / versus, not case sensitive. 
+        public List<string> MatchVsPatternAndUpdateMatchComparisonResultEntity(string youtubeTitle)
         {
-            var match = TeamNamePattern.Match(youtubeVideo.Title);
+            var match = TeamNamePattern.Match(youtubeTitle);
 
             if(match.Success)
             {
                 string Team1 = match.Groups[1].Value;
                 string Team2 = match.Groups[2].Value;
 
-                string result = string.Join(",", Team1, Team2);
-                return result;
+                return new List<string> { Team1, Team2 };
             }
             else
             {
-                return string.Empty;
+                return null;
             }
         }
 

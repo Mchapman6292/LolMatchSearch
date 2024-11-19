@@ -10,5 +10,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeCont
     {
         Task FetchAndAddYoutubeVideo(List<string> playlistIds);
         Task FetchAndAddYoutubePlaylistsForChannel();
+
     }
 }

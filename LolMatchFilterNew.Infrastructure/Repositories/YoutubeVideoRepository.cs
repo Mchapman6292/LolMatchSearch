@@ -30,16 +30,28 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
 
         public async Task<int> BulkaddYoutubeDetails(IEnumerable<YoutubeVideoEntity> youtubeVideoDetails)
         {
+            var distinctVideos = youtubeVideoDetails
+                .GroupBy(x => x.YoutubeVideoId)
+                .Select(g => g.First())
+                .ToList();
+
             int totalCount = youtubeVideoDetails.Count();
-            _appLogger.Info($"Starting bulk add of {totalCount} YouTube video details.");
+            int distinctCount = distinctVideos.Count();
+
+            _appLogger.Info($"Starting bulk add. Total videos: {totalCount}, Distinct videos: {distinctCount}");
+            if (totalCount != distinctCount)
+            {
+                _appLogger.Info($"Found {totalCount - distinctCount} duplicate videos in incoming collection");
+            }
+
             LogTrackedYoutubeEntities();
 
             try
             {
                 var existingIds = await GetIdsOfSavedVideos();
-                var newVideos = youtubeVideoDetails.Where(v => !existingIds.Contains(v.YoutubeVideoId)).ToList();
+                var newVideos = distinctVideos.Where(v => !existingIds.Contains(v.YoutubeVideoId)).ToList();
 
-                _appLogger.Info($"Found {totalCount - newVideos.Count} existing videos. Processing {newVideos.Count} new videos.");
+                _appLogger.Info($"Found {distinctCount - newVideos.Count} existing videos. Processing {newVideos.Count} new videos.");
 
                 if (!newVideos.Any())
                 {
@@ -94,22 +106,30 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
                 .Select(e => e.YoutubeVideoId)
                 .ToListAsync();
 
+            _appLogger.Info($"Found {existingIds.Count} existing video IDs in database");
             return existingIds;
         }
 
-
-
-
         public void LogTrackedYoutubeEntities()
         {
-            var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<LeaguepediaMatchDetailEntity>()
+            var trackedYoutubeEntities = _matchFilterDbContext.ChangeTracker
+                .Entries<YoutubeVideoEntity>()
+                .Select(e => new
+                {
+                    Key = e.Property(p => p.YoutubeVideoId).CurrentValue,
+                    State = e.State
+                }).ToList();
+
+            var trackedLeaguepediaEntities = _matchFilterDbContext.ChangeTracker
+                .Entries<LeaguepediaMatchDetailEntity>()
                 .Select(e => new
                 {
                     Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,
                     State = e.State
                 }).ToList();
 
-            _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
+            _appLogger.Info($"Number of tracked YouTube entities: {trackedYoutubeEntities.Count}");
+            _appLogger.Info($"Number of tracked Leaguepedia entities: {trackedLeaguepediaEntities.Count}");
         }
 
     }

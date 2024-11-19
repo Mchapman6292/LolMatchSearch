@@ -80,46 +80,88 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
         public async Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null)
         {
             var videos = new List<YoutubeVideoEntity>();
-            var pageToken = string.Empty;
+            var nextPageToken = "";
             var processedItems = 0;
-
-            do
+            try
             {
-                try
+                do
                 {
-                    var request = _youtubeService.PlaylistItems.List(RequiredPlaylistParts);
+                    var request = _youtubeService.PlaylistItems.List("snippet,contentDetails");
                     request.PlaylistId = playlistId;
-                    request.MaxResults = MaxResultsPerPage;
-                    request.PageToken = pageToken;
-
+                    request.MaxResults = 50;
+                    request.PageToken = nextPageToken;
                     var response = await request.ExecuteAsync();
-
                     foreach (var item in response.Items)
                     {
                         videos.Add(MapPlaylistItemToEntity(item));
                         processedItems++;
-
                         if (maxResults.HasValue && processedItems >= maxResults)
                         {
                             return videos;
                         }
+                        if (processedItems % 20 == 0)
+                        {
+                            YoutubeVideoEntity mostRecentEntity = videos.LastOrDefault();
+                            _appLogger.Info($"Video {processedItems} - ID: {mostRecentEntity.YoutubeVideoId}, Playlist: {mostRecentEntity.PlaylistName}");
+                        }
                     }
-
-                    pageToken = response.NextPageToken;
-                }
-                catch (Exception ex)
-                {
-                    _appLogger.Error($"Error fetching playlist items: {ex.Message}");
-                    throw;
-                }
+                    nextPageToken = response.NextPageToken;
+                    _appLogger.Info($"Retrieved {response.Items.Count} videos from playlist. Total videos so far: {videos.Count}");
+                } while (!string.IsNullOrEmpty(nextPageToken));
+                _appLogger.Info($"Successfully retrieved all videos from playlist. Total count: {videos.Count}");
+                return videos;
             }
-            while (!string.IsNullOrEmpty(pageToken));
-
-            return videos;
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving videos for playlist {playlistId}: {ex.Message}");
+                throw;
+            }
         }
+    
 
         public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
-      
+        {
+            var playlists = new Dictionary<string, string>();
+            var nextPageToken = "";
+
+            try
+            {
+                do
+                {
+                    var playlistRequest = _youtubeService.Playlists.List("snippet");
+                    playlistRequest.ChannelId = channelId;
+                    playlistRequest.MaxResults = 50;
+                    playlistRequest.PageToken = nextPageToken;
+
+                    var playlistResponse = await playlistRequest.ExecuteAsync();
+
+                    foreach (var playlist in playlistResponse.Items)
+                    {
+                        if (!playlists.ContainsKey(playlist.Id))
+                        {
+                            playlists.Add(playlist.Id, playlist.Snippet.Title);
+                        }
+                    }
+
+                    nextPageToken = playlistResponse.NextPageToken;
+                    _appLogger.Info($"Retrieved {playlistResponse.Items.Count} playlists from channel. " +
+                                   $"Total playlists so far: {playlists.Count}");
+
+                } while (!string.IsNullOrEmpty(nextPageToken));
+
+                _appLogger.Info($"Successfully retrieved all playlists. Total count: {playlists.Count}");
+                var samplePlaylists = playlists.Take(3)
+                    .Select(p => $"\n\tPlaylist ID: {p.Key}, TeamName: {p.Value}");
+                _appLogger.Info($"Sample playlists: {string.Join("", samplePlaylists)}");
+
+                return playlists;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving playlists for channel {channelId}: {ex.Message}");
+                throw;
+            }
+        }
 
         public async Task<string> GetChannelIdFromInput(string input)
         {
@@ -160,6 +202,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={item.ContentDetails.VideoId}",
                 ThumbnailUrl = item.Snippet.Thumbnails.Default__?.Url
             };
+            
         }
     }
 }

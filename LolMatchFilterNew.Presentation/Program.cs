@@ -25,6 +25,14 @@ using LolMatchFilterNew.Infrastructure.Migrations;
 
 
 
+// TO DO
+// Get all known Team abbreviations using TeamRedirects?
+// Find method responsible for appending ' to YoutubePlaylistIds.
+//
+
+
+
+
 
 namespace LolMatchFilterNew.Presentation
 {

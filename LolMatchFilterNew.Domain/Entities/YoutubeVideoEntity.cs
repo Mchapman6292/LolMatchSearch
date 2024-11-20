@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
 using System.Diagnostics.Contracts;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 
 
 namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
@@ -34,6 +35,7 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
 
         [ForeignKey("LeaguepediaGameIdAndTitle")]
         public virtual LeaguepediaMatchDetailEntity? LeaguepediaMatch { get; set; }
+        public virtual YoutubeMatchExtractEntity MatchExtract { get; set; }
 
 
     }

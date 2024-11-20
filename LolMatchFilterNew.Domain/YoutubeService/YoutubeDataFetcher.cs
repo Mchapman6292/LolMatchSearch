@@ -106,8 +106,12 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                         }
                     }
                     nextPageToken = response.NextPageToken;
+
                     _appLogger.Info($"Retrieved {response.Items.Count} videos from playlist. Total videos so far: {videos.Count}");
-                } while (!string.IsNullOrEmpty(nextPageToken));
+
+                }
+                while (!string.IsNullOrEmpty(nextPageToken));
+
                 _appLogger.Info($"Successfully retrieved all videos from playlist. Total count: {videos.Count}");
                 return videos;
             }

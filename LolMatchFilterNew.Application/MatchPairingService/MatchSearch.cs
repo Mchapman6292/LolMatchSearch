@@ -26,6 +26,8 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
         private readonly IApiHelper _apiHelper;
 
 
+        // Looks for names seperated by |
+
 
         public MatchSearch(IAppLogger appLogger, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper)
         {

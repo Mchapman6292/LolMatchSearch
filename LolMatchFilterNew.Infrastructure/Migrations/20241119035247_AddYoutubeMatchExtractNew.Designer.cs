@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119035247_AddYoutubeMatchExtractNew")]
+    partial class AddYoutubeMatchExtractNew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,7 +328,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("TeamRenames");
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.YoutubeMatchExtractEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractors.YoutubeMatchExtract", b =>
                 {
                     b.Property<string>("YoutubeVideoId")
                         .HasColumnType("text")
@@ -343,25 +346,16 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<bool>("IsSeries")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PlayListTitile")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Season")
                         .HasColumnType("text");
 
-                    b.Property<string>("Team1Long")
+                    b.Property<string>("Team1")
                         .HasColumnType("text");
 
-                    b.Property<string>("Team1Short")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Team2Long")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Team2Short")
+                    b.Property<string>("Team2")
                         .HasColumnType("text");
 
                     b.Property<string>("Title")
@@ -473,11 +467,11 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.YoutubeMatchExtractEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractors.YoutubeMatchExtract", b =>
                 {
                     b.HasOne("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", "YoutubeVideo")
                         .WithOne("MatchExtract")
-                        .HasForeignKey("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.YoutubeMatchExtractEntity", "YoutubeVideoId")
+                        .HasForeignKey("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractors.YoutubeMatchExtract", "YoutubeVideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

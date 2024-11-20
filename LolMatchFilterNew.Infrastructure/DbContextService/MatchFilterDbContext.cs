@@ -16,7 +16,7 @@ using System.Numerics;
 using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
 using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
-
+using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -35,6 +35,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<TeamRenameEntity> TeamRenames { get; set; }
         public DbSet<TeamNameHistoryEntity> TeamNameHistory { get; set; }
         public DbSet<LpediaTeamEntity> LOLTeams { get; set; }
+        public DbSet<YoutubeMatchExtractEntity> YoutubeMatchExtracts { get; set; }
 
 
 
@@ -71,6 +72,12 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                       .HasForeignKey<YoutubeVideoEntity>(       
                           y => y.LeaguepediaGameIdAndTitle)      
                       .IsRequired(false);
+
+                entity.HasOne(e => e.MatchExtract)
+                      .WithOne(m => m.YoutubeVideo)
+                      .HasForeignKey<YoutubeMatchExtractEntity>(m => m.YoutubeVideoId)
+                      .IsRequired()
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<LeaguepediaMatchDetailEntity>(entity =>
@@ -137,6 +144,13 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasKey(t => t.Name);
             });
 
+            modelBuilder.Entity<YoutubeMatchExtractEntity>(entity =>
+            {
+                entity.HasKey(e => e.YoutubeVideoId);
+                entity.HasOne(e => e.YoutubeVideo)
+                    .WithOne(y => y.MatchExtract)
+                    .HasForeignKey<YoutubeMatchExtractEntity>(e => e.YoutubeVideoId);
+            });
         }
 
     }

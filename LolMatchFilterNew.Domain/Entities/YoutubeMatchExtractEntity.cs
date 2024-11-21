@@ -22,6 +22,8 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
         [MaxLength(255)]
         public string Title { get; set; }
 
+        public string? PlayListName { get; set; }   
+
         public string? PlayListTitle { get; set; }   
 
         public DateTime PublishedAt { get; set; }

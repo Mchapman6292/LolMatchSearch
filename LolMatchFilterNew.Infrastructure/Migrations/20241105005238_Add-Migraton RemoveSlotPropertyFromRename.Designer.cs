@@ -250,7 +250,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlaylistName")
+                    b.Property<string>("PlaylistId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")

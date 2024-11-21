@@ -45,17 +45,25 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly ILeaguepediaMatchDetailRepository _leaguepediaMatchDetailRepository;
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
+
+
         private readonly IGenericRepository<LeagueTeamEntity> _leagueTeamRepository;
         private readonly IGenericRepository<TeamRenameEntity> _genericTeamRenameRepository;
         private readonly IGenericRepository<TeamNameHistoryEntity> _genericTeamHistoryRepository;
         private readonly IGenericRepository<LpediaTeamEntity> _genericLpediaTeamRepository;
+        private readonly IGenericRepository<YoutubeVideoEntity> _genericYoutubeVideoResultsRepository;
+
+
+
         private readonly ITeamRenameRepository _teamRenameRepository;
+
+
         private readonly IApiHelper _apiHelper;
         private readonly ITeamRenameToHistoryMapper _teamRenameToHistoryMapper;
         private readonly ITeamHistoryLogic _teamHistoryLogic;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<LpediaTeamEntity> genericLpediaTeamRepository, ITeamHistoryLogic teamHistoryLogic)
+        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<LeagueTeamEntity> leagueTeamRepository,IGenericRepository<TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<LpediaTeamEntity> genericLpediaTeamRepository, ITeamHistoryLogic teamHistoryLogic, IGenericRepository<YoutubeVideoEntity> genericYoutubeVideoResultsRepository)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
@@ -71,7 +79,9 @@ namespace LolMatchFilterNew.Application.Controllers
             _teamRenameToHistoryMapper = teamRenameToHistoryMapper;
             _genericTeamHistoryRepository = genericTeamHistoryRepository;
             _genericLpediaTeamRepository = genericLpediaTeamRepository;
+            _genericYoutubeVideoResultsRepository = genericYoutubeVideoResultsRepository;
             _teamHistoryLogic = teamHistoryLogic;
+
         }
 
 
@@ -204,6 +214,12 @@ namespace LolMatchFilterNew.Application.Controllers
 
             await _genericTeamHistoryRepository.AddRangeWithTransactionAsync(teamHistories);
         }
+
+        public async Task ControllerDeleteAllYoutubeVideoResultsEntries()
+        {
+            await _genericYoutubeVideoResultsRepository.RemoveAllEntitiesAsync();
+        }
+
 
     }
 }

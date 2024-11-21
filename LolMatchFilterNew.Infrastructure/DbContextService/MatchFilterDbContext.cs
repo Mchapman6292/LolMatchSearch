@@ -52,9 +52,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.PlaylistName)
-                    .IsRequired(false);
-
                 entity.Property(e => e.PublishedAt)
                     .IsRequired();
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
@@ -67,10 +64,10 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                       .IsRequired(false);
 
 
-                entity.HasOne(e => e.LeaguepediaMatch)           
-                      .WithOne(l => l.YoutubeVideo)             
-                      .HasForeignKey<YoutubeVideoEntity>(       
-                          y => y.LeaguepediaGameIdAndTitle)      
+                entity.HasOne(e => e.LeaguepediaMatch)
+                      .WithOne(l => l.YoutubeVideo)
+                      .HasForeignKey<YoutubeVideoEntity>(
+                          y => y.LeaguepediaGameIdAndTitle)
                       .IsRequired(false);
 
                 entity.HasOne(e => e.MatchExtract)

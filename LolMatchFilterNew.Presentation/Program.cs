@@ -58,7 +58,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await youtubeController.FetchAndAddYoutubePlaylistsForChannel();
+                await APIController.ControllerDeleteAllYoutubeVideoResultsEntries();
 
 
 

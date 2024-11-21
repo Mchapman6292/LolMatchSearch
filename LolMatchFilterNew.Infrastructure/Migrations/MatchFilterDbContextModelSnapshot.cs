@@ -82,7 +82,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("TeamName");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities.LeaguepediaMatchDetailEntity", b =>
@@ -160,7 +160,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 
-                    b.ToTable("LeaguepediaMatchDetails");
+                    b.ToTable("LeaguepediaMatchDetails", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.LpediaTeamEntities.LpediaTeamEntity", b =>
@@ -248,7 +248,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("LOLTeams");
+                    b.ToTable("LOLTeams", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.ProPlayerEntities.ProPlayerEntity", b =>
@@ -281,7 +281,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaPlayerAllName");
 
-                    b.ToTable("ProPlayers");
+                    b.ToTable("ProPlayers", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities.TeamNameHistoryEntity", b =>
@@ -294,7 +294,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("CurrentTeamName");
 
-                    b.ToTable("TeamNameHistory");
+                    b.ToTable("TeamNameHistory", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.TeamRenamesEntities.TeamRenameEntity", b =>
@@ -322,7 +322,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("OriginalName", "NewName", "Date");
 
-                    b.ToTable("TeamRenames");
+                    b.ToTable("TeamRenames", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.YoutubeMatchExtractEntity", b =>
@@ -343,7 +343,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<bool>("IsSeries")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PlayListTitile")
+                    b.Property<string>("PlayListName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PlayListTitle")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")
@@ -374,7 +377,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("YoutubeVideoId");
 
-                    b.ToTable("YoutubeMatchExtracts");
+                    b.ToTable("YoutubeMatchExtracts", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities.YoutubePlaylistEntity", b =>
@@ -388,7 +391,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("name");
 
-                    b.ToTable("YoutubePlaylists");
+                    b.ToTable("YoutubePlaylists", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities.YoutubeVideoEntity", b =>
@@ -400,7 +403,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlaylistName")
+                    b.Property<string>("PlaylistId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PlaylistTitle")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")

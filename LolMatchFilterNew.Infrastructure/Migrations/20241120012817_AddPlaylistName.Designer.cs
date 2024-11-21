@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241120004334_Add-PlaylistTitle")]
-    partial class AddPlaylistTitle
+    [Migration("20241120012817_AddPlaylistName")]
+    partial class AddPlaylistName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -346,7 +346,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<bool>("IsSeries")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PlayListTitile")
+                    b.Property<string>("PlayListName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PlayListTitle")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")
@@ -403,7 +406,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("LeaguepediaGameIdAndTitle")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlaylistName")
+                    b.Property<string>("PlaylistId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PlaylistTitle")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")

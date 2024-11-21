@@ -21,7 +21,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldMaxLength: 2083);
 
             migrationBuilder.AlterColumn<string>(
-                name: "PlaylistName",
+                name: "PlaylistId",
                 table: "YoutubeVideoResults",
                 type: "text",
                 nullable: true,
@@ -76,7 +76,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "PlaylistName",
+                name: "PlaylistId",
                 table: "YoutubeVideoResults",
                 type: "text",
                 nullable: false,

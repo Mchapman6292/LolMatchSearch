@@ -22,5 +22,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task ControllerAddLpediaTeamsToDatabase();
 
         Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
+
+        Task ControllerDeleteAllYoutubeVideoResultsEntries();
     }
 }

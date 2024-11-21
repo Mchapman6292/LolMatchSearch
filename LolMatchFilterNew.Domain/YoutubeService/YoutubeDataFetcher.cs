@@ -102,7 +102,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                         if (processedItems % 20 == 0)
                         {
                             YoutubeVideoEntity mostRecentEntity = videos.LastOrDefault();
-                            _appLogger.Info($"Video {processedItems} - ID: {mostRecentEntity.YoutubeVideoId}, Playlist: {mostRecentEntity.PlaylistName}");
+                            _appLogger.Info($"Video {processedItems} - ID: {mostRecentEntity.YoutubeVideoId},"); 
                         }
                     }
                     nextPageToken = response.NextPageToken;
@@ -121,7 +121,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                 throw;
             }
         }
-    
+
 
         public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
         {
@@ -201,12 +201,11 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             {
                 YoutubeVideoId = item.ContentDetails.VideoId,
                 Title = item.Snippet.Title,
-                PlaylistName = item.Snippet.PlaylistId,
                 PublishedAt = item.Snippet.PublishedAt ?? DateTime.UtcNow,
                 YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={item.ContentDetails.VideoId}",
                 ThumbnailUrl = item.Snippet.Thumbnails.Default__?.Url
             };
-            
+
         }
     }
 }

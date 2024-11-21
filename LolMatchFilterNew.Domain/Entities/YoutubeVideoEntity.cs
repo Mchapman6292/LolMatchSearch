@@ -10,6 +10,7 @@ using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
 
 {
+    // DB table = YoutubeVideoResults
     public class YoutubeVideoEntity
     {
         [Key]
@@ -21,7 +22,10 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
         [Required]
         [MaxLength(255)]
         public string Title { get; set; }
-        public string PlaylistName { get; set; }    
+
+        public string? PlaylistTitle { get; set; }
+
+        public string PlaylistName { get; set; }
 
 
         public DateTime PublishedAt { get; set; }

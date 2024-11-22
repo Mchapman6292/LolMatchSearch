@@ -239,7 +239,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("VideoTitle")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");

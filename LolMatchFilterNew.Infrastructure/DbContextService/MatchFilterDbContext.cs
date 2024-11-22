@@ -48,7 +48,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.ToTable("YoutubeVideoResults");
                 entity.HasKey(e => e.YoutubeVideoId);
 
-                entity.Property(e => e.Title)
+                entity.Property(e => e.VideoTitle)
                     .IsRequired()
                     .HasMaxLength(255);
 
@@ -59,6 +59,14 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.ThumbnailUrl)
                    .IsRequired(false)
                    .HasMaxLength(2083);
+
+                entity.Property(e => e.PlaylistId)
+                    .IsRequired(false);
+
+
+                entity.Property(e => e.PlaylistTitle)
+                    .IsRequired(false)  
+                    .HasMaxLength(255);  
 
                 entity.Property(e => e.LeaguepediaGameIdAndTitle)
                       .IsRequired(false);

@@ -49,7 +49,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService
             if (string.IsNullOrWhiteSpace(videoId))
                 throw new ArgumentException("Video ID cannot be empty", nameof(videoId));
             if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentException("Title cannot be empty", nameof(title));
+                throw new ArgumentException("VideoTitle cannot be empty", nameof(title));
 
             _result.YoutubeVideoId = videoId;
             _result.YoutubeTitle = title;

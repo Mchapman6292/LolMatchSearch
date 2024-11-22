@@ -53,7 +53,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
             foreach (var video in youtubeVideos)
             {
-                var title = video.Title;
+                var title = video.VideoTitle;
                 var videoId = video.YoutubeVideoId;
 
                 int lastSeperatorIndex = title.LastIndexOf('|');
@@ -86,7 +86,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
                 throw new ArgumentException("YoutubeEntity parameter is null");
             }
 
-            var title = youtubeVideo.Title;
+            var title = youtubeVideo.VideoTitle;
             var videoId = youtubeVideo.YoutubeVideoId;
 
             int lastSeparatorIndex = title.LastIndexOf('|');

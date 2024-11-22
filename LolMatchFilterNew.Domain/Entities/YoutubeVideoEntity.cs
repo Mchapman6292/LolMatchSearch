@@ -21,11 +21,11 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
 
         [Required]
         [MaxLength(255)]
-        public string Title { get; set; }
+        public string VideoTitle { get; set; }
 
-        public string? PlaylistTitle { get; set; }
+        public string? PlaylistId { get; set; }
 
-        public string PlaylistName { get; set; }
+        public string PlaylistTitle { get; set; }
 
 
         public DateTime PublishedAt { get; set; }

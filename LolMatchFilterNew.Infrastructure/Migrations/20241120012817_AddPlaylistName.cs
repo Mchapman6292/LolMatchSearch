@@ -16,7 +16,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 newName: "PlayListTitle");
 
             migrationBuilder.AddColumn<string>(
-                name: "PlaylistTitle",
+                name: "PlaylistId",
                 table: "YoutubeVideoResults",
                 type: "text",
                 nullable: true);
@@ -32,7 +32,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PlaylistTitle",
+                name: "PlaylistId",
                 table: "YoutubeVideoResults");
 
             migrationBuilder.DropColumn(

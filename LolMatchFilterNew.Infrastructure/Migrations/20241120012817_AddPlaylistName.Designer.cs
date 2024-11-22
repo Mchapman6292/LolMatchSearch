@@ -370,7 +370,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("Team2Short")
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("VideoTitle")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
@@ -409,7 +409,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("PlaylistId")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlaylistTitle")
+                    b.Property<string>("PlaylistId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")
@@ -419,7 +419,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("VideoTitle")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");

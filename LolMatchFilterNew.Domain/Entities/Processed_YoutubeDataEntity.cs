@@ -26,7 +26,7 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
 
         public string? PlayListTitle { get; set; }   
 
-        public DateTime PublishedAt { get; set; }
+        public DateTime PublishedAt_utc { get; set; }
 
         public string? Team1Short {  get; set; }  
         public string? Team1Long {  get; set; }

@@ -40,9 +40,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
 
                 foreach (var matchDetail in matchDetails)
                 {
-                    if (matchDetail.DateTimeUTC.Kind != DateTimeKind.Utc)
+                    if (matchDetail.DateTime_utc.Kind != DateTimeKind.Utc)
                     {
-                        matchDetail.DateTimeUTC = DateTime.SpecifyKind(matchDetail.DateTimeUTC, DateTimeKind.Utc);
+                        matchDetail.DateTime_utc = DateTime.SpecifyKind(matchDetail.DateTime_utc, DateTimeKind.Utc);
                     }
                     _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
                     processedCount++;

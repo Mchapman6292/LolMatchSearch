@@ -53,7 +53,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(matchData, "GameId"),
                             GameName = _apiHelper.GetStringValue(matchData, "Gamename"),
                             League = _apiHelper.GetStringValue(matchData, "League"),
-                            DateTimeUTC = _apiHelper.ParseDateTime(matchData, "DateTime UTC"),
+                            DateTime_utc = _apiHelper.ParseDateTime(matchData, "DateTime UTC"),
                             Tournament = _apiHelper.GetStringValue(matchData, "Tournament"),
                             Team1 = _apiHelper.GetStringValue(matchData, "Team1"),
                             Team2 = _apiHelper.GetStringValue(matchData, "Team2"),
@@ -209,7 +209,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         {
                             string originalName = titleData["OriginalName"]?.ToString();
                             string newName = titleData["NewName"]?.ToString();
-                            DateTime date = _apiHelper.ParseDateTime(titleData, "Date");
+                            DateTime date = _apiHelper.ParseDateTime(titleData, "ChangeDate_utc");
 
                             if (
                                 string.IsNullOrWhiteSpace(originalName) ||
@@ -235,7 +235,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
                             var entity = new Processed_TeamRenameEntity
                             {
-                                Date = date,
+                                ChangeDate_utc = date,
                                 OriginalName = originalName.Trim(),
                                 NewName = newName.Trim(),
                                 Verb = verb,

@@ -62,7 +62,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .IsRequired(false);
 
 
-                entity.Property(e => e.PublishedAt)
+                entity.Property(e => e.PublishedAt_utc)
                     .IsRequired();
 
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
@@ -93,7 +93,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             modelBuilder.Entity<Import_ScoreboardGamesEntity>(entity =>
             {
                 entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
-                entity.Property(e => e.DateTimeUTC).IsRequired();
+                entity.Property(e => e.DateTime_utc).IsRequired();
                 entity.Property(e => e.Tournament).IsRequired();
                 entity.Property(e => e.Team1).IsRequired();
                 entity.Property(e => e.Team2).IsRequired();
@@ -137,8 +137,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             modelBuilder.Entity<Processed_TeamRenameEntity>(entity =>
             {
-                entity.HasKey(t => new { t.OriginalName, t.NewName, t.Date });
-                entity.Property(e => e.Date).IsRequired();
+                entity.HasKey(t => new { t.OriginalName, t.NewName, t.ChangeDate_utc });
+                entity.Property(e => e.ChangeDate_utc).IsRequired();
                 entity.Property(e => e.OriginalName).IsRequired();
                 entity.Property(e => e.NewName).IsRequired();
 

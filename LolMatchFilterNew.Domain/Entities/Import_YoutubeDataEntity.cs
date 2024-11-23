@@ -28,7 +28,7 @@ namespace LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities
         public string PlaylistTitle { get; set; }
 
 
-        public DateTime PublishedAt { get; set; }
+        public DateTime PublishedAt_utc { get; set; }
 
         [MaxLength(2083)]  // Max length of a URL
         public string YoutubeResultHyperlink { get; set; }

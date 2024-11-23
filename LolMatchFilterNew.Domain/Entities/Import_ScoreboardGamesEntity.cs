@@ -34,7 +34,7 @@ namespace LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities
 
         [Required]
         [Column(Order = 3)]
-        public DateTime DateTimeUTC { get; set; } // ScoreboardPlayers
+        public DateTime DateTime_utc { get; set; } // ScoreboardPlayers
 
         [Required]
         [Column(Order = 4)]

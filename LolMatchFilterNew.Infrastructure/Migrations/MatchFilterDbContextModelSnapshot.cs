@@ -73,7 +73,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(0);
 
-                    b.Property<DateTime>("DateTimeUTC")
+                    b.Property<DateTime>("DateTime_utc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnOrder(3);
 
@@ -250,7 +250,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("PlaylistTitle");
 
-                    b.Property<DateTime>("PublishedAt")
+                    b.Property<DateTime>("PublishedAt_utc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ThumbnailUrl")
@@ -349,7 +349,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(1);
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("ChangeDate_utc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnOrder(2);
 
@@ -362,7 +362,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("Verb")
                         .HasColumnType("text");
 
-                    b.HasKey("OriginalName", "NewName", "Date");
+                    b.HasKey("OriginalName", "NewName", "ChangeDate_utc");
 
                     b.ToTable("TeamRenames");
                 });
@@ -405,7 +405,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("PlayListTitle")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("PublishedAt")
+                    b.Property<DateTime>("PublishedAt_utc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Season")

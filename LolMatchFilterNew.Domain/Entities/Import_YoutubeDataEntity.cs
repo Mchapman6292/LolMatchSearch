@@ -37,9 +37,7 @@ namespace LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities
         public string ThumbnailUrl { get; set; }
         public string LeaguepediaGameIdAndTitle { get; set; }
 
-        [ForeignKey("LeaguepediaGameIdAndTitle")]
-        public virtual Import_ScoreboardGamesEntity? LeaguepediaMatch { get; set; }
-        public virtual Processed_YoutubeDataEntity MatchExtract { get; set; }
+
 
 
     }

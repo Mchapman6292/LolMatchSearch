@@ -11,6 +11,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRena
     {
         Task<List<string>> GetCurrentTeamNamesAsync();
         Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync();
-        Task<List<Processed_TeamRenameEntity>> GetAllTeamRenameValuesAsync();
+        Task<List<Import_TeamRenameEntity>> GetAllTeamRenameValuesAsync();
     }
 }

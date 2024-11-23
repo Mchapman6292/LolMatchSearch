@@ -13,13 +13,13 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 {
     public interface ILeaguepediaApiMapper
     {
-        Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaToScoreboardGames(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData);
 
         Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
 
         Task<IEnumerable<Processed_LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<Processed_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData);
 
         Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData);
     }

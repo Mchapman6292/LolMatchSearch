@@ -68,7 +68,7 @@ namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests
 
                 foreach( var actualResult in actualResults ) 
                 {
-                    _testLogger.Info($"CurrentTeamName: {actualResult.CurrentTeamName}, Processed_TeamNameHistory: {actualResult.NameHistory}.");
+                    _testLogger.Info($"CurrentTeamName: {actualResult.CurrentTeamName}, TeamNameHistory: {actualResult.NameHistory}.");
                 }
 
                 // Verify we got exactly one result

@@ -13,7 +13,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "WinTeam",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -22,7 +22,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Tournament",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -31,7 +31,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2Players",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -40,7 +40,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2Picks",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -49,7 +49,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Team2Kills",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -58,7 +58,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -67,7 +67,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1Players",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -76,7 +76,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1Picks",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -85,7 +85,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Team1Kills",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -94,7 +94,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -103,7 +103,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LossTeam",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -112,7 +112,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "League",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -121,7 +121,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "GameName",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -130,7 +130,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DateTime_utc",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTime),
@@ -139,7 +139,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LeaguepediaGameIdAndTitle",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -152,7 +152,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "WinTeam",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -163,7 +163,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Tournament",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -172,7 +172,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2Players",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -183,7 +183,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2Picks",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -194,7 +194,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Team2Kills",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0,
@@ -205,7 +205,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team2",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -214,7 +214,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1Players",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -225,7 +225,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1Picks",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -236,7 +236,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Team1Kills",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0,
@@ -247,7 +247,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Team1",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -256,7 +256,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LossTeam",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -267,7 +267,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "League",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -278,7 +278,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "GameName",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 defaultValue: "",
@@ -289,7 +289,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DateTime_utc",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "timestamp with time zone",
                 nullable: false,
                 oldClrType: typeof(DateTime),
@@ -298,7 +298,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LeaguepediaGameIdAndTitle",
-                table: "Import_ScoreboardGames",
+                table: "LeaguepediaMatchDetails",
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),

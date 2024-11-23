@@ -316,7 +316,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Processed_TeamNameHistory");
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities.Processed_TeamRenameEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities.Import_TeamRenameEntity", b =>
                 {
                     b.Property<string>("OriginalName")
                         .HasColumnType("text")

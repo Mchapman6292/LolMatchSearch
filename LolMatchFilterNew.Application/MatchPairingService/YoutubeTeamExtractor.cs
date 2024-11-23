@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
+﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;

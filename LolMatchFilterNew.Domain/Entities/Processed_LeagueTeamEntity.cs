@@ -18,7 +18,6 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities
 
         public string NameShort { get; set; }
 
-
         public string Region { get; set; }
 
 

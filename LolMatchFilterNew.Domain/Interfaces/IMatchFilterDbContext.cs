@@ -18,14 +18,14 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
     public interface IMatchFilterDbContext
     {
-        DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
-        DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeams { get; set; }
-        DbSet<Processed_ProPlayerEntity> Processed_ProPlayers { get; set; }
-        DbSet<Import_YoutubeDataEntity> Import_YoutubeData { get; set; }
+        DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
+        DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
+        DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
+        DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
 
-        DbSet<Processed_TeamRenameEntity> Processed_TeamRenames { get; set; }
-        DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
-        DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
+        DbSet<Import_TeamRenameEntity> TeamRenames { get; set; }
+        DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

@@ -36,7 +36,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
         }
 
         // This is causing Infinite loop when there are no previous teamNames
-        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<Processed_TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<Import_TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             var historyList = new List<string>();
             string nameToSearch = currentName;
@@ -67,7 +67,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             _appLogger.Info($"Starting {nameof(GetAllPreviousTeamNamesForCurrentTeamName)} with {currentNames.Count} team names");
             _appLogger.Info($"Input team names: {string.Join(", ", currentNames)}");
 
-            IEnumerable<Processed_TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
+            IEnumerable<Import_TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
             _appLogger.Info($"Retrieved {allRenames.Count()} total rename records from database");
 
             var teamHistoryEntities = new List<Processed_TeamNameHistoryEntity>();
@@ -120,7 +120,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                 }
                 _appLogger.Error(
                     $"Total number of teams with multiple history entries found: {resultsWithMorethanOneOriginalName.Count}. " +
-                    $"Processed_LeagueTeams affected: {string.Join(", ", resultsWithMorethanOneOriginalName.Keys)}");
+                    $"Teams affected: {string.Join(", ", resultsWithMorethanOneOriginalName.Keys)}");
             }
         }
 

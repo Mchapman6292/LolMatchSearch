@@ -43,7 +43,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "Processed_LeagueTeams";
+            query["tables"] = "Teams";
             query["fields"] = "Name,Short,Region,RenamedTo";
             query["where"] = $"Region = '{region}'";
             query["limit"] = queryLimit.ToString();
@@ -76,12 +76,12 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "Processed_LeagueTeams=Processed_LeagueTeams,TournamentResults=TR,Tournaments=T";
-            query["join_on"] = "Processed_LeagueTeams.Name=TR.Team,TR.Tournament=T.Name";
-            query["fields"] = "DISTINCT Processed_LeagueTeams.Name, Processed_LeagueTeams.Short";
-            query["where"] = $"T.League='{leagueName}' AND Processed_LeagueTeams.Status='Active'";
-            query["group_by"] = "Processed_LeagueTeams.Name";
-            query["order_by"] = "Processed_LeagueTeams.Name ASC";
+            query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
+            query["join_on"] = "Teams.Name=TR.Team,TR.Tournament=T.Name";
+            query["fields"] = "DISTINCT Teams.Name, Teams.Short";
+            query["where"] = $"T.League='{leagueName}' AND Teams.Status='Active'";
+            query["group_by"] = "Teams.Name";
+            query["order_by"] = "Teams.Name ASC";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
@@ -92,11 +92,11 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "Processed_LeagueTeams=Processed_LeagueTeams,TournamentResults=TR,Tournaments=T";
-            query["join_on"] = "Processed_LeagueTeams.Name=TR.Team,TR.Event=T.Name";
-            query["fields"] = "Processed_LeagueTeams.Name,Processed_LeagueTeams.Short,Processed_LeagueTeams.Region";
+            query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
+            query["join_on"] = "Teams.Name=TR.Team,TR.Event=T.Name";
+            query["fields"] = "Teams.Name,Teams.Short,Teams.Region";
             query["where"] = $"T.League='{leagueName}'";
-            query["group_by"] = "Processed_LeagueTeams.Name,Processed_LeagueTeams.Short,Processed_LeagueTeams.Region";
+            query["group_by"] = "Teams.Name,Teams.Short,Teams.Region";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
@@ -123,8 +123,8 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "Processed_LeagueTeams";
-            query["fields"] = "Processed_LeagueTeams.*";
+            query["tables"] = "Teams";
+            query["fields"] = "Teams.*";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
@@ -136,16 +136,16 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "Processed_LeagueTeams,TeamRedirects";// Need to join to redirects to ensure names/duplicates tracked properly
-            query["join_on"] = "Processed_LeagueTeams.Name=TeamRedirects.AllName"; 
-            query["fields"] = @"Processed_LeagueTeams.Name,Processed_LeagueTeams.OverviewPage,Processed_LeagueTeams.Short,Processed_LeagueTeams.Location,
-                       Processed_LeagueTeams.TeamLocation,Processed_LeagueTeams.Region,Processed_LeagueTeams.OrganizationPage,
-                       Processed_LeagueTeams.Image,Processed_LeagueTeams.Twitter,Processed_LeagueTeams.Youtube,Processed_LeagueTeams.Facebook,
-                       Processed_LeagueTeams.Instagram,Processed_LeagueTeams.Discord,Processed_LeagueTeams.Snapchat,Processed_LeagueTeams.Vk,
-                       Processed_LeagueTeams.Subreddit,Processed_LeagueTeams.Website,Processed_LeagueTeams.RosterPhoto,
-                       Processed_LeagueTeams.IsDisbanded,Processed_LeagueTeams.RenamedTo,Processed_LeagueTeams.IsLowercase,
+            query["tables"] = "Teams,TeamRedirects";// Need to join to redirects to ensure names/duplicates tracked properly
+            query["join_on"] = "Teams.Name=TeamRedirects.AllName"; 
+            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.Short,Teams.Location,
+                       Teams.TeamLocation,Teams.Region,Teams.OrganizationPage,
+                       Teams.Image,Teams.Twitter,Teams.Youtube,Teams.Facebook,
+                       Teams.Instagram,Teams.Discord,Teams.Snapchat,Teams.Vk,
+                       Teams.Subreddit,Teams.Website,Teams.RosterPhoto,
+                       Teams.IsDisbanded,Teams.RenamedTo,Teams.IsLowercase,
                        TeamRedirects.OtherName,TeamRedirects.UniqueLine";
-            query["group_by"] = "Processed_LeagueTeams.Name"; // Group to prevent duplicate team entries
+            query["group_by"] = "Teams.Name"; // Group to prevent duplicate team entries
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
 

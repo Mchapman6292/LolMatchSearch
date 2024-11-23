@@ -27,7 +27,6 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities
         public string RealName { get; set; }
         public string Role { get; set; }
 
-        public virtual ICollection<Import_ScoreboardGamesEntity> Matches { get; set; }
 
 
 

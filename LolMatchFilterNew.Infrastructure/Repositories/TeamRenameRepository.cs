@@ -30,7 +30,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         // Retrieves all current team names by retrieving NewNames which do not appear in OriginalName
         public async Task<List<string>> GetCurrentTeamNamesAsync()
         {
-            var teamRenames = await _matchFilterDbContext.Processed_TeamRenames.ToListAsync();
+            var teamRenames = await _matchFilterDbContext.TeamRenames.ToListAsync();
 
             var originalNames = teamRenames.Select(x => x.OriginalName).ToHashSet();
 
@@ -42,9 +42,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         }
 
         // Retrieves all results from TeamReanmes which has kept the format of the data from Leaguepedia. 
-        public async Task<List<Processed_TeamRenameEntity>> GetAllTeamRenameValuesAsync()
+        public async Task<List<Import_TeamRenameEntity>> GetAllTeamRenameValuesAsync()
         {
-            return await _matchFilterDbContext.Processed_TeamRenames.ToListAsync();
+            return await _matchFilterDbContext.TeamRenames.ToListAsync();
         }
 
 
@@ -52,7 +52,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         public async Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync()
         {
             Dictionary<string, List<string>> teamNameHistory = new();
-            var allTeamRenames = await _matchFilterDbContext.Processed_TeamRenames.ToListAsync();
+            var allTeamRenames = await _matchFilterDbContext.TeamRenames.ToListAsync();
             var currentNames = await GetCurrentTeamNamesAsync();
 
             foreach (var currentName in currentNames)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities
 {
-    public class Processed_TeamRenameEntity
+    public class Import_TeamRenameEntity
     {
         [Key, Column(Order = 0)]
         [Required]
@@ -21,7 +21,7 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities
 
         [Key, Column(Order = 2)]
         [Required]
-        public DateTime ChangeDate_utc { get; set; }
+        public DateTime Date { get; set; }
 
 
         public string? Verb { get; set; }

@@ -33,7 +33,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                return  await _matchFilterDbContext.Processed_TeamNameHistory
+                return  await _matchFilterDbContext.TeamNameHistory
                     .FirstOrDefaultAsync(t => t.CurrentTeamName.ToLower() == teamName.ToLower());
             }
             catch (Exception ex)
@@ -47,7 +47,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                return await _matchFilterDbContext.Processed_TeamNameHistory
+                return await _matchFilterDbContext.TeamNameHistory
                     .OrderBy(t => t.CurrentTeamName)
                     .ToListAsync();
             }
@@ -62,7 +62,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                await _matchFilterDbContext.Processed_TeamNameHistory.AddAsync(teamHistory);
+                await _matchFilterDbContext.TeamNameHistory.AddAsync(teamHistory);
                 var result = await _matchFilterDbContext.SaveChangesAsync();
                 return result > 0;
             }
@@ -80,7 +80,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
                 var existing = await GetByCurrentTeamNameAsync(teamHistory.CurrentTeamName);
                 if (existing == null) return false;
 
-                _matchFilterDbContext.Processed_TeamNameHistory.Update(teamHistory);
+                _matchFilterDbContext.TeamNameHistory.Update(teamHistory);
                 var result = await _matchFilterDbContext.SaveChangesAsync();
                 return result > 0;
             }
@@ -98,7 +98,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
                 var entity = await GetByCurrentTeamNameAsync(teamName);
                 if (entity == null) return false;
 
-                _matchFilterDbContext.Processed_TeamNameHistory.Remove(entity);
+                _matchFilterDbContext.TeamNameHistory.Remove(entity);
                 var result = await _matchFilterDbContext.SaveChangesAsync();
                 return result > 0;
             }
@@ -114,7 +114,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                return await _matchFilterDbContext.Processed_TeamNameHistory
+                return await _matchFilterDbContext.TeamNameHistory
                     .AnyAsync(t => t.CurrentTeamName.ToLower() == teamName.ToLower() ||
                                  t.NameHistory.ToLower().Contains(teamName.ToLower()));
             }
@@ -145,7 +145,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                return await _matchFilterDbContext.Processed_TeamNameHistory
+                return await _matchFilterDbContext.TeamNameHistory
                     .FirstOrDefaultAsync(t => t.NameHistory.ToLower().Contains(previousName.ToLower()));
             }
             catch (Exception ex)
@@ -187,7 +187,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
         {
             try
             {
-                return await _matchFilterDbContext.Processed_TeamNameHistory
+                return await _matchFilterDbContext.TeamNameHistory
                     .Where(t => !string.IsNullOrEmpty(t.NameHistory))
                     .ToListAsync();
             }

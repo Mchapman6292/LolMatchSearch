@@ -1,11 +1,20 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
-using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
-using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Helpers.ApiHelper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
@@ -22,11 +31,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaToScoreboardGames(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaToScoreboardGames)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaDataToEntity)}.");
                 throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>
@@ -178,7 +187,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Processed_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
@@ -188,7 +197,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<Processed_TeamRenameEntity>();
+                var results = new List<Import_TeamRenameEntity>();
                 int processedCount = 0;
                 int skippedCount = 0;
 
@@ -200,7 +209,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         {
                             string originalName = titleData["OriginalName"]?.ToString();
                             string newName = titleData["NewName"]?.ToString();
-                            DateTime date = _apiHelper.ParseDateTime(titleData, "ChangeDate_utc");
+                            DateTime date = _apiHelper.ParseDateTime(titleData, "Date");
 
                             if (
                                 string.IsNullOrWhiteSpace(originalName) ||
@@ -224,9 +233,9 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                 ? titleData["NewsId"]?.ToString()
                                 : null;
 
-                            var entity = new Processed_TeamRenameEntity
+                            var entity = new Import_TeamRenameEntity
                             {
-                                ChangeDate_utc = date,
+                                Date = date,
                                 OriginalName = originalName.Trim(),
                                 NewName = newName.Trim(),
                                 Verb = verb,
@@ -258,7 +267,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
-        // For Processed_LeagueTeams Table in leagupedia
+        // For Teams Table in leagupedia
         public async Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
@@ -280,7 +289,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     {
                         if (teamData["title"] is JObject titleData)
                         {
-
+                            // Try to get name with fallback to OverviewPage
                             string name = _apiHelper.GetStringValue(teamData, "Name");
                             string overviewPage = _apiHelper.GetStringValue(teamData, "OverviewPage");
 
@@ -293,11 +302,13 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                     continue;
                                 }
 
+                                // Use OverviewPage as name, removing any URL characters
                                 name = _apiHelper.NormalizeOverviewPageToName(overviewPage);
                                 fallbackNameCount++;
                                 _appLogger.Info($"Using normalized OverviewPage as Name: '{overviewPage}' -> '{name}'");
                             }
 
+                            // Validate name length
                             if (name.Length > 255)
                             {
                                 _appLogger.Warning($"Name exceeds maximum length (255): '{name}'. Truncating...");

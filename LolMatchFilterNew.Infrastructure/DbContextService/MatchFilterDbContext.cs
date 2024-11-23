@@ -27,15 +27,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         {
         }
 
-        public DbSet<Import_YoutubeDataEntity> Import_YoutubeData { get; set; }
-        public DbSet<Processed_ProPlayerEntity> Processed_ProPlayers { get; set; }
-        public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
-        public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeams { get; set; }
-        public DbSet<Processed_YoutubePlaylistEntity> Processed_YoutubePlaylists { get; set; }
-        public DbSet<Processed_TeamRenameEntity> Processed_TeamRenames { get; set; }
-        public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
-        public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
-        public DbSet<Processed_YoutubeDataEntity> Processed_YoutubeMatchExtracts { get; set; }
+        public DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
+        public DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
+        public DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
+        public DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
+        public DbSet<Processed_YoutubePlaylistEntity> YoutubePlaylists { get; set; }
+        public DbSet<Import_TeamRenameEntity> TeamRenames { get; set; }
+        public DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        public DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
+        public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
 
 
 
@@ -47,83 +47,48 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             {
                 entity.ToTable("Import_YoutubeData");
                 entity.HasKey(e => e.YoutubeVideoId);
-
-                entity.Property(e => e.VideoTitle)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.PlaylistId)
-                 .HasColumnName("PlaylistName")
-                    .IsRequired(false);
-
-
-                entity.Property(e => e.PlaylistTitle)
-                    .HasColumnName("PlaylistTitle")
-                    .IsRequired(false);
-
-
-                entity.Property(e => e.PublishedAt_utc)
-                    .IsRequired();
-
-                entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
-
-                entity.Property(e => e.ThumbnailUrl)
-                   .IsRequired(false)
-                   .HasMaxLength(2083);
-
-
-
-                entity.Property(e => e.LeaguepediaGameIdAndTitle)
-                      .IsRequired(false);
-
-
-                entity.HasOne(e => e.LeaguepediaMatch)
-                      .WithOne(l => l.YoutubeVideo)
-                      .HasForeignKey<Import_YoutubeDataEntity>(
-                          y => y.LeaguepediaGameIdAndTitle)
-                      .IsRequired(false);
-
-                entity.HasOne(e => e.MatchExtract)
-                      .WithOne(m => m.YoutubeVideo)
-                      .HasForeignKey<Processed_YoutubeDataEntity>(m => m.YoutubeVideoId)
-                      .IsRequired()
-                      .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.YoutubeVideoId).HasComment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.").IsRequired();
+                entity.Property(e => e.VideoTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.PlaylistId).HasMaxLength(100);
+                entity.Property(e => e.PlaylistTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.PublishedAt_utc).IsRequired();
+                entity.Property(e => e.YoutubeResultHyperlink).IsRequired().HasMaxLength(2083);
+                entity.Property(e => e.ThumbnailUrl).IsRequired().HasMaxLength(2083);
+                entity.Property(e => e.LeaguepediaGameIdAndTitle).IsRequired().HasMaxLength(255);
             });
 
             modelBuilder.Entity<Import_ScoreboardGamesEntity>(entity =>
             {
+                entity.ToTable("Import_ScoreboardGames");
                 entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
+                entity.Property(e => e.LeaguepediaGameIdAndTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.GameName).HasMaxLength(255);
+                entity.Property(e => e.League).HasMaxLength(100);
                 entity.Property(e => e.DateTime_utc).IsRequired();
-                entity.Property(e => e.Tournament).IsRequired();
-                entity.Property(e => e.Team1).IsRequired();
-                entity.Property(e => e.Team2).IsRequired();
-
-
-                entity.HasMany(m => m.Team1PlayersNav)
-                     .WithMany()
-                     .UsingEntity(j => j.ToTable("MatchTeam1Players"));
-
-                entity.HasMany(m => m.Team2PlayersNav)
-                    .WithMany()
-                    .UsingEntity(j => j.ToTable("MatchTeam2Players"));
-
-                entity.HasMany(m => m.Players)
-                     .WithMany(p => p.Matches)
-                     .UsingEntity(j => j.ToTable("MatchPlayers"));
-
+                entity.Property(e => e.Tournament).HasMaxLength(255);
+                entity.Property(e => e.Team1).HasMaxLength(100);
+                entity.Property(e => e.Team2).HasMaxLength(100);
+                entity.Property(e => e.Team1Players).HasMaxLength(500);
+                entity.Property(e => e.Team2Players).HasMaxLength(500);
+                entity.Property(e => e.Team1Picks).HasMaxLength(255);
+                entity.Property(e => e.Team2Picks).HasMaxLength(255);
+                entity.Property(e => e.WinTeam).HasMaxLength(100);
+                entity.Property(e => e.LossTeam).HasMaxLength(100);
             });
 
 
 
             modelBuilder.Entity<Processed_ProPlayerEntity>(entity =>
             {
+                entity.ToTable("Processed_ProPlayers");
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
-                entity.Property(e => e.InGameName).IsRequired();
-                entity.Property(e => e.PreviousInGameNames);
-                entity.Property(p => p.CurrentTeam).IsRequired(false);
-                entity.HasMany(p => p.Matches)
-                    .WithMany(m => m.Players)
-                    .UsingEntity(j => j.ToTable("MatchPlayers"));
+                entity.Property(e => e.LeaguepediaPlayerAllName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.LeaguepediaPlayerId).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.CurrentTeam).HasMaxLength(100);
+                entity.Property(e => e.InGameName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.PreviousInGameNames).HasMaxLength(500);
+                entity.Property(e => e.RealName).HasMaxLength(255);
+                entity.Property(e => e.Role).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Processed_LeagueTeamEntity>(entity =>
@@ -135,33 +100,75 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             });
 
-            modelBuilder.Entity<Processed_TeamRenameEntity>(entity =>
+            modelBuilder.Entity<Import_TeamRenameEntity>(entity =>
             {
-                entity.HasKey(t => new { t.OriginalName, t.NewName, t.ChangeDate_utc });
-                entity.Property(e => e.ChangeDate_utc).IsRequired();
-                entity.Property(e => e.OriginalName).IsRequired();
-                entity.Property(e => e.NewName).IsRequired();
-
+                entity.ToTable("Import_TeamRenames");
+                entity.HasKey(t => new { t.OriginalName, t.NewName, t.Date });
+                entity.Property(e => e.OriginalName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.NewName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Date).IsRequired();
+                entity.Property(e => e.Verb).HasMaxLength(50);
+                entity.Property(e => e.IsSamePage).HasMaxLength(10);
+                entity.Property(e => e.NewsId).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
             {
+                entity.ToTable("Processed_TeamNameHistory");
                 entity.HasKey(t => t.CurrentTeamName);
+                entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.NameHistory).HasMaxLength(1000);
             });
 
             modelBuilder.Entity<Import_TeamsTableEntity>(entity =>
             {
+                entity.ToTable("Import_TeamsTable");
                 entity.HasKey(t => t.Name);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.OverviewPage).HasMaxLength(2083);
+                entity.Property(e => e.Short).HasMaxLength(50);
+                entity.Property(e => e.Location).HasMaxLength(100);
+                entity.Property(e => e.TeamLocation).HasMaxLength(100);
+                entity.Property(e => e.Region).HasMaxLength(50);
+                entity.Property(e => e.OrganizationPage).HasMaxLength(2083);
+                entity.Property(e => e.Image).HasMaxLength(2083);
+                entity.Property(e => e.Twitter).HasMaxLength(255);
+                entity.Property(e => e.Youtube).HasMaxLength(255);
+                entity.Property(e => e.Facebook).HasMaxLength(255);
+                entity.Property(e => e.Instagram).HasMaxLength(255);
+                entity.Property(e => e.Discord).HasMaxLength(255);
+                entity.Property(e => e.Snapchat).HasMaxLength(255);
+                entity.Property(e => e.Vk).HasMaxLength(255);
+                entity.Property(e => e.Subreddit).HasMaxLength(255);
+                entity.Property(e => e.Website).HasColumnType("text");
+                entity.Property(e => e.RosterPhoto).HasMaxLength(2083);
+                entity.Property(e => e.IsDisbanded);
+                entity.Property(e => e.RenamedTo).HasMaxLength(255);
+                entity.Property(e => e.IsLowercase);
             });
 
             modelBuilder.Entity<Processed_YoutubeDataEntity>(entity =>
             {
+                entity.ToTable("Processed_YoutubeData");
                 entity.HasKey(e => e.YoutubeVideoId);
-                entity.HasOne(e => e.YoutubeVideo)
-                    .WithOne(y => y.MatchExtract)
-                    .HasForeignKey<Processed_YoutubeDataEntity>(e => e.YoutubeVideoId);
+                entity.Property(e => e.YoutubeVideoId).HasComment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.").IsRequired();
+                entity.Property(e => e.VideoTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.PlayListId).HasMaxLength(100);
+                entity.Property(e => e.PlayListTitle).HasMaxLength(255);
+                entity.Property(e => e.PublishedAt_utc).IsRequired();
+                entity.Property(e => e.Team1Short).HasMaxLength(50);
+                entity.Property(e => e.Team1Long).HasMaxLength(100);
+                entity.Property(e => e.Team2Short).HasMaxLength(50);
+                entity.Property(e => e.Team2Long).HasMaxLength(100);
+                entity.Property(e => e.Tournament).HasMaxLength(255);
+                entity.Property(e => e.GameWeekIdentifier).HasMaxLength(10);
+                entity.Property(e => e.GameDayIdentifier).HasMaxLength(10);
+                entity.Property(e => e.Season).HasMaxLength(50);
+                entity.Property(e => e.IsSeries);
+                // GameNumber doesn't need specific configuration as it's a nullable int
             });
         }
+
 
     }
 }

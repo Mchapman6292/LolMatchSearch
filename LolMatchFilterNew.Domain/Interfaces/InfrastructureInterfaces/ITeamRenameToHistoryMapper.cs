@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRena
 {
     public interface ITeamRenameToHistoryMapper
     {
-        Task<List<TeamNameHistoryEntity>> MapTeamRenameToHistoryAsync();
+        Task<List<Processed_TeamNameHistoryEntity>> MapTeamRenameToHistoryAsync();
     }
 }

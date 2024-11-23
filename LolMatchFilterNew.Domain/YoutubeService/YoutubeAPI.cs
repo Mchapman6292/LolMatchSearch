@@ -127,7 +127,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                 throw;
             }
 
-            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to YoutubeVideoEntity objects.");
+            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to Import_YoutubeDataEntity objects.");
             return youtubeVideoResults;
         }
 
@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync("YoutubeVideoEntity", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync("Import_YoutubeDataEntity", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

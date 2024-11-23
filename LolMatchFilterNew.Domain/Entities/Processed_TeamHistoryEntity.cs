@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities
 {
-        public class TeamNameHistoryEntity
+        public class Processed_TeamNameHistoryEntity
         {
         // NEED TO DISTINGUISH BETWEEN ACQUISITIONS/SISTER TEAMS & RENAMES
 

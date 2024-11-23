@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +12,18 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamHist
         public interface ITeamHistoryRepository
         {
 
-            Task<TeamNameHistoryEntity> GetByCurrentTeamNameAsync(string teamName);
-            Task<IEnumerable<TeamNameHistoryEntity>> GetAllTeamHistoriesAsync();
-            Task<bool> AddTeamHistoryAsync(TeamNameHistoryEntity teamHistory);
-            Task<bool> UpdateTeamHistoryAsync(TeamNameHistoryEntity teamHistory);
+            Task<Processed_TeamNameHistoryEntity> GetByCurrentTeamNameAsync(string teamName);
+            Task<IEnumerable<Processed_TeamNameHistoryEntity>> GetAllTeamHistoriesAsync();
+            Task<bool> AddTeamHistoryAsync(Processed_TeamNameHistoryEntity teamHistory);
+            Task<bool> UpdateTeamHistoryAsync(Processed_TeamNameHistoryEntity teamHistory);
             Task<bool> DeleteTeamHistoryAsync(string teamName);
 
-            Task<IEnumerable<TeamNameHistoryEntity>> GetTeamsByRegionAsync(string region);
+            Task<IEnumerable<Processed_TeamNameHistoryEntity>> GetTeamsByRegionAsync(string region);
             Task<bool> TeamExistsAsync(string teamName);
             Task<IEnumerable<string>> GetAllPreviousNamesAsync(string currentTeamName);
-            Task<TeamNameHistoryEntity> GetByPreviousNameAsync(string previousName);
+            Task<Processed_TeamNameHistoryEntity> GetByPreviousNameAsync(string previousName);
             Task<bool> UpdateTeamNameHistoryAsync(string currentTeamName, string newHistoricalName);
-            Task<IEnumerable<TeamNameHistoryEntity>> GetTeamsWithNameChangeHistoryAsync();
+            Task<IEnumerable<Processed_TeamNameHistoryEntity>> GetTeamsWithNameChangeHistoryAsync();
             Task<Dictionary<string, List<string>>> GetAllTeamNameMappingsAsync();
         }
     }

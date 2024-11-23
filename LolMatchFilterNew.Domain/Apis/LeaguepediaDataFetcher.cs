@@ -9,7 +9,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Activity = System.Diagnostics.Activity;
 using Newtonsoft.Json; 
 using System.Text.Json;
-using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using System;
 using Npgsql.PostgresTypes;
 using Microsoft.EntityFrameworkCore;

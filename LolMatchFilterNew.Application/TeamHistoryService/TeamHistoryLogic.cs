@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
 
 
 
@@ -21,22 +21,22 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
     {
         private readonly IAppLogger _appLogger;
         private readonly ITeamRenameRepository _teamRenameRepository;
-        private readonly IGenericRepository<TeamNameHistoryEntity> _teamHistoryEntity;
+        private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _teamHistoryEntity;
 
-        public TeamHistoryLogic(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<TeamNameHistoryEntity> teamHistoryEntity)
+        public TeamHistoryLogic(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryEntity)
         {
             _appLogger = appLogger;
             _teamRenameRepository = teamRenameRepository;
             _teamHistoryEntity = teamHistoryEntity;
         }
 
-        public  List<TeamNameHistoryEntity> GetAllCurrentTeamsWithHistory()
+        public  List<Processed_TeamNameHistoryEntity> GetAllCurrentTeamsWithHistory()
         {
             throw new NotImplementedException();
         }
 
         // This is causing Infinite loop when there are no previous teamNames
-        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<Processed_TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
         {
             var historyList = new List<string>();
             string nameToSearch = currentName;
@@ -62,15 +62,15 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
 
 
 
-        public async Task<List<TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames)
+        public async Task<List<Processed_TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames)
         {
             _appLogger.Info($"Starting {nameof(GetAllPreviousTeamNamesForCurrentTeamName)} with {currentNames.Count} team names");
             _appLogger.Info($"Input team names: {string.Join(", ", currentNames)}");
 
-            IEnumerable<TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
+            IEnumerable<Processed_TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
             _appLogger.Info($"Retrieved {allRenames.Count()} total rename records from database");
 
-            var teamHistoryEntities = new List<TeamNameHistoryEntity>();
+            var teamHistoryEntities = new List<Processed_TeamNameHistoryEntity>();
             var resultsWithMorethanOneOriginalName = new Dictionary<string, List<string>>();
 
             foreach (var currentName in currentNames)
@@ -83,7 +83,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                     ? $"Found {historyList.Count} previous names for {currentName}: {string.Join(", ", historyList)}"
                     : $"No previous names found for {currentName}");
 
-                var teamEntity = new TeamNameHistoryEntity
+                var teamEntity = new Processed_TeamNameHistoryEntity
                 {
                     CurrentTeamName = currentName,
                     NameHistory = historyList.Any() ? string.Join(", ", historyList) : string.Empty,

@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using System;
@@ -20,7 +20,7 @@ namespace LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters
 
         // Used mainly for Testing TeamHistory. 
 
-        public  Dictionary<string, List<string>> FormatTeamHistoryToDict(List<TeamNameHistoryEntity> teamHistories)
+        public  Dictionary<string, List<string>> FormatTeamHistoryToDict(List<Processed_TeamNameHistoryEntity> teamHistories)
         {
             return teamHistories
                 .Where(team => team != null && !string.IsNullOrEmpty(team.CurrentTeamName))
@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters
                 );
         }
 
-        public  Dictionary<string, string> StandardizeDelimiters(List<TeamNameHistoryEntity> teamHistories)
+        public  Dictionary<string, string> StandardizeDelimiters(List<Processed_TeamNameHistoryEntity> teamHistories)
         {
             var formattedDict = FormatTeamHistoryToDict(teamHistories);
 

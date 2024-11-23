@@ -9,15 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
 {
 
 
-    public class TeamHistoryRepository : GenericRepository<TeamNameHistoryEntity>, ITeamHistoryRepository
+    public class TeamHistoryRepository : GenericRepository<Processed_TeamNameHistoryEntity>, ITeamHistoryRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
@@ -29,7 +29,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             _matchFilterDbContext = dbContext;
         }
 
-        public async Task<TeamNameHistoryEntity> GetByCurrentTeamNameAsync(string teamName)
+        public async Task<Processed_TeamNameHistoryEntity> GetByCurrentTeamNameAsync(string teamName)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<IEnumerable<TeamNameHistoryEntity>> GetAllTeamHistoriesAsync()
+        public async Task<IEnumerable<Processed_TeamNameHistoryEntity>> GetAllTeamHistoriesAsync()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<bool> AddTeamHistoryAsync(TeamNameHistoryEntity teamHistory)
+        public async Task<bool> AddTeamHistoryAsync(Processed_TeamNameHistoryEntity teamHistory)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<bool> UpdateTeamHistoryAsync(TeamNameHistoryEntity teamHistory)
+        public async Task<bool> UpdateTeamHistoryAsync(Processed_TeamNameHistoryEntity teamHistory)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<TeamNameHistoryEntity> GetByPreviousNameAsync(string previousName)
+        public async Task<Processed_TeamNameHistoryEntity> GetByPreviousNameAsync(string previousName)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamHistoryRepositories
             }
         }
 
-        public async Task<IEnumerable<TeamNameHistoryEntity>> GetTeamsWithNameChangeHistoryAsync()
+        public async Task<IEnumerable<Processed_TeamNameHistoryEntity>> GetTeamsWithNameChangeHistoryAsync()
         {
             try
             {

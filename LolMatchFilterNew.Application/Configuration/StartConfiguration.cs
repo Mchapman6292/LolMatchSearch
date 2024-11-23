@@ -16,7 +16,7 @@ using LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;
 using LolMatchFilterNew.Infrastructure.Logging.ActivityService;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository;

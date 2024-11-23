@@ -1,17 +1,17 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
 using System.Diagnostics.Contracts;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 
 
-namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
+namespace LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities
 
 {
     // DB table = YoutubeVideoResults
-    public class YoutubeVideoEntity
+    public class Import_YoutubeDataEntity
     {
         [Key]
 
@@ -38,8 +38,8 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities
         public string LeaguepediaGameIdAndTitle { get; set; }
 
         [ForeignKey("LeaguepediaGameIdAndTitle")]
-        public virtual LeaguepediaMatchDetailEntity? LeaguepediaMatch { get; set; }
-        public virtual YoutubeMatchExtractEntity MatchExtract { get; set; }
+        public virtual Import_ScoreboardGamesEntity? LeaguepediaMatch { get; set; }
+        public virtual Processed_YoutubeDataEntity MatchExtract { get; set; }
 
 
     }

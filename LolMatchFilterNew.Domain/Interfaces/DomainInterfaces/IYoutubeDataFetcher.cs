@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetch
 {
     public interface IYoutubeDataFetcher
     {
-        Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromChannel(string channelId, int? maxResults = null);
-        Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null);
+        Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromChannel(string channelId, int? maxResults = null);
+        Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null);
         Task<Dictionary<string, string>> GetChannelPlaylists(string channelId);
         Task<string> GetChannelIdFromInput(string input);
     }

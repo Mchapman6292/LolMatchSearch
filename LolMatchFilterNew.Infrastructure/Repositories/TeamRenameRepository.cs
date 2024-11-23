@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
@@ -42,7 +42,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         }
 
         // Retrieves all results from TeamReanmes which has kept the format of the data from Leaguepedia. 
-        public async Task<List<TeamRenameEntity>> GetAllTeamRenameValuesAsync()
+        public async Task<List<Processed_TeamRenameEntity>> GetAllTeamRenameValuesAsync()
         {
             return await _matchFilterDbContext.TeamRenames.ToListAsync();
         }

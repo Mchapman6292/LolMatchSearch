@@ -14,7 +14,7 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
@@ -39,7 +39,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
 
 
-        public async Task<List<string>> ExtractEndTeamStringForMultiple(List<YoutubeVideoEntity> youtubeVideos)
+        public async Task<List<string>> ExtractEndTeamStringForMultiple(List<Import_YoutubeDataEntity> youtubeVideos)
         {
             List<(string, string)> missingSeperatorResults = new List<(string, string)>();
 
@@ -78,7 +78,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
 
 
 
-        public async Task<string> ExtractEndTeamString(YoutubeVideoEntity youtubeVideo)
+        public async Task<string> ExtractEndTeamString(Import_YoutubeDataEntity youtubeVideo)
         {
             if (youtubeVideo == null)
             {
@@ -106,7 +106,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
         }
 
 
-        public async Task CheckYoutubeTitleForVsTeams(YoutubeVideoEntity youtubeVideoEntity)
+        public async Task CheckYoutubeTitleForVsTeams(Import_YoutubeDataEntity youtubeVideoEntity)
         {
 
         }

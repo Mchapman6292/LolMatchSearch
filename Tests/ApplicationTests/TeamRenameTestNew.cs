@@ -1,5 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
@@ -62,7 +62,7 @@ namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests
                 _testLogger.Info($"Starting test for team: {currentTeamName}");
 
 
-                List<TeamNameHistoryEntity> actualResults =
+                List<Processed_TeamNameHistoryEntity> actualResults =
                     await _teamHistoryLogic.GetAllPreviousTeamNamesForCurrentTeamName(
                         new List<string> { currentTeamName });
 

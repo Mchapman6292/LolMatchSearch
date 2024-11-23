@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.DTOs;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
-using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_YoutubePlaylistEntities;
 using System.Numerics;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
 using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -27,15 +27,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         {
         }
 
-        public DbSet<YoutubeVideoEntity> YoutubeVideoResults { get; set; }
-        public DbSet<ProPlayerEntity> ProPlayers { get; set; }
-        public DbSet<LeaguepediaMatchDetailEntity> LeaguepediaMatchDetails { get; set; }
-        public DbSet<LeagueTeamEntity> Teams { get; set; }
-        public DbSet<YoutubePlaylistEntity> YoutubePlaylists { get; set; }
-        public DbSet<TeamRenameEntity> TeamRenames { get; set; }
-        public DbSet<TeamNameHistoryEntity> TeamNameHistory { get; set; }
-        public DbSet<LpediaTeamEntity> LOLTeams { get; set; }
-        public DbSet<YoutubeMatchExtractEntity> YoutubeMatchExtracts { get; set; }
+        public DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
+        public DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
+        public DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
+        public DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
+        public DbSet<Processed_YoutubePlaylistEntity> YoutubePlaylists { get; set; }
+        public DbSet<Processed_TeamRenameEntity> TeamRenames { get; set; }
+        public DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        public DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
+        public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
 
 
 
@@ -43,7 +43,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<YoutubeVideoEntity>(entity =>
+            modelBuilder.Entity<Import_YoutubeDataEntity>(entity =>
             {
                 entity.ToTable("YoutubeVideoResults");
                 entity.HasKey(e => e.YoutubeVideoId);
@@ -79,18 +79,18 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
                 entity.HasOne(e => e.LeaguepediaMatch)
                       .WithOne(l => l.YoutubeVideo)
-                      .HasForeignKey<YoutubeVideoEntity>(
+                      .HasForeignKey<Import_YoutubeDataEntity>(
                           y => y.LeaguepediaGameIdAndTitle)
                       .IsRequired(false);
 
                 entity.HasOne(e => e.MatchExtract)
                       .WithOne(m => m.YoutubeVideo)
-                      .HasForeignKey<YoutubeMatchExtractEntity>(m => m.YoutubeVideoId)
+                      .HasForeignKey<Processed_YoutubeDataEntity>(m => m.YoutubeVideoId)
                       .IsRequired()
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<LeaguepediaMatchDetailEntity>(entity =>
+            modelBuilder.Entity<Import_ScoreboardGamesEntity>(entity =>
             {
                 entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
                 entity.Property(e => e.DateTimeUTC).IsRequired();
@@ -115,7 +115,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
-            modelBuilder.Entity<ProPlayerEntity>(entity =>
+            modelBuilder.Entity<Processed_ProPlayerEntity>(entity =>
             {
                 entity.HasKey(e => e.LeaguepediaPlayerAllName);
                 entity.Property(e => e.InGameName).IsRequired();
@@ -126,7 +126,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .UsingEntity(j => j.ToTable("MatchPlayers"));
             });
 
-            modelBuilder.Entity<LeagueTeamEntity>(entity =>
+            modelBuilder.Entity<Processed_LeagueTeamEntity>(entity =>
             {
                 entity.HasKey(e => e.TeamName);
                 entity.Property(e => e.NameShort).IsRequired();
@@ -135,7 +135,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             });
 
-            modelBuilder.Entity<TeamRenameEntity>(entity =>
+            modelBuilder.Entity<Processed_TeamRenameEntity>(entity =>
             {
                 entity.HasKey(t => new { t.OriginalName, t.NewName, t.Date });
                 entity.Property(e => e.Date).IsRequired();
@@ -144,22 +144,22 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             });
 
-            modelBuilder.Entity<TeamNameHistoryEntity>(entity =>
+            modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
             {
                 entity.HasKey(t => t.CurrentTeamName);
             });
 
-            modelBuilder.Entity<LpediaTeamEntity>(entity =>
+            modelBuilder.Entity<Import_TeamsTableEntity>(entity =>
             {
                 entity.HasKey(t => t.Name);
             });
 
-            modelBuilder.Entity<YoutubeMatchExtractEntity>(entity =>
+            modelBuilder.Entity<Processed_YoutubeDataEntity>(entity =>
             {
                 entity.HasKey(e => e.YoutubeVideoId);
                 entity.HasOne(e => e.YoutubeVideo)
                     .WithOne(y => y.MatchExtract)
-                    .HasForeignKey<YoutubeMatchExtractEntity>(e => e.YoutubeVideoId);
+                    .HasForeignKey<Processed_YoutubeDataEntity>(e => e.YoutubeVideoId);
             });
         }
 

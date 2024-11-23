@@ -16,7 +16,7 @@ using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using Newtonsoft.Json.Linq;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
 using LolMatchFilterNew.Domain.Helpers.YoutubeIdHelpers;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
@@ -54,11 +54,11 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
         }
 
 
-        public async Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromChannel(string channelId, int? maxResults = null)
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromChannel(string channelId, int? maxResults = null)
         {
             _appLogger.Info($"Starting {nameof(GetVideosFromChannel)}");
             var playlists = await GetChannelPlaylists(channelId);
-            var allVideos = new List<YoutubeVideoEntity>();
+            var allVideos = new List<Import_YoutubeDataEntity>();
 
             foreach (var playlist in playlists)
             {
@@ -77,9 +77,9 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             return allVideos;
         }
 
-        public async Task<IEnumerable<YoutubeVideoEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null)
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null)
         {
-            var videos = new List<YoutubeVideoEntity>();
+            var videos = new List<Import_YoutubeDataEntity>();
             var nextPageToken = "";
             var processedItems = 0;
             try
@@ -101,7 +101,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
                         }
                         if (processedItems % 20 == 0)
                         {
-                            YoutubeVideoEntity mostRecentEntity = videos.LastOrDefault();
+                            Import_YoutubeDataEntity mostRecentEntity = videos.LastOrDefault();
                             _appLogger.Info($"Video {processedItems} - ID: {mostRecentEntity.YoutubeVideoId},"); 
                         }
                     }
@@ -195,9 +195,9 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             }
         }
 
-        private YoutubeVideoEntity MapPlaylistItemToEntity(PlaylistItem item)
+        private Import_YoutubeDataEntity MapPlaylistItemToEntity(PlaylistItem item)
         {
-            return new YoutubeVideoEntity
+            return new Import_YoutubeDataEntity
             {
                 YoutubeVideoId = item.ContentDetails.VideoId,
                 VideoTitle = item.Snippet.Title,

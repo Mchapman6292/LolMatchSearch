@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
 {
-    public class YoutubeMatchExtractEntity
+    public class Processed_YoutubeDataEntity
     {
         [Key]
 
@@ -42,6 +42,6 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
         public int? GameNumber { get; set; }
 
         [ForeignKey("YoutubeVideoId")]
-        public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
+        public virtual Import_YoutubeDataEntity YoutubeVideo { get; set; }
     }
 }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.TeamRenamesEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities
 {
-    public class TeamRenameEntity
+    public class Processed_TeamRenameEntity
     {
         [Key, Column(Order = 0)]
         [Required]

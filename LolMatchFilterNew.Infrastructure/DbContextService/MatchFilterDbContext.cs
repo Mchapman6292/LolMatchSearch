@@ -27,15 +27,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         {
         }
 
-        public DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
-        public DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
-        public DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
-        public DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
-        public DbSet<Processed_YoutubePlaylistEntity> YoutubePlaylists { get; set; }
-        public DbSet<Processed_TeamRenameEntity> TeamRenames { get; set; }
-        public DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
-        public DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
-        public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
+        public DbSet<Import_YoutubeDataEntity> Import_YoutubeData { get; set; }
+        public DbSet<Processed_ProPlayerEntity> Processed_ProPlayers { get; set; }
+        public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
+        public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeams { get; set; }
+        public DbSet<Processed_YoutubePlaylistEntity> Processed_YoutubePlaylists { get; set; }
+        public DbSet<Processed_TeamRenameEntity> Processed_TeamRenames { get; set; }
+        public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
+        public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
+        public DbSet<Processed_YoutubeDataEntity> Processed_YoutubeMatchExtracts { get; set; }
 
 
 
@@ -45,7 +45,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
             modelBuilder.Entity<Import_YoutubeDataEntity>(entity =>
             {
-                entity.ToTable("YoutubeVideoResults");
+                entity.ToTable("Import_YoutubeData");
                 entity.HasKey(e => e.YoutubeVideoId);
 
                 entity.Property(e => e.VideoTitle)

@@ -130,6 +130,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
+
                         _appLogger.Info($"Fetching page with offset {offset}, limit {currentQueryLimit}");
                         _appLogger.Debug($"Generated URL: {urlQuery}");
 

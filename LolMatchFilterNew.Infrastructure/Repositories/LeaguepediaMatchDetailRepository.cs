@@ -44,7 +44,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                     {
                         matchDetail.DateTime_utc = DateTime.SpecifyKind(matchDetail.DateTime_utc, DateTimeKind.Utc);
                     }
-                    _matchFilterDbContext.LeaguepediaMatchDetails.Add(matchDetail);
+                    _matchFilterDbContext.Import_ScoreboardGames.Add(matchDetail);
                     processedCount++;
                     // Used to log progress at regular intervals(every 20% or 500 items)
                     if (processedCount % Math.Max(totalCount / 5, 500) == 0)
@@ -96,13 +96,13 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
         {
             try
             {
-                var allRecords = await _matchFilterDbContext.LeaguepediaMatchDetails.ToListAsync();
+                var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
                 int count = allRecords.Count;
 
-                _matchFilterDbContext.LeaguepediaMatchDetails.RemoveRange(allRecords);
+                _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
                 await _matchFilterDbContext.SaveChangesAsync();
 
-                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
+                _appLogger.Info($"Successfully deleted {count} records from Import_ScoreboardGames.");
                 return count;
             }
             catch (Exception ex)

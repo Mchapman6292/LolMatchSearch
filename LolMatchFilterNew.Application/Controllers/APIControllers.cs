@@ -91,7 +91,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(leagueName, limit);
 
-            IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
+            IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaToScoreboardGames(apiData);
 
             int addedEntries = await _leaguepediaMatchDetailRepository.BulkAddLeaguepediaMatchDetails(leagueEntities);
 
@@ -178,23 +178,18 @@ namespace LolMatchFilterNew.Application.Controllers
         }
 
 
-        public async Task ControllerGetAllCurrentTeamNames()
-        {
-            List<string> renames = await _teamRenameRepository.GetCurrentTeamNamesAsync();
-
-            int total = renames.Count;
-
-            _appLogger.Info($"Number of current team names: {total}");
-
-            await _apiHelper.WriteListDictToWordDocAsync( renames );
-        }
 
         public async Task ControllerAddTeamNameHistoryToDatabase()
         {
             List<Processed_TeamNameHistoryEntity> teamRenameEntities = await _teamRenameToHistoryMapper.MapTeamRenameToHistoryAsync();
 
            await _genericTeamHistoryRepository.AddRangeWithTransactionAsync(teamRenameEntities);
+
+
         }
+
+
+
 
         public async Task ControllerAddLpediaTeamsToDatabase()
         {
@@ -204,6 +199,18 @@ namespace LolMatchFilterNew.Application.Controllers
 
             await _genericLpediaTeamRepository.AddRangeWithTransactionAsync(mappedEntites);
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync()
         {

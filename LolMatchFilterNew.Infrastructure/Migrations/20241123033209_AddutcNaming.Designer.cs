@@ -145,7 +145,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 
-                    b.ToTable("LeaguepediaMatchDetails");
+                    b.ToTable("Import_ScoreboardGames");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities.Import_TeamsTableEntity", b =>
@@ -233,7 +233,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("LOLTeams");
+                    b.ToTable("Import_TeamsTable");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>
@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();
 
-                    b.ToTable("YoutubeVideoResults", (string)null);
+                    b.ToTable("Import_YoutubeData", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities.Processed_LeagueTeamEntity", b =>
@@ -293,7 +293,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("TeamName");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Processed_LeagueTeams");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities.Processed_ProPlayerEntity", b =>
@@ -326,7 +326,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaPlayerAllName");
 
-                    b.ToTable("ProPlayers");
+                    b.ToTable("Processed_ProPlayers");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities.Processed_TeamNameHistoryEntity", b =>
@@ -339,7 +339,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("CurrentTeamName");
 
-                    b.ToTable("TeamNameHistory");
+                    b.ToTable("Processed_TeamNameHistory");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities.Processed_TeamRenameEntity", b =>
@@ -367,7 +367,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("OriginalName", "NewName", "ChangeDate_utc");
 
-                    b.ToTable("TeamRenames");
+                    b.ToTable("Processed_TeamRenames");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_YoutubePlaylistEntities.Processed_YoutubePlaylistEntity", b =>
@@ -381,7 +381,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("name");
 
-                    b.ToTable("YoutubePlaylists");
+                    b.ToTable("Processed_YoutubePlaylists");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.Processed_YoutubeDataEntity", b =>
@@ -436,7 +436,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("YoutubeVideoId");
 
-                    b.ToTable("YoutubeMatchExtracts");
+                    b.ToTable("Processed_YoutubeMatchExtracts");
                 });
 
             modelBuilder.Entity("Import_ScoreboardGamesEntityProcessed_ProPlayerEntity", b =>

@@ -20,9 +20,9 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
 
         [Required]
         [MaxLength(255)]
-        public string Title { get; set; }
+        public string VideoTitle { get; set; }
 
-        public string? PlayListName { get; set; }   
+        public string? PlayListId { get; set; }   
 
         public string? PlayListTitle { get; set; }   
 

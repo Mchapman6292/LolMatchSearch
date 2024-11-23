@@ -346,10 +346,10 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<bool>("IsSeries")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PlayListName")
+                    b.Property<string>("PlayListId")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlayListTitle")
+                    b.Property<string>("PlayListId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("PublishedAt")

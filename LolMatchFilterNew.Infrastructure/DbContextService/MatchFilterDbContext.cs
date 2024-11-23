@@ -52,21 +52,26 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.PlaylistId)
+                 .HasColumnName("PlaylistName")
+                    .IsRequired(false);
+
+
+                entity.Property(e => e.PlaylistTitle)
+                    .HasColumnName("PlaylistTitle")
+                    .IsRequired(false);
+
+
                 entity.Property(e => e.PublishedAt)
                     .IsRequired();
+
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired();
 
                 entity.Property(e => e.ThumbnailUrl)
                    .IsRequired(false)
                    .HasMaxLength(2083);
 
-                entity.Property(e => e.PlaylistId)
-                    .IsRequired(false);
 
-
-                entity.Property(e => e.PlaylistTitle)
-                    .IsRequired(false)  
-                    .HasMaxLength(255);  
 
                 entity.Property(e => e.LeaguepediaGameIdAndTitle)
                       .IsRequired(false);

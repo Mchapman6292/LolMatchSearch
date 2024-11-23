@@ -5,24 +5,24 @@
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPlaylistName : Migration
+    public partial class UpdateYoutubeColumns : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "PlayListTitile",
-                table: "YoutubeMatchExtracts",
-                newName: "PlayListTitle");
+                name: "PlaylistId",
+                table: "YoutubeVideoResults",
+                newName: "PlaylistName");
 
             migrationBuilder.AddColumn<string>(
-                name: "PlaylistId",
+                name: "PlaylistTitle",
                 table: "YoutubeVideoResults",
                 type: "text",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "PlayListId",
+                name: "PlayListTitle",
                 table: "YoutubeMatchExtracts",
                 type: "text",
                 nullable: true);
@@ -32,17 +32,17 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PlaylistId",
+                name: "PlaylistTitle",
                 table: "YoutubeVideoResults");
 
             migrationBuilder.DropColumn(
-                name: "PlayListId",
+                name: "PlayListTitle",
                 table: "YoutubeMatchExtracts");
 
             migrationBuilder.RenameColumn(
-                name: "PlayListTitle",
-                table: "YoutubeMatchExtracts",
-                newName: "PlayListTitile");
+                name: "PlaylistName",
+                table: "YoutubeVideoResults",
+                newName: "PlaylistId");
         }
     }
 }

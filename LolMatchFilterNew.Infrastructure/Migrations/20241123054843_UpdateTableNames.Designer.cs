@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241123031507_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241123054843_UpdateTableNames")]
+    partial class UpdateTableNames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,75 +73,52 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
                 {
                     b.Property<string>("LeaguepediaGameIdAndTitle")
-                        .HasColumnType("text")
-                        .HasColumnOrder(0);
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateTime_utc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(3);
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GameName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(1);
+                        .HasColumnType("text");
 
                     b.Property<string>("League")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(2);
+                        .HasColumnType("text");
 
                     b.Property<string>("LossTeam")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(12);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team1")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(5);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Team1Kills")
-                        .HasColumnType("integer")
-                        .HasColumnOrder(13);
+                    b.Property<int?>("Team1Kills")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Team1Picks")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(9);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team1Players")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(7);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team2")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(6);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Team2Kills")
-                        .HasColumnType("integer")
-                        .HasColumnOrder(14);
+                    b.Property<int?>("Team2Kills")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Team2Picks")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(10);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team2Players")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(8);
+                        .HasColumnType("text");
 
                     b.Property<string>("Tournament")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(4);
+                        .HasColumnType("text");
 
                     b.Property<string>("WinTeam")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(11);
+                        .HasColumnType("text");
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 
@@ -506,8 +483,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
                 {
-                    b.Navigation("YoutubeVideo")
-                        .IsRequired();
+                    b.Navigation("YoutubeVideo");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>

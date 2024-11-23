@@ -70,79 +70,56 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
                 {
                     b.Property<string>("LeaguepediaGameIdAndTitle")
-                        .HasColumnType("text")
-                        .HasColumnOrder(0);
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("DateTimeUTC")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(3);
+                    b.Property<DateTime>("DateTime_utc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GameName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(1);
+                        .HasColumnType("text");
 
                     b.Property<string>("League")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(2);
+                        .HasColumnType("text");
 
                     b.Property<string>("LossTeam")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(12);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team1")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(5);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Team1Kills")
-                        .HasColumnType("integer")
-                        .HasColumnOrder(13);
+                    b.Property<int?>("Team1Kills")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Team1Picks")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(9);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team1Players")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(7);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team2")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(6);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Team2Kills")
-                        .HasColumnType("integer")
-                        .HasColumnOrder(14);
+                    b.Property<int?>("Team2Kills")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Team2Picks")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(10);
+                        .HasColumnType("text");
 
                     b.Property<string>("Team2Players")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(8);
+                        .HasColumnType("text");
 
                     b.Property<string>("Tournament")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(4);
+                        .HasColumnType("text");
 
                     b.Property<string>("WinTeam")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(11);
+                        .HasColumnType("text");
 
                     b.HasKey("LeaguepediaGameIdAndTitle");
 
-                    b.ToTable("LeaguepediaMatchDetails");
+                    b.ToTable("Import_ScoreboardGames");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities.Import_TeamsTableEntity", b =>
@@ -230,7 +207,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("LOLTeams");
+                    b.ToTable("Import_TeamsTable");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>
@@ -250,7 +227,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("PlaylistTitle");
 
-                    b.Property<DateTime>("PublishedAt")
+                    b.Property<DateTime>("PublishedAt_utc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ThumbnailUrl")
@@ -272,7 +249,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasIndex("LeaguepediaGameIdAndTitle")
                         .IsUnique();
 
-                    b.ToTable("YoutubeVideoResults", (string)null);
+                    b.ToTable("Import_YoutubeData", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities.Processed_LeagueTeamEntity", b =>
@@ -290,7 +267,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("TeamName");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Processed_LeagueTeams");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities.Processed_ProPlayerEntity", b =>
@@ -323,7 +300,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("LeaguepediaPlayerAllName");
 
-                    b.ToTable("ProPlayers");
+                    b.ToTable("Processed_ProPlayers");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities.Processed_TeamNameHistoryEntity", b =>
@@ -336,7 +313,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("CurrentTeamName");
 
-                    b.ToTable("TeamNameHistory");
+                    b.ToTable("Processed_TeamNameHistory");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities.Processed_TeamRenameEntity", b =>
@@ -349,7 +326,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(1);
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("ChangeDate_utc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnOrder(2);
 
@@ -362,9 +339,9 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("Verb")
                         .HasColumnType("text");
 
-                    b.HasKey("OriginalName", "NewName", "Date");
+                    b.HasKey("OriginalName", "NewName", "ChangeDate_utc");
 
-                    b.ToTable("TeamRenames");
+                    b.ToTable("Processed_TeamRenames");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_YoutubePlaylistEntities.Processed_YoutubePlaylistEntity", b =>
@@ -378,7 +355,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("name");
 
-                    b.ToTable("YoutubePlaylists");
+                    b.ToTable("Processed_YoutubePlaylists");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.Processed_YoutubeDataEntity", b =>
@@ -405,7 +382,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("PlayListTitle")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("PublishedAt")
+                    b.Property<DateTime>("PublishedAt_utc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Season")
@@ -433,7 +410,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
                     b.HasKey("YoutubeVideoId");
 
-                    b.ToTable("YoutubeMatchExtracts");
+                    b.ToTable("Processed_YoutubeMatchExtracts");
                 });
 
             modelBuilder.Entity("Import_ScoreboardGamesEntityProcessed_ProPlayerEntity", b =>
@@ -503,8 +480,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
                 {
-                    b.Navigation("YoutubeVideo")
-                        .IsRequired();
+                    b.Navigation("YoutubeVideo");
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>

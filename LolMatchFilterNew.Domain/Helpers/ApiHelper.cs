@@ -319,7 +319,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
         }
 
 
-        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime) //Needed to convert Youtube PublishedAt to DateTimeUTC
+        public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime) //Needed to convert Youtube PublishedAt_utc to DateTime_utc
         {
             if (inputDateTime is DateTime dateTime)
             {

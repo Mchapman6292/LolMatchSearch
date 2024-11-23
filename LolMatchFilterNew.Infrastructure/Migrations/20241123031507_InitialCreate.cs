@@ -12,7 +12,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "LeaguepediaMatchDetails",
+                name: "Import_ScoreboardGames",
                 columns: table => new
                 {
                     LeaguepediaGameIdAndTitle = table.Column<string>(type: "text", nullable: false),
@@ -37,7 +37,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LOLTeams",
+                name: "Import_TeamsTable",
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
@@ -68,7 +68,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProPlayers",
+                name: "Processed_ProPlayers",
                 columns: table => new
                 {
                     LeaguepediaPlayerAllName = table.Column<string>(type: "text", nullable: false),
@@ -85,7 +85,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamNameHistory",
+                name: "Processed_TeamNameHistory",
                 columns: table => new
                 {
                     CurrentTeamName = table.Column<string>(type: "text", nullable: false),
@@ -97,7 +97,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamRenames",
+                name: "Processed_TeamRenames",
                 columns: table => new
                 {
                     OriginalName = table.Column<string>(type: "text", nullable: false),
@@ -113,7 +113,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teams",
+                name: "Processed_LeagueTeams",
                 columns: table => new
                 {
                     TeamName = table.Column<string>(type: "text", nullable: false),
@@ -126,7 +126,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "YoutubePlaylists",
+                name: "Processed_YoutubePlaylists",
                 columns: table => new
                 {
                     name = table.Column<string>(type: "text", nullable: false),
@@ -138,7 +138,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "YoutubeVideoResults",
+                name: "Import_YoutubeData",
                 columns: table => new
                 {
                     YoutubeVideoId = table.Column<string>(type: "text", nullable: false, comment: "Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this."),
@@ -156,7 +156,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_YoutubeVideoResults_LeaguepediaMatchDetails_LeaguepediaGame~",
                         column: x => x.LeaguepediaGameIdAndTitle,
-                        principalTable: "LeaguepediaMatchDetails",
+                        principalTable: "Import_ScoreboardGames",
                         principalColumn: "LeaguepediaGameIdAndTitle");
                 });
 
@@ -173,13 +173,13 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_MatchPlayers_LeaguepediaMatchDetails_MatchesLeaguepediaGame~",
                         column: x => x.MatchesLeaguepediaGameIdAndTitle,
-                        principalTable: "LeaguepediaMatchDetails",
+                        principalTable: "Import_ScoreboardGames",
                         principalColumn: "LeaguepediaGameIdAndTitle",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MatchPlayers_ProPlayers_PlayersLeaguepediaPlayerAllName",
                         column: x => x.PlayersLeaguepediaPlayerAllName,
-                        principalTable: "ProPlayers",
+                        principalTable: "Processed_ProPlayers",
                         principalColumn: "LeaguepediaPlayerAllName",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -197,13 +197,13 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_MatchTeam1Players_LeaguepediaMatchDetails_Import_Scoreboard~",
                         column: x => x.Import_ScoreboardGamesEntityLeaguepediaGameIdAndTitle,
-                        principalTable: "LeaguepediaMatchDetails",
+                        principalTable: "Import_ScoreboardGames",
                         principalColumn: "LeaguepediaGameIdAndTitle",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MatchTeam1Players_ProPlayers_Team1PlayersNavLeaguepediaPlay~",
                         column: x => x.Team1PlayersNavLeaguepediaPlayerAllName,
-                        principalTable: "ProPlayers",
+                        principalTable: "Processed_ProPlayers",
                         principalColumn: "LeaguepediaPlayerAllName",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -221,19 +221,19 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_MatchTeam2Players_LeaguepediaMatchDetails_Import_Scoreboard~",
                         column: x => x.Import_ScoreboardGamesEntity1LeaguepediaGameIdAndTitle,
-                        principalTable: "LeaguepediaMatchDetails",
+                        principalTable: "Import_ScoreboardGames",
                         principalColumn: "LeaguepediaGameIdAndTitle",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MatchTeam2Players_ProPlayers_Team2PlayersNavLeaguepediaPlay~",
                         column: x => x.Team2PlayersNavLeaguepediaPlayerAllName,
-                        principalTable: "ProPlayers",
+                        principalTable: "Processed_ProPlayers",
                         principalColumn: "LeaguepediaPlayerAllName",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "YoutubeMatchExtracts",
+                name: "Processed_YoutubeMatchExtracts",
                 columns: table => new
                 {
                     YoutubeVideoId = table.Column<string>(type: "text", nullable: false, comment: "Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this."),
@@ -258,7 +258,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_YoutubeMatchExtracts_YoutubeVideoResults_YoutubeVideoId",
                         column: x => x.YoutubeVideoId,
-                        principalTable: "YoutubeVideoResults",
+                        principalTable: "Import_YoutubeData",
                         principalColumn: "YoutubeVideoId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -280,7 +280,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_YoutubeVideoResults_LeaguepediaGameIdAndTitle",
-                table: "YoutubeVideoResults",
+                table: "Import_YoutubeData",
                 column: "LeaguepediaGameIdAndTitle",
                 unique: true);
         }
@@ -289,7 +289,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "LOLTeams");
+                name: "Import_TeamsTable");
 
             migrationBuilder.DropTable(
                 name: "MatchPlayers");
@@ -301,28 +301,28 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 name: "MatchTeam2Players");
 
             migrationBuilder.DropTable(
-                name: "TeamNameHistory");
+                name: "Processed_TeamNameHistory");
 
             migrationBuilder.DropTable(
-                name: "TeamRenames");
+                name: "Processed_TeamRenames");
 
             migrationBuilder.DropTable(
-                name: "Teams");
+                name: "Processed_LeagueTeams");
 
             migrationBuilder.DropTable(
-                name: "YoutubeMatchExtracts");
+                name: "Processed_YoutubeMatchExtracts");
 
             migrationBuilder.DropTable(
-                name: "YoutubePlaylists");
+                name: "Processed_YoutubePlaylists");
 
             migrationBuilder.DropTable(
-                name: "ProPlayers");
+                name: "Processed_ProPlayers");
 
             migrationBuilder.DropTable(
-                name: "YoutubeVideoResults");
+                name: "Import_YoutubeData");
 
             migrationBuilder.DropTable(
-                name: "LeaguepediaMatchDetails");
+                name: "Import_ScoreboardGames");
         }
     }
 }

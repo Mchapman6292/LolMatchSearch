@@ -21,7 +21,7 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities
 
         [Key, Column(Order = 2)]
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime ChangeDate_utc { get; set; }
 
 
         public string? Verb { get; set; }

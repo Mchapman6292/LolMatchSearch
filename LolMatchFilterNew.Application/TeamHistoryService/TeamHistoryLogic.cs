@@ -120,7 +120,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                 }
                 _appLogger.Error(
                     $"Total number of teams with multiple history entries found: {resultsWithMorethanOneOriginalName.Count}. " +
-                    $"Teams affected: {string.Join(", ", resultsWithMorethanOneOriginalName.Keys)}");
+                    $"Processed_LeagueTeams affected: {string.Join(", ", resultsWithMorethanOneOriginalName.Keys)}");
             }
         }
 

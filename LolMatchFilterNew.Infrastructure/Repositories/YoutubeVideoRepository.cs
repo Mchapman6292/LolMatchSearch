@@ -62,11 +62,11 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
                 int processedCount = 0;
                 foreach (var videoDetail in newVideos)
                 {
-                    if (videoDetail.PublishedAt.Kind != DateTimeKind.Utc)
+                    if (videoDetail.PublishedAt_utc.Kind != DateTimeKind.Utc)
                     {
-                        videoDetail.PublishedAt = DateTime.SpecifyKind(videoDetail.PublishedAt, DateTimeKind.Utc);
+                        videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc, DateTimeKind.Utc);
                     }
-                    _matchFilterDbContext.YoutubeVideoResults.Add(videoDetail);
+                    _matchFilterDbContext.Import_YoutubeData.Add(videoDetail);
                     processedCount++;
 
                     if (processedCount % Math.Max(newVideos.Count / 5, 500) == 0)
@@ -102,7 +102,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
 
         public async Task<List<string>> GetIdsOfSavedVideos()
         {
-            var existingIds = await _matchFilterDbContext.YoutubeVideoResults
+            var existingIds = await _matchFilterDbContext.Import_YoutubeData
                 .Select(e => e.YoutubeVideoId)
                 .ToListAsync();
 

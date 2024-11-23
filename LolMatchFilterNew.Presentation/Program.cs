@@ -57,7 +57,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.ControllerDeleteAllYoutubeVideoResultsEntries();
+                await APIController.ControllerAddLpediaTeamsToDatabase();
 
 
 

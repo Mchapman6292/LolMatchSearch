@@ -201,7 +201,7 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             {
                 YoutubeVideoId = item.ContentDetails.VideoId,
                 VideoTitle = item.Snippet.Title,
-                PublishedAt = item.Snippet.PublishedAt ?? DateTime.UtcNow,
+                PublishedAt_utc = item.Snippet.PublishedAt ?? DateTime.UtcNow,
                 YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={item.ContentDetails.VideoId}",
                 ThumbnailUrl = item.Snippet.Thumbnails.Default__?.Url
             };

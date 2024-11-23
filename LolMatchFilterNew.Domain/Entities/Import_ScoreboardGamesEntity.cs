@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 
 
-namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
+namespace LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities
 {
     public enum TeamSide
     {
@@ -18,7 +18,7 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         Red
     }
 
-    public class LeaguepediaMatchDetailEntity
+    public class Import_ScoreboardGamesEntity
     {
         // Game Ids are in format: "LEC/2024 Season/Spring Season_Week 2_10_1
         // Primary key for ScoreboardPlayers, ScoreboardGames & ScoreboardTeams
@@ -73,16 +73,16 @@ namespace LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities
         public int Team2Kills { get; set; } // ScoreboardGames
 
         [Column(Order = 15)]
-        public virtual YoutubeVideoEntity YoutubeVideo { get; set; }
+        public virtual Import_YoutubeDataEntity YoutubeVideo { get; set; }
 
         [Column(Order = 16)]
-        public virtual ICollection<ProPlayerEntity> Players { get; set; }
+        public virtual ICollection<Processed_ProPlayerEntity> Players { get; set; }
 
         [Column(Order = 17)]
-        public virtual ICollection<ProPlayerEntity> Team1PlayersNav { get; set; }
+        public virtual ICollection<Processed_ProPlayerEntity> Team1PlayersNav { get; set; }
         
         [Column(Order = 18)]
-        public virtual ICollection<ProPlayerEntity> Team2PlayersNav { get; set; }
+        public virtual ICollection<Processed_ProPlayerEntity> Team2PlayersNav { get; set; }
 
 
 

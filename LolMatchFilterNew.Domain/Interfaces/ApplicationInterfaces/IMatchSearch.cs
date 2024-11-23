@@ -5,13 +5,13 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 
 namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches
 {
     public interface IMatchSearch
     {
-        Task<List<string>> ExtractEndTeamStringForMultiple(List<YoutubeVideoEntity> youtubeVideos);
-        Task<string> ExtractEndTeamString(YoutubeVideoEntity youtubeVideo);
+        Task<List<string>> ExtractEndTeamStringForMultiple(List<Import_YoutubeDataEntity> youtubeVideos);
+        Task<string> ExtractEndTeamString(Import_YoutubeDataEntity youtubeVideo);
     }
 }

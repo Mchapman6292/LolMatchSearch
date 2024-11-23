@@ -127,7 +127,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                 throw;
             }
 
-            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to YoutubeVideoEntity objects.");
+            _appLogger.Info($"Converted {youtubeVideoResults.Count} PlaylistItems to Import_YoutubeDataEntity objects.");
             return youtubeVideoResults;
         }
 
@@ -148,7 +148,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                     try
                     {
                         videoDetails.Add($"Video ID: {item.Snippet.ResourceId.VideoId}");
-                        videoDetails.Add($"Title: {item.Snippet.Title}");
+                        videoDetails.Add($"VideoTitle: {item.Snippet.Title}");
                         videoDetails.Add($"Description: {item.Snippet.Description}");
                         videoDetails.Add($"Published At: {item.Snippet.PublishedAt}");
                         videoDetails.Add($"Thumbnail URL: {item.Snippet.Thumbnails.Default__.Url}");
@@ -237,7 +237,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
                                     videoDetails.Add("DoesMatch found:");
                                     videoDetails.Add($"Video ID: {videoId}");
-                                    videoDetails.Add($"Title: {retrievedTitle}");
+                                    videoDetails.Add($"VideoTitle: {retrievedTitle}");
                                     videoDetails.Add($"Description: {videoItem.Snippet.Description}");
                                     videoDetails.Add($"Published At: {videoItem.Snippet.PublishedAt}");
                                     videoDetails.Add($"Thumbnail URL: {videoItem.Snippet.Thumbnails.Default__.Url}");
@@ -250,8 +250,8 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
                             if (!matchFound)
                             {
-                                _appLogger.Info($"Video did not match criteria. Title: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
-                                videoDetails.Add($"Video did not match criteria. Title: '{retrievedTitle}'");
+                                _appLogger.Info($"Video did not match criteria. VideoTitle: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                                videoDetails.Add($"Video did not match criteria. VideoTitle: '{retrievedTitle}'");
                             }
                         }
                     }
@@ -275,7 +275,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
             }
             finally
             {
-                string filePath = await _apiHelper.WriteToDocxDocumentAsync("YoutubeVideoEntity", videoDetails);
+                string filePath = await _apiHelper.WriteToDocxDocumentAsync("Import_YoutubeDataEntity", videoDetails);
                 _appLogger.Info($"YouTube video data report saved to: {filePath}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                 Console.WriteLine($"YouTube video data report saved to: {filePath}");
             }

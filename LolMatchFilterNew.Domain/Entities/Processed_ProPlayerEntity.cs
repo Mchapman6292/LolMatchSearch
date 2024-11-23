@@ -1,16 +1,16 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LolMatchFilterNew.Domain.Entities.ProPlayerEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities
 {
-    public class ProPlayerEntity
+    public class Processed_ProPlayerEntity
     {
         [Key]
 
@@ -27,7 +27,7 @@ namespace LolMatchFilterNew.Domain.Entities.ProPlayerEntities
         public string RealName { get; set; }
         public string Role { get; set; }
 
-        public virtual ICollection<LeaguepediaMatchDetailEntity> Matches { get; set; }
+        public virtual ICollection<Import_ScoreboardGamesEntity> Matches { get; set; }
 
 
 

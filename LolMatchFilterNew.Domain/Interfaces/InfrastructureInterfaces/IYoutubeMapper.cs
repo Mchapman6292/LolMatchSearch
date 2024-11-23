@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeM
 {
     public interface IYoutubeMapper
     {
-        Task<IEnumerable<YoutubeVideoEntity>> MapYoutubeToEntity(IEnumerable<JObject> videoData);
+        Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntity(IEnumerable<JObject> videoData);
 
-        Task<IEnumerable<YoutubeVideoEntity>> MapYoutubeToEntityTesting(IEnumerable<JObject> videoData, int limit = 2);
+        Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntityTesting(IEnumerable<JObject> videoData, int limit = 2);
     }
 }

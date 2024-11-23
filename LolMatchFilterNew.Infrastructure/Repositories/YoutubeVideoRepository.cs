@@ -1,5 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
@@ -28,7 +28,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
             _matchFilterDbContext = dbContext;
         }
 
-        public async Task<int> BulkaddYoutubeDetails(IEnumerable<YoutubeVideoEntity> youtubeVideoDetails)
+        public async Task<int> BulkaddYoutubeDetails(IEnumerable<Import_YoutubeDataEntity> youtubeVideoDetails)
         {
             var distinctVideos = youtubeVideoDetails
                 .GroupBy(x => x.YoutubeVideoId)
@@ -113,7 +113,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
         public void LogTrackedYoutubeEntities()
         {
             var trackedYoutubeEntities = _matchFilterDbContext.ChangeTracker
-                .Entries<YoutubeVideoEntity>()
+                .Entries<Import_YoutubeDataEntity>()
                 .Select(e => new
                 {
                     Key = e.Property(p => p.YoutubeVideoId).CurrentValue,
@@ -121,7 +121,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
                 }).ToList();
 
             var trackedLeaguepediaEntities = _matchFilterDbContext.ChangeTracker
-                .Entries<LeaguepediaMatchDetailEntity>()
+                .Entries<Import_ScoreboardGamesEntity>()
                 .Select(e => new
                 {
                     Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,

@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryF
 {
     public interface ITeamNameHistoryFormatter
     {
-        Dictionary<string, List<string>> FormatTeamHistoryToDict(List<TeamNameHistoryEntity> teamHistories);
-        Dictionary<string, string> StandardizeDelimiters(List<TeamNameHistoryEntity> teamHistories);
+        Dictionary<string, List<string>> FormatTeamHistoryToDict(List<Processed_TeamNameHistoryEntity> teamHistories);
+        Dictionary<string, string> StandardizeDelimiters(List<Processed_TeamNameHistoryEntity> teamHistories);
     }
 }

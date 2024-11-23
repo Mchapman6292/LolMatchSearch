@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.YoutubePlaylistEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_YoutubePlaylistEntities
 {
-    public class YoutubePlaylistEntity
+    public class Processed_YoutubePlaylistEntity
     {
         [Key]
         public string name { get; set; }

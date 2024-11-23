@@ -1,11 +1,11 @@
 ﻿using Google.Apis.Auth.OAuth2;
-using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -18,14 +18,14 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
     public interface IMatchFilterDbContext
     {
-        DbSet<LeaguepediaMatchDetailEntity> LeaguepediaMatchDetails { get; set; }
-        DbSet<LeagueTeamEntity> Teams { get; set; }
-        DbSet<ProPlayerEntity> ProPlayers { get; set; }
-        DbSet<YoutubeVideoEntity> YoutubeVideoResults { get; set; }
+        DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
+        DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
+        DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
+        DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
 
-        DbSet<TeamRenameEntity> TeamRenames { get; set; }
-        DbSet<TeamNameHistoryEntity> TeamNameHistory { get; set; }
-        DbSet<LpediaTeamEntity> LOLTeams { get; set; }
+        DbSet<Processed_TeamRenameEntity> TeamRenames { get; set; }
+        DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
+        DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

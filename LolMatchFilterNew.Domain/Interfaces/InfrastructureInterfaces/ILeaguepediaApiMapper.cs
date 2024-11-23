@@ -1,7 +1,7 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,14 +13,14 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 {
     public interface ILeaguepediaApiMapper
     {
-        Task<IEnumerable<LeaguepediaMatchDetailEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData);
 
-        Task<IEnumerable<LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
 
-        Task<IEnumerable<LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Processed_LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Processed_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<LpediaTeamEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData);
     }
 }

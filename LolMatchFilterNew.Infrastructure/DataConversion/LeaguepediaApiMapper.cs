@@ -1,5 +1,5 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,10 @@ using Newtonsoft.Json;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Entities.LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.TeamRenamesEntities;
-using LolMatchFilterNew.Domain.Entities.LpediaTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
@@ -31,7 +31,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<LeaguepediaMatchDetailEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
@@ -40,7 +40,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             }
             return await Task.Run(() =>
             {
-                var results = new List<LeaguepediaMatchDetailEntity>();
+                var results = new List<Import_ScoreboardGamesEntity>();
                 int processedCount = 0;
                 foreach (var matchData in leaguepediaData)
                 {
@@ -48,7 +48,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     try
                     {
 
-                        var entity = new LeaguepediaMatchDetailEntity
+                        var entity = new Import_ScoreboardGamesEntity
                         {
                             LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(matchData, "GameId"),
                             GameName = _apiHelper.GetStringValue(matchData, "Gamename"),
@@ -82,7 +82,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             });
         }
 
-        public async Task<IEnumerable<LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
@@ -91,7 +91,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             }
             return await Task.Run(() =>
             {
-                var results = new List<LeagueTeamEntity>();
+                var results = new List<Processed_LeagueTeamEntity>();
                 int processedCount = 0;
                 int skippedCount = 0;
                 foreach (var teamData in leaguepediaData)
@@ -108,7 +108,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             continue;
                         }
 
-                        var entity = new LeagueTeamEntity
+                        var entity = new Processed_LeagueTeamEntity
                         {
                             TeamName = teamName,
                             NameShort = _apiHelper.GetStringValue(teamData, "ShortName"),
@@ -130,7 +130,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
-        public async Task<IEnumerable<LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Processed_LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData)
         {
             if (apiData == null || !apiData.Any())
             {
@@ -140,7 +140,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<LeagueTeamEntity>();
+                var results = new List<Processed_LeagueTeamEntity>();
                 int processedCount = 0;
                 int skippedCount = 0;
 
@@ -159,7 +159,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                 continue;
                             }
 
-                            var entity = new LeagueTeamEntity
+                            var entity = new Processed_LeagueTeamEntity
                             {
                                 TeamName = teamName,
                                 NameShort = _apiHelper.GetStringValue(titleData, "Short"),
@@ -187,7 +187,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Processed_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
@@ -197,7 +197,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<TeamRenameEntity>();
+                var results = new List<Processed_TeamRenameEntity>();
                 int processedCount = 0;
                 int skippedCount = 0;
 
@@ -233,7 +233,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                 ? titleData["NewsId"]?.ToString()
                                 : null;
 
-                            var entity = new TeamRenameEntity
+                            var entity = new Processed_TeamRenameEntity
                             {
                                 Date = date,
                                 OriginalName = originalName.Trim(),
@@ -268,7 +268,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
         // For Teams Table in leagupedia
-        public async Task<IEnumerable<LpediaTeamEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
@@ -278,7 +278,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<LpediaTeamEntity>();
+                var results = new List<Import_TeamsTableEntity>();
                 int processedCount = 0;
                 int skippedCount = 0;
                 int fallbackNameCount = 0;
@@ -315,7 +315,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                 name = name.Substring(0, 255);
                             }
 
-                            var entity = new LpediaTeamEntity
+                            var entity = new Import_TeamsTableEntity
                             {
                                 Name = name,
                                 OverviewPage = overviewPage,

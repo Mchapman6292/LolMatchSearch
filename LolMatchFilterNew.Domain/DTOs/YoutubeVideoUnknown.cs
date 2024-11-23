@@ -8,7 +8,7 @@ using Xceed.Document.NET;
 
 namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults
 {
-    // Needed? Possible older version of YoutubeVideoEntity
+    // Needed? Possible older version of Import_YoutubeDataEntity
     public class YoutubeVideoUnknown
     {
         public string VideoId { get; set; }

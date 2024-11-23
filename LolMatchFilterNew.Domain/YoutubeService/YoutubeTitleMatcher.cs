@@ -56,7 +56,7 @@ namespace LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher
                 }
                 else
                 {
-                    _appLogger.Warning($"Failed to extract team names from valid format. Title: '{youtubeTitle}', TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                    _appLogger.Warning($"Failed to extract team names from valid format. VideoTitle: '{youtubeTitle}', TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
                     return new List<string>();
                 }
             }
@@ -81,7 +81,7 @@ namespace LolMatchFilterNew.Domain.UnUsedYoutubeClass.YoutubeTitleMatcher
 
                 bool isMatch = regex.IsMatch(youtubeTitle);
 
-                _appLogger.Info($"YouTube title format check result: {isMatch}. Title: '{youtubeTitle}', TraceId: {activity.TraceId}.");
+                _appLogger.Info($"YouTube title format check result: {isMatch}. VideoTitle: '{youtubeTitle}', TraceId: {activity.TraceId}.");
 
                 return isMatch;
             }

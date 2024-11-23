@@ -232,6 +232,38 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories
             }
         }
 
+
+        public virtual async Task RemoveAllEntitiesAsync()
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entities = await _dbSet.ToListAsync();
+
+                if (!entities.Any())
+                {
+                    _appLogger.Warning($"No entities found to remove in {nameof(RemoveAllEntitiesAsync)}.");
+                    return;
+                }
+
+                _dbSet.RemoveRange(entities);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                _appLogger.Info($"{entities.Count} entities of type {typeof(T).Name} removed successfully in {nameof(RemoveAllEntitiesAsync)}.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _appLogger.Error($"Error in {nameof(RemoveAllEntitiesAsync)}: {ex.Message}");
+                throw;
+            }
+        }
+
+
+
+
+
+
         public async Task<DateTime> GetEarliestDateTimePublishedAt<TEntity1, TEntity2>()
                 where TEntity1 : class
                 where TEntity2 : class

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
@@ -16,7 +16,7 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
-    public class LeaguepediaMatchDetailRepository : GenericRepository<LeaguepediaMatchDetailEntity>, ILeaguepediaMatchDetailRepository
+    public class LeaguepediaMatchDetailRepository : GenericRepository<Import_ScoreboardGamesEntity>, ILeaguepediaMatchDetailRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
@@ -28,7 +28,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
             _matchFilterDbContext = dbContext;
         }
 
-        public async Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails)
+        public async Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<Import_ScoreboardGamesEntity> matchDetails)
         {
             int totalCount = matchDetails.Count();
             _appLogger.Info($"Starting bulk add of {totalCount} Leaguepedia match details.");
@@ -82,14 +82,14 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
 
         public void LogTrackedLeagueEntities()
         {
-            var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<LeaguepediaMatchDetailEntity>()
+            var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<Import_ScoreboardGamesEntity>()
                 .Select(e => new
                 {
                     Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,
                     State = e.State
                 }).ToList();
 
-            _appLogger.Info($"Number of tracked LeaguepediaMatchDetailEntity: {trackedEntities.Count}");
+            _appLogger.Info($"Number of tracked Import_ScoreboardGamesEntity: {trackedEntities.Count}");
         }
 
         public async Task<int> DeleteAllRecordsAsync()

@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeV
 {
     public interface IYoutubeVideoRepository
     {
-        Task<int> BulkaddYoutubeDetails(IEnumerable<YoutubeVideoEntity> youtubeVideoDetails);
+        Task<int> BulkaddYoutubeDetails(IEnumerable<Import_YoutubeDataEntity> youtubeVideoDetails);
     }
 }

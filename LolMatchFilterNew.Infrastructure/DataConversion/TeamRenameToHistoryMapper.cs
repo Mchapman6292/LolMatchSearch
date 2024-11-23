@@ -1,7 +1,7 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
-using LolMatchFilterNew.Domain.Entities.TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +15,24 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMap
     {
         private readonly IAppLogger _appLogger;
         private readonly ITeamRenameRepository _teamRenameRepository;
-        private readonly IGenericRepository<TeamNameHistoryEntity> _teamHistoryGenericRepository;
+        private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _teamHistoryGenericRepository;
 
 
 
-        public TeamRenameToHistoryMapper(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<TeamNameHistoryEntity> teamHistoryGenericRepository)
+        public TeamRenameToHistoryMapper(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryGenericRepository)
         {
             _appLogger = appLogger;
             _teamRenameRepository = teamRenameRepository;
             _teamHistoryGenericRepository = teamHistoryGenericRepository;
         }
 
-        public async Task<List<TeamNameHistoryEntity>> MapTeamRenameToHistoryAsync()
+        public async Task<List<Processed_TeamNameHistoryEntity>> MapTeamRenameToHistoryAsync()
         {
             try
             {
                 var teamHistories = await _teamRenameRepository.AddOriginalNameToNewNameAsync();
 
-                var historyEntities = teamHistories.Select(kvp => new TeamNameHistoryEntity
+                var historyEntities = teamHistories.Select(kvp => new Processed_TeamNameHistoryEntity
                 {
                     CurrentTeamName = kvp.Key,
 

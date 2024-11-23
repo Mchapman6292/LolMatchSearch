@@ -1,5 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
-using LolMatchFilterNew.Domain.Entities.YoutubeVideoEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
@@ -24,7 +24,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
             _apiHelper = apiHelper;
         }
 
-        public async Task<IEnumerable<YoutubeVideoEntity>> MapYoutubeToEntity(IEnumerable<JObject> videoData)
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntity(IEnumerable<JObject> videoData)
         {
             if (videoData == null || !videoData.Any())
             {
@@ -34,7 +34,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<YoutubeVideoEntity>();
+                var results = new List<Import_YoutubeDataEntity>();
                 int processedCount = 0;
 
                 foreach (var video in videoData)
@@ -42,11 +42,10 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                     processedCount++;
                     try
                     {
-                        var entity = new YoutubeVideoEntity
+                        var entity = new Import_YoutubeDataEntity
                         {
                             YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
-                            Title = _apiHelper.GetStringValue(video, "snippet.title"),
-                            PlaylistName = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
+                            VideoTitle = _apiHelper.GetStringValue(video, "snippet.title"),
                             PublishedAt = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
@@ -67,7 +66,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
             });
         }
 
-        public async Task<IEnumerable<YoutubeVideoEntity>> MapYoutubeToEntityTesting(IEnumerable<JObject> videoData, int limit = 2)
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntityTesting(IEnumerable<JObject> videoData, int limit = 2)
         {
             if (videoData == null || !videoData.Any())
             {
@@ -77,7 +76,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
 
             return await Task.Run(() =>
             {
-                var results = new List<YoutubeVideoEntity>();
+                var results = new List<Import_YoutubeDataEntity>();
                 int processedCount = 0;
                 int successCount = 0;
 
@@ -86,11 +85,10 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                     processedCount++;
                     try
                     {
-                        var entity = new YoutubeVideoEntity
+                        var entity = new Import_YoutubeDataEntity
                         {
                             YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
-                            Title = _apiHelper.GetStringValue(video, "snippet.title"),
-                            PlaylistName = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
+                            VideoTitle = _apiHelper.GetStringValue(video, "snippet.title"),
                             PublishedAt = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),

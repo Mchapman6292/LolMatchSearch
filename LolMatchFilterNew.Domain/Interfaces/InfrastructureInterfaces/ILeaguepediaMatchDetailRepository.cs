@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.LeaguepediaMatchDetailEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 {
     public interface ILeaguepediaMatchDetailRepository
     {
-        Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<LeaguepediaMatchDetailEntity> matchDetails);
+        Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<Import_ScoreboardGamesEntity> matchDetails);
         Task<int> DeleteAllRecordsAsync();
     }
 }

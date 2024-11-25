@@ -57,9 +57,8 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.ControllerAddLpediaTeamsToDatabase();
 
-
+                await APIController.ControllerAddTeamsTableToDatabase();
 
 
 

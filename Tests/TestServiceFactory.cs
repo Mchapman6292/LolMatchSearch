@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
 
                     services.AddSingleton<TestLogger>();
                     services.AddSingleton<IAppLogger, AppLogger>();
-                    services.AddTransient<ITeamRenameRepository, TeamRenameRepository>();
+                    services.AddTransient<ITeamRenameRepository, Import_TeamRenameRepository>();
                     services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
                     services.AddTransient<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
                     services.AddScoped<IMatchFilterDbContext>(provider =>

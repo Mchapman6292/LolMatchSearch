@@ -81,7 +81,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService
         public MatchComparisonResultDTO Build()
         {
             if (!_teamsSet)
-                throw new InvalidOperationException("Processed_LeagueTeams must be set before building the result");
+                throw new InvalidOperationException("Teams must be set before building the result");
 
             if (!_youtubeInfoSet)
                 throw new InvalidOperationException("YouTube information must be set before building the result");

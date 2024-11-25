@@ -14,14 +14,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
+namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories
 {
-    public class YoutubeVideoRepository : GenericRepository<YoutubeVideoRepository>, IYoutubeVideoRepository
+    public class Import_YoutubeDataRepository : GenericRepository<Import_YoutubeDataRepository>, IYoutubeVideoRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
-        public YoutubeVideoRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
+        public Import_YoutubeDataRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
            : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;

@@ -16,23 +16,23 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
 {
-    public class LeaguepediaMatchDetailRepository : GenericRepository<Import_ScoreboardGamesEntity>, ILeaguepediaMatchDetailRepository
+    public class Import_ScoreboardGamesRepository : GenericRepository<Import_ScoreboardGamesEntity>, ILeaguepediaMatchDetailRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
-        public LeaguepediaMatchDetailRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
+        public Import_ScoreboardGamesRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
             : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;
             _matchFilterDbContext = dbContext;
         }
 
-        public async Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<Import_ScoreboardGamesEntity> matchDetails)
+        public async Task<int> BulkAddScoreboardGames(IEnumerable<Import_ScoreboardGamesEntity> matchDetails)
         {
             int totalCount = matchDetails.Count();
             _appLogger.Info($"Starting bulk add of {totalCount} Leaguepedia match details.");
-            LogTrackedLeagueEntities();
+            LogTrackedScoreboardGames();
 
             try
             {
@@ -50,14 +50,14 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                     if (processedCount % Math.Max(totalCount / 5, 500) == 0)
                     {
                         _appLogger.Info($"Processed {processedCount} of {totalCount} entities.");
-                        LogTrackedLeagueEntities();
+                        LogTrackedScoreboardGames();
                     }
                 }
 
                 _appLogger.Info($"Saving changes for {processedCount} entities...");
                 int addedCount = await _matchFilterDbContext.SaveChangesAsync();
                 _appLogger.Info($"Successfully added {addedCount} new matches out of {totalCount} processed.");
-                LogTrackedLeagueEntities();
+                LogTrackedScoreboardGames();
 
                 return addedCount;
             }
@@ -68,19 +68,19 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 {
                     _appLogger.Error($"Inner exception: {ex.InnerException.Message}");
                 }
-                LogTrackedLeagueEntities();
+                LogTrackedScoreboardGames();
                 throw;
             }
             catch (Exception ex)
             {
                 _appLogger.Error($"Unexpected error during bulk add: {ex.Message}");
-                LogTrackedLeagueEntities();
+                LogTrackedScoreboardGames();
                 throw;
             }
         }
 
 
-        public void LogTrackedLeagueEntities()
+        public void LogTrackedScoreboardGames()
         {
             var trackedEntities = _matchFilterDbContext.ChangeTracker.Entries<Import_ScoreboardGamesEntity>()
                 .Select(e => new
@@ -92,7 +92,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
             _appLogger.Info($"Number of tracked Import_ScoreboardGamesEntity: {trackedEntities.Count}");
         }
 
-        public async Task<int> DeleteAllRecordsAsync()
+        // Remove for generic?
+
+        public async Task<int> DeleteAllScoreboardGames()
         {
             try
             {
@@ -102,7 +104,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRe
                 _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
                 await _matchFilterDbContext.SaveChangesAsync();
 
-                _appLogger.Info($"Successfully deleted {count} records from Import_ScoreboardGames.");
+                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
                 return count;
             }
             catch (Exception ex)

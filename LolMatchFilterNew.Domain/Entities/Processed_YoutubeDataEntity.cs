@@ -40,8 +40,5 @@ namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
         public string? Season { get; set; }
         public bool IsSeries { get; set; }  
         public int? GameNumber { get; set; }
-
-        [ForeignKey("YoutubeVideoId")]
-        public virtual Import_YoutubeDataEntity YoutubeVideo { get; set; }
     }
 }

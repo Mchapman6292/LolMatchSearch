@@ -18,6 +18,5 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities
             // For single renames
             public string? NameHistory { get; set; }
 
-
         }
     }

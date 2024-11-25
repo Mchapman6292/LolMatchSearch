@@ -9,7 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 {
     public interface ILeaguepediaMatchDetailRepository
     {
-        Task<int> BulkAddLeaguepediaMatchDetails(IEnumerable<Import_ScoreboardGamesEntity> matchDetails);
-        Task<int> DeleteAllRecordsAsync();
+        Task<int> BulkAddScoreboardGames(IEnumerable<Import_ScoreboardGamesEntity> matchDetails);
+        Task<int> DeleteAllScoreboardGames();
     }
 }

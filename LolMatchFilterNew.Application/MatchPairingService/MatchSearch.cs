@@ -8,7 +8,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaM
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
+using LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs;
 using Xceed.Document.NET;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;

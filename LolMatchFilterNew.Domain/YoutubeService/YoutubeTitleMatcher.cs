@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Google.Apis.YouTube.v3;
 using Activity = System.Diagnostics.Activity;
-using LolMatchFilterNew.Domain.DTOs.YoutubeVideoResults;
 using LolMatchFilterNew.Domain.Entities;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeTitleMatcher;

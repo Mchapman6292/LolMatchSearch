@@ -57,16 +57,6 @@ namespace LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities
  
         public int? Team2Kills { get; set; } // ScoreboardGames
 
-        public virtual Import_YoutubeDataEntity? YoutubeVideo { get; set; }
-
- 
-        public virtual ICollection<Processed_ProPlayerEntity>? Players { get; set; }
-
-
-        public virtual ICollection<Processed_ProPlayerEntity>? Team1PlayersNav { get; set; }
-        
-
-        public virtual ICollection<Processed_ProPlayerEntity>? Team2PlayersNav { get; set; }
 
 
 

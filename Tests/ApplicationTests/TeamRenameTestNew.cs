@@ -1,5 +1,5 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
@@ -68,7 +68,7 @@ namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests
 
                 foreach( var actualResult in actualResults ) 
                 {
-                    _testLogger.Info($"CurrentTeamName: {actualResult.CurrentTeamName}, Processed_TeamNameHistory: {actualResult.NameHistory}.");
+                    _testLogger.Info($"CurrentTeamName: {actualResult.CurrentTeamName}, TeamNameHistory: {actualResult.NameHistory}.");
                 }
 
                 // Verify we got exactly one result

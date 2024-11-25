@@ -11,31 +11,35 @@ using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Domain.Entities.Processed_YoutubePlaylistEntities;
 using System.Numerics;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
 using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
+using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
+
+    // Drop database and add again!!!
     public class MatchFilterDbContext : DbContext, IMatchFilterDbContext
     {
         public MatchFilterDbContext(DbContextOptions<MatchFilterDbContext> options)
             : base(options)
         {
         }
+        // Tables taken directly from Leaguepedia, columns & data match exactly. 
+        public DbSet<Import_YoutubeDataEntity> Import_YoutubeData { get; set; }
+        public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
+        public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
+        public DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
 
-        public DbSet<Import_YoutubeDataEntity> YoutubeVideoResults { get; set; }
-        public DbSet<Processed_ProPlayerEntity> ProPlayers { get; set; }
-        public DbSet<Import_ScoreboardGamesEntity> LeaguepediaMatchDetails { get; set; }
-        public DbSet<Processed_LeagueTeamEntity> Teams { get; set; }
-        public DbSet<Processed_YoutubePlaylistEntity> YoutubePlaylists { get; set; }
-        public DbSet<Import_TeamRenameEntity> TeamRenames { get; set; }
-        public DbSet<Processed_TeamNameHistoryEntity> TeamNameHistory { get; set; }
-        public DbSet<Import_TeamsTableEntity> LOLTeams { get; set; }
+
+        public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
+        public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeam { get; set; }
+        public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
         public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
+
 
 
 
@@ -76,30 +80,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.LossTeam).HasMaxLength(100);
             });
 
-
-
-            modelBuilder.Entity<Processed_ProPlayerEntity>(entity =>
-            {
-                entity.ToTable("Processed_ProPlayers");
-                entity.HasKey(e => e.LeaguepediaPlayerAllName);
-                entity.Property(e => e.LeaguepediaPlayerAllName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.LeaguepediaPlayerId).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.CurrentTeam).HasMaxLength(100);
-                entity.Property(e => e.InGameName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.PreviousInGameNames).HasMaxLength(500);
-                entity.Property(e => e.RealName).HasMaxLength(255);
-                entity.Property(e => e.Role).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<Processed_LeagueTeamEntity>(entity =>
-            {
-                entity.HasKey(e => e.TeamName);
-                entity.Property(e => e.NameShort).IsRequired();
-                entity.Property(e => e.Region).IsRequired();
-
-
-            });
-
             modelBuilder.Entity<Import_TeamRenameEntity>(entity =>
             {
                 entity.ToTable("Import_TeamRenames");
@@ -112,13 +92,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.NewsId).HasMaxLength(100);
             });
 
-            modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
-            {
-                entity.ToTable("Processed_TeamNameHistory");
-                entity.HasKey(t => t.CurrentTeamName);
-                entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.NameHistory).HasMaxLength(1000);
-            });
 
             modelBuilder.Entity<Import_TeamsTableEntity>(entity =>
             {
@@ -147,6 +120,46 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.IsLowercase);
             });
 
+
+
+
+
+
+            modelBuilder.Entity<Processed_ProPlayerEntity>(entity =>
+            {
+                entity.ToTable("Processed_ProPlayers");
+                entity.HasKey(e => e.LeaguepediaPlayerAllName);
+                entity.Property(e => e.LeaguepediaPlayerAllName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.LeaguepediaPlayerId).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.CurrentTeam).HasMaxLength(100);
+                entity.Property(e => e.InGameName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.PreviousInGameNames).HasMaxLength(500);
+                entity.Property(e => e.RealName).HasMaxLength(255);
+                entity.Property(e => e.Role).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Processed_LeagueTeamEntity>(entity =>
+            {
+                entity.ToTable("Processed_LeagueTeamEntity");
+                entity.HasKey(e => e.TeamName);
+                entity.Property(e => e.NameShort).IsRequired();
+                entity.Property(e => e.Region).IsRequired();
+
+
+            });
+
+      
+
+            modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
+            {
+                entity.ToTable("Processed_TeamNameHistory");
+                entity.HasKey(t => t.CurrentTeamName);
+                entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.NameHistory).HasMaxLength(1000);
+            });
+
+         
+
             modelBuilder.Entity<Processed_YoutubeDataEntity>(entity =>
             {
                 entity.ToTable("Processed_YoutubeData");
@@ -168,6 +181,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 // GameNumber doesn't need specific configuration as it's a nullable int
             });
         }
+
+
+
 
 
     }

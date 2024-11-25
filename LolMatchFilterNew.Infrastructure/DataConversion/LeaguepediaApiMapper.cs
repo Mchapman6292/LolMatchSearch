@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers

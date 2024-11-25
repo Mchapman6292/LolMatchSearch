@@ -1,7 +1,7 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

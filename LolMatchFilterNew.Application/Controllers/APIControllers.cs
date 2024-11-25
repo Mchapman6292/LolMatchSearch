@@ -21,7 +21,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaM
 using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using System.Drawing.Printing;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers;
@@ -93,7 +93,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapLeaguepediaDataToEntity(apiData);
 
-            int addedEntries = await _leaguepediaMatchDetailRepository.BulkAddLeaguepediaMatchDetails(leagueEntities);
+            int addedEntries = await _leaguepediaMatchDetailRepository.BulkAddScoreboardGames(leagueEntities);
 
         }
 
@@ -186,7 +186,7 @@ namespace LolMatchFilterNew.Application.Controllers
            await _genericTeamHistoryRepository.AddRangeWithTransactionAsync(teamRenameEntities);
         }
 
-        public async Task ControllerAddLpediaTeamsToDatabase()
+        public async Task ControllerAddTeamsTableToDatabase()
         {
             IEnumerable<JObject> teamEntities = await _leaguepediaDataFetcher.FetchAndExtractMatches();
 

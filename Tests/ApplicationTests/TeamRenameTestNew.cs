@@ -1,5 +1,5 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;

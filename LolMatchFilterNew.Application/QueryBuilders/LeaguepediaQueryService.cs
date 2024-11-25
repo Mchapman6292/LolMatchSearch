@@ -25,7 +25,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP,Tournaments=T";
+            query["tables"] = "ScoreboardGames=SG,Import_ScoreboardPlayers=SP,Tournaments=T";
             query["join_on"] = "SG.GameId=SP.GameId,T.Name=SG.Tournament";
             query["fields"] = "SG.GameId,SG.Gamename, T.League, SG.DateTime_UTC, SG.Tournament, SG.Team1, SG.Team2, " +
                               "SG.Team1Players, SG.Team2Players, SG.Team1Picks, SG.Team2Picks, SG.WinTeam, SG.LossTeam, SG.Team1Kills, SG.Team2Kills";

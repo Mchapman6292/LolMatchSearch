@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

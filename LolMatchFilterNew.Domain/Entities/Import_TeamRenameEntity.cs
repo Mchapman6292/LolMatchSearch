@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.Processed_TeamRenameEntities
+namespace LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities
 {
     public class Import_TeamRenameEntity
     {

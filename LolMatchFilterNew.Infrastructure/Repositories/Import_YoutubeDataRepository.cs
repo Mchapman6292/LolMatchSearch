@@ -14,14 +14,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
+namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories
 {
-    public class YoutubeVideoRepository : GenericRepository<YoutubeVideoRepository>, IYoutubeVideoRepository
+    public class Import_YoutubeDataRepository : GenericRepository<Import_YoutubeDataRepository>, IYoutubeVideoRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
-        public YoutubeVideoRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
+        public Import_YoutubeDataRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
            : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;
@@ -66,7 +66,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
                     {
                         videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc, DateTimeKind.Utc);
                     }
-                    _matchFilterDbContext.YoutubeVideoResults.Add(videoDetail);
+                    _matchFilterDbContext.Import_YoutubeData.Add(videoDetail);
                     processedCount++;
 
                     if (processedCount % Math.Max(newVideos.Count / 5, 500) == 0)
@@ -102,7 +102,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.YoutubeVideoRepository
 
         public async Task<List<string>> GetIdsOfSavedVideos()
         {
-            var existingIds = await _matchFilterDbContext.YoutubeVideoResults
+            var existingIds = await _matchFilterDbContext.Import_YoutubeData
                 .Select(e => e.YoutubeVideoId)
                 .ToListAsync();
 

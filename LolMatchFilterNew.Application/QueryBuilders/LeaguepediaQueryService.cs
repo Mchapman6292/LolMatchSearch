@@ -18,7 +18,16 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         private int MaxResultsPerQuery = 490;
 
 
-        public string BuildQueryStringForPlayersChampsInSeason(string tournamentName, int queryLimit, int offset = 0)
+
+        // LeagueName Metadata : https://lol.fandom.com/wiki/Metadata:Leagues
+
+        // Database currently using main leagues only - LoL EMEA Championship(Current LEC),
+        //                                            - Europe League Championship Series(Old LEC 2013-2018)
+        //                                            - League of Legends Championship Series(LCS America, old)
+        //                                            - LoL Champions Korea(LCK),
+        //                                            
+
+        public string BuildQueryStringScoreBoardGames(string tournamentName, int queryLimit, int offset = 0)
         {
             // Ensure the tournament name is properly escaped/ url encoded.
 
@@ -35,7 +44,6 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
-
         }
 
         public string BuildQueryStringForTeamsInRegion(string region, int queryLimit, int offset = 0)
@@ -69,7 +77,6 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
         public string BuildQueryStringForTeamsInLeague(string leagueName, int queryLimit, int offset = 0)
         {
-            const string BaseUrl = "https://lol.fandom.com/api.php";
 
             leagueName = HttpUtility.UrlEncode(leagueName);
 

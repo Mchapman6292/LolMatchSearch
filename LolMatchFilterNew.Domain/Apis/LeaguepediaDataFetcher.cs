@@ -126,7 +126,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                         : queryLimit;
 
-                        string rawQuery = _leaguepediaQueryService.BuildQueryForAllFieldsInLpediaTeams(currentQueryLimit);
+                        string rawQuery = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(offset);
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
@@ -224,7 +224,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 int remainingResults = maxResults - allMatches.Count;
                 int currentChunkSize = Math.Min(chunkSize, remainingResults);
 
-                string url = _leaguepediaQueryService.BuildQueryStringForPlayersChampsInSeason(tournament, currentChunkSize, offset);
+                string url = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(tournament, currentChunkSize, offset);
                 _appLogger.Info($"[TEST] Fetching Leaguepedia matches from URL: {url}");
 
                 try

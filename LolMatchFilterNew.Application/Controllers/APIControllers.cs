@@ -178,6 +178,11 @@ namespace LolMatchFilterNew.Application.Controllers
         }
 
 
+        public async Task ControllerAddScoreBoardGamesForMainLeagues()
+        {
+            List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea"};
+        }
+
 
         public async Task ControllerAddTeamNameHistoryToDatabase()
         {

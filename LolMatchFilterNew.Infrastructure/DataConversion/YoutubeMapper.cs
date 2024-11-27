@@ -1,5 +1,6 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
-using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
+﻿
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;

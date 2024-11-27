@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities
+namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities
 {
     public class Import_TeamsTableEntity
     {

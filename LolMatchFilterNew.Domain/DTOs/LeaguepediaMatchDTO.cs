@@ -1,10 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
+
 
 namespace LolMatchFilterNew.Domain.DTOs.LeaguepediaMatchDTOs
 {

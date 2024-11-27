@@ -1,14 +1,14 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities
 {
     public class Processed_ProPlayerEntity
     {

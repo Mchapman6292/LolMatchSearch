@@ -14,7 +14,7 @@ using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
-using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
 
 namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch

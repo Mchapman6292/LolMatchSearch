@@ -1,13 +1,9 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+﻿
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
-using System.Diagnostics.Contracts;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
 
 
-namespace LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities
+namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities
 
 {
     // DB table = YoutubeVideoResults

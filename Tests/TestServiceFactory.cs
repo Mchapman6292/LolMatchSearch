@@ -18,7 +18,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Tests.TestLoggers;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 

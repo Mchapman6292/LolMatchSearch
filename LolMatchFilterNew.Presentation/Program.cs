@@ -5,7 +5,6 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
@@ -14,7 +13,6 @@ using LolMatchFilterNew.Domain.YoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
-using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
@@ -27,7 +25,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRe
 // TO DO
 // Get all known Team abbreviations using TeamRedirects?
 // Find method responsible for appending ' to YoutubePlaylistIds.
-//
+// Update Teams to use teamRedirects
 
 
 
@@ -56,6 +54,7 @@ namespace LolMatchFilterNew.Presentation
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<ITeamRenameRepository>();
 
 
+                List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
                 await APIController.ControllerAddTeamsTableToDatabase();

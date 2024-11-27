@@ -1,6 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
@@ -15,6 +13,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogi
 using LolMatchFilterNew.Tests.TestLoggers;
 using LolMatchFilterNew.Tests.TestServiceFactories;
 using System.Collections;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests

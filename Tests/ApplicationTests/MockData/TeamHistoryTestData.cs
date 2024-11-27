@@ -1,10 +1,7 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_Entities;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.MockData.TeamHistoryTestData
 {

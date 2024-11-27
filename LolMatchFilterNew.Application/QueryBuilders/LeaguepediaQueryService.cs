@@ -27,18 +27,16 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         //                                            - LoL Champions Korea(LCK),
         //                                            
 
-        public string BuildQueryStringScoreBoardGames(string tournamentName, int queryLimit, int offset = 0)
+        public string BuildQueryStringScoreBoardGames(int queryLimit, int offset = 0)
         {
-            // Ensure the tournament name is properly escaped/ url encoded.
-
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "ScoreboardGames=SG,Import_ScoreboardPlayers=SP,Tournaments=T";
-            query["join_on"] = "SG.GameId=SP.GameId,T.Name=SG.Tournament";
-            query["fields"] = "SG.GameId,SG.Gamename, T.League, SG.DateTime_UTC, SG.Tournament, SG.Team1, SG.Team2, " +
-                              "SG.Team1Players, SG.Team2Players, SG.Team1Picks, SG.Team2Picks, SG.WinTeam, SG.LossTeam, SG.Team1Kills, SG.Team2Kills";
-            query["where"] = $"T.League = '{tournamentName}'";
+            query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP,Tournaments=T,Players=P,PlayerRedirects=PR";
+            query["join_on"] = "SG.GameId=SP.GameId,T.Name=SG.Tournament,SP.Link=PR.OverviewPage,PR.TargetPage=P.OverviewPage";
+            query["fields"] = "SG.GameId AS LeaguepediaGameIdAndTitle,SG.Gamename AS GameName,T.League,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
+                             "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam,SG.Team1Kills,SG.Team2Kills," +
+                             "P.ID AS PlayerId,P.Role,P.Team AS CurrentTeam,PR.RedirectTitle AS PlayerName";
             query["group_by"] = "SG.GameId";
             query["order_by"] = "SG.DateTime_UTC ASC";
             query["limit"] = queryLimit.ToString();

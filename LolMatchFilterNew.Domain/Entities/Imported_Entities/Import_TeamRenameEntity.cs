@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities
-{
+namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
     public class Import_TeamRenameEntity
     {
         [Key, Column(Order = 0)]
@@ -31,4 +30,4 @@ namespace LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities
 
         public string? NewsId { get; set; }
     }
-}
+

@@ -5,7 +5,6 @@ using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -13,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
 {

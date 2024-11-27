@@ -1,11 +1,9 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+
+
 
 namespace LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters
 {

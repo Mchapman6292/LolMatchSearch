@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.DTOs;
-using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
-using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using System.Numerics;
-using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
-using LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities;
-using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {

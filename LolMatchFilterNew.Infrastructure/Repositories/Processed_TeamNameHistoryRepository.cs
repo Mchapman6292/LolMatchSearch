@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities;
 using Microsoft.EntityFrameworkCore;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories
 {

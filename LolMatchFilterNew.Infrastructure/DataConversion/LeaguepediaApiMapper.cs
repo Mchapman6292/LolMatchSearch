@@ -1,5 +1,4 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using System;
 using System.Collections.Generic;
@@ -11,11 +10,16 @@ using Newtonsoft.Json;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities;
-using LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
     public class LeaguepediaApiMapper : ILeaguepediaApiMapper
@@ -31,11 +35,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapLeaguepediaDataToEntity(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapSGamesJobjectToEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaDataToEntity)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapSGamesJobjectToEntity)}.");
                 throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>

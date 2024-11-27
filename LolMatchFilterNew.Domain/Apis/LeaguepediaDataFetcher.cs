@@ -9,7 +9,6 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Activity = System.Diagnostics.Activity;
 using Newtonsoft.Json; 
 using System.Text.Json;
-using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
 using System;
 using Npgsql.PostgresTypes;
 using Microsoft.EntityFrameworkCore;
@@ -105,7 +104,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
 
 
         // Fetches and accumulates matches from the API, handling pagination until QueryLimit is reached or no more data is available.
-        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(string leagueName = "", int? numberOfPages = null, int queryLimit = 490)
+        public async Task<IEnumerable<JObject>> FetchAndExtractMatches(int? numberOfPages = null, int queryLimit = 490)
         {
             
             var allMatches = new List<JObject>();
@@ -126,7 +125,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                         : queryLimit;
 
-                        string rawQuery = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(offset);
+                        string rawQuery = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(queryLimit, offset);
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
@@ -224,7 +223,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 int remainingResults = maxResults - allMatches.Count;
                 int currentChunkSize = Math.Min(chunkSize, remainingResults);
 
-                string url = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(tournament, currentChunkSize, offset);
+                string url = _leaguepediaQueryService.BuildQueryStringScoreBoardGames(chunkSize, offset);
                 _appLogger.Info($"[TEST] Fetching Leaguepedia matches from URL: {url}");
 
                 try

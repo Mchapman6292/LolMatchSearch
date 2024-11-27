@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
+﻿
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities
+namespace LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities
 {
     public class Processed_YoutubeDataEntity
     {

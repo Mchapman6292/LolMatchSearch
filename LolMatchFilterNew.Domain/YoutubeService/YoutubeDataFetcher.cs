@@ -16,11 +16,12 @@ using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using Newtonsoft.Json.Linq;
-using LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
 using LolMatchFilterNew.Domain.Helpers.YoutubeIdHelpers;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Google;
+using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
 
 namespace LolMatchFilterNew.Domain.YoutubeDataFetcher

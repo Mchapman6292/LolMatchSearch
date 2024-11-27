@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities;
+﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

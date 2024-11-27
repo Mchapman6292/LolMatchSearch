@@ -1,7 +1,7 @@
 ﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +26,10 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
 
 
         private readonly IAppLogger _appLogger;
-        private readonly ILeaguepediaMatchDetailRepository _leaguepediaMatchDetailRepository;
+        private readonly IImport_ScoreboardGamesRepository _leaguepediaMatchDetailRepository;
         private readonly IApiHelper _apiHelper;
 
-        public YoutubeTeamExtractor(IAppLogger appLogger, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper)
+        public YoutubeTeamExtractor(IAppLogger appLogger, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper)
         {
             _appLogger = appLogger;
             _leaguepediaMatchDetailRepository = leaguepediaMatchDetailRepository;

@@ -2,7 +2,7 @@
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntit
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
 {
-    public class Import_TeamRenameRepository : GenericRepository<Import_TeamRenameRepository>, ITeamRenameRepository
+    public class Import_TeamRenameRepository : GenericRepository<Import_TeamRenameRepository>, IImport_TeamRenameRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;

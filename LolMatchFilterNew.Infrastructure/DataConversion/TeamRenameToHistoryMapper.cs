@@ -1,11 +1,10 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 
@@ -14,12 +13,12 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMap
     public class TeamRenameToHistoryMapper : ITeamRenameToHistoryMapper
     {
         private readonly IAppLogger _appLogger;
-        private readonly ITeamRenameRepository _teamRenameRepository;
+        private readonly IImport_TeamRenameRepository _teamRenameRepository;
         private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _teamHistoryGenericRepository;
 
 
 
-        public TeamRenameToHistoryMapper(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryGenericRepository)
+        public TeamRenameToHistoryMapper(IAppLogger appLogger, IImport_TeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryGenericRepository)
         {
             _appLogger = appLogger;
             _teamRenameRepository = teamRenameRepository;

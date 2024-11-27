@@ -1,6 +1,6 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
@@ -14,10 +14,10 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
     public class TeamHistoryLogic : ITeamHistoryLogic
     {
         private readonly IAppLogger _appLogger;
-        private readonly ITeamRenameRepository _teamRenameRepository;
+        private readonly IImport_TeamRenameRepository _teamRenameRepository;
         private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _teamHistoryEntity;
 
-        public TeamHistoryLogic(IAppLogger appLogger, ITeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryEntity)
+        public TeamHistoryLogic(IAppLogger appLogger, IImport_TeamRenameRepository teamRenameRepository, IGenericRepository<Processed_TeamNameHistoryEntity> teamHistoryEntity)
         {
             _appLogger = appLogger;
             _teamRenameRepository = teamRenameRepository;

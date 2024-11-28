@@ -1,9 +1,9 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamHistoryRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistor
 {
 
 
-    public class Processed_TeamNameHistoryRepository : GenericRepository<Processed_TeamNameHistoryEntity>, ITeamHistoryRepository
+    public class Processed_TeamNameHistoryRepository : GenericRepository<Processed_TeamNameHistoryEntity>, IProcessed_TeamNameHistoryRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;

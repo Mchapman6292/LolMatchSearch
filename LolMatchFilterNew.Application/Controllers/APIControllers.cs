@@ -11,10 +11,10 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 
@@ -29,6 +29,10 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamE
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
+using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
+
+
+
 namespace LolMatchFilterNew.Application.Controllers
 
 
@@ -39,7 +43,7 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly ILeaguepediaQueryService _leaguepediaQueryService;
         private readonly ILeaguepediaDataFetcher _leaguepediaDataFetcher;
         private readonly ILeaguepediaApiMapper _leaguepediaApiMapper;
-        private readonly ILeaguepediaMatchDetailRepository _leaguepediaMatchDetailRepository;
+        private readonly IImport_ScoreboardGamesRepository _Import_ScoreboardGamesRepository;
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
         private readonly IYoutubeVideoRepository _youtubeVideoRepository;
 
@@ -53,7 +57,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
 
 
-        private readonly ITeamRenameRepository _teamRenameRepository;
+        private readonly IImport_TeamRenameRepository _importTeamRenameRepository;
 
 
         private readonly IApiHelper _apiHelper;
@@ -61,19 +65,19 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly ITeamHistoryLogic _teamHistoryLogic;
 
 
-        public APIControllers(IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, ILeaguepediaMatchDetailRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<Processed_LeagueTeamEntity> leagueTeamRepository,IGenericRepository<Import_TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameRepository teamRenameRepsitory, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<Processed_TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<Import_TeamsTableEntity> genericLpediaTeamRepository, ITeamHistoryLogic teamHistoryLogic, IGenericRepository<Import_YoutubeDataEntity> genericYoutubeVideoResultsRepository)
+        public APIControllers(IImport_TeamRenameRepository importTeamRenameRepository, IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository, IGenericRepository<Processed_LeagueTeamEntity> leagueTeamRepository,IGenericRepository<Import_TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, IProcessed_TeamNameHistoryRepository teamRenameRepsitory, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<Processed_TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<Import_TeamsTableEntity> genericLpediaTeamRepository, ITeamHistoryLogic teamHistoryLogic, IGenericRepository<Import_YoutubeDataEntity> genericYoutubeVideoResultsRepository)
         {
             _appLogger = appLogger;
             _leaguepediaQueryService = leaguepediaQueryService;
             _leaguepediaDataFetcher = leaguepediaDataFetcher;
             _leaguepediaApiMapper = leaguepediaApiMapper;
-            _leaguepediaMatchDetailRepository = leaguepediaMatchDetailRepository;
+            _Import_ScoreboardGamesRepository = leaguepediaMatchDetailRepository;
             _youtubeDataFetcher = youtubeDataFetcher;
             _youtubeVideoRepository = youtubeVideoRepository;
             _generic_Processed_LeagueTeamRepository = leagueTeamRepository;
             _generic_Import_TeamRenameEntity = genericTeamRenameRepository;
             _apiHelper = apiHelper;
-            _teamRenameRepository = teamRenameRepsitory;
+            _importTeamRenameRepository = importTeamRenameRepository;
             _teamRenameToHistoryMapper = teamRenameToHistoryMapper;
             _generic_Processed_TeamNameHistoryEntity = genericTeamHistoryRepository;
             _generic_Import_TeamsTableEntity = genericLpediaTeamRepository;
@@ -91,7 +95,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapSGamesJobjectToEntity(apiData);
 
-            int addedEntries = await _leaguepediaMatchDetailRepository.BulkAddScoreboardGames(leagueEntities);
+            int addedEntries = await _Import_ScoreboardGamesRepository.BulkAddScoreboardGames(leagueEntities);
 
         }
 
@@ -184,7 +188,7 @@ namespace LolMatchFilterNew.Application.Controllers
             IEnumerable<Import_ScoreboardGamesEntity> MappedSGEntities = await _leaguepediaApiMapper.MapSGamesJobjectToEntity(ExtractedSGames);
 
 
-            await _leaguepediaMatchDetailRepository.BulkAddScoreboardGames(MappedSGEntities);
+            await _Import_ScoreboardGamesRepository.BulkAddScoreboardGames(MappedSGEntities);
 
 
 
@@ -210,7 +214,7 @@ namespace LolMatchFilterNew.Application.Controllers
         public async Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync()
         {
 
-            List<string> teamNames = await _teamRenameRepository.GetCurrentTeamNamesAsync();
+            List<string> teamNames = await _importTeamRenameRepository.GetCurrentTeamNamesAsync();
 
             List<Processed_TeamNameHistoryEntity> teamHistories = await _teamHistoryLogic.GetAllPreviousTeamNamesForCurrentTeamName(teamNames);
 

@@ -6,26 +6,18 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
 using System.Runtime.CompilerServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.LeaguepediaMatchDetailRepository
+namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRepositories
 {
-    public class Import_ScoreboardGamesRepository : GenericRepository<Import_ScoreboardGamesEntity>, ILeaguepediaMatchDetailRepository
+    public class Import_ScoreboardGamesRepository : GenericRepository<Import_ScoreboardGamesEntity>, IImport_ScoreboardGamesRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;

@@ -12,12 +12,12 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.YoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaMatchDetailRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 
 
 
@@ -41,17 +41,17 @@ namespace LolMatchFilterNew.Presentation
             using (var scope = host.Services.CreateScope())
             {
                 var leaguepediaDataFetcher = scope.ServiceProvider.GetRequiredService<ILeaguepediaDataFetcher>();
-                var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
+                var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<IImport_ScoreboardGamesRepository>();
                 var leaguepediaApiMapper = scope.ServiceProvider.GetRequiredService<ILeaguepediaApiMapper>();
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
-                var matchRepository = scope.ServiceProvider.GetRequiredService<ILeaguepediaMatchDetailRepository>();
+                var matchRepository = scope.ServiceProvider.GetRequiredService<IImport_ScoreboardGamesRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
                 var APIController = scope.ServiceProvider.GetRequiredService<IAPIControllers>();
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
-                var teamRenameRepository = scope.ServiceProvider.GetRequiredService<ITeamRenameRepository>();
+                var teamRenameRepository = scope.ServiceProvider.GetRequiredService<Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories.IProcessed_TeamNameHistoryRepository>();
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };

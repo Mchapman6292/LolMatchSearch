@@ -18,6 +18,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamE
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
+using Google.Apis.YouTube.v3.Data;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -34,6 +35,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
         public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
         public DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
+
+        public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
 
 
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
@@ -59,15 +62,18 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.PublishedAt_utc).IsRequired();
                 entity.Property(e => e.YoutubeResultHyperlink).IsRequired().HasMaxLength(2083);
                 entity.Property(e => e.ThumbnailUrl).IsRequired().HasMaxLength(2083);
-                entity.Property(e => e.LeaguepediaGameIdAndTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.GameName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
             });
+
+
 
             modelBuilder.Entity<Import_ScoreboardGamesEntity>(entity =>
             {
                 entity.ToTable("Import_ScoreboardGames");
-                entity.HasKey(e => e.LeaguepediaGameIdAndTitle);
-                entity.Property(e => e.LeaguepediaGameIdAndTitle).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.GameName).HasMaxLength(255);
+                entity.HasKey(e => new { e.GameName, e.GameId });
+                entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.GameName).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.League).HasMaxLength(100);
                 entity.Property(e => e.DateTime_utc).IsRequired();
                 entity.Property(e => e.Tournament).HasMaxLength(255);
@@ -181,7 +187,21 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.IsSeries);
                 // GameNumber doesn't need specific configuration as it's a nullable int
             });
+
+            modelBuilder.Entity<Import_TeamRedirectEntity>(entity =>
+            {
+                entity.ToTable("Import_TeamRedirect");
+                entity.HasKey(e => new { e.PageName, e.AllName });
+                entity.Property(e => e.PageName).HasMaxLength(255);
+                entity.Property(e => e.AllName).HasMaxLength(255);
+                entity.Property(e => e.OtherName).HasMaxLength(255);
+                entity.Property(e => e.UniqueLine).HasMaxLength(255);
+            });
+
+
         }
+
+
 
 
 

@@ -10,12 +10,15 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
 
 namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers
 {
     public interface ILeaguepediaApiMapper
     {
         Task<IEnumerable<Import_ScoreboardGamesEntity>> MapSGamesJobjectToEntity(IEnumerable<JObject> leaguepediaData);
+
+        Task<IEnumerable<Import_TeamRedirectEntity>> MapTeamRedirectsToEntity(IEnumerable<JObject> leaguepediaData);
 
         Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
 

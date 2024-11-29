@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    [Migration("20241125035631_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241127030900_AddTeamRedirects")]
+    partial class AddTeamRedirects
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities.Import_ScoreboardGamesEntity", b =>
                 {
                     b.Property<string>("GameId")
                         .HasMaxLength(255)
@@ -89,7 +89,30 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Import_ScoreboardGames", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_TeamRenameEntities.Import_TeamRenameEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities.Import_TeamRedirectEntity", b =>
+                {
+                    b.Property<string>("PageName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("AllName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("OtherName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("UniqueLine")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("PageName", "AllName");
+
+                    b.ToTable("Import_TeamRedirect", (string)null);
+                });
+
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities.Import_TeamRenameEntity", b =>
                 {
                     b.Property<string>("OriginalName")
                         .HasMaxLength(255)
@@ -122,7 +145,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Import_TeamRenames", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_TeamsTableEntities.Import_TeamsTableEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities.Import_TeamsTableEntity", b =>
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(255)
@@ -210,7 +233,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Import_TeamsTable", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities.Import_YoutubeDataEntity", b =>
                 {
                     b.Property<string>("YoutubeVideoId")
                         .HasColumnType("text")
@@ -253,7 +276,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Import_YoutubeData", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_LeagueTeamEntities.Processed_LeagueTeamEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities.Processed_LeagueTeamEntity", b =>
                 {
                     b.Property<string>("TeamName")
                         .HasColumnType("text");
@@ -271,7 +294,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Processed_LeagueTeamEntity", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_ProPlayerEntities.Processed_ProPlayerEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities.Processed_ProPlayerEntity", b =>
                 {
                     b.Property<string>("LeaguepediaPlayerAllName")
                         .HasMaxLength(255)
@@ -312,7 +335,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Processed_ProPlayers", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_TeamNameHistoryEntities.Processed_TeamNameHistoryEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities.Processed_TeamNameHistoryEntity", b =>
                 {
                     b.Property<string>("CurrentTeamName")
                         .HasMaxLength(255)
@@ -327,7 +350,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("Processed_TeamNameHistory", (string)null);
                 });
 
-            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.YoutubeMatchExtractEntities.Processed_YoutubeDataEntity", b =>
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities.Processed_YoutubeDataEntity", b =>
                 {
                     b.Property<string>("YoutubeVideoId")
                         .HasColumnType("text")

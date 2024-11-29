@@ -29,6 +29,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 
         DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
 
+        DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
+
         DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
         DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
         DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }

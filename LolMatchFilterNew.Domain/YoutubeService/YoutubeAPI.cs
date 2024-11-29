@@ -233,7 +233,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                                 var extractedTeams = await _youtubeTitleMatcher.ExtractTeamNames(activity, retrievedTitle);
                                 if (extractedTeams.Count == 2 && teamNames.All(team => extractedTeams.Contains(team, StringComparer.OrdinalIgnoreCase)))
                                 {
-                                    _appLogger.Info($"DoesMatch found for LeaguepediaGameIdAndTitle: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                                    _appLogger.Info($"DoesMatch found for GameId: {gameId}. Video: '{retrievedTitle}'. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
 
                                     videoDetails.Add("DoesMatch found:");
                                     videoDetails.Add($"Video ID: {videoId}");
@@ -258,8 +258,8 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
                     if (!matchFound)
                     {
-                        _appLogger.Warning($"No matching video found for LeaguepediaGameIdAndTitle: {gameId}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
-                        videoDetails.Add($"No matching video found for LeaguepediaGameIdAndTitle: {gameId}");
+                        _appLogger.Warning($"No matching video found for GameId: {gameId}. TraceId: {activity.TraceId}, ParentId: {activity.ParentId}.");
+                        videoDetails.Add($"No matching video found for GameId: {gameId}");
                     }
                 }
             }

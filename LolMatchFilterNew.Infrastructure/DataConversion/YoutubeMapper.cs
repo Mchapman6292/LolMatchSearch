@@ -32,12 +32,10 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                 _appLogger.Error($"Null or empty data for {nameof(videoData)}");
                 throw new ArgumentNullException(nameof(MapYoutubeToEntity), "Input data cannot be null or empty.");
             }
-
             return await Task.Run(() =>
             {
                 var results = new List<Import_YoutubeDataEntity>();
                 int processedCount = 0;
-
                 foreach (var video in videoData)
                 {
                     processedCount++;
@@ -50,9 +48,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                             PublishedAt_utc = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
-                            LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(video, "leaguepediaGameIdAndTitle") 
+                            GameName = _apiHelper.GetStringValue(video, "snippet.gameName"),
+                            GameId = _apiHelper.GetStringValue(video, "snippet.gameId"),
+                            PlaylistTitle = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
+                            PlaylistId = _apiHelper.GetStringValue(video, "snippet.playlistId")
                         };
-
                         results.Add(entity);
                     }
                     catch (Exception ex)
@@ -61,7 +61,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                         _appLogger.Error($"Raw data: {video}");
                     }
                 }
-
                 _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed.");
                 return results;
             });
@@ -74,13 +73,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                 _appLogger.Error($"Null or empty data for {nameof(videoData)}");
                 throw new ArgumentNullException(nameof(MapYoutubeToEntity), "Input data cannot be null or empty.");
             }
-
             return await Task.Run(() =>
             {
                 var results = new List<Import_YoutubeDataEntity>();
                 int processedCount = 0;
                 int successCount = 0;
-
                 foreach (var video in videoData)
                 {
                     processedCount++;
@@ -93,11 +90,13 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                             PublishedAt_utc = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
-                            LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(video, "leaguepediaGameIdAndTitle")
+                            GameName = _apiHelper.GetStringValue(video, "snippet.gameName"),
+                            GameId = _apiHelper.GetStringValue(video, "snippet.gameId"),
+                            PlaylistTitle = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
+                            PlaylistId = _apiHelper.GetStringValue(video, "snippet.playlistId")
                         };
                         results.Add(entity);
                         successCount++;
-
                         if (successCount >= limit)
                         {
                             _appLogger.Info($"Reached limit of {limit} successfully processed videos. Stopping processing.");
@@ -110,7 +109,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                         _appLogger.Error($"Raw data: {video}");
                     }
                 }
-
                 _appLogger.Info($"Deserialized {successCount} entities out of {processedCount} processed. Limit was set to {limit}.");
                 return results;
             });

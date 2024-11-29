@@ -32,13 +32,25 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP,Tournaments=T,Players=P,PlayerRedirects=PR";
-            query["join_on"] = "SG.GameId=SP.GameId,T.Name=SG.Tournament,SP.Link=PR.OverviewPage,PR.TargetPage=P.OverviewPage";
-            query["fields"] = "SG.GameId AS LeaguepediaGameIdAndTitle,SG.Gamename AS GameName,T.League,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
-                             "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam,SG.Team1Kills,SG.Team2Kills," +
-                             "P.ID AS PlayerId,P.Role,P.Team AS CurrentTeam,PR.RedirectTitle AS PlayerName";
+            query["tables"] = "ScoreboardGames=SG,ScoreboardPlayers=SP,Tournaments=T,Players=P,PlayerRedirects=PR,TeamRedirects=TR";
+            query["join_on"] = "SG.GameId=SP.GameId,T.Name=SG.Tournament,SP.Link=PR.OverviewPage,PR.TargetPage=P.OverviewPage,SG.Team1=TR.AllName OR SG.Team2=TR.AllName";
+            query["fields"] = "SG.GameId AS GameId,SG.Gamename AS GameName,T.League,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
+                             "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam,SG.Team1Kills,SG.Team2Kills";
             query["group_by"] = "SG.GameId";
             query["order_by"] = "SG.DateTime_UTC ASC";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+
+        // Used to get all values from TeamRedirects table, need to alias _pageName due to _ not being valid in cargoquery. 
+        public string BuildQueryStringTeamRedirects(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "TeamRedirects=MSG";
+            query["fields"] = "MSG._pageName=PageName,AllName,OtherName,UniqueLine";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";

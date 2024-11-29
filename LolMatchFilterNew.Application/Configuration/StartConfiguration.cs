@@ -43,7 +43,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogi
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
-using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
+
 
 
 
@@ -58,6 +58,9 @@ using LolMatchFilterNew.Application.Controllers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
+using LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRedirectRepositories;
+using LolMatchFilterNew.Infrastructure.Repositories.Import_TeamRedirectRepositories;
 
 
 
@@ -134,9 +137,12 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeVideoRepository, Import_YoutubeDataRepository>();
                   services.AddTransient<IYoutubeController, YoutubeController>();
                   services.AddTransient<IImport_ScoreboardGamesRepository, Import_ScoreboardGamesRepository>();
-                  services.AddTransient<Import_TeamRenameRepository, Import_TeamRenameRepository>();
+                  services.AddTransient<IImport_TeamRenameRepository, Import_TeamRenameRepository>();
                   services.AddTransient<ITeamRenameToHistoryMapper, TeamRenameToHistoryMapper>();
                   services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
+                  services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
+                  services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
+          
                   services.AddTransient<IMatchServiceController, MatchServiceController>();
         
 

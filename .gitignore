@@ -370,3 +370,6 @@ LolMatchFilterNew.Application/appsettings.json
 
 #Practice accidentally added
 LeetcodeAOC/
+SharedKernel/
+Logging/
+Common/

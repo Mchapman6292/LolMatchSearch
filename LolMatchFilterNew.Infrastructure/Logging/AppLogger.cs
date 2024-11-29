@@ -16,7 +16,7 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
         }
 

@@ -124,7 +124,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataReposi
                 .Entries<Import_ScoreboardGamesEntity>()
                 .Select(e => new
                 {
-                    Key = e.Property(p => p.LeaguepediaGameIdAndTitle).CurrentValue,
+                    Key = e.Property(p => p.GameId).CurrentValue,
                     State = e.State
                 }).ToList();
 

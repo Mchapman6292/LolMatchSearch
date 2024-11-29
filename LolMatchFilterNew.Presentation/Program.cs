@@ -26,6 +26,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamR
 // Get all known Team abbreviations using TeamRedirects?
 // Find method responsible for appending ' to YoutubePlaylistIds.
 // Update Teams to use teamRedirects
+// Need to ensure all Youtube & scoreboardGame mappers & repositories use updated composite key.
 
 
 
@@ -51,13 +52,13 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
-                var teamRenameRepository = scope.ServiceProvider.GetRequiredService<Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories.IProcessed_TeamNameHistoryRepository>();
+                var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
-                await APIController.ControllerAddTeamsTableToDatabase();
+                await APIController.ControllerAddScoreboardGames();
 
 
 

@@ -31,7 +31,8 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeData
 
         [MaxLength(2083)]
         public string ThumbnailUrl { get; set; }
-        public string LeaguepediaGameIdAndTitle { get; set; }
+        public string GameName { get; set; }
+        public string GameId { get; set; }
 
 
 

@@ -54,7 +54,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
                         var entity = new Import_ScoreboardGamesEntity
                         {
-                            LeaguepediaGameIdAndTitle = _apiHelper.GetStringValue(matchData, "GameId"),
+                            GameId = _apiHelper.GetStringValue(matchData, "GameId"),
                             GameName = _apiHelper.GetStringValue(matchData, "Gamename"),
                             League = _apiHelper.GetStringValue(matchData, "League"),
                             DateTime_utc = _apiHelper.ParseDateTime(matchData, "DateTime UTC"),
@@ -85,6 +85,58 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 return results;
             });
         }
+
+
+
+
+        public async Task<IEnumerable<Import_TeamRedirectEntity>> MapTeamRedirectsToEntity(IEnumerable<JObject> TeamRedirectData)
+        {
+            if (TeamRedirectData == null || !TeamRedirectData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapTeamRedirectsToEntity)}.");
+                throw new ArgumentNullException(nameof(TeamRedirectData), "Input data cannot be null or empty.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<Import_TeamRedirectEntity>();
+                int processedCount = 0;
+
+                foreach (var teamData in TeamRedirectData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        var entity = new Import_TeamRedirectEntity
+                        {
+                            PageName = _apiHelper.GetStringValue(teamData, "PageName"),
+                            AllName = _apiHelper.GetStringValue(teamData, "AllName"),
+                            OtherName = _apiHelper.GetStringValue(teamData, "OtherName"),
+                            UniqueLine = _apiHelper.GetStringValue(teamData, "UniqueLine")
+                        };
+                        results.Add(entity);
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team redirect data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} team redirect entities out of {processedCount} processed.");
+                return results;
+            });
+        }
+
+
+
+
+
+
+
+
+
+
 
         public async Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
         {

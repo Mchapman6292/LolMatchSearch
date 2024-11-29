@@ -8,7 +8,13 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 {
     public interface IAPIControllers
     {
+
+        Task DeleteAllTeamRedirects();
         Task FetchAndAddLeaguepediaDataForLeagueName(string league);
+
+        Task ControllerAddScoreboardGames();
+
+        Task ControllerAddTeamRedirects();
 
 
         Task FetchAndAddTeamNamesForLeague(string leagueName);

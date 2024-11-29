@@ -15,10 +15,16 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
     {
         // Game Ids are in format: "LEC/2024 Season/Spring Season_Week 2_10_1
         // Primary key for ScoreboardPlayers, ScoreboardGames & ScoreboardTeams
-        [Key]
-        public string LeaguepediaGameIdAndTitle { get; set; }
 
-        public string? GameName { get; set; } // ScoreboardGames
+
+
+        [Key]
+        public string GameName { get; set; } // ScoreboardGames
+
+        [Key]
+        public string GameId { get; set; }
+
+
 
 
         public string? League { get; set; }

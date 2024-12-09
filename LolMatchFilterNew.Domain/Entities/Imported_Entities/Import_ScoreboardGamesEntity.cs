@@ -24,9 +24,6 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         [Key]
         public string GameId { get; set; }
 
-
-
-
         public string? League { get; set; }
 
 

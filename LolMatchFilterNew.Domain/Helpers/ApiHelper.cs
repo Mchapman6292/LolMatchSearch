@@ -177,7 +177,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
-        public int GetInt32Value(JObject obj, string key)
+        public int? GetInt32Value(JObject obj, string key)
         {
             try
             {
@@ -260,7 +260,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 
 
 
-        public string GetStringValue(JObject obj, string key)
+        public string? GetStringValue(JObject obj, string key)
         {
             JToken targetObj = obj;
             if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
@@ -269,12 +269,12 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
 
             var token = targetObj[key];
-            var result = token?.ToString() ?? string.Empty;
+            var result = token?.ToString() ?? null;
 
             return result;
         }
 
-        public DateTime GetDateTimeFromJObject(JObject obj, string key)
+        public DateTime? GetDateTimeFromJObject(JObject obj, string key)
         {
             try
             {
@@ -332,10 +332,11 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 return dateTimeOffset.UtcDateTime;
             }
 
+
             throw new ArgumentException("Unsupported datetime format");
         }
 
-        public DateTime ParseDateTime(JObject obj, string key)
+        public DateTime? ParseDateTime(JObject obj, string key)
         {
             try
             {
@@ -349,15 +350,16 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 if (token == null)
                 {
                     _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
-                    return DateTime.MinValue.ToUniversalTime();
+                    return null;
                 }
 
                 var rawValue = token.ToString();
                 if (string.IsNullOrEmpty(rawValue))
                 {
                     _appLogger.Warning($"Value for key '{key}' is null or empty.");
-                    return DateTime.MinValue.ToUniversalTime();
+                    return null;
                 }
+
                 if (DateTime.TryParse(rawValue, out DateTime result))
                 {
                     if (result.Kind != DateTimeKind.Utc)
@@ -368,14 +370,14 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 }
                 else
                 {
-                    _appLogger.Warning($"Failed to parse DateTime for key '{key}' with value: '{rawValue}'. Using default value (UTC).");
-                    return DateTime.MinValue.ToUniversalTime();
+                    _appLogger.Warning($"Failed to parse DateTime for key '{key}' with value: '{rawValue}'.");
+                    return null;
                 }
             }
             catch (Exception ex)
             {
                 _appLogger.Error($"Unexpected error while parsing DateTime for key '{key}': {ex.Message}");
-                return DateTime.MinValue.ToUniversalTime();
+                return null;
             }
         }
 

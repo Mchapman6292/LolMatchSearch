@@ -18,9 +18,8 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameE
         [Required]
         public string NewName { get; set; }
 
-        [Key]
-        [Required]
-        public DateTime Date { get; set; }
+
+        public DateTime? Date { get; set; }
 
 
         public string? Verb { get; set; }

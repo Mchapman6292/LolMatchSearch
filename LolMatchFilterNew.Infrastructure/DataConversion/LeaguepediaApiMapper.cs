@@ -54,21 +54,21 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
                         var entity = new Import_ScoreboardGamesEntity
                         {
-                            GameId = _apiHelper.GetStringValue(matchData, "GameId"),
-                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),  // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
-                            League = _apiHelper.GetStringValue(matchData, "League"),
-                            DateTime_utc = _apiHelper.ParseDateTime(matchData, "DateTime UTC"),
-                            Tournament = _apiHelper.GetStringValue(matchData, "Tournament"),
-                            Team1 = _apiHelper.GetStringValue(matchData, "Team1"),
-                            Team2 = _apiHelper.GetStringValue(matchData, "Team2"),
+                            GameId = _apiHelper.GetNullableStringValue(matchData, "GameId"),
+                            GameName = _apiHelper.GetNullableStringValue(matchData, "Gamename"),  // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
+                            League = _apiHelper.GetNullableStringValue(matchData, "League"),
+                            DateTime_utc = _apiHelper.ParseNullableDateTime(matchData, "DateTime UTC"),
+                            Tournament = _apiHelper.GetNullableStringValue(matchData, "Tournament"),
+                            Team1 = _apiHelper.GetNullableStringValue(matchData, "Team1"),
+                            Team2 = _apiHelper.GetNullableStringValue(matchData, "Team2"),
                             Team1Players = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team1Players")),
                             Team2Players = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team2Players")),
                             Team1Picks = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team1Picks")),
                             Team2Picks = string.Join(',', _apiHelper.GetValuesAsList(matchData, "Team2Picks")),
-                            WinTeam = _apiHelper.GetStringValue(matchData, "WinTeam"),
-                            LossTeam = _apiHelper.GetStringValue(matchData, "LossTeam"),
-                            Team1Kills = _apiHelper.GetInt32Value(matchData, "Team1Kills"),
-                            Team2Kills = _apiHelper.GetInt32Value(matchData, "Team2Kills")
+                            WinTeam = _apiHelper.GetNullableStringValue(matchData, "WinTeam"),
+                            LossTeam = _apiHelper.GetNullableStringValue(matchData, "LossTeam"),
+                            Team1Kills = _apiHelper.GetNullableInt32Value(matchData, "Team1Kills"),
+                            Team2Kills = _apiHelper.GetNullableInt32Value(matchData, "Team2Kills")
 
                         };
 
@@ -109,10 +109,10 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     {
                         var entity = new Import_TeamRedirectEntity
                         {
-                            PageName = _apiHelper.GetStringValue(teamData, "PageName"),
-                            AllName = _apiHelper.GetStringValue(teamData, "AllName"),
-                            OtherName = _apiHelper.GetStringValue(teamData, "OtherName"),
-                            UniqueLine = _apiHelper.GetStringValue(teamData, "UniqueLine")
+                            PageName = _apiHelper.GetNullableStringValue(teamData, "PageName"),
+                            AllName = _apiHelper.GetNullableStringValue(teamData, "AllName"),
+                            OtherName = _apiHelper.GetNullableStringValue(teamData, "OtherName"),
+                            UniqueLine = _apiHelper.GetNullableStringValue(teamData, "UniqueLine")
                         };
                         results.Add(entity);
                     }
@@ -155,7 +155,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     processedCount++;
                     try
                     {
-                        string teamName = _apiHelper.GetStringValue(teamData, "TeamName");
+                        string teamName = _apiHelper.GetNullableStringValue(teamData, "TeamName");
 
                         if (string.IsNullOrWhiteSpace(teamName))
                         {
@@ -167,8 +167,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         var entity = new Processed_LeagueTeamEntity
                         {
                             TeamName = teamName,
-                            NameShort = _apiHelper.GetStringValue(teamData, "ShortName"),
-                            Region = _apiHelper.GetStringValue(teamData, "Region")
+                            NameShort = _apiHelper.GetNullableStringValue(teamData, "ShortName"),
+                            Region = _apiHelper.GetNullableStringValue(teamData, "Region")
                         };
                         results.Add(entity);
                     }
@@ -207,7 +207,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     {
                         if (teamData["title"] is JObject titleData)
                         {
-                            string teamName = _apiHelper.GetStringValue(titleData, "Name");
+                            string teamName = _apiHelper.GetNullableStringValue(titleData, "Name");
                             if (string.IsNullOrEmpty(teamName))
                             {
                                 skippedCount++;
@@ -218,8 +218,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             var entity = new Processed_LeagueTeamEntity
                             {
                                 TeamName = teamName,
-                                NameShort = _apiHelper.GetStringValue(titleData, "Short"),
-                                Region = _apiHelper.GetStringValue(titleData, "Region")
+                                NameShort = _apiHelper.GetNullableStringValue(titleData, "Short"),
+                                Region = _apiHelper.GetNullableStringValue(titleData, "Region")
                             };
 
                             results.Add(entity);
@@ -265,7 +265,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         {
                             string originalName = titleData["OriginalName"]?.ToString();
                             string newName = titleData["NewName"]?.ToString();
-                            DateTime date = _apiHelper.ParseDateTime(titleData, "Date");
+                            DateTime? date = _apiHelper.ParseNullableDateTime(titleData, "Date");
 
                             if (
                                 string.IsNullOrWhiteSpace(originalName) ||
@@ -346,8 +346,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         if (teamData["title"] is JObject titleData)
                         {
                             // Try to get name with fallback to OverviewPage
-                            string name = _apiHelper.GetStringValue(teamData, "Name");
-                            string overviewPage = _apiHelper.GetStringValue(teamData, "OverviewPage");
+                            string name = _apiHelper.GetNullableStringValue(teamData, "Name");
+                            string overviewPage = _apiHelper.GetNullableStringValue(teamData, "OverviewPage");
 
                             if (string.IsNullOrWhiteSpace(name))
                             {
@@ -375,25 +375,25 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             {
                                 Name = name,
                                 OverviewPage = overviewPage,
-                                Short = _apiHelper.GetStringValue(teamData, "Short"),
-                                Location = _apiHelper.GetStringValue(teamData, "Location"),
-                                TeamLocation = _apiHelper.GetStringValue(teamData, "TeamLocation"),
-                                Region = _apiHelper.GetStringValue(teamData, "Region"),
-                                OrganizationPage = _apiHelper.GetStringValue(teamData, "OrganizationPage"),
-                                Image = _apiHelper.GetStringValue(teamData, "Image"),
-                                Twitter = _apiHelper.GetStringValue(teamData, "Twitter"),
-                                Youtube = _apiHelper.GetStringValue(teamData, "Youtube"),
-                                Facebook = _apiHelper.GetStringValue(teamData, "Facebook"),
-                                Instagram = _apiHelper.GetStringValue(teamData, "Instagram"),
-                                Discord = _apiHelper.GetStringValue(teamData, "Discord"),
-                                Snapchat = _apiHelper.GetStringValue(teamData, "Snapchat"),
-                                Vk = _apiHelper.GetStringValue(teamData, "Vk"),
-                                Subreddit = _apiHelper.GetStringValue(teamData, "Subreddit"),
-                                Website = _apiHelper.GetStringValue(teamData, "Website"),
-                                RosterPhoto = _apiHelper.GetStringValue(teamData, "RosterPhoto"),
-                                IsDisbanded = _apiHelper.GetStringValue(teamData, "IsDisbanded").Equals("true", StringComparison.OrdinalIgnoreCase),
-                                RenamedTo = _apiHelper.GetStringValue(teamData, "RenamedTo"),
-                                IsLowercase = _apiHelper.GetStringValue(teamData, "IsLowercase").Equals("true", StringComparison.OrdinalIgnoreCase)
+                                Short = _apiHelper.GetNullableStringValue(teamData, "Short"),
+                                Location = _apiHelper.GetNullableStringValue(teamData, "Location"),
+                                TeamLocation = _apiHelper.GetNullableStringValue(teamData, "TeamLocation"),
+                                Region = _apiHelper.GetNullableStringValue(teamData, "Region"),
+                                OrganizationPage = _apiHelper.GetNullableStringValue(teamData, "OrganizationPage"),
+                                Image = _apiHelper.GetNullableStringValue(teamData, "Image"),
+                                Twitter = _apiHelper.GetNullableStringValue(teamData, "Twitter"),
+                                Youtube = _apiHelper.GetNullableStringValue(teamData, "Youtube"),
+                                Facebook = _apiHelper.GetNullableStringValue(teamData, "Facebook"),
+                                Instagram = _apiHelper.GetNullableStringValue(teamData, "Instagram"),
+                                Discord = _apiHelper.GetNullableStringValue(teamData, "Discord"),
+                                Snapchat = _apiHelper.GetNullableStringValue(teamData, "Snapchat"),
+                                Vk = _apiHelper.GetNullableStringValue(teamData, "Vk"),
+                                Subreddit = _apiHelper.GetNullableStringValue(teamData, "Subreddit"),
+                                Website = _apiHelper.GetNullableStringValue(teamData, "Website"),
+                                RosterPhoto = _apiHelper.GetNullableStringValue(teamData, "RosterPhoto"),
+                                IsDisbanded = _apiHelper.GetNullableStringValue(teamData, "IsDisbanded").Equals("true", StringComparison.OrdinalIgnoreCase),
+                                RenamedTo = _apiHelper.GetNullableStringValue(teamData, "RenamedTo"),
+                                IsLowercase = _apiHelper.GetNullableStringValue(teamData, "IsLowercase").Equals("true", StringComparison.OrdinalIgnoreCase)
                             };
 
                             results.Add(entity);

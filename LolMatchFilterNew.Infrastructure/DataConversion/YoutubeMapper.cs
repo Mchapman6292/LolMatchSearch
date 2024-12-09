@@ -43,15 +43,15 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                     {
                         var entity = new Import_YoutubeDataEntity
                         {
-                            YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
-                            VideoTitle = _apiHelper.GetStringValue(video, "snippet.title"),
-                            PublishedAt_utc = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
-                            YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
-                            ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
-                            GameName = _apiHelper.GetStringValue(video, "snippet.gameName"),
-                            GameId = _apiHelper.GetStringValue(video, "snippet.gameId"),
-                            PlaylistTitle = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
-                            PlaylistId = _apiHelper.GetStringValue(video, "snippet.playlistId")
+                            YoutubeVideoId = _apiHelper.GetNullableStringValue(video, "id"),
+                            VideoTitle = _apiHelper.GetNullableStringValue(video, "snippet.title"),
+                            PublishedAt_utc = _apiHelper.GetDateTimeFromJobject(video, "snippet.publishedAt"),
+                            YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetNullableStringValue(video, "id")}",
+                            ThumbnailUrl = _apiHelper.GetNullableStringValue(video, "snippet.thumbnails.default.url"),
+                            GameName = _apiHelper.GetNullableStringValue(video, "snippet.gameName"),
+                            GameId = _apiHelper.GetNullableStringValue(video, "snippet.gameId"),
+                            PlaylistTitle = _apiHelper.GetNullableStringValue(video, "snippet.playlistTitle"),
+                            PlaylistId = _apiHelper.GetNullableStringValue(video, "snippet.playlistId")
                         };
                         results.Add(entity);
                     }
@@ -85,15 +85,15 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                     {
                         var entity = new Import_YoutubeDataEntity
                         {
-                            YoutubeVideoId = _apiHelper.GetStringValue(video, "id"),
-                            VideoTitle = _apiHelper.GetStringValue(video, "snippet.title"),
-                            PublishedAt_utc = _apiHelper.GetDateTimeFromJObject(video, "snippet.publishedAt"),
-                            YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetStringValue(video, "id")}",
-                            ThumbnailUrl = _apiHelper.GetStringValue(video, "snippet.thumbnails.default.url"),
-                            GameName = _apiHelper.GetStringValue(video, "snippet.gameName"),
-                            GameId = _apiHelper.GetStringValue(video, "snippet.gameId"),
-                            PlaylistTitle = _apiHelper.GetStringValue(video, "snippet.playlistTitle"),
-                            PlaylistId = _apiHelper.GetStringValue(video, "snippet.playlistId")
+                            YoutubeVideoId = _apiHelper.GetNullableStringValue(video, "id"),
+                            VideoTitle = _apiHelper.GetNullableStringValue(video, "snippet.title"),
+                            PublishedAt_utc = _apiHelper.GetDateTimeFromJobject(video, "snippet.publishedAt"),
+                            YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetNullableStringValue(video, "id")}",
+                            ThumbnailUrl = _apiHelper.GetNullableStringValue(video, "snippet.thumbnails.default.url"),
+                            GameName = _apiHelper.GetNullableStringValue(video, "snippet.gameName"),
+                            GameId = _apiHelper.GetNullableStringValue(video, "snippet.gameId"),
+                            PlaylistTitle = _apiHelper.GetNullableStringValue(video, "snippet.playlistTitle"),
+                            PlaylistId = _apiHelper.GetNullableStringValue(video, "snippet.playlistId")
                         };
                         results.Add(entity);
                         successCount++;

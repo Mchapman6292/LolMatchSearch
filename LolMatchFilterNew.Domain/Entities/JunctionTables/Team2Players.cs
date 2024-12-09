@@ -18,4 +18,4 @@ namespace LolMatchFilterNew.Domain.Entities.JunctionTables
         public virtual Processed_ProPlayerEntity Player { get; set; }
     }
 }
-}
+

@@ -17,7 +17,6 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         // Primary key for ScoreboardPlayers, ScoreboardGames & ScoreboardTeams
 
 
-
         [Key]
         public string GameName { get; set; } // ScoreboardGames
 

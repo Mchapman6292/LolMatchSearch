@@ -75,7 +75,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.GameName).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.League).HasMaxLength(100);
-                entity.Property(e => e.DateTime_utc).IsRequired();
+                entity.Property(e => e.DateTime_utc).HasMaxLength(100);
                 entity.Property(e => e.Tournament).HasMaxLength(255);
                 entity.Property(e => e.Team1).HasMaxLength(100);
                 entity.Property(e => e.Team2).HasMaxLength(100);
@@ -93,7 +93,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.HasKey(t => new { t.OriginalName, t.NewName, t.Date });
                 entity.Property(e => e.OriginalName).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.NewName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.Date).IsRequired();
+                entity.Property(e => e.Date).HasMaxLength(10);
                 entity.Property(e => e.Verb).HasMaxLength(50);
                 entity.Property(e => e.IsSamePage).HasMaxLength(10);
                 entity.Property(e => e.NewsId).HasMaxLength(100);
@@ -126,6 +126,19 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.RenamedTo).HasMaxLength(255);
                 entity.Property(e => e.IsLowercase);
             });
+
+
+
+            modelBuilder.Entity<Import_TeamRedirectEntity>(entity =>
+            {
+                entity.ToTable("Import_TeamRedirect");
+                entity.HasKey(e => new { e.PageName, e.AllName });
+                entity.Property(e => e.PageName).HasMaxLength(255);
+                entity.Property(e => e.AllName).HasMaxLength(255);
+                entity.Property(e => e.OtherName).HasMaxLength(255);
+                entity.Property(e => e.UniqueLine).HasMaxLength(255);
+            });
+
 
 
 
@@ -186,16 +199,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Season).HasMaxLength(50);
                 entity.Property(e => e.IsSeries);
                 // GameNumber doesn't need specific configuration as it's a nullable int
-            });
-
-            modelBuilder.Entity<Import_TeamRedirectEntity>(entity =>
-            {
-                entity.ToTable("Import_TeamRedirect");
-                entity.HasKey(e => new { e.PageName, e.AllName });
-                entity.Property(e => e.PageName).HasMaxLength(255);
-                entity.Property(e => e.AllName).HasMaxLength(255);
-                entity.Property(e => e.OtherName).HasMaxLength(255);
-                entity.Property(e => e.UniqueLine).HasMaxLength(255);
             });
 
 

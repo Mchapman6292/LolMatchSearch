@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
     public class Import_TeamRenameEntity
     {
-        [Key, Column(Order = 0)]
+        [Key]
         [Required]
 
         public string OriginalName { get; set; }
 
-        [Key, Column(Order = 1)]
+        [Key]
         [Required]
         public string NewName { get; set; }
 
-        [Key, Column(Order = 2)]
+        [Key]
         [Required]
         public DateTime Date { get; set; }
 

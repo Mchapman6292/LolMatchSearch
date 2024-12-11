@@ -56,14 +56,12 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.ToTable("Import_YoutubeData");
                 entity.HasKey(e => e.YoutubeVideoId);
                 entity.Property(e => e.YoutubeVideoId).HasComment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.").IsRequired();
-                entity.Property(e => e.VideoTitle).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.VideoTitle).HasMaxLength(255);
                 entity.Property(e => e.PlaylistId).HasMaxLength(100);
-                entity.Property(e => e.PlaylistTitle).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.PublishedAt_utc).IsRequired();
-                entity.Property(e => e.YoutubeResultHyperlink).IsRequired().HasMaxLength(2083);
-                entity.Property(e => e.ThumbnailUrl).IsRequired().HasMaxLength(2083);
-                entity.Property(e => e.GameName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.PlaylistTitle).HasMaxLength(255);
+                entity.Property(e => e.PublishedAt_utc);
+                entity.Property(e => e.YoutubeResultHyperlink).HasMaxLength(2083);
+                entity.Property(e => e.ThumbnailUrl).HasMaxLength(2083);
             });
 
 

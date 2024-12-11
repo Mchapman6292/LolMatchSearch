@@ -59,6 +59,13 @@ namespace LolMatchFilterNew.Domain.YoutubeService
         }
 
 
+        // OLD API LOGIC PROBABLY NOT NEEDED ALL YOUTUBE LOGIC KEPT IN YOUTUBEDATAFETCHER AND YOUTUBECONTROLLER
+
+
+
+
+
+
 
         public async Task<List<PlaylistItem>> GetAllPlayListItemsFromYoutubePlayListAsync(Activity activity, string playlistId)
         {

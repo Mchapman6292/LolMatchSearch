@@ -1,6 +1,6 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +12,10 @@ namespace LolMatchFilterNew.Application.Testing.YoutubeTesting
     public class YoutubeTesting
     {
         private readonly IYoutubeDataFetcher _youtubeDataFetcher;
-        private readonly IYoutubeVideoRepository _youtubeVideoRepository;
+        private readonly IImport_YoutubeDataRepository _youtubeVideoRepository;
         private readonly IAppLogger _appLogger;
 
-        public YoutubeTesting(IAppLogger appLogger,IYoutubeDataFetcher youtubeDataFetcher, IYoutubeVideoRepository youtubeVideoRepository)
+        public YoutubeTesting(IAppLogger appLogger,IYoutubeDataFetcher youtubeDataFetcher, IImport_YoutubeDataRepository youtubeVideoRepository)
         {
             _appLogger = appLogger;
             _youtubeDataFetcher = youtubeDataFetcher;

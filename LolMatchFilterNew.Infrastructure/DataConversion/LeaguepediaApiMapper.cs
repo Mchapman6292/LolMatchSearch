@@ -243,11 +243,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToImport_TeamRename(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
-                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToTeamRenameEntity)}.");
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToImport_TeamRename)}.");
                 throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
             }
 
@@ -324,11 +324,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
         // For Teams Table in leagupedia
-        public async Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToImport_Teams(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
-                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToLpediaTeamEntity)}.");
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToImport_Teams)}.");
                 throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
             }
 

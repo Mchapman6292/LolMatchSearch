@@ -24,8 +24,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 
         Task<IEnumerable<Processed_LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToTeamRenameEntity(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToImport_TeamRename(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToLpediaTeamEntity(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToImport_Teams(IEnumerable<JObject> apiData);
     }
 }

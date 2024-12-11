@@ -1,6 +1,6 @@
 ﻿
+using Google.Apis.YouTube.v3.Data;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
-
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
@@ -25,45 +25,18 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
             _apiHelper = apiHelper;
         }
 
-        public async Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntity(IEnumerable<JObject> videoData)
+        public async Task <Import_YoutubeDataEntity> MapToImport_YoutubeDataEntity(PlaylistItem item, string playlistTitle)
         {
-            if (videoData == null || !videoData.Any())
+            return new Import_YoutubeDataEntity
             {
-                _appLogger.Error($"Null or empty data for {nameof(videoData)}");
-                throw new ArgumentNullException(nameof(MapYoutubeToEntity), "Input data cannot be null or empty.");
-            }
-            return await Task.Run(() =>
-            {
-                var results = new List<Import_YoutubeDataEntity>();
-                int processedCount = 0;
-                foreach (var video in videoData)
-                {
-                    processedCount++;
-                    try
-                    {
-                        var entity = new Import_YoutubeDataEntity
-                        {
-                            YoutubeVideoId = _apiHelper.GetNullableStringValue(video, "id"),
-                            VideoTitle = _apiHelper.GetNullableStringValue(video, "snippet.title"),
-                            PublishedAt_utc = _apiHelper.GetDateTimeFromJobject(video, "snippet.publishedAt"),
-                            YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetNullableStringValue(video, "id")}",
-                            ThumbnailUrl = _apiHelper.GetNullableStringValue(video, "snippet.thumbnails.default.url"),
-                            GameName = _apiHelper.GetNullableStringValue(video, "snippet.gameName"),
-                            GameId = _apiHelper.GetNullableStringValue(video, "snippet.gameId"),
-                            PlaylistTitle = _apiHelper.GetNullableStringValue(video, "snippet.playlistTitle"),
-                            PlaylistId = _apiHelper.GetNullableStringValue(video, "snippet.playlistId")
-                        };
-                        results.Add(entity);
-                    }
-                    catch (Exception ex)
-                    {
-                        _appLogger.Error($"Error processing video data {processedCount}: {ex.Message}");
-                        _appLogger.Error($"Raw data: {video}");
-                    }
-                }
-                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed.");
-                return results;
-            });
+                YoutubeVideoId = item.ContentDetails.VideoId,
+                VideoTitle = item.Snippet.Title,
+                PlaylistId = item.Snippet.PlaylistId,
+                PlaylistTitle = playlistTitle,
+                PublishedAt_utc = item.Snippet.PublishedAt ?? DateTime.UtcNow,
+                YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={item.ContentDetails.VideoId}",
+                ThumbnailUrl = item.Snippet.Thumbnails.Default__?.Url
+            };
         }
 
         public async Task<IEnumerable<Import_YoutubeDataEntity>> MapYoutubeToEntityTesting(IEnumerable<JObject> videoData, int limit = 2)
@@ -71,7 +44,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
             if (videoData == null || !videoData.Any())
             {
                 _appLogger.Error($"Null or empty data for {nameof(videoData)}");
-                throw new ArgumentNullException(nameof(MapYoutubeToEntity), "Input data cannot be null or empty.");
+                throw new ArgumentNullException(nameof(MapToImport_YoutubeDataEntity), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>
             {
@@ -90,8 +63,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.YoutubeMappers
                             PublishedAt_utc = _apiHelper.GetDateTimeFromJobject(video, "snippet.publishedAt"),
                             YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={_apiHelper.GetNullableStringValue(video, "id")}",
                             ThumbnailUrl = _apiHelper.GetNullableStringValue(video, "snippet.thumbnails.default.url"),
-                            GameName = _apiHelper.GetNullableStringValue(video, "snippet.gameName"),
-                            GameId = _apiHelper.GetNullableStringValue(video, "snippet.gameId"),
                             PlaylistTitle = _apiHelper.GetNullableStringValue(video, "snippet.playlistTitle"),
                             PlaylistId = _apiHelper.GetNullableStringValue(video, "snippet.playlistId")
                         };

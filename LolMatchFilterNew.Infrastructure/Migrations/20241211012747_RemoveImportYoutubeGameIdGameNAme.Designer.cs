@@ -3,6 +3,7 @@ using System;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241211012747_RemoveImportYoutubeGameIdGameNAme")]
+    partial class RemoveImportYoutubeGameIdGameNAme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,13 +243,15 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("PlaylistTitle")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<DateTime?>("PublishedAt_utc")
+                    b.Property<DateTime>("PublishedAt_utc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ThumbnailUrl")
+                        .IsRequired()
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 
@@ -256,6 +261,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("YoutubeResultHyperlink")
+                        .IsRequired()
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 

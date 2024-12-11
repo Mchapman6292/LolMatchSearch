@@ -1,4 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+﻿using Google.Apis.YouTube.v3.Data;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,13 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetch
 {
     public interface IYoutubeDataFetcher
     {
-        Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromChannel(string channelId, int? maxResults = null);
-        Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null);
-        Task<Dictionary<string, string>> GetChannelPlaylists(string channelId);
-        Task<string> GetChannelIdFromInput(string input);
+        Task<IEnumerable<Import_YoutubeDataEntity>> FetchVideosFromChannel(int? maxResults = null);
+
+        Task<Dictionary<string, string>> FetchChannelPlaylistIdNameAndId(string channelId);
+
+        Task<IEnumerable<PlaylistItem>> FetchPlayListItem(string playlistId, int? maxResults = null);
+
+        Task<IEnumerable<Import_YoutubeDataEntity>> FetchPlaylistItemAndMapToImport_YoutubeData(string playlistId, string playlistTitle, int? maxResults = null);
+
     }
 }

@@ -98,22 +98,15 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRe
 
         public async Task<int> DeleteAllScoreboardGames()
         {
-            try
-            {
-                var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
-                int count = allRecords.Count;
+         
+            var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
+            int count = allRecords.Count;
 
-                _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
-                await _matchFilterDbContext.SaveChangesAsync();
+            _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
+            await _matchFilterDbContext.SaveChangesAsync();
 
-                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
-                return count;
-            }
-            catch (Exception ex)
-            {
-                _appLogger.Error($"Error occurred while deleting records: {ex.Message}");
-                throw;
-            }
+            _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
+            return count;
         }
     }
 }

@@ -41,12 +41,13 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRe
 
                 foreach (var matchDetail in matchDetails)
                 {
-                    if (matchDetail.DateTime_utc.Kind != DateTimeKind.Utc)
+                    if (matchDetail.DateTime_utc != null && matchDetail.DateTime_utc.Value.Kind != DateTimeKind.Utc)
                     {
-                        matchDetail.DateTime_utc = DateTime.SpecifyKind(matchDetail.DateTime_utc, DateTimeKind.Utc);
+                        matchDetail.DateTime_utc = DateTime.SpecifyKind(matchDetail.DateTime_utc.Value, DateTimeKind.Utc);
                     }
                     _matchFilterDbContext.Import_ScoreboardGames.Add(matchDetail);
                     processedCount++;
+
                     // Used to log progress at regular intervals(every 20% or 500 items)
                     if (processedCount % Math.Max(totalCount / 5, 500) == 0)
                     {
@@ -97,22 +98,15 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRe
 
         public async Task<int> DeleteAllScoreboardGames()
         {
-            try
-            {
-                var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
-                int count = allRecords.Count;
+         
+            var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
+            int count = allRecords.Count;
 
-                _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
-                await _matchFilterDbContext.SaveChangesAsync();
+            _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
+            await _matchFilterDbContext.SaveChangesAsync();
 
-                _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
-                return count;
-            }
-            catch (Exception ex)
-            {
-                _appLogger.Error($"Error occurred while deleting records: {ex.Message}");
-                throw;
-            }
+            _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
+            return count;
         }
     }
 }

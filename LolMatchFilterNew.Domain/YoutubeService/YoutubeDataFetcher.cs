@@ -22,21 +22,27 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Google;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using Npgsql.PostgresTypes;
 
 
-namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
+namespace LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers
 {
     public class YoutubeDataFetcher : IYoutubeDataFetcher
     {
         private readonly string _apiKey;
         private readonly IAppLogger _appLogger;
+
         private readonly IActivityService _activityService;
         private readonly YouTubeService _youtubeService;
         private readonly IApiHelper _apiHelper;
         private readonly IYoutubeMapper _youtubeMapper;
+
         private const int MaxResultsPerPage = 50;
         private const string RequiredPlaylistParts = "snippet,contentDetails";
         private const string RequiredChannelParts = "snippet";
+        private const string KazaChannelId = "UC3Lh8yZe1MD-jCIXhBcVtqQ";
+
+
         public Dictionary<string, string> YoutubeplaylistNames = new Dictionary<string, string>();
 
 
@@ -55,76 +61,40 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
         }
 
 
-        public async Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromChannel(string channelId, int? maxResults = null)
+
+        /// <summary>
+        /// Orchestrates the full process of fetching channel videos:
+        /// 1. Gets all playlists using FetchChannelPlaylistIdNameAndId
+        /// 2. For each playlist, calls FetchPlaylistItemAndMapToImport_YoutubeData
+        /// 3. Combines all video entities into a single collection
+        
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> FetchVideosFromChannel(int? maxResults = null)
         {
-            _appLogger.Info($"Starting {nameof(GetVideosFromChannel)}");
-            var playlists = await GetChannelPlaylists(channelId);
             var allVideos = new List<Import_YoutubeDataEntity>();
+            var playlists = await FetchChannelPlaylistIdNameAndId();
 
             foreach (var playlist in playlists)
             {
-                try
-                {
-                    var videos = await GetVideosFromPlaylist(playlist.Key, maxResults);
-                    allVideos.AddRange(videos);
-                }
-                catch (Exception ex)
-                {
-                    _appLogger.Error($"Failed to fetch videos from playlist {playlist.Key}: {ex.Message}");
-                    continue;
-                }
+                var videoEntities = await FetchPlaylistItemAndMapToImport_YoutubeData(playlist.Key, playlist.Value, maxResults);
+                allVideos.AddRange(videoEntities);
             }
 
+            _appLogger.Info($"Successfully retrieved videos from all playlists. Total videos: {allVideos.Count}");
             return allVideos;
         }
 
-        public async Task<IEnumerable<Import_YoutubeDataEntity>> GetVideosFromPlaylist(string playlistId, int? maxResults = null)
-        {
-            var videos = new List<Import_YoutubeDataEntity>();
-            var nextPageToken = "";
-            var processedItems = 0;
-            try
-            {
-                do
-                {
-                    var request = _youtubeService.PlaylistItems.List("snippet,contentDetails");
-                    request.PlaylistId = playlistId;
-                    request.MaxResults = 50;
-                    request.PageToken = nextPageToken;
-                    var response = await request.ExecuteAsync();
-                    foreach (var item in response.Items)
-                    {
-                        videos.Add(MapPlaylistItemToEntity(item));
-                        processedItems++;
-                        if (maxResults.HasValue && processedItems >= maxResults)
-                        {
-                            return videos;
-                        }
-                        if (processedItems % 20 == 0)
-                        {
-                            Import_YoutubeDataEntity mostRecentEntity = videos.LastOrDefault();
-                            _appLogger.Info($"Video {processedItems} - ID: {mostRecentEntity.YoutubeVideoId},"); 
-                        }
-                    }
-                    nextPageToken = response.NextPageToken;
-
-                    _appLogger.Info($"Retrieved {response.Items.Count} videos from playlist. Total videos so far: {videos.Count}");
-
-                }
-                while (!string.IsNullOrEmpty(nextPageToken));
-
-                _appLogger.Info($"Successfully retrieved all videos from playlist. Total count: {videos.Count}");
-                return videos;
-            }
-            catch (Exception ex)
-            {
-                _appLogger.Error($"Error retrieving videos for playlist {playlistId}: {ex.Message}");
-                throw;
-            }
-        }
 
 
-        public async Task<Dictionary<string, string>> GetChannelPlaylists(string channelId)
+
+
+
+        /// <summary>
+        /// Starting point - Gets all playlists from a channel.
+        /// Returns a dictionary used by other methods to fetch video data:
+        /// - Key: YouTube's PlaylistId required by FetchPlayListItem
+        /// - Value: Playlist title needed for entity creation
+       
+        public async Task<Dictionary<string, string>> FetchChannelPlaylistIdNameAndId(string channelId = KazaChannelId)
         {
             var playlists = new Dictionary<string, string>();
             var nextPageToken = "";
@@ -168,45 +138,76 @@ namespace LolMatchFilterNew.Domain.YoutubeDataFetcher
             }
         }
 
-        public async Task<string> GetChannelIdFromInput(string input)
+
+
+        /// <summary>
+        /// Intermediate step - Takes a playlist ID and retrieves its videos.
+        /// Called by FetchPlaylistItemAndMapToImport_YoutubeData to get raw video data.
+        /// Handles YouTube API pagination to get all videos in playlist.
+        
+        public async Task<IEnumerable<PlaylistItem>> FetchPlayListItem(string playlistId, int? maxResults = null)
         {
-            try
+            var playlistItems = new List<PlaylistItem>();
+            var nextPageToken = "";
+            var processedItems = 0;
+
+            do
             {
-                if (!input.StartsWith("@"))
+                var request = _youtubeService.PlaylistItems.List("snippet, contentDetails");
+                request.PlaylistId = playlistId;
+                request.MaxResults = 50;
+                request.PageToken = nextPageToken;
+
+                var response = await request.ExecuteAsync();
+
+                playlistItems.AddRange(response.Items);
+                processedItems += response.Items.Count();
+
+                if (maxResults.HasValue && processedItems >= maxResults)
                 {
-                    var videoRequest = _youtubeService.Videos.List("snippet");
-                    videoRequest.Id = input;
-                    var response = await videoRequest.ExecuteAsync();
-                    return response.Items.FirstOrDefault()?.Snippet.ChannelId;
+                    return playlistItems.Take(maxResults.Value);
                 }
-                else
-                {
-                    var searchRequest = _youtubeService.Search.List("snippet");
-                    searchRequest.Q = input.TrimStart('@');
-                    searchRequest.Type = "channel";
-                    searchRequest.MaxResults = 1;
-                    var response = await searchRequest.ExecuteAsync();
-                    return response.Items.FirstOrDefault()?.Snippet.ChannelId;
-                }
+
+                nextPageToken = response.NextPageToken;
+                _appLogger.Info($"Retrieved {response.Items.Count} videos from playlist. Total videos so far: {playlistItems.Count}");
             }
-            catch (Exception ex)
-            {
-                _appLogger.Error($"Error retrieving channel ID: {ex.Message}");
-                throw;
-            }
+            while (!string.IsNullOrEmpty(nextPageToken));
+
+            return playlistItems;
         }
 
-        private Import_YoutubeDataEntity MapPlaylistItemToEntity(PlaylistItem item)
-        {
-            return new Import_YoutubeDataEntity
-            {
-                YoutubeVideoId = item.ContentDetails.VideoId,
-                VideoTitle = item.Snippet.Title,
-                PublishedAt_utc = item.Snippet.PublishedAt ?? DateTime.UtcNow,
-                YoutubeResultHyperlink = $"https://www.youtube.com/watch?v={item.ContentDetails.VideoId}",
-                ThumbnailUrl = item.Snippet.Thumbnails.Default__?.Url
-            };
 
+
+        /// <summary>
+        /// Final step - Creates database entities from playlist videos:
+        /// 1. Calls FetchPlayListItem to get video data
+        /// 2. Maps each video to an entity using the playlist title
+        /// Used directly by FetchVideosFromChannel or for single playlist processing
+
+        public async Task<IEnumerable<Import_YoutubeDataEntity>> FetchPlaylistItemAndMapToImport_YoutubeData(string playlistId, string playlistTitle, int? maxResults = null)
+        {
+            var playlistItems = await FetchPlayListItem(playlistId, maxResults);
+            var entities = new List<Import_YoutubeDataEntity>();
+
+            foreach (var item in playlistItems)
+            {
+                entities.Add(await _youtubeMapper.MapToImport_YoutubeDataEntity(item, playlistTitle));
+            }
+
+            _appLogger.Info($"Successfully converted {entities.Count} playlist items to entities");
+            return entities;
         }
+
+
+
+        
+
+
+
+        // 
+
+     
+
+        
     }
 }

@@ -16,7 +16,7 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 1)
                 .CreateLogger();
         }
 
@@ -50,5 +50,8 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
         public Task ErrorAsync(string message, params object[] propertyValues) => Task.Run(() => Error(message, propertyValues));
         public Task FatalAsync(string message) => Task.Run(() => Fatal(message));
         public Task FatalAsync(string message, Exception ex) => Task.Run(() => Fatal(message,ex));
+
+
+
     }
 }

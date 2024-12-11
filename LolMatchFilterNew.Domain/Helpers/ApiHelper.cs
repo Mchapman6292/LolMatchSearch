@@ -177,6 +177,50 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
+        public int? GetNullableInt32Value(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
+                    return null;
+                }
+
+                if (token.Type != JTokenType.String && token.Type != JTokenType.Integer)
+                {
+                    _appLogger.Warning($"Unexpected token type for key '{key}'. Type: {token.Type}");
+                    throw new ArgumentException($"The value for key '{key}' is not a string or integer.");
+                }
+
+                string value = token.ToString();
+                if (int.TryParse(value, out int result))
+                {
+                    return result;
+                }
+                else
+                {
+                    _appLogger.Error($"Failed to parse int value for key '{key}': '{value}'");
+                    throw new FormatException($"The value for key '{key}' ('{value}') is not a valid integer.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error in {nameof(GetNullableInt32Value)} for key '{key}': {ex.Message}");
+                throw;
+            }
+        }
+
+
+
+
         public int? GetInt32Value(JObject obj, string key)
         {
             try
@@ -213,10 +257,21 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
             catch (Exception ex)
             {
-                _appLogger.Error($"Error in {nameof(GetInt32Value)} for key '{key}': {ex.Message}");
+                _appLogger.Error($"Error in {nameof(GetNullableInt32Value)} for key '{key}': {ex.Message}");
                 throw;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
 
         public List<string> GetValuesAsList(JObject obj, string key)
         {
@@ -255,12 +310,26 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             }
         }
 
-      
+
+        
 
 
+        public string GetStringValue(JObject obj, string key)
+        {
+            JToken targetObj = obj;
+            if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+            {
+                targetObj = titleObj;
+            }
+
+            var token = targetObj[key];
+            var result = token?.ToString() ?? string.Empty;
+
+            return result;
+        }
 
 
-        public string? GetStringValue(JObject obj, string key)
+        public string? GetNullableStringValue(JObject obj, string key)
         {
             JToken targetObj = obj;
             if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
@@ -274,7 +343,65 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             return result;
         }
 
-        public DateTime? GetDateTimeFromJObject(JObject obj, string key)
+
+
+
+
+
+
+
+
+
+
+
+        public DateTime? GetNullableDateTimeFromJobject(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
+                    return null;
+                }
+
+                var rawValue = token.ToString();
+                if (string.IsNullOrEmpty(rawValue))
+                {
+                    _appLogger.Warning($"Value for key '{key}' is null or empty.");
+                    return null;
+                }
+                if (DateTime.TryParse(rawValue, out DateTime result))
+                {
+                    if (result.Kind != DateTimeKind.Utc)
+                    {
+                        result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
+                    }
+                    return result;
+                }
+                else
+                {
+                    _appLogger.Warning($"Failed to parse DateTime for key '{key}' with value: '{rawValue}'. Using default value (UTC).");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error while parsing DateTime for key '{key}': {ex.Message}");
+                return null;
+            }
+        }
+
+
+
+
+        public DateTime GetDateTimeFromJobject(JObject obj, string key)
         {
             try
             {
@@ -319,6 +446,15 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
         }
 
 
+
+
+
+
+
+
+
+
+
         public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime) //Needed to convert Youtube PublishedAt_utc to DateTime_utc
         {
             if (inputDateTime is DateTime dateTime)
@@ -336,7 +472,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
             throw new ArgumentException("Unsupported datetime format");
         }
 
-        public DateTime? ParseDateTime(JObject obj, string key)
+        public DateTime? ParseNullableDateTime(JObject obj, string key)
         {
             try
             {
@@ -380,6 +516,53 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 return null;
             }
         }
+
+
+
+        public DateTime ParseDateTime(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Key '{key}' does not exist in the JSON object.");
+                    return DateTime.MinValue.ToUniversalTime();
+                }
+
+                var rawValue = token.ToString();
+                if (string.IsNullOrEmpty(rawValue))
+                {
+                    _appLogger.Warning($"Value for key '{key}' is null or empty.");
+                    return DateTime.MinValue.ToUniversalTime();
+                }
+
+                if (DateTime.TryParse(rawValue, out DateTime result))
+                {
+                    if (result.Kind != DateTimeKind.Utc)
+                    {
+                        result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
+                    }
+                    return result;
+                }
+                throw new ArgumentException($"Failed to parse DateTime for key '{key}' with value: '{rawValue}'.");
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error parsing DateTime for key '{key}': {ex.Message}");
+                throw; 
+            }
+        }
+
+
+
+
 
         public  (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
         {

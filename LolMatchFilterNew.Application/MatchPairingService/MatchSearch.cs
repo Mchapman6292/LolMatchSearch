@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs;

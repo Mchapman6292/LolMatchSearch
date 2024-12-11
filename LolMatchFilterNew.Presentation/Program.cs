@@ -9,9 +9,10 @@ using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServ
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using System.Reflection;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
-using LolMatchFilterNew.Domain.YoutubeDataFetcher;
+using LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
@@ -49,7 +50,7 @@ namespace LolMatchFilterNew.Presentation
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
                 var APIController = scope.ServiceProvider.GetRequiredService<IAPIControllers>();
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
-                var youtubeRepository = scope.ServiceProvider.GetRequiredService<IYoutubeVideoRepository>();
+                var youtubeRepository = scope.ServiceProvider.GetRequiredService<IImport_YoutubeDataRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
@@ -58,8 +59,8 @@ namespace LolMatchFilterNew.Presentation
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
-                await APIController.ControllerAddScoreboardGames();
 
+                await youtubeController.ControllerAddAllImport_YoutubeData();
 
 
 

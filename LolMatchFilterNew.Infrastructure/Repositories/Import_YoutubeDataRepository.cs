@@ -1,7 +1,7 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeVideoRepository;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories
 {
-    public class Import_YoutubeDataRepository : GenericRepository<Import_YoutubeDataRepository>, IYoutubeVideoRepository
+    public class Import_YoutubeDataRepository : GenericRepository<Import_YoutubeDataRepository>, IImport_YoutubeDataRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
@@ -62,9 +62,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataReposi
                 int processedCount = 0;
                 foreach (var videoDetail in newVideos)
                 {
-                    if (videoDetail.PublishedAt_utc.Kind != DateTimeKind.Utc)
+                    if (videoDetail.PublishedAt_utc.HasValue && videoDetail.PublishedAt_utc.Value.Kind != DateTimeKind.Utc)
                     {
-                        videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc, DateTimeKind.Utc);
+                        videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc.Value, DateTimeKind.Utc);
                     }
                     _matchFilterDbContext.Import_YoutubeData.Add(videoDetail);
                     processedCount++;
@@ -130,6 +130,14 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataReposi
 
             _appLogger.Info($"Number of tracked YouTube entities: {trackedYoutubeEntities.Count}");
             _appLogger.Info($"Number of tracked Leaguepedia entities: {trackedLeaguepediaEntities.Count}");
+        }
+
+
+        public async Task<int> DeleteAllImport_YoutubeData()
+        {
+            var allRecords = _matchFilterDbContext.Import_YoutubeData.ToList();
+            _matchFilterDbContext.Import_YoutubeData.RemoveRange(allRecords);
+            return await _matchFilterDbContext.SaveChangesAsync();
         }
 
     }

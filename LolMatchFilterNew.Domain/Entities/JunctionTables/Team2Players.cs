@@ -10,12 +10,12 @@ namespace LolMatchFilterNew.Domain.Entities.JunctionTables
 {
     public class Team2Players
     {
-        public string LeaguepediaGameIdAndTitle { get; set; }
-        public string LeaguepediaPlayerAllName { get; set; }
+        public string GameName { get; set; }
+        public string GameId { get; set; }
 
         // Navigation properties
         public virtual Import_ScoreboardGamesEntity Match { get; set; }
         public virtual Processed_ProPlayerEntity Player { get; set; }
     }
 }
-}
+

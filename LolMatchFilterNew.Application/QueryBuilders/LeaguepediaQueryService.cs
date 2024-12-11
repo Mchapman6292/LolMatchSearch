@@ -43,6 +43,35 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             return $"{BaseUrl}?{query}";
         }
 
+        // Fetches all values from ScoreboardGames without any joins to Teamredirects etc, 
+
+        //
+        public string BuildCompleteScoreboardGamesQuery(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "ScoreboardGames=SG";
+
+            query["fields"] = "SG.OverviewPage,SG.Tournament,SG.Team1,SG.Team2,SG.WinTeam,SG.LossTeam," +
+                             "SG.DateTime_UTC,SG.DST,SG.Team1Score,SG.Team2Score,SG.Winner,SG.Gamelength," +
+                             "SG.Gamelength_Number,SG.Team1Bans__full,SG.Team2Bans__full,SG.Team1Picks__full," +
+                             "SG.Team2Picks__full,SG.Team1Players__full,SG.Team2Players__full,SG.Team1Dragons," +
+                             "SG.Team2Dragons,SG.Team1Barons,SG.Team2Barons,SG.Team1Towers,SG.Team2Towers," +
+                             "SG.Team1Gold,SG.Team2Gold,SG.Team1Kills,SG.Team2Kills,SG.Team1RiftHeralds," +
+                             "SG.Team2RiftHeralds,SG.Team1VoidGrubs,SG.Team2VoidGrubs,SG.Team1Inhibitors," +
+                             "SG.Team2Inhibitors,SG.Patch,SG.PatchSort,SG.MatchHistory,SG.VOD,SG.N_Page," +
+                             "SG.N_MatchInTab,SG.N_MatchInPage,SG.N_GameInMatch,SG.Gamename,SG.UniqueLine," +
+                             "SG.GameId,SG.MatchId,SG.RiotPlatformGameId,SG.RiotPlatformId,SG.RiotGameId," +
+                             "SG.RiotHash,SG.RiotVersion";
+
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+
+            return $"{BaseUrl}?{query}";
+        }
+
         // Used to get all values from TeamRedirects table, need to alias _pageName due to _ not being valid in cargoquery. 
         public string BuildQueryStringTeamRedirects(int queryLimit, int offset = 0)
         {
@@ -55,6 +84,19 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public string BuildQueryStringForTeamsInRegion(string region, int queryLimit, int offset = 0)
         {
@@ -166,6 +208,25 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
 
+            return $"{BaseUrl}?{query}";
+        }
+
+
+        public string BuildQueryForImport_Teams(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams=T";
+            query["fields"] = "T._pageName = PageName," +
+                             "T.Name,T.OverviewPage,T.Short,T.Location," +
+                             "T.TeamLocation,T.Region,T.OrganizationPage," +
+                             "T.Image,T.Twitter,T.Youtube,T.Facebook," +
+                             "T.Instagram,T.Discord,T.Snapchat,T.Vk," +
+                             "T.Subreddit,T.Website,T.RosterPhoto," +
+                             "T.IsDisbanded,T.RenamedTo,T.IsLowercase";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";
         }
     }

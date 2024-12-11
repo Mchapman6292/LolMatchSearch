@@ -60,14 +60,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await youtubeController.ControllerAddAllImport_YoutubeData();
-
-
-
-
-
-
-
+                await APIController.ControllerAddTeamRenames();
 
 
             }

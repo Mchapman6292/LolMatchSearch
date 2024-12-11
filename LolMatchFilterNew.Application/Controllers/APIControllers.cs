@@ -146,11 +146,11 @@ namespace LolMatchFilterNew.Application.Controllers
             await _generic_Processed_LeagueTeamRepository.AddRangeWithTransactionAsync(leagueEntities);
         }
 
-        public async Task FetchAllDataForTeamRenames()
+        public async Task ControllerAddTeamRenames()
         {
             try
             {
-                _appLogger.Info("Starting FetchAllDataForTeamRenames");
+                _appLogger.Info("Starting ControllerAddTeamRenames");
 
                 if (_leaguepediaDataFetcher == null) throw new InvalidOperationException("_leaguepediaDataFetcher is null");
                 if (_apiHelper == null) throw new InvalidOperationException("_apiHelper is null");
@@ -201,7 +201,7 @@ namespace LolMatchFilterNew.Application.Controllers
             }
             catch (Exception ex)
             {
-                _appLogger.Error($"Error in FetchAllDataForTeamRenames: {ex.Message}");
+                _appLogger.Error($"Error in ControllerAddTeamRenames: {ex.Message}");
                 _appLogger.Error($"Stack trace: {ex.StackTrace}");
                 throw;
             }

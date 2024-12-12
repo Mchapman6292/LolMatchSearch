@@ -21,7 +21,13 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         public string GameName { get; set; } // ScoreboardGames
 
         [Key]
+
+        // References the individual match in the series e.g 2012 MLG Pro Circuit/Fall/Championship_Round 2_1_2
         public string GameId { get; set; }
+
+
+        // References the series e.g 2012 MLG Pro Circuit/Fall/Championship_Round 2_1
+        public string? MatchId {  get; set; }
 
         public string? League { get; set; }
 

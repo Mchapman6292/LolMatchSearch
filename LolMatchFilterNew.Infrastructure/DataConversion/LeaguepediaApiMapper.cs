@@ -40,6 +40,12 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
                 _appLogger.Error($"Input data cannot be null or empty for {nameof(MapSGamesJobjectToEntity)}.");
+
+                foreach(var entry in leaguepediaData)
+                {
+                    Console.Write($" LeaguepediaData: {entry.ToString(Formatting.Indented)}");
+                }
+
                 throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>
@@ -54,8 +60,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
                         var entity = new Import_ScoreboardGamesEntity
                         {
-                            GameId = _apiHelper.GetNullableStringValue(matchData, "GameId"),
-                            GameName = _apiHelper.GetNullableStringValue(matchData, "Gamename"),  // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
+                            GameId = _apiHelper.GetStringValue(matchData, "GameId"),
+                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),  // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
                             League = _apiHelper.GetNullableStringValue(matchData, "League"),
                             DateTime_utc = _apiHelper.ParseNullableDateTime(matchData, "DateTime UTC"),
                             Tournament = _apiHelper.GetNullableStringValue(matchData, "Tournament"),
@@ -127,10 +133,6 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 return results;
             });
         }
-
-
-
-
 
 
 

@@ -1,28 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IActivityService;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using Google.Apis.YouTube.v3;
 using Google.Apis.Services;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
-using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
-using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IYoutubeMapper;
-using LolMatchFilterNew.Domain.Helpers.YoutubeIdHelpers;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Google;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
-using Npgsql.PostgresTypes;
 
 
 namespace LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers
@@ -32,9 +17,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers
         private readonly string _apiKey;
         private readonly IAppLogger _appLogger;
 
-        private readonly IActivityService _activityService;
         private readonly YouTubeService _youtubeService;
-        private readonly IApiHelper _apiHelper;
         private readonly IYoutubeMapper _youtubeMapper;
 
         private const int MaxResultsPerPage = 50;
@@ -46,12 +29,10 @@ namespace LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers
         public Dictionary<string, string> YoutubeplaylistNames = new Dictionary<string, string>();
 
 
-        public YoutubeDataFetcher(IConfiguration configuration, IAppLogger appLogger, IActivityService activityService, IApiHelper apiHelper, IYoutubeMapper youtubeMapper)
+        public YoutubeDataFetcher(IConfiguration configuration, IAppLogger appLogger, IYoutubeMapper youtubeMapper)
         {
             _apiKey = configuration["YouTubeApiKey"];
             _appLogger = appLogger;
-            _activityService = activityService;
-            _apiHelper = apiHelper;
             _youtubeMapper = youtubeMapper;
             _youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {

@@ -70,8 +70,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             {
                 entity.ToTable("Import_ScoreboardGames");
                 entity.HasKey(e => new { e.GameName, e.GameId });
-                entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.GameName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.GameId).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.MatchId).HasMaxLength(255);
                 entity.Property(e => e.League).HasMaxLength(100);
                 entity.Property(e => e.DateTime_utc).HasMaxLength(100);
                 entity.Property(e => e.Tournament).HasMaxLength(255);

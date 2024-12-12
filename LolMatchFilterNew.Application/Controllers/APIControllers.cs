@@ -101,7 +101,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches(limit);
 
-            IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapSGamesJobjectToEntity(apiData);
+            IEnumerable<Import_ScoreboardGamesEntity> leagueEntities = await _leaguepediaApiMapper.MapToImport_ScoreboardGames(apiData);
 
             int addedEntries = await _Import_ScoreboardGamesRepository.BulkAddScoreboardGames(leagueEntities);
 
@@ -110,9 +110,10 @@ namespace LolMatchFilterNew.Application.Controllers
         // Used BuildQueryStringScoreBoardGames
         public async Task ControllerAddScoreboardGames()
         {
+
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches();
 
-            IEnumerable<Import_ScoreboardGamesEntity> scoreBoardGames = await _leaguepediaApiMapper.MapSGamesJobjectToEntity(apiData);
+            IEnumerable<Import_ScoreboardGamesEntity> scoreBoardGames = await _leaguepediaApiMapper.MapToImport_ScoreboardGames(apiData);
 
             await _generic_Import_ScoreboardGamesEntity.AddRangeWithTransactionAsync(scoreBoardGames);
         }
@@ -122,7 +123,7 @@ namespace LolMatchFilterNew.Application.Controllers
         {
             IEnumerable<JObject> apiData = await _leaguepediaDataFetcher.FetchAndExtractMatches();
 
-            IEnumerable<Import_TeamRedirectEntity> redirectEntity = await _leaguepediaApiMapper.MapTeamRedirectsToEntity(apiData);
+            IEnumerable<Import_TeamRedirectEntity> redirectEntity = await _leaguepediaApiMapper.MapToImport_TeamRedirects(apiData);
 
             await _generic_Import_TeamRedirectEntity.AddRangeWithTransactionAsync(redirectEntity);
         }
@@ -171,12 +172,12 @@ namespace LolMatchFilterNew.Application.Controllers
                                $"Null Objects: {counts.NullObjects}, " +
                                $"Null Properties: {counts.NullProperties}");
 
-                var teamRenameEntities = await _leaguepediaApiMapper.MapJTokenToImport_TeamRename(apiData);
+                var teamRenameEntities = await _leaguepediaApiMapper.MapToImport_TeamRename(apiData);
                 _appLogger.Info($"Team Rename Entities mapped: {teamRenameEntities != null}");
 
                 if (teamRenameEntities == null)
                 {
-                    _appLogger.Error("MapJTokenToImport_TeamRename returned null");
+                    _appLogger.Error("MapToImport_TeamRename returned null");
                     throw new InvalidOperationException("Entity mapping returned null");
                 }
 
@@ -213,7 +214,7 @@ namespace LolMatchFilterNew.Application.Controllers
         {
             IEnumerable<JObject> ExtractedSGames = await _leaguepediaDataFetcher.FetchAndExtractMatches();
 
-            IEnumerable<Import_ScoreboardGamesEntity> MappedSGEntities = await _leaguepediaApiMapper.MapSGamesJobjectToEntity(ExtractedSGames);
+            IEnumerable<Import_ScoreboardGamesEntity> MappedSGEntities = await _leaguepediaApiMapper.MapToImport_ScoreboardGames(ExtractedSGames);
 
 
             await _Import_ScoreboardGamesRepository.BulkAddScoreboardGames(MappedSGEntities);
@@ -234,7 +235,7 @@ namespace LolMatchFilterNew.Application.Controllers
         {
             IEnumerable<JObject> teamEntities = await _leaguepediaDataFetcher.FetchAndExtractMatches();
 
-            IEnumerable<Import_TeamsTableEntity> mappedEntites = await _leaguepediaApiMapper.MapJTokenToImport_Teams(teamEntities);
+            IEnumerable<Import_TeamsTableEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Teams(teamEntities);
 
             await _generic_Import_TeamsTableEntity.AddRangeWithTransactionAsync(mappedEntites);
         }

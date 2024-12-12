@@ -17,9 +17,6 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
     public class LeaguepediaApiMapper : ILeaguepediaApiMapper
@@ -35,11 +32,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapSGamesJobjectToEntity(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Import_ScoreboardGamesEntity>> MapToImport_ScoreboardGames(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapSGamesJobjectToEntity)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToImport_ScoreboardGames)}.");
 
                 foreach(var entry in leaguepediaData)
                 {
@@ -61,8 +58,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         var entity = new Import_ScoreboardGamesEntity
                         {
                             GameId = _apiHelper.GetStringValue(matchData, "GameId"),
-                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),  // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
-                            League = _apiHelper.GetNullableStringValue(matchData, "League"),
+                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),        // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
+                            MatchId = _apiHelper.GetNullableStringValue(matchData, "MatchId"),
                             DateTime_utc = _apiHelper.ParseNullableDateTime(matchData, "DateTime UTC"),
                             Tournament = _apiHelper.GetNullableStringValue(matchData, "Tournament"),
                             Team1 = _apiHelper.GetNullableStringValue(matchData, "Team1"),
@@ -95,11 +92,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
-        public async Task<IEnumerable<Import_TeamRedirectEntity>> MapTeamRedirectsToEntity(IEnumerable<JObject> TeamRedirectData)
+        public async Task<IEnumerable<Import_TeamRedirectEntity>> MapToImport_TeamRedirects(IEnumerable<JObject> TeamRedirectData)
         {
             if (TeamRedirectData == null || !TeamRedirectData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapTeamRedirectsToEntity)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToImport_TeamRedirects)}.");
                 throw new ArgumentNullException(nameof(TeamRedirectData), "Input data cannot be null or empty.");
             }
 
@@ -140,11 +137,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
-        public async Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
+        public async Task<IEnumerable<Processed_LeagueTeamEntity>> MapToProcessed_LeagueTeamEntity(IEnumerable<JObject> leaguepediaData)
         {
             if (leaguepediaData == null || !leaguepediaData.Any())
             {
-                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapLeaguepediaDataToLeagueTeamEntity)}.");
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToProcessed_LeagueTeamEntity)}.");
                 throw new ArgumentNullException(nameof(leaguepediaData), "Input data cannot be null or empty.");
             }
             return await Task.Run(() =>
@@ -245,11 +242,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
         }
 
 
-        public async Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToImport_TeamRename(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamRenameEntity>> MapToImport_TeamRename(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
-                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToImport_TeamRename)}.");
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapToImport_TeamRename)}.");
                 throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
             }
 
@@ -326,11 +323,11 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
         // For Teams Table in leagupedia
-        public async Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToImport_Teams(IEnumerable<JObject> apiData)
+        public async Task<IEnumerable<Import_TeamsTableEntity>> MapToImport_Teams(IEnumerable<JObject> apiData)
         {
             if (apiData == null)
             {
-                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapJTokenToImport_Teams)}.");
+                _appLogger.Error($"The apiData parameter cannot be null for {nameof(MapToImport_Teams)}.");
                 throw new ArgumentNullException(nameof(apiData), "The apiData parameter cannot be null.");
             }
 

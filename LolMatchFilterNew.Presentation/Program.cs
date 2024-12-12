@@ -46,7 +46,7 @@ namespace LolMatchFilterNew.Presentation
                 var leaguepediaRepository = scope.ServiceProvider.GetRequiredService<IImport_ScoreboardGamesRepository>();
                 var leaguepediaApiMapper = scope.ServiceProvider.GetRequiredService<ILeaguepediaApiMapper>();
                 var logger = scope.ServiceProvider.GetRequiredService<IAppLogger>();
-                var matchRepository = scope.ServiceProvider.GetRequiredService<IImport_ScoreboardGamesRepository>();
+                var scoreboardGamesRepository = scope.ServiceProvider.GetRequiredService<IImport_ScoreboardGamesRepository>();
                 var leaguepediaQueryService = scope.ServiceProvider.GetRequiredService<ILeaguepediaQueryService>();
                 var APIController = scope.ServiceProvider.GetRequiredService<IAPIControllers>();
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
@@ -59,9 +59,8 @@ namespace LolMatchFilterNew.Presentation
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
-
                 await APIController.ControllerAddScoreboardGames();
-
+              
 
             }
             await host.RunAsync();

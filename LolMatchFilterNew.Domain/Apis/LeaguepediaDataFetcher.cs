@@ -125,7 +125,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                         : queryLimit;
 
-                        string rawQuery = _leaguepediaQueryService.BuildQueryStringTeamRenames(queryLimit, offset);
+                        string rawQuery = _leaguepediaQueryService.NewQuery(queryLimit, offset);
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);

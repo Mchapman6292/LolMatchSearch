@@ -67,6 +67,25 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             return $"{BaseUrl}?{query}";
         }
 
+
+
+        public string NewQuery(int queryLimit, int  queryOffset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "ScoreboardGames=SG";
+            query["fields"] = "SG.Gamename,SG.GameId,SG.League,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
+                 "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam," +
+                 "SG.Team1Kills,SG.Team2Kills";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = queryOffset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+    
+
+
+
         // Fetches all values from ScoreboardGames without any joins to Teamredirects etc, 
 
         //
@@ -146,7 +165,26 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
+        public string BuildQueryStringTeamsWithRedirects(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teams,TeamRedirects";// Need to join to redirects to ensure names/duplicates tracked properly
+            query["join_on"] = "Teams.Name=TeamRedirects.AllName"; 
+            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.Short,Teams.Location,
+                       Teams.TeamLocation,Teams.Region,Teams.OrganizationPage,
+                       Teams.Image,Teams.Twitter,Teams.Youtube,Teams.Facebook,
+                       Teams.Instagram,Teams.Discord,Teams.Snapchat,Teams.Vk,
+                       Teams.Subreddit,Teams.Website,Teams.RosterPhoto,
+                       Teams.IsDisbanded,Teams.RenamedTo,Teams.IsLowercase,
+                       TeamRedirects.OtherName,TeamRedirects.UniqueLine";
+            query["group_by"] = "Teams.Name"; // Group to prevent duplicate team entries
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
 
+            return $"{BaseUrl}?{query}";
+        }
 
 
 
@@ -175,29 +213,5 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
-
-        public string BuildQueryStringTeamsWithRedirects(int queryLimit, int offset = 0)
-        {
-            var query = HttpUtility.ParseQueryString(string.Empty);
-            query["action"] = "cargoquery";
-            query["format"] = "json";
-            query["tables"] = "Teams,TeamRedirects";// Need to join to redirects to ensure names/duplicates tracked properly
-            query["join_on"] = "Teams.Name=TeamRedirects.AllName"; 
-            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.Short,Teams.Location,
-                       Teams.TeamLocation,Teams.Region,Teams.OrganizationPage,
-                       Teams.Image,Teams.Twitter,Teams.Youtube,Teams.Facebook,
-                       Teams.Instagram,Teams.Discord,Teams.Snapchat,Teams.Vk,
-                       Teams.Subreddit,Teams.Website,Teams.RosterPhoto,
-                       Teams.IsDisbanded,Teams.RenamedTo,Teams.IsLowercase,
-                       TeamRedirects.OtherName,TeamRedirects.UniqueLine";
-            query["group_by"] = "Teams.Name"; // Group to prevent duplicate team entries
-            query["limit"] = queryLimit.ToString();
-            query["offset"] = offset.ToString();
-
-            return $"{BaseUrl}?{query}";
-        }
-
-
-        
     }
 }

@@ -60,7 +60,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.ControllerAddTeamRenames();
+                await APIController.ControllerAddScoreboardGames();
 
 
             }

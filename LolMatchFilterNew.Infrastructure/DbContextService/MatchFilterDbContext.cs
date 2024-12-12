@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: Teamname
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +15,12 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEnt
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
-using Google.Apis.YouTube.v3.Data;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -38,11 +40,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
         public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
 
+        public DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+
 
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
         public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeam { get; set; }
         public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
         public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
+
+
 
 
 
@@ -139,6 +145,20 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
+            modelBuilder.Entity<Import_TeamnameEntity>(entity =>
+            {
+                entity.ToTable("Import_Teamname");
+                entity.HasKey(e => e.TeamnameId);
+                entity.Property(e => e.Longname).HasMaxLength(100);
+                entity.Property(e => e.Short).HasMaxLength(100);
+                entity.Property(e => e.Medium).HasMaxLength(100);
+                entity.Property(e => e.Inputs).HasMaxLength(100);
+            });
+
+
+
+
+
 
 
 
@@ -198,6 +218,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.IsSeries);
                 // GameNumber doesn't need specific configuration as it's a nullable int
             });
+
+
 
 
         }

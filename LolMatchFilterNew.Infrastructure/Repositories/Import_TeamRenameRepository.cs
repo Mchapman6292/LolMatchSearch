@@ -31,7 +31,19 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         // Retrieves all current team names by retrieving NewNames which do not appear in OriginalName
         public async Task<List<string>> GetCurrentTeamNamesAsync()
         {
+
+            if (_matchFilterDbContext == null)
+            {
+                throw new InvalidOperationException("DbContext is null");
+            }
+
+            if (_matchFilterDbContext.Import_TeamRename == null)
+            {
+                throw new InvalidOperationException("ImportTeamRename DbSet is null");
+            }
+
             var teamRenames = await _matchFilterDbContext.Import_TeamRename.ToListAsync();
+
 
             var originalNames = teamRenames.Select(x => x.OriginalName).ToHashSet();
 

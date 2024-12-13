@@ -39,6 +39,7 @@ namespace LolMatchFilterNew.Presentation
     {
         public static async Task Main(string[] args)
         {
+            Console.WriteLine("Executing Main Application Program.cs");
             var host = await StartConfiguration.InitializeApplicationAsync(args);
             using (var scope = host.Services.CreateScope())
             {

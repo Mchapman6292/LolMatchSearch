@@ -36,7 +36,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMap
                     CurrentTeamName = kvp.Key,
 
                     // Stores previous TeamNames as comma separated string in database. 
-                    NameHistory = string.Join(";", kvp.Value) ?? string.Empty
+                    NameHistory = kvp.Value
                 }).ToList();
 
                 _appLogger.Info($"Mapped {historyEntities.Count} team histories successfully");

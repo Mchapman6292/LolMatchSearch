@@ -26,29 +26,12 @@ namespace LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters
                     team => team.CurrentTeamName,
                     team =>
                     {
-                        if (string.IsNullOrEmpty(team.NameHistory))
-                            return new List<string>();
+                        var history = team.NameHistory ?? new List<string>();
 
-                        var result = new List<string>();
-                        var parts = team.NameHistory.Split(new[] { ',', ';' });
-
-                        for (int i = 0; i < parts.Length; i++)
-                        {
-                            var name = parts[i].Trim();
-                            if (name == "Also Known As")
-                                continue;
-
-                            if (!string.IsNullOrWhiteSpace(name))
-                                result.Add(name);
-                        }
-
-                        _appLogger.Info($"Team: {team.CurrentTeamName}");
-                        _appLogger.Info($"Original History: {team.NameHistory}");
-                        _appLogger.Info($"Processed History: {string.Join(", ", result)}");
-
-                        return result;
+                        return history;
                     },
-                    StringComparer.OrdinalIgnoreCase
+
+                     StringComparer.OrdinalIgnoreCase
                 );
         }
 

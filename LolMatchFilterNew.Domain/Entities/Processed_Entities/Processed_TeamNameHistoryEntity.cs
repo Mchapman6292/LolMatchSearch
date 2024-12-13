@@ -16,7 +16,7 @@ namespace LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNam
         public string CurrentTeamName { get; set; }
 
         // For single renames
-        public List<string> NameHistory { get; set; }
+        public List<string>? NameHistory { get; set; }
 
     }
 }

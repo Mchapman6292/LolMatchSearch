@@ -65,6 +65,7 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             _appLogger.Info($"Retrieved {allRenames.Count()} total rename records from database");
 
             var teamHistoryEntities = new List<Processed_TeamNameHistoryEntity>();
+
             var resultsWithMorethanOneOriginalName = new Dictionary<string, List<string>>();
 
             foreach (var currentName in currentNames)

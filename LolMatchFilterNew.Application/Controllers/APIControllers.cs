@@ -58,6 +58,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
 
 
+
         private readonly IImport_TeamRenameRepository _importTeamRenameRepository;
 
 
@@ -68,7 +69,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
         public APIControllers(IImport_TeamRenameRepository importTeamRenameRepository, IAppLogger appLogger, ILeaguepediaQueryService leaguepediaQueryService, ILeaguepediaDataFetcher leaguepediaDataFetcher, ILeaguepediaApiMapper leaguepediaApiMapper, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IYoutubeDataFetcher youtubeDataFetcher, IImport_YoutubeDataRepository youtubeVideoRepository, IGenericRepository<Processed_LeagueTeamEntity> leagueTeamRepository,IGenericRepository<Import_TeamRenameEntity> genericTeamRenameRepository, IApiHelper apiHelper, ITeamRenameToHistoryMapper teamRenameToHistoryMapper, IGenericRepository<Processed_TeamNameHistoryEntity> genericTeamHistoryRepository, IGenericRepository<Import_TeamsTableEntity> genericLpediaTeamRepository, ITeamHistoryLogic teamHistoryLogic, IGenericRepository<Import_YoutubeDataEntity> genericYoutubeVideoResultsRepository, IGenericRepository<Import_TeamRedirectEntity> genericImport_TeamRedirectEntity, IGenericRepository<Import_ScoreboardGamesEntity> genericImport_ScoreboardGamesEntity)
         {
-            _appLogger = appLogger;
+            _appLogger = appLogger ?? throw new ArgumentNullException(nameof(appLogger));
             _leaguepediaQueryService = leaguepediaQueryService;
             _leaguepediaDataFetcher = leaguepediaDataFetcher;
             _leaguepediaApiMapper = leaguepediaApiMapper;
@@ -85,6 +86,7 @@ namespace LolMatchFilterNew.Application.Controllers
             _teamHistoryLogic = teamHistoryLogic;
             _generic_Import_TeamRedirectEntity = genericImport_TeamRedirectEntity;
             _generic_Import_ScoreboardGamesEntity = genericImport_ScoreboardGamesEntity;
+            _importTeamRenameRepository = importTeamRenameRepository;
 
         }
 

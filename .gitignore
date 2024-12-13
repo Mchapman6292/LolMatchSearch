@@ -367,6 +367,8 @@ FodyWeavers.xsd
 # Ignore AppSettings.json
 LolMatchFilterNew.Presentation/AppSettings.json
 LolMatchFilterNew.Application/appsettings.json
+appsettings.Development.json
+appsettings.json
 
 #Practice accidentally added
 LeetcodeAOC/

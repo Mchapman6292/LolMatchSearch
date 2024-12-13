@@ -193,7 +193,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.ToTable("Processed_TeamNameHistory");
                 entity.HasKey(t => t.CurrentTeamName);
                 entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.NameHistory).HasMaxLength(1000);
+                entity.Property(e => e.NameHistory).HasColumnType("text[]");
+
             });
 
          

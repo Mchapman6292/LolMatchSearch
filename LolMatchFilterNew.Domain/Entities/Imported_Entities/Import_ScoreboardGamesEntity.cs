@@ -29,7 +29,6 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         // References the series e.g 2012 MLG Pro Circuit/Fall/Championship_Round 2_1
         public string? MatchId {  get; set; }
 
-        public string? League { get; set; }
 
 
         public DateTime? DateTime_utc { get; set; } // ScoreboardPlayers

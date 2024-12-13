@@ -15,9 +15,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
         string BuildQueryStringScoreBoardGames(int queryLimit, int offset = 0);
 
 
-        string BuildQueryStringAllScoreboardGames(int queryLimit, int offset = 0);
-
-
         string BuildQueryStringTeamRedirects(int queryLimit, int offset = 0);
 
 
@@ -29,7 +26,5 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
 
 
 
-
-        string NewQuery(int queryLimit, int queryOffset = 0);
     }
 }

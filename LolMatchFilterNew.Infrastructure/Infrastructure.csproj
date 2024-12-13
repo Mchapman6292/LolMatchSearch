@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="DocX" Version="3.0.1" />
+    <PackageReference Include="EPPlus" Version="7.4.2" />
     <PackageReference Include="Google.Apis" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.68.0" />
@@ -38,17 +39,15 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Threading" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LolMatchFilterNew.Domain\LolMatchFilterNew.Domain.csproj" />
-    <ProjectReference Include="..\LolMatchFilterNew.Infrastructure\LolMatchFilterNew.Infrastructure.csproj" />
+    <ProjectReference Include="..\LolMatchFilterNew.Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

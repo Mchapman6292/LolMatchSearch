@@ -36,9 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LolMatchFilterNew.Application\LolMatchFilterNew.Application.csproj" />
-    <ProjectReference Include="..\LolMatchFilterNew.Domain\LolMatchFilterNew.Domain.csproj" />
-    <ProjectReference Include="..\LolMatchFilterNew.Infrastructure\LolMatchFilterNew.Infrastructure.csproj" />
+    <ProjectReference Include="..\LolMatchFilterNew.Application\Application.csproj" />
+    <ProjectReference Include="..\LolMatchFilterNew.Domain\Domain.csproj" />
+    <ProjectReference Include="..\LolMatchFilterNew.Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

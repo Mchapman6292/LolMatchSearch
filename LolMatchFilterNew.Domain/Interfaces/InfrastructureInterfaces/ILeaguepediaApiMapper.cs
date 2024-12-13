@@ -16,16 +16,16 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
 {
     public interface ILeaguepediaApiMapper
     {
-        Task<IEnumerable<Import_ScoreboardGamesEntity>> MapSGamesJobjectToEntity(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Import_ScoreboardGamesEntity>> MapToImport_ScoreboardGames(IEnumerable<JObject> leaguepediaData);
 
-        Task<IEnumerable<Import_TeamRedirectEntity>> MapTeamRedirectsToEntity(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Import_TeamRedirectEntity>> MapToImport_TeamRedirects(IEnumerable<JObject> leaguepediaData);
 
-        Task<IEnumerable<Processed_LeagueTeamEntity>> MapLeaguepediaDataToLeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
+        Task<IEnumerable<Processed_LeagueTeamEntity>> MapToProcessed_LeagueTeamEntity(IEnumerable<JObject> leaguepediaData);
 
         Task<IEnumerable<Processed_LeagueTeamEntity>> MapApiDataToLeagueTeamEntityForTeamShort(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<Import_TeamRenameEntity>> MapJTokenToImport_TeamRename(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamRenameEntity>> MapToImport_TeamRename(IEnumerable<JObject> apiData);
 
-        Task<IEnumerable<Import_TeamsTableEntity>> MapJTokenToImport_Teams(IEnumerable<JObject> apiData);
+        Task<IEnumerable<Import_TeamsTableEntity>> MapToImport_Teams(IEnumerable<JObject> apiData);
     }
 }

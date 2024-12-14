@@ -30,30 +30,32 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
         }
 
         // This is causing Infinite loop when there are no previous teamNames
-        public List<string> FindPreviousTeamNames(string currentName, IEnumerable<Import_TeamRenameEntity> allRenames, Dictionary<string, List<string>> resultsWithMorethanOneOriginalName)
+        public List<string>? FindPreviousTeamNames(string currentName, IEnumerable<Import_TeamRenameEntity> allRenames)
         {
-            var historyList = new List<string>();
+            List<string>? historyList = new List<string>();
+            var processedNames = new List<string>();
             string nameToSearch = currentName;
 
+            while (allRenames.Any(rename => rename.NewName.Equals(nameToSearch, StringComparison.OrdinalIgnoreCase))) 
             {
-                var foundOriginalName = allRenames
+                var foundOriginalNames = allRenames
                     .Where(rename => rename.NewName.Equals(nameToSearch, StringComparison.OrdinalIgnoreCase))
                     .Select(rename => rename.OriginalName)
                     .ToList();
 
-                if (foundOriginalName.Any())
+                foreach (var name in foundOriginalNames)
                 {
-                    historyList.Add(foundOriginalName.First());
-                    nameToSearch = foundOriginalName.First();
+                    if (!processedNames.Contains(name))
+                    {
+                        historyList.Add(name);
+                        processedNames.Add(name);
+                    }
                 }
-                else
-                {
-                    historyList.Add("N/A");
-                }
+
+                nameToSearch = foundOriginalNames.First();
             }
             return historyList;
         }
-
 
 
         public async Task<List<Processed_TeamNameHistoryEntity>> GetAllPreviousTeamNamesForCurrentTeamName(List<string> currentNames)
@@ -62,17 +64,19 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
             _appLogger.Info($"Input team names: {string.Join(", ", currentNames)}");
 
             IEnumerable<Import_TeamRenameEntity> allRenames = await _teamRenameRepository.GetAllTeamRenameValuesAsync();
+
+
             _appLogger.Info($"Retrieved {allRenames.Count()} total rename records from database");
 
             var teamHistoryEntities = new List<Processed_TeamNameHistoryEntity>();
 
-            var resultsWithMorethanOneOriginalName = new Dictionary<string, List<string>>();
+  
 
             foreach (var currentName in currentNames)
             {
                 _appLogger.Info($"Processing history for team: {currentName}");
 
-                var historyList = FindPreviousTeamNames(currentName, allRenames, resultsWithMorethanOneOriginalName);
+                var historyList = FindPreviousTeamNames(currentName, allRenames);
 
                 _appLogger.Info(historyList.Any()
                     ? $"Found {historyList.Count} previous names for {currentName}: {string.Join(", ", historyList)}"
@@ -88,7 +92,6 @@ namespace LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics
                 _appLogger.Info($"Created history entity for {currentName} with history: {teamEntity.NameHistory}");
             }
 
-            LogMultipleMatches(resultsWithMorethanOneOriginalName);
 
             foreach (var teamEntity in teamHistoryEntities)
             {

@@ -49,12 +49,14 @@ namespace LolMatchFilterNew.Application.Controllers
 
 
         private readonly IGenericRepository<Import_ScoreboardGamesEntity> _generic_Import_ScoreboardGamesEntity;
-        private readonly IGenericRepository<Processed_LeagueTeamEntity> _generic_Processed_LeagueTeamRepository;
         private readonly IGenericRepository<Import_TeamRenameEntity> _generic_Import_TeamRenameEntity;
-        private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _generic_Processed_TeamNameHistoryEntity;
         private readonly IGenericRepository<Import_TeamsTableEntity> _generic_Import_TeamsTableEntity;
         private readonly IGenericRepository<Import_YoutubeDataEntity> _generic_Import_YoutubeDataEntity;
         private readonly IGenericRepository<Import_TeamRedirectEntity> _generic_Import_TeamRedirectEntity;
+
+
+        private readonly IGenericRepository<Processed_LeagueTeamEntity> _generic_Processed_LeagueTeamRepository;
+        private readonly IGenericRepository<Processed_TeamNameHistoryEntity> _generic_Processed_TeamNameHistoryEntity;
 
 
 
@@ -252,9 +254,9 @@ namespace LolMatchFilterNew.Application.Controllers
             await _generic_Processed_TeamNameHistoryEntity.AddRangeWithTransactionAsync(teamHistories);
         }
 
-        public async Task ControllerDeleteAllYoutubeVideoResultsEntries()
+        public async Task ControllerDeleteProcessed_TeamNameHistory()
         {
-            await _generic_Import_YoutubeDataEntity.RemoveAllEntitiesAsync();
+            await _generic_Processed_TeamNameHistoryEntity.RemoveAllEntitiesAsync();
         }
 
 

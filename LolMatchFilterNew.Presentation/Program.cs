@@ -60,8 +60,13 @@ namespace LolMatchFilterNew.Presentation
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
-                await APIController.ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
-              
+
+                
+
+
+                await APIController.ControllerDeleteProcessed_TeamNameHistory();
+
+
 
             }
             await host.RunAsync();

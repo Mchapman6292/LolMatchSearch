@@ -28,6 +28,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
         Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
-        Task ControllerDeleteAllYoutubeVideoResultsEntries();
+        Task ControllerDeleteProcessed_TeamNameHistory();
     }
 }

@@ -1,5 +1,4 @@
-﻿using LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
+﻿
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
@@ -54,7 +53,6 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
                     services.AddSingleton<TestLogger>();
                     services.AddSingleton<IAppLogger, AppLogger>();
                     services.AddTransient<Import_TeamRenameRepository, Import_TeamRenameRepository>();
-                    services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
                     services.AddTransient<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
                     services.AddScoped<IMatchFilterDbContext>(provider =>
                         provider.GetRequiredService<MatchFilterDbContext>());
@@ -64,8 +62,6 @@ namespace LolMatchFilterNew.Tests.TestServiceFactories
         public IAppLogger GetAppLogger() =>
             _host.Services.GetRequiredService<IAppLogger>();
 
-        public ITeamHistoryLogic GetTeamHistoryLogic() =>
-            _host.Services.GetRequiredService<ITeamHistoryLogic>();
 
         public TestLogger GetTestLogger() =>
          _host.Services.GetRequiredService<TestLogger>();

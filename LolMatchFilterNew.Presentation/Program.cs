@@ -16,7 +16,6 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Youtu
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 
@@ -53,7 +52,6 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeFetcher = scope.ServiceProvider.GetRequiredService<IYoutubeDataFetcher>();
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IImport_YoutubeDataRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
-                var teamHistoryLogic = scope.ServiceProvider.GetRequiredService<ITeamHistoryLogic>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
 
 
@@ -61,10 +59,10 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                
 
 
-                await APIController.ControllerDeleteProcessed_TeamNameHistory();
+
+                await APIController.TESTControllerMapProcessed_TeamNameHistoryAsync();
 
 
 

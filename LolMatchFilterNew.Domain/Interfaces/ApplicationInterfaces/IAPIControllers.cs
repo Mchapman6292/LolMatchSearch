@@ -26,8 +26,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
         Task ControllerAddTeamsTableToDatabase();
 
-        Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
         Task ControllerDeleteProcessed_TeamNameHistory();
+
+        Task TESTControllerMapProcessed_TeamNameHistoryAsync();
     }
 }

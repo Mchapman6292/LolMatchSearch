@@ -10,5 +10,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRena
     public interface ITeamRenameToHistoryMapper
     {
         Task<List<Processed_TeamNameHistoryEntity>> MapTeamRenameToHistoryAsync();
+        Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync();
+        Task<Dictionary<string, List<string>>> TESTAddOriginalNameToNewNameAsync();
     }
 }

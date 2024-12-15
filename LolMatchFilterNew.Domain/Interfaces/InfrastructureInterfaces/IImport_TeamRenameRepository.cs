@@ -11,7 +11,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_T
     public interface IImport_TeamRenameRepository
     {
         Task<List<string>> GetCurrentTeamNamesAsync();
-        Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync();
+
+        Task<List<string>> TESTGet10CurrentTeamNamesAsync();
         Task<List<Import_TeamRenameEntity>> GetAllTeamRenameValuesAsync();
     }
 }

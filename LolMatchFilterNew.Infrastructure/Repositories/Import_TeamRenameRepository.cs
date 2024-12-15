@@ -31,9 +31,8 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         // Retrieves all current team names by retrieving NewNames which do not appear in OriginalName
         public async Task<List<string>> GetCurrentTeamNamesAsync()
         {
+
             var teamRenames = await _matchFilterDbContext.Import_TeamRename.ToListAsync();
-
-
             var originalNames = teamRenames.Select(x => x.OriginalName).ToHashSet();
 
             return teamRenames
@@ -43,6 +42,24 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
                 .ToList();
         }
 
+
+        public async Task<List<string>> TESTGet10CurrentTeamNamesAsync()
+        {
+            var teamRenames = await _matchFilterDbContext.Import_TeamRename.ToListAsync();
+
+            var originalNames = teamRenames.Select(x => x.OriginalName).ToHashSet();
+
+            return teamRenames
+            .Select(x => x.NewName)
+            .Where(newName => !originalNames.Contains(newName))
+            .Distinct()
+            .Take(10)
+            .ToList();
+
+
+        }
+
+
         // Retrieves all results from TeamReanmes which has kept the format of the data from Leaguepedia. 
         public async Task<List<Import_TeamRenameEntity>> GetAllTeamRenameValuesAsync()
         {
@@ -50,49 +67,12 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         }
 
 
-        // Iteratively  adds OriginalNames to NewNames until no more entries found for each OriginalName
-        public async Task<Dictionary<string, List<string>>> AddOriginalNameToNewNameAsync()
-        {
-            Dictionary<string, List<string>> teamNameHistory = new();
-            var allTeamRenames = await _matchFilterDbContext.Import_TeamRename.ToListAsync();
-            var currentNames = await GetCurrentTeamNamesAsync();
-
-            foreach (var currentName in currentNames)
-            {
-                var previousNames = new List<string>();
-                var namesToProcess = new Queue<string>();
-                namesToProcess.Enqueue(currentName);
-
-                // Track processed names to avoid infinite loop
-                var processedNames = new HashSet<string>();
-
-                while (namesToProcess.Count > 0)
-                {
-                    var nameToCheck = namesToProcess.Dequeue();
-
-                    if (processedNames.Contains(nameToCheck))
-                        continue;
 
 
-                    var previousIterations = allTeamRenames
-                        .Where(x => x.NewName == nameToCheck)
-                        .Select(x => x.OriginalName);
 
-                    foreach (var previousName in previousIterations)
-                    {
-                        if (!processedNames.Contains(previousName))
-                        {
-                            previousNames.Add(previousName);
-                            namesToProcess.Enqueue(previousName);
-                        }
-                    }
 
-                    processedNames.Add(nameToCheck);
-                }
-                teamNameHistory[currentName] = previousNames;
-            }
-            return teamNameHistory;
-        }
+
+
 
     }
 }

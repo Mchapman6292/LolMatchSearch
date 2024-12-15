@@ -38,8 +38,6 @@ using LolMatchFilterNew.Application.Controllers.YoutubeControllers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
-using LolMatchFilterNew.Application.TeamHistoryService.TeamHistoryLogics;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.ITeamHistoryLogic;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
@@ -139,7 +137,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_ScoreboardGamesRepository, Import_ScoreboardGamesRepository>();
                   services.AddTransient<IImport_TeamRenameRepository, Import_TeamRenameRepository>();
                   services.AddTransient<ITeamRenameToHistoryMapper, TeamRenameToHistoryMapper>();
-                  services.AddTransient<ITeamHistoryLogic, TeamHistoryLogic>();
                   services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
           

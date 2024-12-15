@@ -29,6 +29,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
         Task ControllerDeleteProcessed_TeamNameHistory();
 
-        Task TESTControllerMapProcessed_TeamNameHistoryAsync();
+        Task ControllerAddProcessed_TeamNameHistory();
     }
 }

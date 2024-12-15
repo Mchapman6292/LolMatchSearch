@@ -62,7 +62,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.TESTControllerMapProcessed_TeamNameHistoryAsync();
+                await APIController.ControllerAddTeamsTableToDatabase();
 
 
 

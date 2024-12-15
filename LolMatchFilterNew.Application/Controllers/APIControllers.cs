@@ -113,10 +113,7 @@ namespace LolMatchFilterNew.Application.Controllers
 
 
 
-        public async Task DeleteAllTeamRedirects()
-        {
-            await _generic_Import_TeamRedirectEntity.RemoveAllEntitiesAsync();
-        }
+  
 
         public async Task FetchAndAddLeaguepediaDataForLeagueName(string leagueName)
         {
@@ -265,7 +262,9 @@ namespace LolMatchFilterNew.Application.Controllers
 
 
 
-        public async Task TESTControllerMapProcessed_TeamNameHistoryAsync()
+
+        // Used to populate Processed_TeamNameHistory 15/12/2024
+        public async Task ControllerAddProcessed_TeamNameHistory()
         {
             List<Processed_TeamNameHistoryEntity> teamHistories = await _teamRenameToHistoryMapper.MapTeamRenameToHistoryAsync();
 
@@ -276,6 +275,11 @@ namespace LolMatchFilterNew.Application.Controllers
         public async Task ControllerDeleteProcessed_TeamNameHistory()
         {
             await _generic_Processed_TeamNameHistoryEntity.RemoveAllEntitiesAsync();
+        }
+
+        public async Task DeleteAllTeamRedirects()
+        {
+            await _generic_Import_TeamRedirectEntity.RemoveAllEntitiesAsync();
         }
 
 

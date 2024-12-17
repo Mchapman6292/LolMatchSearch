@@ -31,6 +31,7 @@ namespace Infrastructure.QueryBuilders.APIQueryBuilders
         public APIQueryBuilder( IMatchFilterDbContext matchFilterDbContext)
         {
             _matchFilterDbContext = matchFilterDbContext;
+            _query = _matchFilterDbContext.Processed_TeamNameHistory;
   
         }
 
@@ -42,6 +43,8 @@ namespace Infrastructure.QueryBuilders.APIQueryBuilders
                 _query = _query.Where(t =>
                                 t.CurrentTeamName == teamName ||
                                 t.NameHistory.Contains(teamName));
+
+
                                 
             }
             return this;

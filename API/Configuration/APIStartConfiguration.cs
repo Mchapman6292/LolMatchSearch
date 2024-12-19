@@ -1,23 +1,12 @@
-﻿using LolMatchFilterNew.Application.Configuration.StartConfiguration;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using API.Configuration.APIStartups;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRedirectRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.Import_TeamRedirectRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories;
 
 

@@ -5,6 +5,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_T
 {
     public interface IProcessed_TeamNameHistoryRepository
     {
-        Task<String>? TESTGetTeamsByNameAsync(string teamName);
+        Task<List<string>> TESTGetTeamsByNameAsync(string teamName);
     }
 }

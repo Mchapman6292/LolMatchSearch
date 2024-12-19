@@ -75,7 +75,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMap
             var currentNames = await _teamRenameRepository.GetCurrentTeamNamesAsync();
 
             foreach (var currentName in currentNames)
-            {
+            { 
                 var previousNames = new HashSet<string>(); 
                 var processedNames = new HashSet<string> { currentName }; 
                 var namesToProcess = new Queue<string>();

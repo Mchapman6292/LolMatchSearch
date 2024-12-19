@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using Infrastructure.QueryBuilders.APIQueryBuilders;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories
@@ -32,11 +33,11 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistor
         }
 
 
-        public async Task<String>? TESTGetTeamsByNameAsync(string teamName)
+        public async Task<List<string>> TESTGetTeamsByNameAsync(string teamName)
         {
             APIQueryBuilder queryBuilder = new APIQueryBuilder(_matchFilterDbContext);
 
-            Task result = queryBuilder
+            List<string>? result = await queryBuilder
                 .WithTeam(teamName)
                 .SelectNameHistory()
                 .FirstOrDefaultAsync();
@@ -45,9 +46,9 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistor
             {
                 throw new Exception($"Unable to find NameHistory for {nameof(TESTGetTeamsByNameAsync)} for team {teamName}.");
             }
- 
-           return  result.ToString() ?? string.Empty; 
 
+            return result;
+            
         }
 
 

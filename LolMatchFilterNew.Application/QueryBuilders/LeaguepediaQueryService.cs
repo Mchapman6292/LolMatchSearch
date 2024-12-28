@@ -48,7 +48,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
-        // Fetches all values from ScoreboardGames without any joins to Teamredirects etc, 
+        // Fetches all values from ScoreboardGamesId without any joins to Teamredirects etc, 
 
         //
 
@@ -57,7 +57,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "ScoreboardGames=SG";
+            query["tables"] = "ScoreboardGamesId=SG";
             query["fields"] = "SG.GameId,SG.Gamename,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
                              "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam," +
                              "SG.Team1Kills,SG.Team2Kills,SG.MatchId";

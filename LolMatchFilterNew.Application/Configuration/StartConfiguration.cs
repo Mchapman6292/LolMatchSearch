@@ -8,7 +8,7 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IYoutubeApi;
 using LolMatchFilterNew.Domain.Interfaces.ILeaguepediaDataFetcher;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
-using LolMatchFilterNew.Domain;
+using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher;
 using LolMatchFilterNew.Domain.Helpers.ApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
@@ -36,8 +36,6 @@ using LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositori
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using LolMatchFilterNew.Application.Controllers.YoutubeControllers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
-using LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
 using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
@@ -136,7 +134,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeController, YoutubeController>();
                   services.AddTransient<IImport_ScoreboardGamesRepository, Import_ScoreboardGamesRepository>();
                   services.AddTransient<IImport_TeamRenameRepository, Import_TeamRenameRepository>();
-                  services.AddTransient<ITeamRenameToHistoryMapper, TeamRenameToHistoryMapper>();
                   services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
           

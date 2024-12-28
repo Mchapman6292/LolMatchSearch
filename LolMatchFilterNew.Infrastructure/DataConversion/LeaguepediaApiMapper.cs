@@ -58,7 +58,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                         var entity = new Import_ScoreboardGamesEntity
                         {
                             GameId = _apiHelper.GetStringValue(matchData, "GameId"),
-                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),        // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
+                            GameName = _apiHelper.GetStringValue(matchData, "Gamename"),        // Lower case in original data https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGamesId
                             MatchId = _apiHelper.GetNullableStringValue(matchData, "MatchId"),
                             DateTime_utc = _apiHelper.ParseNullableDateTime(matchData, "DateTime UTC"),
                             Tournament = _apiHelper.GetNullableStringValue(matchData, "Tournament"),

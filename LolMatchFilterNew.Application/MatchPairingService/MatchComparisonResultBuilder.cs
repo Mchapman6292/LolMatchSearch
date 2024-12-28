@@ -20,7 +20,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService
         {
             if (string.IsNullOrWhiteSpace(gameId))
                 throw new ArgumentException("Game ID cannot be empty", nameof(gameId));
-            _result.LeaguepediaGameId = gameId;
+            _result.ScoreboardGamesId = gameId;
             return this;
         }
 
@@ -38,8 +38,8 @@ namespace LolMatchFilterNew.Application.MatchPairingService
             if (string.IsNullOrWhiteSpace(team2))
                 throw new ArgumentException("Team2 cannot be empty", nameof(team2));
 
-            _result.LeaguepediaTeam1 = team1;
-            _result.LeaguepediaTeam2 = team2;
+            _result.ScoreboardGamesTeam1 = team1;
+            _result.ScoreboardGamesTeam2 = team2;
             _teamsSet = true;
             return this;
         }

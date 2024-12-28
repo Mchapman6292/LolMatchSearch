@@ -1,4 +1,4 @@
-﻿using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
+﻿using Domain.DTOs.TeamNameHistoryDTOs;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
@@ -25,40 +25,30 @@ namespace Infrastructure.QueryBuilders.APIQueryBuilders
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
-        private IQueryable<Processed_TeamNameHistoryEntity> _query;
+        private IQueryable<TeamNameHistoryDTO> _query;
 
 
         public APIQueryBuilder( IMatchFilterDbContext matchFilterDbContext)
         {
             _matchFilterDbContext = matchFilterDbContext;
-            _query = _matchFilterDbContext.Processed_TeamNameHistory;
   
         }
 
 
         public APIQueryBuilder WithTeam(string teamName) 
         {
-            if(!string.IsNullOrEmpty(teamName))
-            {
-                _query = _query.Where(t =>
-                                t.CurrentTeamName == teamName ||
-                                t.NameHistory.Contains(teamName));
-
-
-                                
-            }
-            return this;
+            throw new NotImplementedException();
         }
 
 
         public IQueryable<List<string>> SelectNameHistory()
         {
-            return _query.Select(t => t.NameHistory);
+            throw new NotImplementedException();
         }
 
 
 
-        public IQueryable<Processed_TeamNameHistoryEntity> Build()
+        public IQueryable<TeamNameHistoryDTO> Build()
         {
             return _query;
         }

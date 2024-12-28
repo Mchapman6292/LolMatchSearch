@@ -7,7 +7,7 @@ using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
-using Domain.DTOs.TeamNameHistoryDTOs;
+using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using Npgsql;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories

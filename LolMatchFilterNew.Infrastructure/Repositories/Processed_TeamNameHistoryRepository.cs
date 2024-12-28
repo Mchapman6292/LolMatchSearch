@@ -4,15 +4,16 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamR
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
+using Domain.DTOs.TeamNameHistoryDTOs;
 using Infrastructure.QueryBuilders.APIQueryBuilders;
+using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories
 {
 
 
-    public class Processed_TeamNameHistoryRepository : GenericRepository<Processed_TeamNameHistoryEntity>, IProcessed_TeamNameHistoryRepository
+    public class Processed_TeamNameHistoryRepository : GenericRepository<Import_TeamRenameRepository>, IProcessed_TeamNameHistoryRepository
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;

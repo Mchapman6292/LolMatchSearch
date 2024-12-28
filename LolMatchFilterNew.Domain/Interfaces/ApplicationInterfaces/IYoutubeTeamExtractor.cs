@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeam
 {
     public interface IYoutubeTeamExtractor
     {
-        
+        List<string> MatchVsPatternAndUpdateMatchComparisonResultEntity(string youtubeTitle);
+
+        Task<List<string>> ExtractEndTeamStringForMultipleAsync(List<Import_YoutubeDataEntity> youtubeVideos);
+
+        async Task<string> ExtractEndTeamStringAsync(Import_YoutubeDataEntity youtubeVideo);
     }
 }

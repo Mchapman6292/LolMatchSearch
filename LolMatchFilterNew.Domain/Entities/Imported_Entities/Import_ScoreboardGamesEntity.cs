@@ -14,11 +14,11 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
     public class Import_ScoreboardGamesEntity
     {
         // Game Ids are in format: "LEC/2024 Season/Spring Season_Week 2_10_1
-        // Primary key for ScoreboardPlayers, ScoreboardGames & ScoreboardTeams
+        // Primary key for ScoreboardPlayers, ScoreboardGamesId & ScoreboardTeams
 
 
         [Key]
-        public string GameName { get; set; } // ScoreboardGames
+        public string GameName { get; set; } // ScoreboardGamesId
 
         [Key]
 
@@ -36,31 +36,31 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         public string? Tournament { get; set; } // ScoreboardPlayers
 
 
-        public string? Team1 { get; set; } // ScoreboardGames
+        public string? Team1 { get; set; } // ScoreboardGamesId
 
 
-        public string? Team2 { get; set; } // ScoreboardGames
+        public string? Team2 { get; set; } // ScoreboardGamesId
 
-        public string? Team1Players { get; set; } // ScoreboardGames
-
-
-        public string? Team2Players { get; set; } // ScoreboardGames
-
-        public string? Team1Picks { get; set; } // ScoreboardGames
+        public string? Team1Players { get; set; } // ScoreboardGamesId
 
 
-        public string? Team2Picks { get; set; } // ScoreboardGames
+        public string? Team2Players { get; set; } // ScoreboardGamesId
+
+        public string? Team1Picks { get; set; } // ScoreboardGamesId
 
 
-        public string? WinTeam { get; set; } // ScoreboardGames
+        public string? Team2Picks { get; set; } // ScoreboardGamesId
 
 
-        public string? LossTeam { get; set; } // ScoreboardGames
-
-        public int? Team1Kills { get; set; } // ScoreboardGames
+        public string? WinTeam { get; set; } // ScoreboardGamesId
 
 
-        public int? Team2Kills { get; set; } // ScoreboardGames
+        public string? LossTeam { get; set; } // ScoreboardGamesId
+
+        public int? Team1Kills { get; set; } // ScoreboardGamesId
+
+
+        public int? Team2Kills { get; set; } // ScoreboardGamesId
 
 
 

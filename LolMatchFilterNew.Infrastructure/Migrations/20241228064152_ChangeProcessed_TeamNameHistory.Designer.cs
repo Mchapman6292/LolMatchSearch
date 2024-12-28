@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228064152_ChangeProcessed_TeamNameHistory")]
+    partial class ChangeProcessed_TeamNameHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,6 +355,39 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.HasKey("LeaguepediaPlayerAllName");
 
                     b.ToTable("Processed_ProPlayers", (string)null);
+                });
+
+            modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities.Processed_TeamNameHistoryEntity", b =>
+                {
+                    b.Property<string>("CurrentTeamName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("ChangeDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ChangeDepth")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ChangeType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ChangedTo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ParentOrganization")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreviousName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("CurrentTeamName");
+
+                    b.ToTable("Processed_TeamNameHistory", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities.Processed_YoutubeDataEntity", b =>

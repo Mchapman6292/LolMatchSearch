@@ -19,7 +19,6 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -45,7 +44,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
         public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeam { get; set; }
-        public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
         public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
 
 
@@ -187,15 +185,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             });
 
       
-
-            modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
-            {
-                entity.ToTable("Processed_TeamNameHistory");
-                entity.HasKey(t => t.CurrentTeamName);
-                entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.NameHistory).HasColumnType("text[]");
-
-            });
 
          
 

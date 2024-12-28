@@ -11,7 +11,6 @@ using Xunit;
 using LolMatchFilterNew.Tests.TestLoggers;
 using LolMatchFilterNew.Tests.TestServiceFactories;
 using System.Collections;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests

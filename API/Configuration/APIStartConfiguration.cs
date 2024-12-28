@@ -7,7 +7,6 @@ using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories;
 
 
 namespace API.Configuration.APIStartConfigurations
@@ -45,7 +44,6 @@ namespace API.Configuration.APIStartConfigurations
                     services.AddScoped<IMatchFilterDbContext>(provider => provider.GetRequiredService<MatchFilterDbContext>());
                     services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-                    services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
 
                 });
   

@@ -41,6 +41,9 @@ namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests
 
             // edge case 
             new object[] { new Dictionary<string, List<string>> { ["Fnatic"] = new List<string> { "myRevenge","Enemy" } } }
+
+
+            // Add Movistar KOI, academy team of Mad Lions koi, good test case. 
         };
 
 

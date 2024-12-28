@@ -1,18 +1,14 @@
 ﻿
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
+using Domain.DTOs.TeamNameHistoryDTOs;
+using Npgsql;
 
 namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
 {
@@ -64,6 +60,13 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
         public async Task<List<Import_TeamRenameEntity>> GetAllTeamRenameValuesAsync()
         {
             return await _matchFilterDbContext.Import_TeamRename.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Import_TeamRenameEntity>> GetTeamHistoryAsync(string teamName)
+        {
+            var query = "SELECT * FROM get_team_name_history(@teamName)";
+            var parameter = new NpgsqlParameter("@teamName", teamName);
+            return await _matchFilterDbContext.Import_TeamRename.FromSqlRaw(query, parameter).ToListAsync();
         }
 
 

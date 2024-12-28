@@ -1,13 +1,8 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ITeamRenameToHistoryMappers;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
-using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 
 namespace LolMatchFilterNew.Infrastructure.DataConversion.TeamRenameToHistoryMappers
 {

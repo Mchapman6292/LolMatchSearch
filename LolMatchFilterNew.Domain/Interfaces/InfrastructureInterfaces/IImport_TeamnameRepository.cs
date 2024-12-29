@@ -9,6 +9,6 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositorie
 {
     public interface IImport_TeamnameRepository
     {
-        Task<IEnumerable<Import_TeamnameEntity>> GetAllTeamnamesAsync();
+        Task<List<Import_TeamnameEntity>> GetAllTeamnamesAsync();
     }
 }

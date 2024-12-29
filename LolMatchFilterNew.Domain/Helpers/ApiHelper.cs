@@ -649,16 +649,6 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 
 
 
-        public List<string> ParseTeamnameInputsColumn(string teamnameInputs)
-        {
-            string cleaned = teamnameInputs.Trim('{', '}', '"');
-
-            List<string> allNames = cleaned.Split(';', StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(name => name.Trim())
-                                        .ToList();
-
-            return allNames;
-        }
     }
 }
 

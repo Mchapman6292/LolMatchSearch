@@ -150,7 +150,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.Property<string>("TeamnameId")
                         .HasColumnType("text");
 
-                    b.Property<List<string>>("Inputs")
+                    b.Property<List<string>>("FormattedInputs")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("text[]");

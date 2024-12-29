@@ -462,7 +462,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                 Longname = _apiHelper.GetNullableStringValue(titleData, "Longname"),
                                 Short = _apiHelper.GetNullableStringValue(titleData, "Short"),
                                 Medium = _apiHelper.GetNullableStringValue(titleData, "Medium"),
-                                Inputs = _apiHelper.GetValuesAsList(titleData, "Inputs")
+                                Inputs = _apiHelper.GetValuesAsList(titleData, "FormattedInputs")
                             };
 
                             results.Add(entity);

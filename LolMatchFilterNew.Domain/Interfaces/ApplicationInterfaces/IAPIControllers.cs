@@ -22,12 +22,13 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
         Task ControllerAddTeamRenames();
 
 
-        Task ControllerAddTeamNameHistoryToDatabase();
 
         Task ControllerAddTeamsTableToDatabase();
 
-        Task ControllerMapAllCurrentTeamNamesToPreviousTeamNamesAsync();
 
-        Task ControllerDeleteAllYoutubeVideoResultsEntries();
+        Task ControllerAddTeamnameToDatabase();
+
+
+
     }
 }

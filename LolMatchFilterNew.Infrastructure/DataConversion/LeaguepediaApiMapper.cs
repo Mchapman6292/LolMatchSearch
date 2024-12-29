@@ -17,6 +17,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
     public class LeaguepediaApiMapper : ILeaguepediaApiMapper
@@ -418,6 +419,68 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                                $"Used fallback names for {fallbackNameCount} records. " +
                                $"Total objects: {totalObjects}, Null objects: {nullObjects}, Null properties: {nullProperties}");
 
+                return results;
+            });
+        }
+
+
+
+
+
+        public async Task<IEnumerable<Import_TeamnameEntity>> MapToImport_Teamname(IEnumerable<JObject> apiData)
+        {
+            if (apiData == null || !apiData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToImport_Teamname)}.");
+                throw new ArgumentNullException(nameof(apiData), "Input data cannot be null or empty.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<Import_TeamnameEntity>();
+                int processedCount = 0;
+                int skippedCount = 0;
+
+                foreach (var teamData in apiData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        if (teamData["title"] is JObject titleData)
+                        {
+                            string teamnameId = _apiHelper.GetNullableStringValue(titleData, "TeamnameId");
+                            if (string.IsNullOrEmpty(teamnameId))
+                            {
+                                skippedCount++;
+                                _appLogger.Warning($"Skipping record {processedCount} due to null or empty TeamnameId. Raw data: {titleData}");
+                                continue;
+                            }
+
+                            var entity = new Import_TeamnameEntity
+                            {
+                                TeamnameId = teamnameId,
+                                Longname = _apiHelper.GetNullableStringValue(titleData, "Longname"),
+                                Short = _apiHelper.GetNullableStringValue(titleData, "Short"),
+                                Medium = _apiHelper.GetNullableStringValue(titleData, "Medium"),
+                                Inputs = _apiHelper.GetValuesAsList(titleData, "Inputs")
+                            };
+
+                            results.Add(entity);
+                        }
+                        else
+                        {
+                            skippedCount++;
+                            _appLogger.Warning($"Skipping record {processedCount} due to missing or invalid 'title' object. Raw data: {teamData}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing team data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {teamData}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} entities out of {processedCount} processed. Skipped {skippedCount} records with null/empty TeamnameId.");
                 return results;
             });
         }

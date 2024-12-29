@@ -15,7 +15,7 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRepositories
+namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesRepositories
 {
     public class Import_ScoreboardGamesRepository : GenericRepository<Import_ScoreboardGamesEntity>, IImport_ScoreboardGamesRepository
     {
@@ -88,7 +88,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRe
                 .Select(e => new
                 {
                     Key = e.Property(p => p.GameId).CurrentValue,
-                    State = e.State
+                    e.State
                 }).ToList();
 
             _appLogger.Info($"Number of tracked Import_ScoreboardGamesEntity: {trackedEntities.Count}");
@@ -98,7 +98,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_ScoreboardGamesRe
 
         public async Task<int> DeleteAllScoreboardGames()
         {
-         
+
             var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
             int count = allRecords.Count;
 

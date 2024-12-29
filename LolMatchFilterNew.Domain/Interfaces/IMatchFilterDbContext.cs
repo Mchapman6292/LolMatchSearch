@@ -14,9 +14,9 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEnti
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
@@ -31,7 +31,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 
         DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
 
-        DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
+        DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+
         DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
         DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
 

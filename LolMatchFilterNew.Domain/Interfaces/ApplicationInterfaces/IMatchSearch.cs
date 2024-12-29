@@ -11,7 +11,5 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearch
 {
     public interface IMatchSearch
     {
-        Task<List<string>> ExtractEndTeamStringForMultiple(List<Import_YoutubeDataEntity> youtubeVideos);
-        Task<string> ExtractEndTeamString(Import_YoutubeDataEntity youtubeVideo);
     }
 }

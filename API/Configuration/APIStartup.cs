@@ -15,13 +15,18 @@
         {
             if (env.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwagger();           // Enables Swagger API documentation
+                app.UseSwaggerUI();         // Enables the Swagger UI web interface
+
             }
 
-            app.UseHttpsRedirection();
-            app.UseAuthorization();
-            app.UseRouting();
+            app.UseHttpsRedirection();      // Redirects HTTP requests to HTTPS
+
+            app.UseRouting();              // Matches request to an endpoint(TestController)
+
+            app.UseAuthorization();         // Checks if the request is authorized
+        
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

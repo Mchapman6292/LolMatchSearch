@@ -19,7 +19,6 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
-using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_TeamNameHistoryEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
@@ -37,15 +36,13 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
         public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
         public DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
-
         public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
-
         public DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+ 
 
 
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
         public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeam { get; set; }
-        public DbSet<Processed_TeamNameHistoryEntity> Processed_TeamNameHistory { get; set; }
         public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
 
 
@@ -152,7 +149,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Longname).HasMaxLength(100);
                 entity.Property(e => e.Short).HasMaxLength(100);
                 entity.Property(e => e.Medium).HasMaxLength(100);
-                entity.Property(e => e.Inputs).HasMaxLength(100);
+                entity.Property(e => e.Inputs).HasMaxLength(1000);
             });
 
 
@@ -187,15 +184,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             });
 
       
-
-            modelBuilder.Entity<Processed_TeamNameHistoryEntity>(entity =>
-            {
-                entity.ToTable("Processed_TeamNameHistory");
-                entity.HasKey(t => t.CurrentTeamName);
-                entity.Property(e => e.CurrentTeamName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.NameHistory).HasColumnType("text[]");
-
-            });
 
          
 

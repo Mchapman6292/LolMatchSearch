@@ -6,6 +6,7 @@ public class Program
     {
         // HostBuilder, sets up basic config. Includes logging DI container, logging.
 
+        Console.WriteLine("Executing API Program.cs");
         var host = APIStartConfiguration.CreateHostBuilder(args).Build();
         await host.RunAsync();
     }

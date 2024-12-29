@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_ProPlayerRepositories
+namespace Infrastructure.Repositories.ProcessedRepositories
 {
     public class Processed_ProPlayerRepository
     {

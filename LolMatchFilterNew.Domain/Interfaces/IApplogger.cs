@@ -38,5 +38,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
 
 
 
+
+
+        void LogTeamNameHistory(Dictionary<string, List<string>> teamNameHistory);
+
     }
 }

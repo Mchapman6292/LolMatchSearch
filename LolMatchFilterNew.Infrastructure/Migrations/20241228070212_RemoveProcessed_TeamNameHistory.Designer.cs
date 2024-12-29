@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228070212_RemoveProcessed_TeamNameHistory")]
+    partial class RemoveProcessed_TeamNameHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,18 +151,22 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Inputs")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("text[]");
 
                     b.Property<string>("Longname")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Medium")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Short")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 

@@ -10,7 +10,7 @@ namespace LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs
     {
         public MatchComparisonResultDTO()
         { }
-        public string LeaguepediaGameId { get; set; }
+        public string ScoreboardGames { get; set; }
         public DateTime? MatchDate { get; set; }
         public string LeaguepediaTeam1 { get; set; }
         public string LeaguepediaTeam2 { get; set; }

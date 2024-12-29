@@ -20,7 +20,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService
         {
             if (string.IsNullOrWhiteSpace(gameId))
                 throw new ArgumentException("Game ID cannot be empty", nameof(gameId));
-            _result.LeaguepediaGameId = gameId;
+            _result.ScoreboardGames = gameId;
             return this;
         }
 

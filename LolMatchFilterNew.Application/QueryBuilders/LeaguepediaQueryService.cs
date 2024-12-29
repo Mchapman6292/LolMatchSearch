@@ -140,6 +140,17 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         }
 
 
+        public string BuildQueryStringTeamnames(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teamnames";
+            query["fields"] = "TeamnameId,Longname,Short,Medium,Inputs";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
 
 
 
@@ -147,22 +158,6 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
-
-
-        //public string BuildQueryForTeamNameAndAbbreviation(string leagueName, int queryLimit, int offset = 0)
-        //{
-        //    var query = HttpUtility.ParseQueryString(string.Empty);
-        //    query["action"] = "cargoquery";
-        //    query["format"] = "json";
-        //    query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
-        //    query["join_on"] = "Teams.Name=TR.Team,TR.Event=T.Name";
-        //    query["fields"] = "Teams.Name,Teams.Short,Teams.Region";
-        //    query["where"] = $"T.League='{leagueName}'";
-        //    query["group_by"] = "Teams.Name,Teams.Short,Teams.Region";
-        //    query["limit"] = queryLimit.ToString();
-        //    query["offset"] = offset.ToString();
-        //    return $"{BaseUrl}?{query}";
-        //}
 
 
 

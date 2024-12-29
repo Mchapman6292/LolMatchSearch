@@ -4,7 +4,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
+using Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQueryServices;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
@@ -17,6 +17,7 @@ using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Newtonsoft.Json.Linq;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 
 
@@ -45,6 +46,7 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IGenericRepository<Import_TeamsTableEntity> _generic_Import_TeamsTableRepository;
         private readonly IGenericRepository<Import_YoutubeDataEntity> _generic_Import_YoutubeDataEntity;
         private readonly IGenericRepository<Import_TeamRedirectEntity> _generic_Import_TeamRedirectEntity;
+        private readonly IGenericRepository<Import_TeamnameEntity> _generic_Import_TeamnameEntity;
 
 
         private readonly IGenericRepository<Processed_LeagueTeamEntity> _generic_Processed_LeagueTeam;
@@ -76,6 +78,7 @@ namespace LolMatchFilterNew.Application.Controllers
         IGenericRepository<Import_YoutubeDataEntity> genericImport_YoutubeData,
         IGenericRepository<Import_TeamRedirectEntity> genericImport_TeamRedirectEntity,
         IGenericRepository<Import_ScoreboardGamesEntity> genericImport_ScoreboardGamesEntity,
+        IGenericRepository<Import_TeamnameEntity> genericImport_TeamnameEntity,
 
         IGenericRepository<Processed_LeagueTeamEntity> genericProcessed_leagueTeamRepository
         )
@@ -99,6 +102,9 @@ namespace LolMatchFilterNew.Application.Controllers
             _generic_Import_YoutubeDataEntity = genericImport_YoutubeData;
             _generic_Import_TeamRedirectEntity = genericImport_TeamRedirectEntity;
             _generic_Import_ScoreboardGamesEntity = genericImport_ScoreboardGamesEntity;
+            _generic_Import_TeamnameEntity = genericImport_TeamnameEntity;
+
+
             _generic_Processed_LeagueTeam = genericProcessed_leagueTeamRepository;
 
         }
@@ -221,7 +227,7 @@ namespace LolMatchFilterNew.Application.Controllers
         }
 
         
-        // Used to add all records from ScoreboardGamesId for initial selection of columns, Has joined scoreboardGames to scoreboardPlayers
+        // Used to add all records from ScoreboardGames for initial selection of columns, Has joined scoreboardGames to scoreboardPlayers
         public async Task ControllerAddScoreBoardGamesForAllGames()
         {
             IEnumerable<JObject> ExtractedSGames = await _leaguepediaDataFetcher.FetchAndExtractMatches();
@@ -244,6 +250,16 @@ namespace LolMatchFilterNew.Application.Controllers
             IEnumerable<Import_TeamsTableEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Teams(teamEntities);
 
             await _generic_Import_TeamsTableRepository.AddRangeWithTransactionAsync(mappedEntites);
+        }
+
+        // Populated Teamname table 29/12/2024
+        public async Task ControllerAddTeamnameToDatabase()
+        {
+            IEnumerable<JObject> teamnames = await _leaguepediaDataFetcher.FetchAndExtractMatches();
+
+            IEnumerable<Import_TeamnameEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Teamname(teamnames);
+
+            await _generic_Import_TeamnameEntity.AddRangeWithTransactionAsync(mappedEntites);
         }
 
 

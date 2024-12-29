@@ -4,7 +4,6 @@ using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Logging.AppLoggers;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,7 @@ using System.Threading.Tasks;
 using LolMatchFilterNew.Tests.TestLoggers;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
+using Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositories;
 
 namespace LolMatchFilterNew.Tests.TestServiceFactories
 {

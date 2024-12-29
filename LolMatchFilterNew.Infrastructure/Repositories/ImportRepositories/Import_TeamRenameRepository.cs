@@ -10,7 +10,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntit
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using Npgsql;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories
+namespace Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositories
 {
     public class Import_TeamRenameRepository : GenericRepository<Import_TeamRenameRepository>, IImport_TeamRenameRepository
     {

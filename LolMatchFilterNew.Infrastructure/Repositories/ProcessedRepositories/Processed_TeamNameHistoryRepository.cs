@@ -6,10 +6,10 @@ using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using Domain.DTOs.TeamNameHistoryDTOs;
 using Infrastructure.QueryBuilders.APIQueryBuilders;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
+using Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositories;
 
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistoryRepositories
+namespace Infrastructure.Repositories.ProcessedRepositories
 {
 
 
@@ -23,7 +23,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistor
         {
             _appLogger = appLogger;
             _matchFilterDbContext = dbContext;
-          
+
         }
 
 
@@ -36,13 +36,13 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Processed_TeamNameHistor
                 .SelectNameHistory()
                 .FirstOrDefaultAsync();
 
-            if(result == null) 
+            if (result == null)
             {
                 throw new Exception($"Unable to find NameHistory for {nameof(TESTGetTeamsByNameAsync)} for team {teamName}.");
             }
 
             return result;
-            
+
         }
 
 

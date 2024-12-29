@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories
+namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories
 {
     public class Import_YoutubeDataRepository : GenericRepository<Import_YoutubeDataRepository>, IImport_YoutubeDataRepository
     {
@@ -117,7 +117,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataReposi
                 .Select(e => new
                 {
                     Key = e.Property(p => p.YoutubeVideoId).CurrentValue,
-                    State = e.State
+                    e.State
                 }).ToList();
 
             var trackedLeaguepediaEntities = _matchFilterDbContext.ChangeTracker
@@ -125,7 +125,7 @@ namespace LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataReposi
                 .Select(e => new
                 {
                     Key = e.Property(p => p.GameId).CurrentValue,
-                    State = e.State
+                    e.State
                 }).ToList();
 
             _appLogger.Info($"Number of tracked YouTube entities: {trackedYoutubeEntities.Count}");

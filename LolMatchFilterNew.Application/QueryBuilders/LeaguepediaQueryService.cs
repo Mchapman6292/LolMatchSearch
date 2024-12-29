@@ -48,7 +48,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
-        // Fetches all values from ScoreboardGamesId without any joins to Teamredirects etc, 
+        // Fetches all values from ScoreboardGames without any joins to Teamredirects etc, 
 
         //
 
@@ -57,7 +57,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
-            query["tables"] = "ScoreboardGamesId=SG";
+            query["tables"] = "ScoreboardGames=SG";
             query["fields"] = "SG.GameId,SG.Gamename,SG.DateTime_UTC,SG.Tournament,SG.Team1,SG.Team2," +
                              "SG.Team1Players,SG.Team2Players,SG.Team1Picks,SG.Team2Picks,SG.WinTeam,SG.LossTeam," +
                              "SG.Team1Kills,SG.Team2Kills,SG.MatchId";
@@ -140,6 +140,17 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         }
 
 
+        public string BuildQueryStringTeamnames(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Teamnames";
+            query["fields"] = "TeamnameId,Longname,Short,Medium,Inputs";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
 
 
 
@@ -147,22 +158,6 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
 
 
 
-
-
-        //public string BuildQueryForTeamNameAndAbbreviation(string leagueName, int queryLimit, int offset = 0)
-        //{
-        //    var query = HttpUtility.ParseQueryString(string.Empty);
-        //    query["action"] = "cargoquery";
-        //    query["format"] = "json";
-        //    query["tables"] = "Teams=Teams,TournamentResults=TR,Tournaments=T";
-        //    query["join_on"] = "Teams.Name=TR.Team,TR.Event=T.Name";
-        //    query["fields"] = "Teams.Name,Teams.Short,Teams.Region";
-        //    query["where"] = $"T.League='{leagueName}'";
-        //    query["group_by"] = "Teams.Name,Teams.Short,Teams.Region";
-        //    query["limit"] = queryLimit.ToString();
-        //    query["offset"] = offset.ToString();
-        //    return $"{BaseUrl}?{query}";
-        //}
 
 
 

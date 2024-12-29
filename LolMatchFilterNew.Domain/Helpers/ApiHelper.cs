@@ -7,6 +7,7 @@ using Google.Apis.YouTube.v3.Data;
 using Newtonsoft.Json.Linq;
 using Xceed.Document.NET;
 using Npgsql;
+using System.Text;
 
 namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 {
@@ -265,6 +266,46 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 
 
 
+
+
+
+        public List<string>? GetNullableValuesAsList(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning($"Null value encountered for key: {key}. Returning null.");
+                    return null; // Return null for missing keys
+                }
+                if (token.Type == JTokenType.Array)
+                {
+                    return token.ToObject<List<string>>() ?? new List<string>();
+                }
+                if (token.Type == JTokenType.String)
+                {
+                    var value = token.ToString();
+                    return string.IsNullOrWhiteSpace(value)
+                        ? new List<string>()
+                        : value.Split(',').Select(s => s.Trim()).ToList();
+                }
+
+                _appLogger.Warning($"Unexpected token type for key: {key}. Returning null.");
+                return null; // Return null for unexpected token types
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error getting list values for key: {key}. Error: {ex.Message}");
+                return null; // Return null in case of errors
+            }
+        }
 
 
 
@@ -603,6 +644,20 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 StringSplitOptions.RemoveEmptyEntries));
 
             return overviewPage.Trim();
+        }
+
+
+
+
+        public List<string> ParseTeamnameInputsColumn(string teamnameInputs)
+        {
+            string cleaned = teamnameInputs.Trim('{', '}', '"');
+
+            List<string> allNames = cleaned.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(name => name.Trim())
+                                        .ToList();
+
+            return allNames;
         }
     }
 }

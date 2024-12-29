@@ -13,6 +13,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeam
 
         Task<List<string>> ExtractEndTeamStringForMultipleAsync(List<Import_YoutubeDataEntity> youtubeVideos);
 
-        async Task<string> ExtractEndTeamStringAsync(Import_YoutubeDataEntity youtubeVideo);
+        Task<string> ExtractEndTeamStringAsync(Import_YoutubeDataEntity youtubeVideo);
     }
 }

@@ -24,6 +24,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
 
         List<string> GetValuesAsList(JObject obj, string key);
 
+        List<string>? GetNullableValuesAsList(JObject obj, string key);
+
         DateTime GetDateTimeFromJobject(JObject obj, string key);
         DateTime? GetNullableDateTimeFromJobject(JObject obj, string key);
 

@@ -52,7 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MatchPairingService\ScoreboardGameService\" />
     <Folder Include="MatchPairingService\YoutubeDataService\" />
   </ItemGroup>
 

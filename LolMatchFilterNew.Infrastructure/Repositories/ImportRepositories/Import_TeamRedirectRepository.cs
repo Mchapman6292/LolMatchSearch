@@ -4,7 +4,6 @@ using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRedirectRepositories;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LolMatchFilterNew.Infrastructure.Repositories.Import_TeamRedirectRepositories
+namespace Infrastructure.Repositories.ImportRepositories.Import_TeamRedirectRepositories
 {
     public class Import_TeamRedirectRepository : GenericRepository<Import_TeamRedirectRepository>, IImport_TeamRedirectRepository
     {

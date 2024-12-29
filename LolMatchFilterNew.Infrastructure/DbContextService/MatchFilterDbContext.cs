@@ -36,10 +36,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
         public DbSet<Import_ScoreboardGamesEntity> Import_ScoreboardGames { get; set; }
         public DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
-
         public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
-
         public DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+ 
 
 
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
@@ -150,7 +149,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Longname).HasMaxLength(100);
                 entity.Property(e => e.Short).HasMaxLength(100);
                 entity.Property(e => e.Medium).HasMaxLength(100);
-                entity.Property(e => e.Inputs).HasMaxLength(100);
+                entity.Property(e => e.Inputs).HasMaxLength(1000);
             });
 
 

@@ -11,17 +11,14 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
     {
         string FormatCargoQuery(string rawQuery, int queryLimit = 490, int offset = 0);
 
-
         string BuildQueryStringScoreBoardGames(int queryLimit, int offset = 0);
-
 
         string BuildQueryStringTeamRedirects(int queryLimit, int offset = 0);
 
-
         string BuildQueryStringTeamRenames(int queryLimit, int offset = 0);
 
-
         string BuildQueryStringTeams(int queryLimit = 0, int offset = 0);
+        string BuildQueryStringTeamnames(int queryLimit, int offset = 0);
 
 
 

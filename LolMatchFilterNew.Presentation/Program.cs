@@ -11,12 +11,10 @@ using System.Reflection;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControllers;
 using LolMatchFilterNew.Domain.YoutubeService.YoutubeDataFetchers;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.IYoutubeDataFetcher;
-using LolMatchFilterNew.Infrastructure.Repositories.Import_YoutubeDataRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
-using LolMatchFilterNew.Infrastructure.Repositories.TeamRenameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 
 
@@ -62,7 +60,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.ControllerAddTeamsTableToDatabase();
+                await APIController.ControllerAddTeamnameToDatabase();
 
 
 

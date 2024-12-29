@@ -29,6 +29,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
         private readonly IAppLogger _appLogger;
         private readonly IImport_ScoreboardGamesRepository _leaguepediaMatchDetailRepository;
         private readonly IApiHelper _apiHelper;
+        private readonly Dictionary<string, List<string>> _teamNamesAndAbbreviations = new Dictionary<string, List<string>>();
 
         public YoutubeTeamExtractor(IAppLogger appLogger, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper)
         {
@@ -54,6 +55,8 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
                 return null;
             }
         }
+
+
 
 
 

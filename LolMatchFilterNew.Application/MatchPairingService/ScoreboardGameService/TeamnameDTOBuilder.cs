@@ -1,11 +1,11 @@
 ﻿using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 using Domain.DTOs.TeamnameDTO;
 
 namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders
 {
-    public class TeamnameDTOBuilder
+    public class TeamnameDTOBuilder  :ITeamnameDTOBuilder
     {
         private readonly IAppLogger _appLogger;
         private readonly IImport_TeamnameRepository _teamnameRepository;
@@ -17,6 +17,24 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
             _appLogger = appLogger;
             _teamnameRepository = teamnameRepository;
             TeamNamesAndAbbreviations = new List<TeamnameDTO>();    
+        }
+
+
+
+        // Retrieves all teamnames from repository and transforms them into DTOs, storing them in TeamNamesAndAbbreviations property.
+        // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
+        public async Task PopulateTeamNamesAndAbbreviations()
+        {
+            var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
+            TeamNamesAndAbbreviations = teamnames.Select(t => BuildTeamnameDTO(
+                t.Longname,
+                t.Short,
+                t.Medium,
+                t.Inputs
+               
+            )).ToList();
+
+            _appLogger.Info($"TeamNamesAndAbbreviations count: {TeamNamesAndAbbreviations.Count}");
         }
 
 
@@ -46,22 +64,29 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         }
 
 
-        public async Task PopulateTeamNamesAndAbbreviations()
-        {
-            var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
-            TeamNamesAndAbbreviations = teamnames.Select(t => BuildTeamnameDTO(
-                t.Longname,
-                t.Short,
-                t.Medium,
-                t.Inputs
-            )).ToList();
-        }
-
 
 
         public List<TeamnameDTO> GetTeamNamesAndAbbreviations()
         {
             return TeamNamesAndAbbreviations;
+        }
+
+
+
+        public async Task TESTLogTeamNameAbbreviations()
+        {
+            await PopulateTeamNamesAndAbbreviations();
+
+            var firstTeamDTO = TeamNamesAndAbbreviations.FirstOrDefault();
+
+
+            var lastTeamDTO = TeamNamesAndAbbreviations.LastOrDefault();
+
+            _appLogger.LogTeamnameDTO(firstTeamDTO);
+            _appLogger.LogTeamnameDTO(lastTeamDTO);
+
+
+
         }
 
 

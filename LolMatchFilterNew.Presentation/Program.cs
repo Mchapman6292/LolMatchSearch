@@ -16,6 +16,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Score
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 
 
 
@@ -51,16 +52,25 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IImport_YoutubeDataRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
+                var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamnameDTOBuilder>();
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
+                await teamnameDTOBuilder.PopulateTeamNamesAndAbbreviations();
+
+                teamnameDTOBuilder.TESTLogTeamNameAbbreviations();
+
+
+
+                Console.ReadLine();
 
 
 
 
-                await APIController.ControllerAddTeamnameToDatabase();
+
+
 
 
 

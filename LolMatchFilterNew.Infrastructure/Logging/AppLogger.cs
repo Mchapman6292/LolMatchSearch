@@ -3,6 +3,7 @@ using Serilog.Context;
 using System;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using Domain.DTOs.TeamnameDTO; 
 
 namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 {
@@ -76,6 +77,16 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 
             _logger.Information($"Total teams processed: {teamNameHistory.Count}");
             _logger.Information("=== Team Name History End ===");
+        }
+
+
+        public void LogTeamnameDTO(TeamnameDTO teamnameDTO)
+        {
+            _logger.Information($"TeamnameDTO: [" +
+                               $"Longname: {teamnameDTO.Longname ?? "null"}, " +
+                               $"Short: {teamnameDTO.Short ?? "null"}, " +
+                               $"Medium: {teamnameDTO.Medium ?? "null"}, " +
+                               $"FormattedInputs: {(teamnameDTO.FormattedInputs != null ? string.Join(", ", teamnameDTO.FormattedInputs) : "null")}]");
         }
 
 

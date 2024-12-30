@@ -45,7 +45,8 @@ using Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositori
 using Infrastructure.Repositories.ImportRepositories.Import_TeamnameRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 
-
+using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 
 
 using Microsoft.Extensions.Hosting;
@@ -139,6 +140,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
+                  services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
           
                   services.AddTransient<IMatchServiceController, MatchServiceController>();
         

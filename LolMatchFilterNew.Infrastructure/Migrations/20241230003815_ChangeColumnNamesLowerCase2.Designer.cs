@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241230003815_ChangeColumnNamesLowerCase2")]
+    partial class ChangeColumnNamesLowerCase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,101 +30,84 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.Property<string>("GameName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("game_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("GameId")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("game_id");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("DateTime_utc")
                         .HasMaxLength(100)
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("datetime_utc");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LossTeam")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("loss_team");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("MatchId")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("match_id");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Team1")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("team1");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("Team1Kills")
                         .HasColumnType("integer");
 
                     b.Property<string>("Team1Picks")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("team1_picks");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Team1Players")
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("team1_players");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Team2")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("team2");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("Team2Kills")
                         .HasColumnType("integer");
 
                     b.Property<string>("Team2Picks")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("team2_picks");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Team2Players")
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("team2_players");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Tournament")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("tournament");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("WinTeam")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("win_team");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("GameName", "GameId");
 
-                    b.ToTable("import_scoreboardgames", (string)null);
+                    b.ToTable("import_scoreboardGames", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities.Import_TeamRedirectEntity", b =>
                 {
                     b.Property<string>("PageName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("page_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("AllName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("all_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("OtherName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("other_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("UniqueLine")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("unique_line");
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("PageName", "AllName");
 
@@ -132,33 +118,27 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.Property<string>("OriginalName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("original_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("NewName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("new_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("Date")
                         .HasMaxLength(10)
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IsSamePage")
                         .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("is_same_page");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("NewsId")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("news_id");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Verb")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("verb");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("OriginalName", "NewName", "Date");
 
@@ -168,28 +148,23 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames.Import_TeamnameEntity", b =>
                 {
                     b.Property<string>("TeamnameId")
-                        .HasColumnType("text")
-                        .HasColumnName("teamname_id");
+                        .HasColumnType("text");
 
                     b.Property<List<string>>("Inputs")
                         .HasMaxLength(1000)
-                        .HasColumnType("text[]")
-                        .HasColumnName("inputs");
+                        .HasColumnType("text[]");
 
                     b.Property<string>("Longname")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("longname");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Medium")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("medium");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Short")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("short");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("TeamnameId");
 
@@ -200,105 +175,84 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Discord")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("discord");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Facebook")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("facebook");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Image")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("image");
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("Instagram")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("instagram");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<bool>("IsDisbanded")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_disbanded");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsLowercase")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_lowercase");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("location");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("OrganizationPage")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("organization_page");
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("OverviewPage")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("overview_page");
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("Region")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("region");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("RenamedTo")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("renamed_to");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("RosterPhoto")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("roster_photo");
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("Short")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("short");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Snapchat")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("snapchat");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Subreddit")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("subreddit");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("TeamLocation")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("team_location");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Twitter")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("twitter");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Vk")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("vk");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Website")
-                        .HasColumnType("text")
-                        .HasColumnName("website");
+                        .HasColumnType("text");
 
                     b.Property<string>("Youtube")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("youtube");
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Name");
 
@@ -309,107 +263,90 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.Property<string>("YoutubeVideoId")
                         .HasColumnType("text")
-                        .HasColumnName("youtube_video_id")
                         .HasComment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.");
 
                     b.Property<string>("PlaylistId")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("playlist_id");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PlaylistTitle")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("playlist_title");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("PublishedAt_utc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("published_at_utc");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ThumbnailUrl")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("thumbnail_url");
+                        .HasColumnType("character varying(2083)");
 
                     b.Property<string>("VideoTitle")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("video_title");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("YoutubeResultHyperlink")
                         .HasMaxLength(2083)
-                        .HasColumnType("character varying(2083)")
-                        .HasColumnName("youtube_result_hyperlink");
+                        .HasColumnType("character varying(2083)");
 
                     b.HasKey("YoutubeVideoId");
 
-                    b.ToTable("import_youtubedata", (string)null);
+                    b.ToTable("import_youtubeData", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities.Processed_LeagueTeamEntity", b =>
                 {
                     b.Property<string>("TeamName")
-                        .HasColumnType("text")
-                        .HasColumnName("team_name");
+                        .HasColumnType("text");
 
                     b.Property<string>("NameShort")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name_short");
+                        .HasColumnType("text");
 
                     b.Property<string>("Region")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("region");
+                        .HasColumnType("text");
 
                     b.HasKey("TeamName");
 
-                    b.ToTable("processed_leagueteam", (string)null);
+                    b.ToTable("processed_leagueteamentity", (string)null);
                 });
 
             modelBuilder.Entity("LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities.Processed_ProPlayerEntity", b =>
                 {
                     b.Property<string>("LeaguepediaPlayerAllName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("leaguepedia_player_all_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("CurrentTeam")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("current_team");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("InGameName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("in_game_name");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LeaguepediaPlayerId")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("leaguepedia_player_id");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PreviousInGameNames")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("previous_in_game_names");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("RealName")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("real_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("role");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("LeaguepediaPlayerAllName");
 
@@ -420,80 +357,65 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 {
                     b.Property<string>("YoutubeVideoId")
                         .HasColumnType("text")
-                        .HasColumnName("youtube_video_id")
                         .HasComment("Can begin with uppercase letters, numbers, lowercase letters, - and _ , appending single quotation to handle this.");
 
                     b.Property<string>("GameDayIdentifier")
                         .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("game_day_identifier");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<int?>("GameNumber")
-                        .HasColumnType("integer")
-                        .HasColumnName("game_number");
+                        .HasColumnType("integer");
 
                     b.Property<string>("GameWeekIdentifier")
                         .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("game_week_identifier");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<bool>("IsSeries")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_series");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PlayListId")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("playlist_id");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PlayListTitle")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("playlist_title");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("PublishedAt_utc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("published_at_utc");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Season")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("season");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Team1Long")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("team1_long");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Team1Short")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("team1_short");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Team2Long")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("team2_long");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Team2Short")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("team2_short");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Tournament")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("tournament");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("VideoTitle")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("video_title");
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("YoutubeVideoId");
 
-                    b.ToTable("processed_youtubedata", (string)null);
+                    b.ToTable("processed_youtubeData", (string)null);
                 });
 #pragma warning restore 612, 618
         }

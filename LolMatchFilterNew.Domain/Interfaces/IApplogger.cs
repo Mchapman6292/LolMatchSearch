@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.DTOs.TeamnameDTO; 
 
 namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
 {
@@ -41,6 +36,10 @@ namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
 
 
         void LogTeamNameHistory(Dictionary<string, List<string>> teamNameHistory);
+
+        void LogTeamnameDTO(TeamnameDTO teamnameDTO);
+
+
 
     }
 }

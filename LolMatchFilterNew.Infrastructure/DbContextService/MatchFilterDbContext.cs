@@ -20,6 +20,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
+using Domain.DTOs.Western_MatchDTOs;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -44,6 +45,10 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }
         public DbSet<Processed_LeagueTeamEntity> Processed_LeagueTeam { get; set; }
         public DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
+
+
+
+        public DbSet<WesternMatchDTO> WesternMatches { get; set; }
 
 
 
@@ -96,6 +101,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.IsSamePage).HasColumnName("is_same_page").HasMaxLength(10);
                 entity.Property(e => e.NewsId).HasColumnName("news_id").HasMaxLength(100);
             });
+
+
             modelBuilder.Entity<Import_TeamsTableEntity>(entity =>
             {
                 entity.ToTable("import_teamstable");
@@ -171,8 +178,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
-
-
             modelBuilder.Entity<Processed_YoutubeDataEntity>(entity =>
             {
                 entity.ToTable("processed_youtubedata");
@@ -193,6 +198,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.IsSeries).HasColumnName("is_series");
                 entity.Property(e => e.GameNumber).HasColumnName("game_number");
             });
+
+
 
 
 

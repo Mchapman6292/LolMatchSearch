@@ -61,6 +61,9 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamR
 using Infrastructure.Repositories.ImportRepositories;
 using Infrastructure.Repositories.ProcessedRepositories;
 
+using Infrastructure.SQLFunctions.TestFunctions;
+using Domain.Interfaces.InfrastructureInterfaces.ITestFunctions;
+
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -141,6 +144,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
                   services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
+                  services.AddTransient<ITestFunction, TestFunction>();
           
                   services.AddTransient<IMatchServiceController, MatchServiceController>();
         

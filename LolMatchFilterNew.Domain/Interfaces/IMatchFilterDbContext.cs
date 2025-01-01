@@ -17,6 +17,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEn
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
+using Domain.DTOs.Western_MatchDTOs;
 
 namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
@@ -35,6 +36,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 
         DbSet<Processed_YoutubeDataEntity> YoutubeMatchExtracts { get; set; }
         DbSet<Import_TeamsTableEntity> Import_TeamsTable { get; set; }
+
+
+        DbSet<WesternMatchDTO> WesternMatches { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

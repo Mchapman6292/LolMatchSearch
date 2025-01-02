@@ -22,9 +22,29 @@ namespace Infrastructure.SQLFunctions.TestFunctions
 
         public async Task<IEnumerable<WesternMatchDTO>> GetWesternMatches()
         {
-            return await _matchFilterDbContext.WesternMatches
+            var matches = await _matchFilterDbContext.WesternMatches
             .FromSqlRaw("SELECT * FROM get_western_matches()")
             .ToListAsync();
+
+            foreach (var match in matches)
+            {
+                match.Team1_Inputs = ParseteamnameInputForWesternMatches(match.Team1_Inputs);
+                match.Team2_Inputs = ParseteamnameInputForWesternMatches(match.Team2_Inputs);
+            }
+
+            return matches;
+        }
+
+
+        private List<string>? ParseteamnameInputForWesternMatches(List<string>? inputs)
+        {
+            if (inputs == null || !inputs.Any()) return null;
+
+            return inputs.SelectMany(input => input
+                            .Trim('{', '}', '"')
+                            .Split(';', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(name => name.Trim()))
+                            .ToList();
         }
 
 

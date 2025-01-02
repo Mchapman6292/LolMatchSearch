@@ -201,6 +201,13 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
+            modelBuilder.Entity<WesternMatchDTO>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+
+
 
 
 

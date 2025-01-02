@@ -47,6 +47,8 @@ using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 
 using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Infrastructure.Logging.ObjectLoggers;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 
 using Microsoft.Extensions.Hosting;
@@ -145,6 +147,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
                   services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
                   services.AddTransient<ITestFunction, TestFunction>();
+                  services.AddTransient<IObjectLogger, ObjectLogger>();
           
                   services.AddTransient<IMatchServiceController, MatchServiceController>();
         

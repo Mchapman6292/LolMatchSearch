@@ -45,7 +45,10 @@ using Infrastructure.Repositories.ImportRepositories.Import_TeamRenameRepositori
 using Infrastructure.Repositories.ImportRepositories.Import_TeamnameRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 
-
+using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Infrastructure.Logging.ObjectLoggers;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 
 using Microsoft.Extensions.Hosting;
@@ -59,6 +62,9 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceCon
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRedirectRepositories;
 using Infrastructure.Repositories.ImportRepositories;
 using Infrastructure.Repositories.ProcessedRepositories;
+
+using Infrastructure.SQLFunctions.TestFunctions;
+using Domain.Interfaces.InfrastructureInterfaces.ITestFunctions;
 
 
 
@@ -139,6 +145,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IProcessed_TeamNameHistoryRepository, Processed_TeamNameHistoryRepository>();
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
+                  services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
+                  services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
+                  services.AddTransient<IObjectLogger, ObjectLogger>();
           
                   services.AddTransient<IMatchServiceController, MatchServiceController>();
         

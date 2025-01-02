@@ -3,6 +3,7 @@ using Serilog.Context;
 using System;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using Domain.DTOs.TeamnameDTOs; 
 
 namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 {
@@ -56,27 +57,6 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 
 
 
-
-
-
-        public void LogTeamNameHistory(Dictionary<string, List<string>> teamNameHistory)
-        {
-
-            foreach (var (currentName, previousNames) in teamNameHistory)
-            {
-                if (!previousNames.Any())
-                {
-                    _logger.Information($"Team: {currentName} - No previous names found");
-                    continue;
-                }
-
-                _logger.Information($"Team: {currentName}");
-                _logger.Information($"    Previous names ({previousNames.Count}): {string.Join(", ", previousNames)}");
-            }
-
-            _logger.Information($"Total teams processed: {teamNameHistory.Count}");
-            _logger.Information("=== Team Name History End ===");
-        }
 
 
     }

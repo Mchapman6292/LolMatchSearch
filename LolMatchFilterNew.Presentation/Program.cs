@@ -16,6 +16,11 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Score
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using Domain.DTOs.Western_MatchDTOs;
+using System.Collections.Generic;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 
 
@@ -51,16 +56,37 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IImport_YoutubeDataRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
+                var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamnameDTOBuilder>();
+                var testFunctions = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
+                var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();   
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
+                IEnumerable<WesternMatchDTO> matches = await testFunctions.GetWesternMatches();
+
+                int processed = 0;
+
+                foreach (var match in matches)
+                {
+                    if(processed % 50 == 0)
+                    {
+                        objectLogger.LogWesternMatchDTO(match);
+
+                    }
+                    processed++;
+                }
+
+
+
+                Console.ReadLine();
 
 
 
 
-                await APIController.ControllerAddTeamnameToDatabase();
+
+
 
 
 

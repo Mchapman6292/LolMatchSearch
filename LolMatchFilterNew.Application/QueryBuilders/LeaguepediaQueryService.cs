@@ -146,7 +146,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["action"] = "cargoquery";
             query["format"] = "json";
             query["tables"] = "Teamnames";
-            query["fields"] = "TeamnameId,Longname,Short,Medium,Inputs";
+            query["fields"] = "TeamnameId,Longname,Short,Medium,FormattedInputs";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";

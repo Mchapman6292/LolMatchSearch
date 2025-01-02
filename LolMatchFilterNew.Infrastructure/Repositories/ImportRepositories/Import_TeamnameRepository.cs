@@ -25,10 +25,11 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_TeamnameReposito
 
 
 
-        public async Task<IEnumerable<Import_TeamnameEntity>> GetAllTeamnamesAsync()
+        public async Task<List<Import_TeamnameEntity>> GetAllTeamnamesAsync()
         {
             return await _matchFilterDbContext.Import_Teamname.ToListAsync();
         }
+
 
 
 

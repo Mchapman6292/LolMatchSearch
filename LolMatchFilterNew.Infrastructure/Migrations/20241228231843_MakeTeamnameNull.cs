@@ -42,7 +42,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<List<string>>(
-                name: "Inputs",
+                name: "FormattedInputs",
                 table: "Import_Teamname",
                 type: "text[]",
                 maxLength: 100,
@@ -92,7 +92,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<List<string>>(
-                name: "Inputs",
+                name: "FormattedInputs",
                 table: "Import_Teamname",
                 type: "text[]",
                 maxLength: 100,

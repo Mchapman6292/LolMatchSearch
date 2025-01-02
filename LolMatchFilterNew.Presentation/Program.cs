@@ -17,7 +17,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
 using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
-using Domain.Interfaces.InfrastructureInterfaces.ITestFunctions;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Domain.DTOs.Western_MatchDTOs;
 using System.Collections.Generic;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
@@ -57,7 +57,7 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
                 var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamnameDTOBuilder>();
-                var testFunctions = scope.ServiceProvider.GetRequiredService<ITestFunction>();
+                var testFunctions = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
                 var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();   
 
 

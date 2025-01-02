@@ -2,17 +2,18 @@
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using Domain.DTOs.Western_MatchDTOs;
 using Microsoft.EntityFrameworkCore;
-using Domain.Interfaces.InfrastructureInterfaces.ITestFunctions;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using Domain.DTOs.TeamnameDTOs;
 
-namespace Infrastructure.SQLFunctions.TestFunctions
+namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
 {
-    public class TestFunction : ITestFunction
+    public class StoredSqlFunctionCaller : IStoredSqlFunctionCaller
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
 
 
-        public TestFunction(IAppLogger appLogger, IMatchFilterDbContext matchFilterDbContext)
+        public StoredSqlFunctionCaller(IAppLogger appLogger, IMatchFilterDbContext matchFilterDbContext)
         {
             _appLogger = appLogger;
             _matchFilterDbContext = matchFilterDbContext;
@@ -22,7 +23,7 @@ namespace Infrastructure.SQLFunctions.TestFunctions
 
         public async Task<IEnumerable<WesternMatchDTO>> GetWesternMatches()
         {
-            var matches = await _matchFilterDbContext.WesternMatches
+            var matches = await _matchFilterDbContext.WesternMatchesSet
             .FromSqlRaw("SELECT * FROM get_western_matches()")
             .ToListAsync();
 
@@ -45,6 +46,22 @@ namespace Infrastructure.SQLFunctions.TestFunctions
                             .Split(';', StringSplitOptions.RemoveEmptyEntries)
                             .Select(name => name.Trim()))
                             .ToList();
+        }
+
+
+
+
+        public async Task<IEnumerable<TeamnameDTO>> GetWesternTeamsWithRegions()
+        {
+            var matches = await _matchFilterDbContext.TeamnamesSet
+           .FromSqlRaw("SELECT * FROM get_western_teams_with_regions()")
+           .ToListAsync();
+
+            foreach (var match in matches)
+            {
+                match.FormattedInputs = ParseteamnameInputForWesternMatches(match.FormattedInputs);
+            }
+            return matches;
         }
 
 

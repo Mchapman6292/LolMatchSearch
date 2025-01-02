@@ -1,15 +1,8 @@
 ﻿// Ignore Spelling: Teamname
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LolMatchFilterNew.Domain.Entities;
+
 using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Domain.DTOs;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using System.Numerics;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntities;
@@ -20,7 +13,11 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeDataEntities;
+
+
 using Domain.DTOs.Western_MatchDTOs;
+using Domain.DTOs.TeamnameDTOs;
+using Domain.DTOs.YoutubeDataDTOs;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -48,7 +45,9 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
 
-        public DbSet<WesternMatchDTO> WesternMatches { get; set; }
+        public DbSet<WesternMatchDTO> WesternMatchesSet { get; set; }
+        public DbSet<TeamnameDTO> TeamnamesSet { get; set; }
+        public DbSet<YoutubeDataDTO> YoutubeSet { get; set; }
 
 
 
@@ -207,7 +206,15 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             });
 
 
+            modelBuilder.Entity<TeamnameDTO>(entity =>
+            {
+                entity.HasNoKey();
+            });
 
+            modelBuilder.Entity<YoutubeDataDTO>(entity =>
+            {
+                entity.HasNoKey();
+            });
 
 
 

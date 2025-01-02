@@ -1,7 +1,8 @@
 ﻿using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
-using Domain.DTOs.TeamnameDTO;
+using Domain.DTOs.TeamnameDTOs;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders
 {
@@ -9,14 +10,16 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
     {
         private readonly IAppLogger _appLogger;
         private readonly IImport_TeamnameRepository _teamnameRepository;
+        private readonly IObjectLogger _objectLogger;
         private List<TeamnameDTO> TeamNamesAndAbbreviations {  get; set; } 
 
 
-        public TeamnameDTOBuilder(IAppLogger appLogger, IImport_TeamnameRepository teamnameRepository)
+        public TeamnameDTOBuilder(IAppLogger appLogger, IImport_TeamnameRepository teamnameRepository, IObjectLogger objectLogger)
         {
             _appLogger = appLogger;
             _teamnameRepository = teamnameRepository;
             TeamNamesAndAbbreviations = new List<TeamnameDTO>();    
+            _objectLogger = objectLogger;
         }
 
 
@@ -82,8 +85,8 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
             var lastTeamDTO = TeamNamesAndAbbreviations.LastOrDefault();
 
-            _appLogger.LogTeamnameDTO(firstTeamDTO);
-            _appLogger.LogTeamnameDTO(lastTeamDTO);
+            _objectLogger.LogTeamnameDTO(firstTeamDTO);
+            _objectLogger.LogTeamnameDTO(lastTeamDTO);
 
 
 

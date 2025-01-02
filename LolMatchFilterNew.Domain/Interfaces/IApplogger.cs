@@ -1,4 +1,4 @@
-﻿using Domain.DTOs.TeamnameDTO; 
+﻿using Domain.DTOs.TeamnameDTOs; 
 
 namespace LolMatchFilterNew.Domain.Interfaces.IAppLoggers
 {

@@ -3,7 +3,7 @@ using Serilog.Context;
 using System;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.DTOs.TeamnameDTO; 
+using Domain.DTOs.TeamnameDTOs; 
 
 namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 {

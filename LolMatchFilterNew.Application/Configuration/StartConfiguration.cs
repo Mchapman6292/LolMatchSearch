@@ -146,7 +146,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
                   services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
-                  services.AddTransient<ITestFunction, TestFunction>();
+                  services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
                   services.AddTransient<IObjectLogger, ObjectLogger>();
           
                   services.AddTransient<IMatchServiceController, MatchServiceController>();

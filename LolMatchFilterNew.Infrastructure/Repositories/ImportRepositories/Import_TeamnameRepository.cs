@@ -30,11 +30,6 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_TeamnameReposito
             return await _matchFilterDbContext.Import_Teamname.ToListAsync();
         }
 
-        public async Task<IEnumerable<Import_TeamnameEntity>> GetEuAndNaTeamsAsync()
-        {
-            throw new NotImplementedException();
-                
-        }
 
 
 

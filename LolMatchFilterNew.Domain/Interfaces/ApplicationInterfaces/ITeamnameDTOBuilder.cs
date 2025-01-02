@@ -1,4 +1,4 @@
-﻿using Domain.DTOs.TeamnameDTO;
+﻿using Domain.DTOs.TeamnameDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

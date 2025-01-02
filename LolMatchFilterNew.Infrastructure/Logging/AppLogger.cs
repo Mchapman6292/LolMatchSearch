@@ -59,36 +59,5 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 
 
 
-
-        public void LogTeamNameHistory(Dictionary<string, List<string>> teamNameHistory)
-        {
-
-            foreach (var (currentName, previousNames) in teamNameHistory)
-            {
-                if (!previousNames.Any())
-                {
-                    _logger.Information($"Team: {currentName} - No previous names found");
-                    continue;
-                }
-
-                _logger.Information($"Team: {currentName}");
-                _logger.Information($"    Previous names ({previousNames.Count}): {string.Join(", ", previousNames)}");
-            }
-
-            _logger.Information($"Total teams processed: {teamNameHistory.Count}");
-            _logger.Information("=== Team Name History End ===");
-        }
-
-
-        public void LogTeamnameDTO(TeamnameDTO teamnameDTO)
-        {
-            _logger.Information($"TeamnameDTO: [" +
-                               $"Longname: {teamnameDTO.Longname ?? "null"}, " +
-                               $"Short: {teamnameDTO.Short ?? "null"}, " +
-                               $"Medium: {teamnameDTO.Medium ?? "null"}, " +
-                               $"FormattedInputs: {(teamnameDTO.FormattedInputs != null ? string.Join(", ", teamnameDTO.FormattedInputs) : "null")}]");
-        }
-
-
     }
 }

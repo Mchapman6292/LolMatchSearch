@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices
 {
-    public interface IMatchDTOService
+    public interface ITeamnameService
     {
     }
 }

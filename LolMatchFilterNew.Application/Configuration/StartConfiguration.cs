@@ -63,8 +63,8 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamR
 using Infrastructure.Repositories.ImportRepositories;
 using Infrastructure.Repositories.ProcessedRepositories;
 
-using Infrastructure.SQLFunctions.TestFunctions;
-using Domain.Interfaces.InfrastructureInterfaces.ITestFunctions;
+using Infrastructure.SQLFunctions.StoredSqlFunctionCallers;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 
 
 

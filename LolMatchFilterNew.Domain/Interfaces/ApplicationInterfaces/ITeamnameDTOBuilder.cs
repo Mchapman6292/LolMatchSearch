@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.TeamnameDTOs;
+using Domain.DTOs.Western_MatchDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,15 @@ namespace Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders
 {
     public interface ITeamnameDTOBuilder
     {
+        List<TeamnameDTO> GetTeamNamesAndAbbreviations();
+
         Task PopulateTeamNamesAndAbbreviations();
 
         TeamnameDTO BuildTeamnameDTO(string? longname, string? shortname, string? mediumName, List<string>? inputs);
 
-        List<TeamnameDTO> GetTeamNamesAndAbbreviations();
 
         Task TESTLogTeamNameAbbreviations();
+
+        Task<List<TeamnameDTO>> BuildTeamnameDTOFromGetWesternMatches(List<WesternMatchDTO> westernMatches);
     }
 }

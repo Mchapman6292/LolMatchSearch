@@ -3,6 +3,9 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using Domain.DTOs.Western_MatchDTOs;
+using System.Linq;
 
 namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders
 {
@@ -11,15 +14,23 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         private readonly IAppLogger _appLogger;
         private readonly IImport_TeamnameRepository _teamnameRepository;
         private readonly IObjectLogger _objectLogger;
+        private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
         private List<TeamnameDTO> TeamNamesAndAbbreviations {  get; set; } 
 
 
-        public TeamnameDTOBuilder(IAppLogger appLogger, IImport_TeamnameRepository teamnameRepository, IObjectLogger objectLogger)
+        public TeamnameDTOBuilder(IAppLogger appLogger, IImport_TeamnameRepository teamnameRepository, IObjectLogger objectLogger, IStoredSqlFunctionCaller storedSqlFunctionCaller)
         {
             _appLogger = appLogger;
             _teamnameRepository = teamnameRepository;
             TeamNamesAndAbbreviations = new List<TeamnameDTO>();    
             _objectLogger = objectLogger;
+            _storedSqlFunctionCaller = storedSqlFunctionCaller;
+        }
+
+
+        public List<TeamnameDTO> GetTeamNamesAndAbbreviations()
+        {
+            return TeamNamesAndAbbreviations;
         }
 
 
@@ -41,13 +52,13 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         }
 
 
-        public TeamnameDTO BuildTeamnameDTO(string? longname, string? shortname, string? mediumName, List<string>? inputs) 
+        public TeamnameDTO BuildTeamnameDTO(string? longname, string? mediumName, string? shortname, List<string>? inputs) 
         {
             return new TeamnameDTO
             {
                 Longname = longname,
-                Short = shortname,
-                Medium = mediumName,
+                Medium = mediumName ?? string.Empty,
+                Short = shortname ?? string.Empty,
                 FormattedInputs = ParseTeamnameInputsColumn(inputs)
             };    
         }
@@ -69,10 +80,6 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
 
 
-        public List<TeamnameDTO> GetTeamNamesAndAbbreviations()
-        {
-            return TeamNamesAndAbbreviations;
-        }
 
 
 
@@ -88,8 +95,37 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
             _objectLogger.LogTeamnameDTO(firstTeamDTO);
             _objectLogger.LogTeamnameDTO(lastTeamDTO);
 
+        }
 
 
+
+        public async Task<List<TeamnameDTO>> BuildTeamnameDTOFromGetWesternMatches(List<WesternMatchDTO> westernMatches)
+        {
+
+
+            List<TeamnameDTO> teamnames = new List<TeamnameDTO>();
+
+            int count = 0;
+
+            foreach(var match in westernMatches)
+            {
+                bool team1Exisits = teamnames.Any(t => t.TeamNameId == match.Team1Team_Id);
+
+                if(!team1Exisits)
+                {
+                    teamnames.Add(BuildTeamnameDTO(match.Team1_Longname, match.Team1_Medium, match.Team1_Short, match.Team1_Inputs));
+                }
+
+                bool team2Exists = teamnames.Any(t => t.TeamNameId == match.Team2Team_Id);
+
+                if(!team2Exists)
+                {
+                    teamnames.Add(BuildTeamnameDTO(match.Team2_Longname, match.Team2_Medium, match.Team2_Short, match.Team2_Inputs));
+                }
+                count++;
+            }
+            _appLogger.Info($"{nameof(BuildTeamnameDTO)} complete, TeamnameDTO count: {teamnames.Count}.");
+            return teamnames;
         }
 
 

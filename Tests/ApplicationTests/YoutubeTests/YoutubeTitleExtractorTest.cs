@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Tests.TestServiceFactories;
 using LolMatchFilterNew.Tests.TestLoggers;
-using LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractors;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors;
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.YoutubeTests.YoutubeTitleExtractorTests
 {

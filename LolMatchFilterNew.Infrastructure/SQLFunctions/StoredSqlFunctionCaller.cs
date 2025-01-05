@@ -21,7 +21,7 @@ namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
 
 
 
-        public async Task<IEnumerable<WesternMatchDTO>> GetWesternMatches()
+        public async Task<List<WesternMatchDTO>> GetWesternMatches()
         {
             var matches = await _matchFilterDbContext.WesternMatchesSet
             .FromSqlRaw("SELECT * FROM get_western_matches()")
@@ -51,18 +51,7 @@ namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
 
 
 
-        public async Task<IEnumerable<TeamnameDTO>> GetWesternTeamsWithRegions()
-        {
-            var matches = await _matchFilterDbContext.TeamnamesSet
-           .FromSqlRaw("SELECT * FROM get_western_teams_with_regions()")
-           .ToListAsync();
-
-            foreach (var match in matches)
-            {
-                match.FormattedInputs = ParseteamnameInputForWesternMatches(match.FormattedInputs);
-            }
-            return matches;
-        }
+  
 
 
     }

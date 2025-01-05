@@ -2,18 +2,17 @@
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using Domain.DTOs.TeamnameDTOs;
+using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using System.Linq;
 
-namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractors
+namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors
 {
-    public  class YoutubeTeamExtractor : IYoutubeTeamExtractor
+    public class YoutubeTeamExtractor : IYoutubeTeamExtractor
     {
         // (?:^|[^a-zA-Z0-9]) - Start of string or non-alphanumeric character (non-capturing)
         // ([A-Z0-9][A-Za-z0-9\s]*?) - Team name starting with capital letter or number, followed by letters, numbers, spaces
@@ -29,12 +28,20 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
         private readonly IAppLogger _appLogger;
         private readonly IImport_ScoreboardGamesRepository _Import_ScoreboardGamesRepository;
         private readonly IApiHelper _apiHelper;
+        private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
+        private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;    
+        private readonly List<TeamnameDTO> _TeamNamesAndAbbreviations;
 
-        public YoutubeTeamExtractor(IAppLogger appLogger, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper)
+        public YoutubeTeamExtractor(IAppLogger appLogger, IImport_ScoreboardGamesRepository leaguepediaMatchDetailRepository, IApiHelper apiHelper, IStoredSqlFunctionCaller sqlFunctionCaller, ITeamnameDTOBuilder teamnameDTOBuilder)
         {
             _appLogger = appLogger;
             _Import_ScoreboardGamesRepository = leaguepediaMatchDetailRepository;
             _apiHelper = apiHelper;
+            _sqlFunctionCaller = sqlFunctionCaller;
+            _teamnameDTOBuilder = teamnameDTOBuilder;
+            _TeamNamesAndAbbreviations = _teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
+
+
         }
 
         // Looks for team names either side of vs / versus, not case sensitive. 
@@ -42,7 +49,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
         {
             var match = TeamNamePattern.Match(youtubeTitle);
 
-            if(match.Success)
+            if (match.Success)
             {
                 string Team1 = match.Groups[1].Value;
                 string Team2 = match.Groups[2].Value;
@@ -56,8 +63,20 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
         }
 
 
+        public bool VerifyTeamShortname(string teamName)
+        {
+            return _TeamNamesAndAbbreviations.Any(t => string.Equals(t.Short, teamName, StringComparison.OrdinalIgnoreCase));
+        }
 
+        public bool VerifyTeamMedium(string teamName)
+        {
+            return _TeamNamesAndAbbreviations.Any(t => string.Equals(t.Medium, teamName, StringComparison.OrdinalIgnoreCase));
+        }
 
+        public bool VerifyFormattedInputs(string teamName)
+        {
+            return _TeamNamesAndAbbreviations.Any(t => t.FormattedInputs != null && t.FormattedInputs.Contains(teamName, StringComparer.OrdinalIgnoreCase));
+        }
 
 
 
@@ -97,9 +116,6 @@ namespace LolMatchFilterNew.Application.MatchPairingService.YoutubeTeamExtractor
             }
             return ExtractedEndStrings;
         }
-
-
-
 
 
 

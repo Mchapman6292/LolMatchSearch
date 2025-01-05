@@ -58,27 +58,19 @@ namespace LolMatchFilterNew.Presentation
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
                 var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamnameDTOBuilder>();
                 var testFunctions = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
-                var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();   
+                var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();
+                var sqlFunctionCaller = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
+                
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
 
 
-                IEnumerable<WesternMatchDTO> matches = await testFunctions.GetWesternMatches();
-
-                int processed = 0;
-
-                foreach (var match in matches)
-                {
-                    if(processed % 50 == 0)
-                    {
-                        objectLogger.LogWesternMatchDTO(match);
-
-                    }
-                    processed++;
-                }
+                List<WesternMatchDTO> matches = await testFunctions.GetWesternMatches();
 
 
+
+                await teamnameDTOBuilder.BuildTeamnameDTOFromGetWesternMatches(matches);
 
                 Console.ReadLine();
 

@@ -42,22 +42,22 @@ namespace Application.MatchPairingService.ScoreboardGameService.MatchDTOServices
             int count = 0;
             foreach (var team in teamNames)
             {
-                if (string.IsNullOrEmpty(team.Longname))
+                if (string.IsNullOrEmpty(team.LongName))
                     continue;
 
                 if (!string.IsNullOrEmpty(team.Short))
                 {
-                    _shortNames.Add(team.Longname, team.Short);
+                    _shortNames.Add(team.LongName, team.Short);
                 }
 
                 if (!string.IsNullOrEmpty(team.Medium))
                 {
-                    _mediumNames.Add(team.Longname, team.Medium);
+                    _mediumNames.Add(team.LongName, team.Medium);
                 }
 
                 if (team.FormattedInputs != null && team.FormattedInputs.Count > 0)
                 {
-                    _inputs.Add(team.Longname, team.FormattedInputs);
+                    _inputs.Add(team.LongName, team.FormattedInputs);
                 }
 
                 count++;

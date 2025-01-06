@@ -14,7 +14,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders
 
         Task PopulateTeamNamesAndAbbreviations();
 
-        TeamnameDTO BuildTeamnameDTO(string? longname, string? shortname, string? mediumName, List<string>? inputs);
+        TeamnameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs);
 
 
         Task TESTLogTeamNameAbbreviations();

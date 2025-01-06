@@ -9,7 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeam
 {
     public interface IYoutubeTeamExtractor
     {
-        List<string> MatchVsPatternAndUpdateMatchComparisonResultEntity(string youtubeTitle);
+        List<string> ExtractTeamNamesAroundVsKeyword(string youtubeTitle);
 
         Task<List<string>> ExtractEndTeamStringForMultipleAsync(List<Import_YoutubeDataEntity> youtubeVideos);
 

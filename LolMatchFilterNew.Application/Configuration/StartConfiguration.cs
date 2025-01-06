@@ -49,9 +49,12 @@ using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
+using Application.MatchPairingService.YoutubeDataService.TeamNameValidators;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
 
 
-using Microsoft.Extensions.Hosting;
+
+    using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
@@ -126,6 +129,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IAppLogger, AppLogger>();
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
                   services.AddSingleton<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
+                  services.AddSingleton<ITeamNameValidator, TeamNameValidator>();
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
                   services.AddTransient<ILeaguepediaDataFetcher, LeaguepediaDataFetcher>();

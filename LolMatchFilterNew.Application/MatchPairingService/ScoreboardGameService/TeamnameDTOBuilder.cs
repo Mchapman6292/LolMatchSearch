@@ -41,6 +41,7 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         {
             var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
             TeamNamesAndAbbreviations = teamnames.Select(t => BuildTeamnameDTO(
+                t.TeamnameId,
                 t.Longname,
                 t.Short,
                 t.Medium,
@@ -52,11 +53,12 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         }
 
 
-        public TeamnameDTO BuildTeamnameDTO(string? longname, string? mediumName, string? shortname, List<string>? inputs) 
+        public TeamnameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs) 
         {
             return new TeamnameDTO
             {
-                Longname = longname,
+                TeamNameId = teamNameId,
+                LongName = longname,
                 Medium = mediumName ?? string.Empty,
                 Short = shortname ?? string.Empty,
                 FormattedInputs = ParseTeamnameInputsColumn(inputs)
@@ -113,17 +115,18 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
                 if(!team1Exisits)
                 {
-                    teamnames.Add(BuildTeamnameDTO(match.Team1_Longname, match.Team1_Medium, match.Team1_Short, match.Team1_Inputs));
+                    teamnames.Add(BuildTeamnameDTO(match.Team1Team_Id, match.Team1_Longname, match.Team1_Medium, match.Team1_Short, match.Team1_Inputs));
                 }
 
                 bool team2Exists = teamnames.Any(t => t.TeamNameId == match.Team2Team_Id);
 
                 if(!team2Exists)
                 {
-                    teamnames.Add(BuildTeamnameDTO(match.Team2_Longname, match.Team2_Medium, match.Team2_Short, match.Team2_Inputs));
+                    teamnames.Add(BuildTeamnameDTO(match.Team2Team_Id, match.Team2_Longname, match.Team2_Medium, match.Team2_Short, match.Team2_Inputs));
                 }
                 count++;
             }
+            TeamNamesAndAbbreviations = teamnames;
             _appLogger.Info($"{nameof(BuildTeamnameDTO)} complete, TeamnameDTO count: {teamnames.Count}.");
             return teamnames;
         }

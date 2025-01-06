@@ -21,6 +21,7 @@ using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Domain.DTOs.Western_MatchDTOs;
 using System.Collections.Generic;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
+using Domain.DTOs.TeamnameDTOs;
 
 
 
@@ -69,8 +70,18 @@ namespace LolMatchFilterNew.Presentation
                 List<WesternMatchDTO> matches = await testFunctions.GetWesternMatches();
 
 
-
                 await teamnameDTOBuilder.BuildTeamnameDTOFromGetWesternMatches(matches);
+
+
+                List<TeamnameDTO> teams = teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
+
+                var first = teams.First();
+                var last = teams.Last();
+
+                objectLogger.LogTeamnameDTO(first);
+                objectLogger.LogTeamnameDTO(last);
+
+
 
                 Console.ReadLine();
 

@@ -4,8 +4,8 @@ namespace Domain.DTOs.TeamnameDTOs
 {
     public class TeamnameDTO
     {
-        public string? TeamNameId { get; set; } 
-        public string? Longname { get; set; }
+        public string TeamNameId { get; set; } 
+        public string? LongName { get; set; }
 
         
 

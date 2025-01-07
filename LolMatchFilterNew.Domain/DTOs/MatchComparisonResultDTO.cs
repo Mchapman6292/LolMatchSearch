@@ -25,6 +25,10 @@ namespace LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs
 
         // Result properties
         public bool? DoesMatch { get; set; }
-        public string? MismatchReason { get; set; }
+
+
+        public List<string> Errors { get; set; } = new();
+        public List<string> Warnings { get; set; } = new();
+        public List<string> InfoMessages { get; set; } = new();
     }
 }

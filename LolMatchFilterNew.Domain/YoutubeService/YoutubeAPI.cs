@@ -105,10 +105,10 @@ namespace LolMatchFilterNew.Domain.YoutubeService
 
 
 
-        public async Task<List<YoutubeVideoDTO>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
+        public async Task<List<Import_YoutubeVideoDTO>> ConvertPlayListItemsToYouTubeVideoResult(Activity activity, List<PlaylistItem> youTubePlaylist)
         {
             _appLogger.Info($"Starting {nameof(ConvertPlayListItemsToYouTubeVideoResult)}, TraceId: {activity.TraceId}.");
-            List<YoutubeVideoDTO> youtubeVideoResults = new List<YoutubeVideoDTO>();
+            List<Import_YoutubeVideoDTO> youtubeVideoResults = new List<Import_YoutubeVideoDTO>();
             try
             {
                 foreach (PlaylistItem result in youTubePlaylist)
@@ -120,7 +120,7 @@ namespace LolMatchFilterNew.Domain.YoutubeService
                     string thumbnailUrl = result.Snippet.Thumbnails.Default__.Url;
                     string url = $"https://www.youtube.com/watch?v={videoId}";
 
-                    var youtubeVideoResult = new YoutubeVideoDTO(
+                    var youtubeVideoResult = new Import_YoutubeVideoDTO(
                         videoId,
                         url
                     );

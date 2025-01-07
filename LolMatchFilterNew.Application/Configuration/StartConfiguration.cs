@@ -36,7 +36,6 @@ using LolMatchFilterNew.Application.Controllers.YoutubeControllers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
 using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
-using LolMatchFilterNew.Application.MatchPairingService.MatchServiceControllers;
 
 using Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories;
 using Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesRepositories;
@@ -51,10 +50,12 @@ using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Application.MatchPairingService.YoutubeDataService.TeamNameValidators;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 
 
 
-    using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
 using LolMatchFilterNew.Domain.YoutubeService;
@@ -65,9 +66,14 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceCon
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRedirectRepositories;
 using Infrastructure.Repositories.ImportRepositories;
 using Infrastructure.Repositories.ProcessedRepositories;
+using Application.MatchPairingService.MatchComparisonResultService.MatchComparisonResultBuilders;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchComparisonResultBuilders;
 
 using Infrastructure.SQLFunctions.StoredSqlFunctionCallers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
+using Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder;
+using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
 
 
 
@@ -130,6 +136,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
                   services.AddSingleton<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
                   services.AddSingleton<ITeamNameValidator, TeamNameValidator>();
+         
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
                   services.AddTransient<ILeaguepediaDataFetcher, LeaguepediaDataFetcher>();
@@ -152,8 +159,14 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
                   services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
                   services.AddTransient<IObjectLogger, ObjectLogger>();
-          
-                  services.AddTransient<IMatchServiceController, MatchServiceController>();
+                  services.AddTransient<IProcessed_YoutubeDataDTOBuilder, Processed_YoutubeDataDTOBuilder>();
+                  services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
+                  services.AddTransient<IMatchComparisonController, MatchComparisonController>();
+                  services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
+
+
+
+                  services.AddTransient<IMatchComparisonController, MatchComparisonController>();
         
 
 

@@ -6,7 +6,7 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
-using Domain.DTOs.YoutubeDataDTOs;
+using Domain.DTOs.Processed_YoutubeDataDTOs;
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories
 {
@@ -135,6 +135,12 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
         }
 
 
+
+
+        public async Task<List<Import_YoutubeDataEntity>> GetAllImport_YoutubeData()
+        {
+            return await _matchFilterDbContext.Import_YoutubeData.ToListAsync();
+        }
 
 
 

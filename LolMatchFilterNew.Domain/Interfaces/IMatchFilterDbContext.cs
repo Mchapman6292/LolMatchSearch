@@ -12,7 +12,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeData
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.DTOs.TeamnameDTOs;
-using Domain.DTOs.YoutubeDataDTOs;
+using Domain.DTOs.Processed_YoutubeDataDTOs;
 
 namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
@@ -33,7 +33,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 
         DbSet<WesternMatchDTO> WesternMatchesSet { get; set; }
         DbSet<TeamnameDTO> TeamnamesSet { get; set; }
-        DbSet<YoutubeDataDTO> YoutubeSet { get; set; }
+
+        
+        DbSet<Processed_YoutubeDataDTO> YoutubeSet { get; set; }
 
         ChangeTracker ChangeTracker { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

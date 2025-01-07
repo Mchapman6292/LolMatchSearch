@@ -116,7 +116,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("WesternMatchesSet");
                 });
 
-            modelBuilder.Entity("Domain.DTOs.YoutubeDataDTOs.YoutubeDataDTO", b =>
+            modelBuilder.Entity("Domain.DTOs.YoutubeDataDTOs.Processed_YoutubeDataDTO", b =>
                 {
                     b.Property<string>("PlaylistId")
                         .HasColumnType("text");

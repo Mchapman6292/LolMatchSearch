@@ -31,7 +31,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
         private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;    
-        private readonly List<TeamnameDTO> _TeamNamesAndAbbreviations;
 
         public YoutubeTeamExtractor(
 
@@ -49,36 +48,38 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
             _Import_ScoreboardGamesRepository = import_ScoreboardGames;
             _sqlFunctionCaller = sqlFunctionCaller;
             _teamnameDTOBuilder = teamnameDTOBuilder;
-            _TeamNamesAndAbbreviations = _teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
         }
 
 
 
 
-
-
-
+        
 
 
 
 
         // Looks for team names either side of vs / versus, not case sensitive. 
-        public List<string> ExtractTeamNamesAroundVsKeyword(string youtubeTitle)
+        public List<string?> ExtractTeamNamesAroundVsKeyword(string youtubeTitle)
         {
             var match = TeamNamePattern.Match(youtubeTitle);
 
+            List<string?> teams = new List<string?>();
+
             if (match.Success)
             {
-                string Team1 = match.Groups[1].Value;
-                string Team2 = match.Groups[2].Value;
+                string team1 = match.Groups[1].Value;
+                string team2 = match.Groups[2].Value;
 
-                return new List<string> { Team1, Team2 };
+                teams.Add(team1);
+                teams.Add(team2);
+
+                return teams;
             }
             else
             {
                 _appLogger.Info($"No matches found for {nameof(ExtractTeamNamesAroundVsKeyword)}, ");
-                return null;
+                return teams;
             }
         }
 

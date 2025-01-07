@@ -17,7 +17,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchSearches;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 
 
-namespace LolMatchFilterNew.Application.MatchPairingService.MatchSearch
+namespace Application.MatchPairingService.MatchComparisonResultService.MatchSearches
 {
     public class MatchSearch : IMatchSearch
     {

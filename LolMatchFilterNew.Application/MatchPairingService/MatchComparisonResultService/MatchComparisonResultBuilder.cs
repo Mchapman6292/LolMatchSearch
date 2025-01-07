@@ -1,16 +1,63 @@
-﻿using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
+﻿using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
+using Domain.Interfaces.ApplicationInterfaces.MatchFailureReasons;
+using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchComparisonResultBuilders;
+using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 
-namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResultBuilders
+namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonResultBuilders
 {
     public class MatchComparisonResultBuilder : IMatchComparisonResultBuilder
     {
         private readonly MatchComparisonResultDTO _result = new();
+        private readonly ITeamNameValidator _teamValidator;
+
         private bool _teamsSet;
         private bool _youtubeInfoSet;
         private bool _matchDateSet;
 
+        public List<string> Errors { get; private set; } = new();
+        public List<string> Warnings { get; private set; } = new();
+        public List<string> InfoMessages { get; private set; } = new();
 
+
+
+        public MatchComparisonResultBuilder(ITeamNameValidator teamValidator)
+        {
+            _teamValidator = teamValidator;
+   
+        }
+
+
+        private void AddError(string message)
+        {
+            Errors.Add(message);
+            SetNoMatch(); 
+        }
+
+        private void AddWarning(string message)
+        {
+            Warnings.Add(message);
+        }
+
+        private void AddInfo(string message)
+        {
+            InfoMessages.Add(message);
+        }
+
+
+        private void SetNoMatch()
+        {
+            _result.DoesMatch = false;
+        }
+
+        private void SetMatch()
+        {
+            _result.DoesMatch = true;
+        }
+
+
+
+        // Returning an interface instead of void/concrete class allows for method chaining. 
         public IMatchComparisonResultBuilder WithMatchIdentification(string gameId)
         {
             if (string.IsNullOrWhiteSpace(gameId))
@@ -29,7 +76,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResul
         public IMatchComparisonResultBuilder WithLeaguepediaTeams(string team1, string team2)
         {
             if (string.IsNullOrWhiteSpace(team1))
-                throw new ArgumentException("Team1 cannot be empty", nameof(team1));
+  
             if (string.IsNullOrWhiteSpace(team2))
                 throw new ArgumentException("Team2 cannot be empty", nameof(team2));
 
@@ -53,10 +100,15 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResul
             return this;
         }
 
-        public IMatchComparisonResultBuilder WithYoutubeTeams(string team1, string team2)
+        public IMatchComparisonResultBuilder WithYoutubeTeams(string youtubeVideoId, string extractedTeam1, string extractedTeam2)
         {
-            _result.YoutubeTeam1 = team1;
-            _result.YoutubeTeam2 = team2;
+       
+            int? matchCount = _teamValidator.GetCountOfValidTeams(_result.YoutubeTeam1, _result.YoutubeTeam2);
+
+
+
+
+
             return this;
         }
 
@@ -66,12 +118,7 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResul
             return this;
         }
 
-        public IMatchComparisonResultBuilder SetMatchResult(bool doesMatch, string mismatchReason = null)
-        {
-            _result.DoesMatch = doesMatch;
-            _result.MismatchReason = mismatchReason;
-            return this;
-        }
+
 
         public MatchComparisonResultDTO Build()
         {
@@ -86,7 +133,16 @@ namespace LolMatchFilterNew.Application.MatchPairingService.MatchComparisonResul
 
             return _result;
         }
+
+
+
+
+
     }
+
+
+
+
 
 
 }

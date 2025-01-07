@@ -22,6 +22,7 @@ using Domain.DTOs.Western_MatchDTOs;
 using System.Collections.Generic;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.DTOs.TeamnameDTOs;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 
 
 
@@ -61,7 +62,9 @@ namespace LolMatchFilterNew.Presentation
                 var testFunctions = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
                 var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();
                 var sqlFunctionCaller = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
-                
+                var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
+
+
 
 
                 List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
@@ -80,6 +83,8 @@ namespace LolMatchFilterNew.Presentation
 
                 objectLogger.LogTeamnameDTO(first);
                 objectLogger.LogTeamnameDTO(last);
+
+                await matchComparisonController.TESTGetAllProcessed();
 
 
 

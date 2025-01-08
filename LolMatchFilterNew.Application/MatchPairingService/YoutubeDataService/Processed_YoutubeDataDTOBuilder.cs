@@ -1,16 +1,18 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using Domain.DTOs.Processed_YoutubeDataDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
+using System.Drawing.Text;
+using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 
 namespace Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder
 {
-    public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
+public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
     {
-        
+        private readonly IAppLogger _appLogger;
 
-        public Processed_YoutubeDataDTOBuilder()
+        public Processed_YoutubeDataDTOBuilder(IAppLogger appLogger)
         {
-
+            _appLogger = appLogger;
         }
 
 
@@ -36,6 +38,8 @@ namespace Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDa
 
 
 
-        
+
+
+
     }
 }

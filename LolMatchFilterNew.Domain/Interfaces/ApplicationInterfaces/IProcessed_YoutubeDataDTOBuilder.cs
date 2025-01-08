@@ -11,5 +11,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuild
     public interface IProcessed_YoutubeDataDTOBuilder
     {
         Processed_YoutubeDataDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string team1, string team2);
+
+
     }
 }

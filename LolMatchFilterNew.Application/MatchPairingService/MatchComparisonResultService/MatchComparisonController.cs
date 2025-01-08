@@ -23,33 +23,102 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
         private readonly IProcessed_YoutubeDataDTOBuilder _processed_YoutubeDataDTOBuilder;
-        private readonly List<TeamnameDTO> _TeamNamesAndAbbreviations;
+        private readonly List<TeamnameDTO> _KnownTeamNamesAndAbbreviations;
        
 
 
 
 
-        public MatchComparisonController(IAppLogger appLogger, IMatchComparisonResultBuilder matchComparisonResultBuilder, IYoutubeTeamExtractor youtubeTeamExtractor, ITeamnameDTOBuilder teamnameDTOBuilder, IImport_YoutubeDataRepository import_YoutubeDataRepository, IStoredSqlFunctionCaller storedSqlFunctionCaller, IProcessed_YoutubeDataDTOBuilder processed_YoutubeDataDTOBuilder)
+        public MatchComparisonController(IAppLogger appLogger, IMatchComparisonResultBuilder matchComparisonResultBuilder, ITeamnameDTOBuilder teamnameDTOBuilder, IImport_YoutubeDataRepository import_YoutubeDataRepository, IStoredSqlFunctionCaller storedSqlFunctionCaller, IProcessed_YoutubeDataDTOBuilder youtubeDataDTOBuilder)
         {
             _appLogger = appLogger;
             _matchBuilder = matchComparisonResultBuilder;
-            _youtubeTeamExtractor = youtubeTeamExtractor;
+
             _teamnameDTOBuilder = teamnameDTOBuilder;
-            _TeamNamesAndAbbreviations = _teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
+            _KnownTeamNamesAndAbbreviations = _teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
             _sqlFunctionCaller = storedSqlFunctionCaller;
-            _processed_YoutubeDataDTOBuilder = processed_YoutubeDataDTOBuilder;
+            _processed_YoutubeDataDTOBuilder = youtubeDataDTOBuilder;
+
         }
 
 
-        public async Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessed()
+        // 
+        public async Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessedForEuAndNaTeams()
         {
-            List <Import_YoutubeDataEntity> allvideos = await _import_YoutubeDataRepository.GetAllImport_YoutubeData();
+            List <Import_YoutubeDataEntity> allvideos = await _import_YoutubeDataRepository.GetAllVideoDataForEuAndNaTeamsByPlaylistId();
 
             return await ExtractAndBuildAllProcessedDTO(allvideos);
         }
 
-        
+
+
+        public async Task TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(List<Processed_YoutubeDataDTO> processedYoutubeDataList)
+        {
+            Dictionary<string,string> missingMatches = new Dictionary<string,string>();
+
+            int invalidCount = 0;
+
+            int validCount = 0;
+
+
+            var teamNames = new HashSet<string>();
+
+            foreach (var dto in processedYoutubeDataList)
+            {
+                if (!string.IsNullOrWhiteSpace(dto.Team1))
+                    teamNames.Add(dto.Team1);
+                if (!string.IsNullOrWhiteSpace(dto.Team2))
+                    teamNames.Add(dto.Team2);
+            }
+
+            foreach (var name in teamNames)
+            {
+         
+                var match = _KnownTeamNamesAndAbbreviations.Any(dto =>
+                    string.Equals(dto.LongName, name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(dto.Medium, name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(dto.Short, name, StringComparison.OrdinalIgnoreCase) ||
+                    (dto.FormattedInputs != null && dto.FormattedInputs.Any(input =>
+                        string.Equals(input, name, StringComparison.OrdinalIgnoreCase)))
+                );
+
+                if (match)
+                {
+                    validCount++;
+                }
+                else
+                {
+                    invalidCount++;
+                    missingMatches[name] = "No match found"; 
+                }
+            }
+
+            Console.WriteLine($"Valid Matches: {validCount}");
+            Console.WriteLine($"Invalid Matches: {invalidCount}");
+        }
+
+
+
+
+
+
+
+
+
+        public async Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData)
+        {
+
+            List<string> extractedTeams =  _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
+
+            string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
+            string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
+
+
+
+            return _processed_YoutubeDataDTOBuilder.BuildProcessedDTO(youtubeData, team1, team2);
+        }
+
 
 
         public async Task<List<Processed_YoutubeDataDTO>> ExtractAndBuildAllProcessedDTO(List<Import_YoutubeDataEntity> youtubeDataList)
@@ -57,6 +126,8 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             List<Processed_YoutubeDataDTO> processed = new List<Processed_YoutubeDataDTO>();
 
             int nullCount = 0;
+
+            List<Processed_YoutubeDataDTO> YoutubeVideosWithNoMatch = new List<Processed_YoutubeDataDTO>();
 
             foreach (var video in youtubeDataList)
             {
@@ -72,26 +143,24 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
                 {
                     nullCount++;
                 }
+                if (newDto.Team1 == null || newDto.Team1 == string.Empty && newDto.Team2 == null || newDto.Team2 == string.Empty)
+                {
+                    YoutubeVideosWithNoMatch.Add(newDto);
+                }
+
+            }
+
+            if (YoutubeVideosWithNoMatch.Count > 0)
+            {
+                foreach (var video in YoutubeVideosWithNoMatch)
+                {
+                    Console.WriteLine($"Playlist title {video.PlaylistTitle}, title: {video.VideoTitle}.");
+                }
             }
 
             _appLogger.Info($"NUMBER OF TEAM EXTRACTIONS FAILED: {nullCount}");
             return processed;
-            
-        }
 
-
-        public async Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData)
-        {
-        
-
-            List<string> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
-
-            string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
-            string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
-
-
-
-            return _processed_YoutubeDataDTOBuilder.BuildProcessedDTO(youtubeData, team1, team2);
         }
 
 
@@ -104,7 +173,15 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-       
+
+
+
+
+
+
+
+
+
 
 
 

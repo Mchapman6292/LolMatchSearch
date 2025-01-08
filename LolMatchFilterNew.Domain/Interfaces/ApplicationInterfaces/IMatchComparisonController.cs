@@ -10,10 +10,13 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
 {
     public interface IMatchComparisonController
     {
-        Task<List<Processed_YoutubeDataDTO>> ExtractAndBuildAllProcessedDTO(List<Import_YoutubeDataEntity> youtubeDataList);
+
+        Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessedForEuAndNaTeams();
+
 
         Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData);
 
-        Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessed();
+        Task TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(List<Processed_YoutubeDataDTO> processedYoutubeDataList);
+
     }
 }

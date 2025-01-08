@@ -23,15 +23,11 @@ using System.Collections.Generic;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.DTOs.TeamnameDTOs;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
+using Domain.DTOs.Processed_YoutubeDataDTOs;
 
 
 
 
-// TO DO
-// Get all known Team abbreviations using TeamRedirects?
-// Find method responsible for appending ' to YoutubePlaylistIds.
-// Update Teams to use teamRedirects
-// Need to ensure all Youtube & scoreboardGame mappers & repositories use updated composite key.
 
 
 
@@ -65,26 +61,17 @@ namespace LolMatchFilterNew.Presentation
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
 
 
+                await teamnameDTOBuilder.PopulateTeamNamesAndAbbreviations();
+
+                List<TeamnameDTO> allKnownNames = teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
+
+                Console.WriteLine($"populatedTeams created with count {allKnownNames.Count}");
+
+                List<Processed_YoutubeDataDTO> processedYoutubeDTOList = await matchComparisonController.TESTGetAllProcessedForEuAndNaTeams();
+
+                await matchComparisonController.TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(processedYoutubeDTOList);
 
 
-                List<string> MainTeamsExcludingChina = new List<string> { "LoL EMEA Championship", "Europe League Championship Series", "League of Legends Championship Series", "LoL Champions Korea" };
-
-
-                List<WesternMatchDTO> matches = await testFunctions.GetWesternMatches();
-
-
-                await teamnameDTOBuilder.BuildTeamnameDTOFromGetWesternMatches(matches);
-
-
-                List<TeamnameDTO> teams = teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
-
-                var first = teams.First();
-                var last = teams.Last();
-
-                objectLogger.LogTeamnameDTO(first);
-                objectLogger.LogTeamnameDTO(last);
-
-                await matchComparisonController.TESTGetAllProcessed();
 
 
 

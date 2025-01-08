@@ -9,5 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Y
         Task<int> DeleteAllImport_YoutubeData();
 
         Task<List<Import_YoutubeDataEntity>> GetAllImport_YoutubeData();
+
+        Task<List<Import_YoutubeDataEntity>> GetAllVideoDataForEuAndNaTeamsByPlaylistId();
     }
 }

@@ -32,6 +32,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
         private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;    
 
+
         public YoutubeTeamExtractor(
 
             IAppLogger appLogger,
@@ -54,7 +55,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
 
 
 
-        
+
 
 
 
@@ -79,9 +80,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
             else
             {
                 _appLogger.Info($"No matches found for {nameof(ExtractTeamNamesAroundVsKeyword)}, ");
+                Console.WriteLine($"No matches found for {youtubeTitle}.");
                 return teams;
             }
         }
+
 
 
 

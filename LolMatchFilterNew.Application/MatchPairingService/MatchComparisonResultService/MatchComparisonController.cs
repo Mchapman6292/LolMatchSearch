@@ -44,7 +44,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
         public async Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessed()
         {
-            List <Import_YoutubeDataEntity> allvideos = await _import_YoutubeDataRepository.GetAllImport_YoutubeData();
+            List <Import_YoutubeDataEntity> allvideos = await _import_YoutubeDataRepository.GetAllVideoDataForEuAndNaTeamsByPlaylistId();
 
             return await ExtractAndBuildAllProcessedDTO(allvideos);
         }
@@ -57,6 +57,8 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             List<Processed_YoutubeDataDTO> processed = new List<Processed_YoutubeDataDTO>();
 
             int nullCount = 0;
+
+            List<Processed_YoutubeDataDTO> YoutubeVideosWithNoMatch = new List<Processed_YoutubeDataDTO>();
 
             foreach (var video in youtubeDataList)
             {
@@ -72,6 +74,20 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
                 {
                     nullCount++;
                 }
+                if (newDto.Team1 == null || newDto.Team1 == string.Empty && newDto.Team2 == null || newDto.Team2 == string.Empty)
+                {
+                    YoutubeVideosWithNoMatch.Add(newDto);
+                }
+
+            }
+
+
+            if (YoutubeVideosWithNoMatch.Count > 0)
+            {
+                foreach (var video in YoutubeVideosWithNoMatch)
+                {
+                    Console.WriteLine($"Playlist title {video.PlaylistTitle}, title: {video.VideoTitle}.");
+                }
             }
 
             _appLogger.Info($"NUMBER OF TEAM EXTRACTIONS FAILED: {nullCount}");
@@ -80,9 +96,10 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         }
 
 
+
         public async Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData)
         {
-        
+
 
             List<string> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
 
@@ -104,7 +121,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-       
+
 
 
 

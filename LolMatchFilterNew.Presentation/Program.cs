@@ -88,7 +88,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                Console.ReadLine();
+                Console.ReadKey();
 
 
 

@@ -143,6 +143,14 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
         }
 
 
+        public async Task<List<Import_YoutubeDataEntity>> GetAllVideoDataForEuAndNaTeamsByPlaylistId()
+        {
+            return await _matchFilterDbContext.Import_YoutubeData
+                            .FromSqlRaw("SELECT * FROM get_euna_videos_by_playlist_title()")
+                            .ToListAsync();
+        }
+
+
 
     }
 }

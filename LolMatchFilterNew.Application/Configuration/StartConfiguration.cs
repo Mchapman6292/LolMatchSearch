@@ -74,6 +74,8 @@ using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
 using Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
+using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.ITeamNameServices;
 
 
 
@@ -163,6 +165,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
+                  services.AddTransient<ITeamNameService, TeamNameService>();
 
 
 

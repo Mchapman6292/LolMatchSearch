@@ -69,7 +69,7 @@ namespace LolMatchFilterNew.Presentation
 
                 List<Processed_YoutubeDataDTO> processedYoutubeDTOList = await matchComparisonController.TESTGetAllProcessedForEuAndNaTeams();
 
-                await matchComparisonController.TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(processedYoutubeDTOList);
+                await matchComparisonController.TESTCheckAllProcessed(processedYoutubeDTOList);
 
 
 

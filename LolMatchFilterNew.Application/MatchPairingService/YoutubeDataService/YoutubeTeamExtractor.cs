@@ -30,7 +30,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         private readonly IApiHelper _apiHelper;
         private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
-        private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;    
+        private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;
 
 
         public YoutubeTeamExtractor(
@@ -63,6 +63,15 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         // Looks for team names either side of vs / versus, not case sensitive. 
         public List<string?> ExtractTeamNamesAroundVsKeyword(string youtubeTitle)
         {
+            if(youtubeTitle == null)
+            {
+                throw new NullReferenceException(nameof(youtubeTitle));
+            }
+            if(youtubeTitle == string.Empty) 
+            {
+                throw new ArgumentException(nameof(youtubeTitle));
+            }
+
             var match = TeamNamePattern.Match(youtubeTitle);
 
             List<string?> teams = new List<string?>();

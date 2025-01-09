@@ -16,7 +16,6 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
 
         Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData);
 
-        Task TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(List<Processed_YoutubeDataDTO> processedYoutubeDataList);
 
     }
 }

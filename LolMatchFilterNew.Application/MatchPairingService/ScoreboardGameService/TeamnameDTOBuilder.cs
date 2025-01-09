@@ -1,6 +1,6 @@
 ﻿using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders
 {
-    public class TeamnameDTOBuilder  :ITeamnameDTOBuilder
+    public class TeamnameDTOBuilder  :ITeamNameDTOBuilder
     {
         private readonly IAppLogger _appLogger;
         private readonly IImport_TeamnameRepository _teamnameRepository;
@@ -28,29 +28,6 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         }
 
 
-        public List<TeamnameDTO> GetTeamNamesAndAbbreviations()
-        {
-            return TeamNamesAndAbbreviations;
-        }
-
-
-
-        // Retrieves all teamnames from repository and transforms them into DTOs, storing them in TeamNamesAndAbbreviations property.
-        // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
-        public async Task PopulateTeamNamesAndAbbreviations()
-        {
-            var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
-            TeamNamesAndAbbreviations = teamnames.Select(t => BuildTeamnameDTO(
-                t.TeamnameId,
-                t.Longname,
-                t.Short,
-                t.Medium,
-                t.Inputs
-               
-            )).ToList();
-
-            _appLogger.Info($"TeamNamesAndAbbreviations count: {TeamNamesAndAbbreviations.Count}");
-        }
 
 
         public TeamnameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs) 
@@ -85,25 +62,10 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
 
 
-        public async Task TESTLogTeamNameAbbreviations()
-        {
-            await PopulateTeamNamesAndAbbreviations();
-
-            var firstTeamDTO = TeamNamesAndAbbreviations.FirstOrDefault();
-
-
-            var lastTeamDTO = TeamNamesAndAbbreviations.LastOrDefault();
-
-            _objectLogger.LogTeamnameDTO(firstTeamDTO);
-            _objectLogger.LogTeamnameDTO(lastTeamDTO);
-
-        }
-
 
 
         public async Task<List<TeamnameDTO>> BuildTeamnameDTOFromGetWesternMatches(List<WesternMatchDTO> westernMatches)
         {
-
 
             List<TeamnameDTO> teamnames = new List<TeamnameDTO>();
 

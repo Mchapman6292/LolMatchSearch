@@ -1,14 +1,12 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs;
+﻿using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using System.Text.RegularExpressions;
-using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
-using Domain.DTOs.TeamnameDTOs;
-using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using System.Text.RegularExpressions;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors
 {
@@ -30,7 +28,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         private readonly IApiHelper _apiHelper;
         private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
-        private readonly ITeamnameDTOBuilder _teamnameDTOBuilder;
+        private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
 
 
         public YoutubeTeamExtractor(
@@ -39,7 +37,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
             IApiHelper apiHelper,
             IImport_ScoreboardGamesRepository import_ScoreboardGames,
             IStoredSqlFunctionCaller sqlFunctionCaller,
-            ITeamnameDTOBuilder teamnameDTOBuilder,
+            ITeamNameDTOBuilder teamNameDTOBuilder,
             IImport_YoutubeDataRepository import_YoutubeDataRepository
 
             )
@@ -48,7 +46,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
             _apiHelper = apiHelper;
             _Import_ScoreboardGamesRepository = import_ScoreboardGames;
             _sqlFunctionCaller = sqlFunctionCaller;
-            _teamnameDTOBuilder = teamnameDTOBuilder;
+            _teamNameDTOBuilder = teamNameDTOBuilder;
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
         }
 

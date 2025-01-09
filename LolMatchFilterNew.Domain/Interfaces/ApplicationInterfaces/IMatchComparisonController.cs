@@ -13,9 +13,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
 
         Task<List<Processed_YoutubeDataDTO>> TESTGetAllProcessedForEuAndNaTeams();
 
-
-        Task<Processed_YoutubeDataDTO> ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData);
-
+        Task TESTCheckExtractedTeams(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames);
 
     }
 }

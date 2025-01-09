@@ -16,9 +16,6 @@ public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
         {
             _appLogger = appLogger;
             _youtubeTeamExtractor = youtubeTeamExtractor;
-
-
-
         }
 
 
@@ -39,49 +36,10 @@ public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
         }
 
 
-        public List<Processed_YoutubeDataDTO> BuildProcessed_YoutubeDataDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities) 
-        {
-            List<Processed_YoutubeDataDTO> processed = new List<Processed_YoutubeDataDTO>();
-
-            int teamNullCount = 0;
-
-            List<Processed_YoutubeDataDTO> YoutubeVideosWithNoMatch = new List<Processed_YoutubeDataDTO>();
-
-            foreach (var video in youtubeDataEntities)
-            {
+    
 
 
-                Processed_YoutubeDataDTO newDto = await ExtractAndBuildProcessedDTO(video);
-
-                processed.Add(newDto);
-
-                if (newDto.Team1 == null || newDto.Team1 == string.Empty)
-                {
-                    teamNullCount++;
-                }
-                if (newDto.Team2 == null || newDto.Team2 == string.Empty)
-                {
-                    teamNullCount++;
-                }
-                if (newDto.Team1 == null || newDto.Team1 == string.Empty && newDto.Team2 == null || newDto.Team2 == string.Empty)
-                {
-                    YoutubeVideosWithNoMatch.Add(newDto);
-                }
-
-            }
-
-            if (YoutubeVideosWithNoMatch.Count > 0)
-            {
-                foreach (var video in YoutubeVideosWithNoMatch)
-                {
-                    Console.WriteLine($"Playlist title {video.PlaylistTitle}, title: {video.VideoTitle}.");
-                }
-            }
-
-            _appLogger.Info($"NUMBER OF TEAM EXTRACTIONS FAILED: {teamNullCount}");
-            return processed;
-
-        }
+  
 
 
 

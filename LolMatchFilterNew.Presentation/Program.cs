@@ -16,7 +16,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Score
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeController;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_TeamRenameRepositories;
-using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Domain.DTOs.Western_MatchDTOs;
 using System.Collections.Generic;
@@ -24,6 +24,7 @@ using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.DTOs.TeamnameDTOs;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 using Domain.DTOs.Processed_YoutubeDataDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IScoreboardGamesTeamNameServices;
 
 
 
@@ -54,11 +55,12 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeRepository = scope.ServiceProvider.GetRequiredService<IImport_YoutubeDataRepository>();
                 var youtubeController = scope.ServiceProvider.GetRequiredService<IYoutubeController>();
                 var teamRenameRepository = scope.ServiceProvider.GetRequiredService<IProcessed_TeamNameHistoryRepository>();
-                var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamnameDTOBuilder>();
+                var teamnameDTOBuilder = scope.ServiceProvider.GetRequiredService<ITeamNameDTOBuilder>();
                 var testFunctions = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
                 var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();
                 var sqlFunctionCaller = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
+                var teamNameService = scope.ServiceProvider.GetRequiredService<IScoreboardGamesTeamNameService>();
 
 
                 await teamnameDTOBuilder.PopulateTeamNamesAndAbbreviations();
@@ -69,7 +71,6 @@ namespace LolMatchFilterNew.Presentation
 
                 List<Processed_YoutubeDataDTO> processedYoutubeDTOList = await matchComparisonController.TESTGetAllProcessedForEuAndNaTeams();
 
-                await matchComparisonController.TESTCheckAllProcessed(processedYoutubeDTOList);
 
 
 

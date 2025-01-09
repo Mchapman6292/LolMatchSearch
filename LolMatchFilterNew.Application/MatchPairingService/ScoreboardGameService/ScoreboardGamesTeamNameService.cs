@@ -6,32 +6,46 @@ using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Domain.DTOs.TeamnameDTOs;
-using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.ITeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IScoreboardGamesTeamNameServices;
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.DTOs.Processed_YoutubeDataDTOs;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
+using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 
-namespace Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices
+namespace Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.ScoreboardGamesTeamNameServices
 {
-    public class TeamNameService : ITeamNameService
+    public class ScoreboardGamesTeamNameService : IScoreboardGamesTeamNameService
     {
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
         private readonly IStoredSqlFunctionCaller _sqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
+        private readonly IImport_TeamnameRepository _teamnameRepository;
+        private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
+
+        public List<TeamnameDTO> TeamNamesAndAbbreviations = new List<TeamnameDTO>();
 
         private readonly List<WesternMatchDTO> _westernMatches;
+
         private readonly Dictionary<string, string> _shortNames;
         private readonly Dictionary<string, string> _mediumNames;
         private readonly Dictionary<string, List<string>> _inputs;
 
 
-        public TeamNameService(IAppLogger appLogger, IObjectLogger objectLogger, IStoredSqlFunctionCaller testFunction, IImport_YoutubeDataRepository import_YoutubeDataRepository)
+        public ScoreboardGamesTeamNameService(IAppLogger appLogger, IObjectLogger objectLogger, IStoredSqlFunctionCaller testFunction, IImport_YoutubeDataRepository import_YoutubeDataRepository, IImport_TeamnameRepository teamNameRepository, ITeamNameDTOBuilder teamNameDTOBuilder)
         {
+
             _appLogger = appLogger;
             _objectLogger = objectLogger;
             _sqlFunctionCaller = testFunction;
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
+            _teamnameRepository = teamNameRepository;
+            _teamNameDTOBuilder = teamNameDTOBuilder;
+
+ 
 
 
             _westernMatches = _sqlFunctionCaller.GetWesternMatches()
@@ -39,41 +53,54 @@ namespace Application.MatchPairingService.ScoreboardGameService.MatchDTOServices
               .GetResult();
 
 
-            _shortNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            _mediumNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            _inputs = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         }
 
-
-        public void PopulateTeamVariations(IEnumerable<TeamnameDTO> teamNames)
+        // Retrieves all team names from repository and transforms them into DTOs, storing them in TeamNamesAndAbbreviations property.
+        // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
+        public async Task PopulateTeamNamesAndAbbreviations()
         {
-            int count = 0;
-            foreach (var team in teamNames)
-            {
-                if (string.IsNullOrEmpty(team.LongName))
-                    continue;
+            var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
+            TeamNamesAndAbbreviations = teamnames.Select(t => _teamNameDTOBuilder.BuildTeamnameDTO(
+                t.TeamnameId,
+                t.Longname,
+                t.Short,
+                t.Medium,
+                t.Inputs
 
-                if (!string.IsNullOrEmpty(team.Short))
-                {
-                    _shortNames.Add(team.LongName, team.Short);
-                }
+            )).ToList();
 
-                if (!string.IsNullOrEmpty(team.Medium))
-                {
-                    _mediumNames.Add(team.LongName, team.Medium);
-                }
-
-                if (team.FormattedInputs != null && team.FormattedInputs.Count > 0)
-                {
-                    _inputs.Add(team.LongName, team.FormattedInputs);
-                }
-
-                count++;
-            }
-
-            _appLogger.Info($"{nameof(PopulateTeamVariations)} complete total count: {count}");
+            _appLogger.Info($"TeamNamesAndAbbreviations count: {TeamNamesAndAbbreviations.Count}");
         }
 
+
+        public async Task TESTLogTeamNameAbbreviations()
+        {
+            await PopulateTeamNamesAndAbbreviations();
+
+            var firstTeamDTO = TeamNamesAndAbbreviations.FirstOrDefault();
+
+
+            var lastTeamDTO = TeamNamesAndAbbreviations.LastOrDefault();
+
+            _objectLogger.LogTeamnameDTO(firstTeamDTO);
+            _objectLogger.LogTeamnameDTO(lastTeamDTO);
+
+        }
+
+
+
+
+
+
+
+        public List<TeamnameDTO> GetTeamNamesAndAbbreviations()
+        {
+            if (TeamNamesAndAbbreviations == null || !TeamNamesAndAbbreviations.Any())
+            {
+                throw new ArgumentNullException(nameof(TeamNamesAndAbbreviations), "The list is null or empty.");
+            }
+            return TeamNamesAndAbbreviations;
+        }
 
 
 

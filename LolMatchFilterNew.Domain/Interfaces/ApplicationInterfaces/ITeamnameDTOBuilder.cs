@@ -6,18 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders
+namespace Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders
 {
-    public interface ITeamnameDTOBuilder
+    public interface ITeamNameDTOBuilder
     {
-        List<TeamnameDTO> GetTeamNamesAndAbbreviations();
-
-        Task PopulateTeamNamesAndAbbreviations();
 
         TeamnameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs);
 
-
-        Task TESTLogTeamNameAbbreviations();
 
         Task<List<TeamnameDTO>> BuildTeamnameDTOFromGetWesternMatches(List<WesternMatchDTO> westernMatches);
     }

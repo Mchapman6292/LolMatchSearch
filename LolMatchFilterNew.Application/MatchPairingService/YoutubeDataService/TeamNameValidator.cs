@@ -3,7 +3,7 @@
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
 
 namespace Application.MatchPairingService.YoutubeDataService.TeamNameValidators
@@ -12,13 +12,13 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamNameValidators
     {
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
-        private readonly ITeamnameDTOBuilder _teamNameDTOBuilder;
+        private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
         private readonly List<TeamnameDTO> _TeamNamesAndAbbreviations;
         
 
 
 
-        public TeamNameValidator(IAppLogger appLogger, IObjectLogger objectLogger, ITeamnameDTOBuilder teamNameDTOBuilder)
+        public TeamNameValidator(IAppLogger appLogger, IObjectLogger objectLogger, ITeamNameDTOBuilder teamNameDTOBuilder)
         {
             _appLogger = appLogger;
             _objectLogger = objectLogger;

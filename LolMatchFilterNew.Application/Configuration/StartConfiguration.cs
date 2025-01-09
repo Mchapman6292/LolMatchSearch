@@ -45,7 +45,7 @@ using Infrastructure.Repositories.ImportRepositories.Import_TeamnameRepositories
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 
 using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
-using Domain.Interfaces.ApplicationInterfaces.ITeamnameDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Application.MatchPairingService.YoutubeDataService.TeamNameValidators;
@@ -74,6 +74,9 @@ using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
 using Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
+using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IScoreboardGamesTeamNameServices;
+using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.ScoreboardGamesTeamNameServices;
 
 
 
@@ -157,12 +160,14 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
                   services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
-                  services.AddTransient<ITeamnameDTOBuilder, TeamnameDTOBuilder>();
+                  services.AddTransient<ITeamNameDTOBuilder, TeamnameDTOBuilder>();
                   services.AddTransient<IObjectLogger, ObjectLogger>();
                   services.AddTransient<IProcessed_YoutubeDataDTOBuilder, Processed_YoutubeDataDTOBuilder>();
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
+                  services.AddTransient<IScoreboardGamesTeamNameService, ScoreboardGamesTeamNameService>();
+
 
 
 

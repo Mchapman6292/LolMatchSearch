@@ -3,16 +3,19 @@ using Domain.DTOs.Processed_YoutubeDataDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
 using System.Drawing.Text;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 
 namespace Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder
 {
 public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
     {
         private readonly IAppLogger _appLogger;
+        private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
 
-        public Processed_YoutubeDataDTOBuilder(IAppLogger appLogger)
+        public Processed_YoutubeDataDTOBuilder(IAppLogger appLogger, IYoutubeTeamExtractor youtubeTeamExtractor)
         {
             _appLogger = appLogger;
+            _youtubeTeamExtractor = youtubeTeamExtractor;
         }
 
 
@@ -31,6 +34,12 @@ public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
                 Team2 = team2 ?? string.Empty
             };
         }
+
+
+    
+
+
+  
 
 
 

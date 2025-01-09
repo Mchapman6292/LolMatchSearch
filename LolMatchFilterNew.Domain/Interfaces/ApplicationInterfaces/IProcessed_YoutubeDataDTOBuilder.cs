@@ -13,5 +13,6 @@ namespace Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuild
         Processed_YoutubeDataDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string team1, string team2);
 
 
+
     }
 }

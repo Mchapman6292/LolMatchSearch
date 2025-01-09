@@ -23,7 +23,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.DTOs.TeamnameDTOs.TeamnameDTO", b =>
+            modelBuilder.Entity("Domain.DTOs.TeamnameDTOs.TeamNameDTO", b =>
                 {
                     b.Property<List<string>>("FormattedInputs")
                         .HasColumnType("text[]");
@@ -113,7 +113,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                     b.ToTable("WesternMatchesSet");
                 });
 
-            modelBuilder.Entity("Domain.DTOs.YoutubeDataDTOs.Processed_YoutubeDataDTO", b =>
+            modelBuilder.Entity("Domain.DTOs.YoutubeDataDTOs.YoutubeDataWithTeamsDTO", b =>
                 {
                     b.Property<string>("PlaylistId")
                         .HasColumnType("text");

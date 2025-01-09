@@ -1,7 +1,7 @@
-﻿namespace Domain.DTOs.Processed_YoutubeDataDTOs
+﻿namespace Domain.DTOs.YoutubeDataWithTeamsDTOs
 {
-    // Used to format data from Immport_YoutubeData so MatchComparisonController can extract team names from title. Is not linked to Processed_YoutubeDataDTO db table. 
-    public class Processed_YoutubeDataDTO
+    // Used to format data from Immport_YoutubeData so MatchComparisonController can extract team names from title. Is not linked to YoutubeDataWithTeamsDTO db table. 
+    public class YoutubeDataWithTeamsDTO
     {
         public string YoutubeVideoId { get; set; }
         public string VideoTitle { get; set; }

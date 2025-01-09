@@ -6,7 +6,7 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
-using Domain.DTOs.Processed_YoutubeDataDTOs;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories
 {

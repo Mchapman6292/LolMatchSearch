@@ -1,4 +1,4 @@
-﻿using Domain.DTOs.Processed_YoutubeDataDTOs;
+﻿using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuild
 {
     public interface IProcessed_YoutubeDataDTOBuilder
     {
-        Processed_YoutubeDataDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string team1, string team2);
+        YoutubeDataWithTeamsDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string team1, string team2);
 
 
 

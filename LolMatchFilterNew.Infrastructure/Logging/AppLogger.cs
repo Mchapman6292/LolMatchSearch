@@ -9,16 +9,21 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 {
     public class AppLogger : IAppLogger
     {
-        private readonly Serilog.ILogger _logger;
+        private static readonly Serilog.ILogger _logger;
 
-        public AppLogger()
+        static AppLogger()
         {
             _logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 1)
+                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10, shared: true)
                 .CreateLogger();
+        }
+
+        public AppLogger()
+        {
+
         }
 
 

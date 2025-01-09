@@ -2,13 +2,14 @@
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
-using Domain.DTOs.Processed_YoutubeDataDTOs;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
-    public class YoutubeTeamNameService
+    public class YoutubeTeamNameService : IYoutubeTeamNameService
     {
         private readonly IAppLogger _appLogger;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
@@ -27,7 +28,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _youtubeTeamExtractor = youtubeTeamExtractor;
         }
 
-        public Processed_YoutubeDataDTO ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData)
+        public YoutubeDataWithTeamsDTO ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData)
         {
 
             List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
@@ -39,18 +40,18 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             return _processed_YoutubeDataDTOBuilder.BuildProcessedDTO(youtubeData, team1, team2);
         }
 
-        public List<Processed_YoutubeDataDTO> BuildProcessed_YoutubeDataDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities)
+        public List<YoutubeDataWithTeamsDTO> BuildProcessed_YoutubeDataDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities)
         {
-            List<Processed_YoutubeDataDTO> processed = new List<Processed_YoutubeDataDTO>();
+            List<YoutubeDataWithTeamsDTO> processed = new List<YoutubeDataWithTeamsDTO>();
 
             int teamNullCount = 0;
 
-            List<Processed_YoutubeDataDTO> YoutubeVideosWithNoMatch = new List<Processed_YoutubeDataDTO>();
+            List<YoutubeDataWithTeamsDTO> YoutubeVideosWithNoMatch = new List<YoutubeDataWithTeamsDTO>();
 
             foreach (var video in youtubeDataEntities)
             {
 
-                Processed_YoutubeDataDTO newDto = ExtractAndBuildProcessedDTO(video);
+                YoutubeDataWithTeamsDTO newDto = ExtractAndBuildProcessedDTO(video);
 
                 processed.Add(newDto);
 
@@ -80,6 +81,31 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _appLogger.Info($"NUMBER OF TEAM EXTRACTIONS FAILED: {teamNullCount}");
             return processed;
 
+        }
+
+
+        public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> processed_YoutubeDataDTOs)
+        {
+            HashSet<string> distinctTeamNames = new HashSet<string>();
+
+            int distinctCount = 0;
+
+            foreach (var dto in processed_YoutubeDataDTOs)
+            {
+                if (!string.IsNullOrEmpty(dto.Team1))
+                {
+                    distinctTeamNames.Add(dto.Team1);
+                    distinctCount++;
+                }
+                if (!string.IsNullOrEmpty(dto.Team2))
+                {
+                    distinctTeamNames.Add(dto.Team2);
+                    distinctCount++;
+                }
+            }
+            _appLogger.Info($"Total number of distinct teams for {nameof(GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO)}: {distinctCount}.");
+
+            return distinctTeamNames;
         }
 
 

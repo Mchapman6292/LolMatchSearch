@@ -15,14 +15,14 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
         private readonly IImport_TeamnameRepository _teamnameRepository;
         private readonly IObjectLogger _objectLogger;
         private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
-        private List<TeamnameDTO> TeamNamesAndAbbreviations {  get; set; } 
+        private List<TeamNameDTO> TeamNamesAndAbbreviations {  get; set; } 
 
 
         public TeamnameDTOBuilder(IAppLogger appLogger, IImport_TeamnameRepository teamnameRepository, IObjectLogger objectLogger, IStoredSqlFunctionCaller storedSqlFunctionCaller)
         {
             _appLogger = appLogger;
             _teamnameRepository = teamnameRepository;
-            TeamNamesAndAbbreviations = new List<TeamnameDTO>();    
+            TeamNamesAndAbbreviations = new List<TeamNameDTO>();    
             _objectLogger = objectLogger;
             _storedSqlFunctionCaller = storedSqlFunctionCaller;
         }
@@ -30,9 +30,9 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
 
 
-        public TeamnameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs) 
+        public TeamNameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs) 
         {
-            return new TeamnameDTO
+            return new TeamNameDTO
             {
                 TeamNameId = teamNameId,
                 LongName = longname,
@@ -64,10 +64,10 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
 
 
 
-        public async Task<List<TeamnameDTO>> BuildTeamnameDTOFromGetWesternMatches(List<WesternMatchDTO> westernMatches)
+        public async Task<List<TeamNameDTO>> BuildTeamNameDTOListFromGetWesternMatchesAsync(List<WesternMatchDTO> westernMatches)
         {
 
-            List<TeamnameDTO> teamnames = new List<TeamnameDTO>();
+            List<TeamNameDTO> teamnames = new List<TeamNameDTO>();
 
             int count = 0;
 
@@ -89,7 +89,7 @@ namespace Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuild
                 count++;
             }
             TeamNamesAndAbbreviations = teamnames;
-            _appLogger.Info($"{nameof(BuildTeamnameDTO)} complete, TeamnameDTO count: {teamnames.Count}.");
+            _appLogger.Info($"{nameof(BuildTeamnameDTO)} complete, TeamNameDTO count: {teamnames.Count}.");
             return teamnames;
         }
 

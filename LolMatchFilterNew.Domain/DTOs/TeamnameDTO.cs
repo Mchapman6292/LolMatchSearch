@@ -2,7 +2,7 @@
 
 namespace Domain.DTOs.TeamnameDTOs
 {
-    public class TeamnameDTO
+    public class TeamNameDTO
     {
         public string TeamNameId { get; set; } 
         public string? LongName { get; set; }

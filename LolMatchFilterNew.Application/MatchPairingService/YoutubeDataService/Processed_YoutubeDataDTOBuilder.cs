@@ -1,5 +1,5 @@
 ﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
-using Domain.DTOs.Processed_YoutubeDataDTOs;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
 using System.Drawing.Text;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
@@ -19,9 +19,9 @@ public class Processed_YoutubeDataDTOBuilder : IProcessed_YoutubeDataDTOBuilder
         }
 
 
-        public Processed_YoutubeDataDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string? team1, string? team2)
+        public YoutubeDataWithTeamsDTO BuildProcessedDTO(Import_YoutubeDataEntity youtubeDataEntity, string? team1, string? team2)
         {
-            return new Processed_YoutubeDataDTO
+            return new YoutubeDataWithTeamsDTO
             {
                 YoutubeVideoId = youtubeDataEntity.YoutubeVideoId,
                 VideoTitle = youtubeDataEntity.VideoTitle,

@@ -23,8 +23,11 @@ using System.Collections.Generic;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.DTOs.TeamnameDTOs;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
-using Domain.DTOs.Processed_YoutubeDataDTOs;
-using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IScoreboardGamesTeamNameServices;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 
 
 
@@ -60,28 +63,25 @@ namespace LolMatchFilterNew.Presentation
                 var objectLogger = scope.ServiceProvider.GetRequiredService<IObjectLogger>();
                 var sqlFunctionCaller = scope.ServiceProvider.GetRequiredService<IStoredSqlFunctionCaller>();
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
-                var teamNameService = scope.ServiceProvider.GetRequiredService<IScoreboardGamesTeamNameService>();
+                var import_TeamNameService = scope.ServiceProvider.GetRequiredService<IImport_TeamNameService>();
+                var youtubeTeamNameService = scope.ServiceProvider.GetRequiredService<IYoutubeTeamNameService>();
 
 
-                await teamnameDTOBuilder.PopulateTeamNamesAndAbbreviations();
+                await import_TeamNameService.PopulateImport_TeamNameAllNames();
+                List<TeamNameDTO> allTeamNames = import_TeamNameService.ReturnImport_TeamNameAllNames();
 
-                List<TeamnameDTO> allKnownNames = teamnameDTOBuilder.GetTeamNamesAndAbbreviations();
 
-                Console.WriteLine($"populatedTeams created with count {allKnownNames.Count}");
+ 
+                List<Import_YoutubeDataEntity> westernMatches = await sqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeams();
 
-                List<Processed_YoutubeDataDTO> processedYoutubeDTOList = await matchComparisonController.TESTGetAllProcessedForEuAndNaTeams();
-
+                HashSet<string> distinctNames = youtubeTeamNameService.GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO()
+          
 
 
 
 
 
                 Console.ReadKey();
-
-
-
-
-
 
 
 
@@ -93,31 +93,5 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-        private static (int TotalObjects, int NullObjects, int NullProperties) CountObjectsAndNullProperties(IEnumerable<JObject> enumerable)
-        {
-            int totalObjects = 0;
-            int nullObjects = 0;
-            int nullProperties = 0;
-
-            foreach (var item in enumerable)
-            {
-                totalObjects++;
-                if (item == null)
-                {
-                    nullObjects++;
-                    continue;
-                }
-
-                foreach (var property in item.Properties())
-                {
-                    if (property.Value.Type == JTokenType.Null)
-                    {
-                        nullProperties++;
-                    }
-                }
-            }
-
-            return (TotalObjects: totalObjects, NullObjects: nullObjects, NullProperties: nullProperties);
-        }
     }
 }

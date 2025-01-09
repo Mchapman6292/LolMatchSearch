@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
+﻿using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
 using Domain.Interfaces.ApplicationInterfaces.MatchFailureReasons;
 using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchComparisonResultBuilders;
@@ -9,7 +9,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
     public class MatchComparisonResultBuilder : IMatchComparisonResultBuilder
     {
         private readonly MatchComparisonResultDTO _result = new();
-        private readonly ITeamNameValidator _teamValidator;
+        private readonly IYoutubeTeamNameValidator _teamValidator;
 
         private bool _teamsSet;
         private bool _youtubeInfoSet;
@@ -21,7 +21,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-        public MatchComparisonResultBuilder(ITeamNameValidator teamValidator)
+        public MatchComparisonResultBuilder(IYoutubeTeamNameValidator teamValidator)
         {
             _teamValidator = teamValidator;
    
@@ -103,7 +103,6 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         public IMatchComparisonResultBuilder WithYoutubeTeams(string youtubeVideoId, string extractedTeam1, string extractedTeam2)
         {
        
-            int? matchCount = _teamValidator.GetCountOfValidTeams(_result.YoutubeTeam1, _result.YoutubeTeam2);
 
 
 

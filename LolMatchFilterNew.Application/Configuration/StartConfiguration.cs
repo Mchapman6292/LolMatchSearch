@@ -48,8 +48,8 @@ using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
-using Application.MatchPairingService.YoutubeDataService.TeamNameValidators;
-using Domain.Interfaces.ApplicationInterfaces.ITeamNameValidators;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameValidators;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 
@@ -75,8 +75,10 @@ using Application.MatchPairingService.MatchComparisonResultService.MatchComparis
 using Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder;
 using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices;
-using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IScoreboardGamesTeamNameServices;
-using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.ScoreboardGamesTeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 
 
 
@@ -138,7 +140,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IAppLogger, AppLogger>();
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
                   services.AddSingleton<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
-                  services.AddSingleton<ITeamNameValidator, TeamNameValidator>();
+                  services.AddSingleton<IYoutubeTeamNameValidator, YoutubeTeamNameValidator>();
          
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
@@ -166,7 +168,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
-                  services.AddTransient<IScoreboardGamesTeamNameService, ScoreboardGamesTeamNameService>();
+                  services.AddTransient<IImport_TeamNameService, Import_TeamNameService>();
+                  services.AddTransient<IYoutubeTeamNameService, YoutubeTeamNameService>();
 
 
 

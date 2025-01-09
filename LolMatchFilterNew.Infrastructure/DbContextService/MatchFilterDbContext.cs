@@ -17,7 +17,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeData
 
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.DTOs.TeamnameDTOs;
-using Domain.DTOs.Processed_YoutubeDataDTOs;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -46,8 +46,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 
 
         public DbSet<WesternMatchDTO> WesternMatchesSet { get; set; }
-        public DbSet<TeamnameDTO> TeamnamesSet { get; set; }
-        public DbSet<Processed_YoutubeDataDTO> YoutubeSet { get; set; }
+        public DbSet<TeamNameDTO> TeamnamesSet { get; set; }
+        public DbSet<YoutubeDataWithTeamsDTO> YoutubeSet { get; set; }
 
 
 
@@ -206,12 +206,12 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             });
 
 
-            modelBuilder.Entity<TeamnameDTO>(entity =>
+            modelBuilder.Entity<TeamNameDTO>(entity =>
             {
                 entity.HasNoKey();
             });
 
-            modelBuilder.Entity<Processed_YoutubeDataDTO>(entity =>
+            modelBuilder.Entity<YoutubeDataWithTeamsDTO>(entity =>
             {
                 entity.HasNoKey();
             });

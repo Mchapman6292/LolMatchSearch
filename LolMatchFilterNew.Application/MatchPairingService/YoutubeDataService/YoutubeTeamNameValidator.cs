@@ -21,7 +21,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameVali
             _teamNameDTOBuilder = teamNameDTOBuilder;
         }
 
-  
+        
 
         public bool ValidateTeamName(string youtubeTeamName, List<TeamNameDTO> teamNamesAndAbbreviations)
         {

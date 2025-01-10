@@ -72,8 +72,8 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchComparison
 using Infrastructure.SQLFunctions.StoredSqlFunctionCallers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
-using Application.MatchPairingService.YoutubeDataService.Processed_YoutubeDataDTOBuilder;
-using Domain.Interfaces.ApplicationInterfaces.IProcessed_YoutubeDataDTOBuilders;
+using Application.MatchPairingService.YoutubeDataService.YoutubeDataWithTeamsDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
@@ -164,7 +164,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
                   services.AddTransient<ITeamNameDTOBuilder, TeamnameDTOBuilder>();
                   services.AddTransient<IObjectLogger, ObjectLogger>();
-                  services.AddTransient<IProcessed_YoutubeDataDTOBuilder, Processed_YoutubeDataDTOBuilder>();
+                  services.AddTransient<IYoutubeDataWithTeamsDTOBuilder, YoutubeDataWithTeamsDTOBuilder>();
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();

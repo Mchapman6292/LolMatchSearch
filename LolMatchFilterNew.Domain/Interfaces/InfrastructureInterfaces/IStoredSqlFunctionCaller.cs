@@ -7,7 +7,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers
     {
         Task<List<WesternMatchDTO>> GetWesternMatches();
 
-        Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeams();
+        Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeamsAsync();
 
     }
 }

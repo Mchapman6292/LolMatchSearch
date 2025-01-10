@@ -49,7 +49,7 @@ namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
                             .ToList();
         }
 
-        public async Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeams()
+        public async Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeamsAsync()
         {
             return await _matchFilterDbContext.Import_YoutubeData
                             .FromSqlRaw("SELECT * FROM get_euna_videos_by_playlist_title()")

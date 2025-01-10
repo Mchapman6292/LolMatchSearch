@@ -1,4 +1,5 @@
-﻿using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+﻿using Domain.DTOs.TeamnameDTOs;
+using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,9 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
 
         Task<List<YoutubeDataWithTeamsDTO>> TESTGetAllProcessedForEuAndNaTeams();
 
-        Task TESTCheckExtractedTeams(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames);
+        Task TESTCheckExtractedTeamsAsync(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames);
+
+        void CONTROLLERValidateWesternMatches(HashSet<string> distinctTeamNames, List<TeamNameDTO> import_TeamNameAllNames);
 
     }
 }

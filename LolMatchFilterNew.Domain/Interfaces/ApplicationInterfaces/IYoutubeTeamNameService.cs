@@ -11,8 +11,9 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices
 {
     public interface IYoutubeTeamNameService
     {
-        YoutubeDataWithTeamsDTO ExtractAndBuildProcessedDTO(Import_YoutubeDataEntity youtubeData);
-        List<YoutubeDataWithTeamsDTO> BuildProcessed_YoutubeDataDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities);
+        HashSet<string> CONTROLLERGetAllDistinctNamesForWestern(List<Import_YoutubeDataEntity> youtubeData);
+        YoutubeDataWithTeamsDTO ExtractAndBuildYoutubeDataWithTeamsDTO(Import_YoutubeDataEntity youtubeData);
+        List<YoutubeDataWithTeamsDTO> BuildYoutubeDataWithTeamsDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities);
         HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> processed_YoutubeDataDTOs);
     }
 }

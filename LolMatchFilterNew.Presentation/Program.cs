@@ -68,13 +68,19 @@ namespace LolMatchFilterNew.Presentation
 
 
                 await import_TeamNameService.PopulateImport_TeamNameAllNames();
+
+
+
                 List<TeamNameDTO> allTeamNames = import_TeamNameService.ReturnImport_TeamNameAllNames();
 
 
  
-                List<Import_YoutubeDataEntity> westernMatches = await sqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeams();
+                List<Import_YoutubeDataEntity> westernMatches = await sqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
-                HashSet<string> distinctNames = youtubeTeamNameService.GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO()
+                HashSet<string> distinctNames = youtubeTeamNameService.CONTROLLERGetAllDistinctNamesForWestern(westernMatches);
+
+
+                matchComparisonController.CONTROLLERValidateWesternMatches(distinctNames, allTeamNames);
           
 
 

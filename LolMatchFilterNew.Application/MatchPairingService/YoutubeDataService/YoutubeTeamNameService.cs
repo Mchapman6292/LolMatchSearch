@@ -6,6 +6,7 @@ using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
@@ -24,6 +25,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
     public class YoutubeTeamNameService : IYoutubeTeamNameService
     {
         private readonly IAppLogger _appLogger;
+        private readonly IObjectLogger _objectLogger;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
         private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
         private readonly IYoutubeDataWithTeamsDTOBuilder _processed_YoutubeDataDTOBuilder;
@@ -31,13 +33,14 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         
 
 
-        public YoutubeTeamNameService(IAppLogger appLogger, IImport_YoutubeDataRepository import_YoutubeDataRepository, IStoredSqlFunctionCaller storedSqlFunctionCaller, IYoutubeDataWithTeamsDTOBuilder processed_YoutubeDataDTOBuilder, IYoutubeTeamExtractor youtubeTeamExtractor)
+        public YoutubeTeamNameService(IAppLogger appLogger, IImport_YoutubeDataRepository import_YoutubeDataRepository, IStoredSqlFunctionCaller storedSqlFunctionCaller, IYoutubeDataWithTeamsDTOBuilder processed_YoutubeDataDTOBuilder, IYoutubeTeamExtractor youtubeTeamExtractor, IObjectLogger objectLogger)
         {
             _appLogger = appLogger;
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
             _storedSqlFunctionCaller = storedSqlFunctionCaller;
             _processed_YoutubeDataDTOBuilder = processed_YoutubeDataDTOBuilder;
             _youtubeTeamExtractor = youtubeTeamExtractor;
+            _objectLogger = objectLogger;
         }
 
 
@@ -70,6 +73,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
                 if (newDto.Team1 == null || newDto.Team1 == string.Empty && newDto.Team2 == null || newDto.Team2 == string.Empty)
                 {
                     YoutubeVideosWithNoMatch.Add(newDto);
+
                 }
 
             }
@@ -78,7 +82,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             {
                 foreach (var video in YoutubeVideosWithNoMatch)
                 {
-                    Console.WriteLine($"Playlist title {video.PlaylistTitle}, title: {video.VideoTitle}.");
+                    _objectLogger.LogProcessedYoutubeDataDTO(video);
                 }
             }
 
@@ -96,9 +100,12 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
 
             List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
 
+
+
             string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
             string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
 
+    
 
             return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
         }

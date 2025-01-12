@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
+﻿using Domain.DTOs.TeamnameDTOs;
+using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
@@ -89,6 +90,24 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
                 _appLogger.Info($"No matches found for {nameof(ExtractTeamNamesAroundVsKeyword)}, ");
                 Console.WriteLine($"No matches found for {youtubeTitle}.");
                 return teams;
+            }
+        }
+
+
+        public List<string> FindAllShortNameMatches(string youtubeTitle, List<TeamNameDTO> import_TeamNameAllNames)
+        {
+            List<string> matchingTeams = new List<string>();
+
+            foreach (var teamNameDTO in import_TeamNameAllNames)
+            {
+                if (!string.IsNullOrEmpty(teamNameDTO.Short))
+                { 
+                    
+                }
+
+
+
+                }
             }
         }
 

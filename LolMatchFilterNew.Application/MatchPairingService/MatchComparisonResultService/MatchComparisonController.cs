@@ -14,12 +14,14 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEnti
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameValidators;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers
 {
     public class MatchComparisonController : IMatchComparisonController
     {
         private readonly IAppLogger _appLogger;
+        private readonly IObjectLogger _objectLogger;
         private readonly IMatchComparisonResultBuilder _matchBuilder;
         private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
         private readonly ITeamNameDTOBuilder _teamnameDTOBuilder;
@@ -37,6 +39,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         public MatchComparisonController(
 
             IAppLogger appLogger,
+            IObjectLogger objectLogger,
             IMatchComparisonResultBuilder matchComparisonResultBuilder,
             ITeamNameDTOBuilder teamnameDTOBuilder,
             IImport_YoutubeDataRepository import_YoutubeDataRepository,
@@ -50,6 +53,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         )
         {
             _appLogger = appLogger;
+            _objectLogger = objectLogger;
             _matchBuilder = matchComparisonResultBuilder;
 
             _teamnameDTOBuilder = teamnameDTOBuilder;
@@ -111,20 +115,27 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         {
 
             int matchingTeams = 0;
+            List<string> matchingTeamList = new List<string>();
+
             int noMatch = 0;
+            List<string> noMatchesList = new List<string>();
 
             foreach (var teamName in distinctTeamNames)
             {
                 if (_youtubeTeamNameValidator.ValidateTeamName(teamName, import_TeamNameAllNames))
                 {
                     matchingTeams++;
+                    matchingTeamList.Add(teamName);
                 }
                 else
                 {
                     noMatch++;
+                    noMatchesList.Add(teamName);
                 }
             }
             _appLogger.Debug($"Matching teams: {matchingTeams}, No matches {noMatch}.");
+            _objectLogger.LogListForCONTROLLERValidateWesternMatches(noMatchesList);
+
         }
 
 

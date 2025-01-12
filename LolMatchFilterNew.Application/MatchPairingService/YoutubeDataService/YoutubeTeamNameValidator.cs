@@ -46,5 +46,9 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameVali
             return teamNamesAndAbbreviations.Any(t => t.FormattedInputs != null &&
                 t.FormattedInputs.Contains(teamName, StringComparer.OrdinalIgnoreCase));
         }
+
+
+
+
     }
 }

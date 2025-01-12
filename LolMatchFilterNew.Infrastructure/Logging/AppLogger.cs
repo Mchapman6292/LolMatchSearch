@@ -17,7 +17,11 @@ namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10, shared: true)
+                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt",
+                        rollingInterval: RollingInterval.Day, 
+                        retainedFileCountLimit: 10, 
+                        shared: true)
+                .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
         }
 

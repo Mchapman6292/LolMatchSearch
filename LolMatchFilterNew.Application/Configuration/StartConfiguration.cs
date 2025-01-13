@@ -79,6 +79,10 @@ using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamName
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMatchCountFactories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameFinders;
 
 
 
@@ -170,6 +174,8 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
                   services.AddTransient<IImport_TeamNameService, Import_TeamNameService>();
                   services.AddTransient<IYoutubeTeamNameService, YoutubeTeamNameService>();
+                  services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
+                  services.AddTransient<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
 
 
 

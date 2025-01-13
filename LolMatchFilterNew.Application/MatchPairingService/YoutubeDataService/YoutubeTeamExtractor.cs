@@ -94,23 +94,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtracto
         }
 
 
-        public List<string> FindAllShortNameMatches(string youtubeTitle, List<TeamNameDTO> import_TeamNameAllNames)
-        {
-            List<string> matchingTeams = new List<string>();
-
-            foreach (var teamNameDTO in import_TeamNameAllNames)
-            {
-                if (!string.IsNullOrEmpty(teamNameDTO.Short))
-                { 
-                    
-                }
-
-
-
-                }
-            }
-        }
-
+   
 
 
 

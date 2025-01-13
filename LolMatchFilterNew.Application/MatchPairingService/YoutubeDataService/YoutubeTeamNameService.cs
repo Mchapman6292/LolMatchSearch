@@ -1,6 +1,7 @@
 ﻿using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
@@ -11,6 +12,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEnti
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
@@ -36,6 +38,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
         private readonly IYoutubeTeamNameValidator _youtubeTeamNameValidator;
         private readonly IYoutubeTitleTeamMatchCountFactory _youtubeTitleTeamMatchCountFactory;
+        private readonly IImport_TeamNameService _importTeamNameService;
+        private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
 
         private List<YoutubeTitleTeamNameOccurrenceCountDTO> _youtubeTitleTeamMatchCounts { get; }
 
@@ -49,7 +53,10 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
          IYoutubeTeamExtractor youtubeTeamExtractor,
          IObjectLogger objectLogger,
          IYoutubeTeamNameValidator youtubeTeamNameValidator,
-         IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory
+         IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory,
+         IImport_TeamNameService importTeamNameService,
+         IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder
+
 
          )
         {
@@ -61,6 +68,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _objectLogger = objectLogger;
             _youtubeTeamNameValidator = youtubeTeamNameValidator;
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
+            _importTeamNameService = importTeamNameService;
+            _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
             _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameOccurrenceCountDTO>();
       
 
@@ -70,7 +79,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         {
             foreach (var teamName in teamNames)
             {
-                _youtubeTitleTeamMatchCounts.Add(_youtubeTitleTeamMatchCountFactory.InitializeYoutubeTitleTeamMatchCountWithAllCountsZero(teamName));
+                _youtubeTitleTeamMatchCounts.Add(_youtubeTitleTeamMatchCountFactory.CreateNewYoutubeTitleOccurenceDTO(teamName,string.Empty));
             }
         }
 
@@ -78,6 +87,23 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         {
             return _youtubeTitleTeamMatchCounts;
         }
+
+
+
+        public YoutubeDataWithTeamsDTO MatchTeamsAroundVsKeyWord(Import_YoutubeDataEntity youtubeData)
+        {
+
+            List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
+
+
+            _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
+
+            string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
+            string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
+
+            return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
+        }
+
 
 
 
@@ -130,31 +156,26 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
 
 
 
-
-
         public YoutubeDataWithTeamsDTO ExtractAndBuildYoutubeDataWithTeamsDTO(Import_YoutubeDataEntity youtubeData)
         {
 
             List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
 
-            string finalTeam1 = string.Empty;
-            string finalTeam2 = string.Empty;
 
 
             string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
             string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
 
-            if(team1 != null && _youtubeTeamNameValidator.)
 
-
-
-
-    
 
             return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
         }
 
-  
+
+
+
+
+
 
 
         public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> YoutubeDataWithTeamsDTO)

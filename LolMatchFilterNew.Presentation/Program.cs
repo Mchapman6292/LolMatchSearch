@@ -77,11 +77,15 @@ namespace LolMatchFilterNew.Presentation
  
                 List<Import_YoutubeDataEntity> westernMatches = await sqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
+                List<Import_YoutubeDataEntity> TenWesternMatches = westernMatches.Take(10).ToList();
+
                 HashSet<string> distinctNames = youtubeTeamNameService.CONTROLLERGetAllDistinctNamesForWestern(westernMatches);
 
 
                 matchComparisonController.CONTROLLERValidateWesternMatches(distinctNames, allTeamNames);
-          
+
+                matchComparisonController.TESTCreateTenYoutubeTitleOccurence(TenWesternMatches);
+
 
 
 

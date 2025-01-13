@@ -19,6 +19,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         private readonly IImport_TeamNameService _importTeamNameService;
 
 
+
+
         public YoutubeTitleTeamNameFinder(IAppLogger appLogger, IObjectLogger objectLogger, IImport_TeamNameService import_TeamNameService)
         {
             _appLogger = appLogger;
@@ -44,7 +46,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         }
 
 
-
+        // Can try changing equals to contains. 
 
         public void IncrementShortNameMatchesInTitle(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches)
         {
@@ -54,9 +56,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 foreach (var word in words)
                 {
                     if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.Short) &&
-                        word.Equals(titleMatch.TeamNameDto.Short, StringComparison.OrdinalIgnoreCase))
+                        word.Equals(titleMatch.TeamNameDto.Short, StringComparison.OrdinalIgnoreCase) &&
+                        !titleMatch.ShortNameMatches.Contains(word))
                     {
-                        titleMatch.ShortNameMatch++;
+                        titleMatch.ShortNameCount++;
+                        titleMatch.ShortNameMatches.Add(word);
                     }
                 }
             }
@@ -70,9 +74,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 foreach (var word in words)
                 {
                     if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.Medium) &&
-                        word.Equals(titleMatch.TeamNameDto.Medium, StringComparison.OrdinalIgnoreCase))
+                        word.Equals(titleMatch.TeamNameDto.Medium, StringComparison.OrdinalIgnoreCase) &&
+                        !titleMatch.MediumNameMatches.Contains(word))
                     {
-                        titleMatch.MediumNameMatch++;
+                        titleMatch.MediumNameCount++;
+                        titleMatch.MediumNameMatches.Add(word);
                     }
                 }
             }
@@ -86,9 +92,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 foreach (var word in words)
                 {
                     if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.LongName) &&
-                        word.Equals(titleMatch.TeamNameDto.LongName, StringComparison.OrdinalIgnoreCase))
+                        word.Equals(titleMatch.TeamNameDto.LongName, StringComparison.OrdinalIgnoreCase) &&
+                        !titleMatch.LongNameMatches.Contains(word))
                     {
-                        titleMatch.LongNameMatch++;
+                        titleMatch.LongNameCount++;
+                        titleMatch.LongNameMatches.Add(word);
                     }
                 }
             }

@@ -5,6 +5,12 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFac
 {
     public interface IYoutubeTitleTeamMatchCountFactory
     {
-        YoutubeTitleTeamNameOccurrenceCountDTO InitializeYoutubeTitleTeamMatchCountWithAllCountsZero(TeamNameDTO teamNameDTO, int longNameMatch = 0, int mediumNameMatch = 0, int shortNameMatch = 0, List<string> matchingInputs = null);
+        YoutubeTitleTeamNameOccurrenceCountDTO CreateNewYoutubeTitleOccurenceDTO(TeamNameDTO? teamNameDTO, string youtubeTitle, int longNameMatch = 0, int mediumNameMatch = 0, int shortNameMatch = 0, List<string> matchingInputs = null);
+
+        void UpdateTeamNameDtoForMatch(YoutubeTitleTeamNameOccurrenceCountDTO matchCount, TeamNameDTO? newTeamDto);
+
+        void UpdateYoutubeTitle(YoutubeTitleTeamNameOccurrenceCountDTO dto, string title);
+
+
     }
 }

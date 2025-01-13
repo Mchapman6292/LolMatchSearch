@@ -23,11 +23,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameVali
 
         
 
-        public bool ValidateTeamName(string youtubeTeamName, List<TeamNameDTO> teamNamesAndAbbreviations)
+        public bool ValidateTeamName(string extractedWordFromYoutubeTitle, List<TeamNameDTO> importTeamNameAllNames)
         {
-            if (MatchesTeamShortName(youtubeTeamName, teamNamesAndAbbreviations)) return true;
-            if (MatchesTeamMediumName(youtubeTeamName, teamNamesAndAbbreviations)) return true;
-            if (MatchesTeamInputs(youtubeTeamName, teamNamesAndAbbreviations)) return true;
+            if (MatchesTeamShortName(extractedWordFromYoutubeTitle, importTeamNameAllNames)) return true;
+            if (MatchesTeamMediumName(extractedWordFromYoutubeTitle, importTeamNameAllNames)) return true;
+            if (MatchesTeamInputs(extractedWordFromYoutubeTitle, importTeamNameAllNames)) return true;
             return false;
         }
 

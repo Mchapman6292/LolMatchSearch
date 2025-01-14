@@ -67,24 +67,11 @@ namespace LolMatchFilterNew.Presentation
                 var youtubeTeamNameService = scope.ServiceProvider.GetRequiredService<IYoutubeTeamNameService>();
 
 
-                await import_TeamNameService.PopulateImport_TeamNameAllNames();
 
 
-
-                List<TeamNameDTO> allTeamNames = import_TeamNameService.ReturnImport_TeamNameAllNames();
-
-
- 
-                List<Import_YoutubeDataEntity> westernMatches = await sqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
-
-                List<Import_YoutubeDataEntity> TenWesternMatches = westernMatches.Take(10).ToList();
-
-                HashSet<string> distinctNames = youtubeTeamNameService.CONTROLLERGetAllDistinctNamesForWestern(westernMatches);
+                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
 
 
-                matchComparisonController.CONTROLLERValidateWesternMatches(distinctNames, allTeamNames);
-
-                matchComparisonController.TESTCreateTenYoutubeTitleOccurence(TenWesternMatches);
 
 
 

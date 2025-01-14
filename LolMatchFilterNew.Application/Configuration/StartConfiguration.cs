@@ -166,7 +166,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TeamRedirectRepository, Import_TeamRedirectRepository>();
                   services.AddTransient<IImport_TeamnameRepository, Import_TeamnameRepository>();
                   services.AddTransient<IStoredSqlFunctionCaller, StoredSqlFunctionCaller>();
-                  services.AddTransient<ITeamNameDTOBuilder, TeamnameDTOBuilder>();
+                  services.AddTransient<ITeamNameDTOBuilder, TeamNameDTOBuilder>();
                   services.AddTransient<IObjectLogger, ObjectLogger>();
                   services.AddTransient<IYoutubeDataWithTeamsDTOBuilder, YoutubeDataWithTeamsDTOBuilder>();
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();

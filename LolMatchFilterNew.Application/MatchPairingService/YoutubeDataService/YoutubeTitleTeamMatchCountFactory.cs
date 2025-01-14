@@ -9,33 +9,21 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMat
     {
 
 
-        public YoutubeTitleTeamNameOccurrenceCountDTO CreateNewYoutubeTitleOccurenceDTO(TeamNameDTO? teamNameDTO, string youtubeTitle, int longNameMatch = 0, int mediumNameMatch = 0, int shortNameMatch = 0, List<string> matchingInputs = null)
+        public YoutubeTitleTeamNameOccurrenceCountDTO CreateNewYoutubeTitleOccurenceDTO(string youtubeTitle, int longNameCount = 0, int mediumNameCount = 0, int shortNameCount = 0,int matchingInputsCount = 0 ,List<string> matchingInputs = null)
         {
             return new YoutubeTitleTeamNameOccurrenceCountDTO
             {
-                TeamNameDto = teamNameDTO,
-                LongNameCount = longNameMatch,
                 YoutubeTitle = youtubeTitle,
-                LongNameMatches = new List<string>(),
-                MediumNameCount = mediumNameMatch,
-                MediumNameMatches = new List<string>(),
-                ShortNameCount = shortNameMatch,
-                ShortNameMatches = new List<string>(),
+                LongNameCount = longNameCount,
+                MatchingTeamNameIds = new Dictionary<string, List<string>>(),
+                MediumNameCount = mediumNameCount,
+                ShortNameCount = shortNameCount,
+                MatchingInputsCount = matchingInputsCount,
                 MatchingInputs = new List<string>()
             };
         }
 
-        public void UpdateTeamNameDtoForMatch(YoutubeTitleTeamNameOccurrenceCountDTO dto, TeamNameDTO? newTeamDto)
-        {
-            dto.TeamNameDto = newTeamDto;
-        }
-
-        public void UpdateYoutubeTitle(YoutubeTitleTeamNameOccurrenceCountDTO dto, string title)
-        {
-            dto.YoutubeTitle = title;
-        }
-
-
+ 
 
 
 

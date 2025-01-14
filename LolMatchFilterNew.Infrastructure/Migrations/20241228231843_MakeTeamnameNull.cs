@@ -12,7 +12,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Short",
+                name: "ShortName",
                 table: "Import_Teamname",
                 type: "character varying(100)",
                 maxLength: 100,
@@ -22,7 +22,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Medium",
+                name: "MediumName",
                 table: "Import_Teamname",
                 type: "character varying(100)",
                 maxLength: 100,
@@ -56,7 +56,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Short",
+                name: "ShortName",
                 table: "Import_Teamname",
                 type: "character varying(100)",
                 maxLength: 100,
@@ -68,7 +68,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Medium",
+                name: "MediumName",
                 table: "Import_Teamname",
                 type: "character varying(100)",
                 maxLength: 100,

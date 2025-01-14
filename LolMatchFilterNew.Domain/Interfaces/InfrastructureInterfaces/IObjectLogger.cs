@@ -17,7 +17,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogListForCONTROLLERValidateWesternMatches(List<string> noMatchesList);
 
-        void LogYoutubeTitleTeamNameOccurrenceCountDTO(YoutubeTitleTeamNameOccurrenceCountDTO occurrenceDTO);
+        void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamNameOccurrenceCountDTO> matchResults);
 
     }
 }

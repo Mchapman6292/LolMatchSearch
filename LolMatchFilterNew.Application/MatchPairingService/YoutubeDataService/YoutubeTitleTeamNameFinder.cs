@@ -5,6 +5,8 @@ using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+using Microsoft.Extensions.ObjectPool;
+using OfficeOpenXml.Packaging.Ionic.Zip;
 
 
 
@@ -37,92 +39,81 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
 
-        public void IncrementAllCountsForMatchesInTitle(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamMatchCounts)
+
+
+
+
+
+
+        public void UpdateDTOWithTeamMatchesFromTitle(YoutubeTitleTeamNameOccurrenceCountDTO youtubeTitleMatchDTO)
         {
-            IncrementShortNameMatchesInTitle(youtubeTitle, youtubeTitleTeamMatchCounts);
-            IncrementMediumNameMatches(youtubeTitle, youtubeTitleTeamMatchCounts);
-            IncrementLongNameMatches(youtubeTitle, youtubeTitleTeamMatchCounts);
-            AddFormattedInputMatches(youtubeTitle, youtubeTitleTeamMatchCounts);
-        }
-
-
-        // Can try changing equals to contains. 
-
-        public void IncrementShortNameMatchesInTitle(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches)
-        {
-            string[] words = ExtractAllWordsFromYoutubeTitle(youtubeTitle);
-            foreach (var titleMatch in listOfTitleMatches)
+            string[] extractedWords = ExtractAllWordsFromYoutubeTitle(youtubeTitleMatchDTO.YoutubeTitle);
+            foreach (var teamNameDto in _importTeamNameService.ReturnImport_TeamNameAllNames())
             {
-                foreach (var word in words)
+                var allTeamMatches = new List<string>();
+
+                foreach (string word in extractedWords)
                 {
-                    if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.Short) &&
-                        word.Equals(titleMatch.TeamNameDto.Short, StringComparison.OrdinalIgnoreCase) &&
-                        !titleMatch.ShortNameMatches.Contains(word))
-                    {
-                        titleMatch.ShortNameCount++;
-                        titleMatch.ShortNameMatches.Add(word);
-                    }
+                    var wordMatches = GetTeamNameMatchesInExtractedWord(teamNameDto, youtubeTitleMatchDTO, word);
+                    allTeamMatches.AddRange(wordMatches);
+                }
+
+                if (allTeamMatches.Any())
+                {
+                    youtubeTitleMatchDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, allTeamMatches);
                 }
             }
         }
 
-        public void IncrementMediumNameMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches)
+
+        private List<string> GetTeamNameMatchesInExtractedWord(TeamNameDTO teamNameDto, YoutubeTitleTeamNameOccurrenceCountDTO youtubeDto, string extractedWord)
         {
-            string[] words = ExtractAllWordsFromYoutubeTitle(youtubeTitle);
-            foreach (var titleMatch in listOfTitleMatches)
+            List<string> allAbbreviationMatches = new List<string>();
+
+            if (!string.IsNullOrEmpty(teamNameDto.ShortName))
             {
-                foreach (var word in words)
+                if (extractedWord.Contains(teamNameDto.ShortName))
                 {
-                    if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.Medium) &&
-                        word.Equals(titleMatch.TeamNameDto.Medium, StringComparison.OrdinalIgnoreCase) &&
-                        !titleMatch.MediumNameMatches.Contains(word))
+                    allAbbreviationMatches.Add(teamNameDto.ShortName);
+                    youtubeDto.IncrementCount("Short", 1);
+                }
+            }
+            if (!string.IsNullOrEmpty(teamNameDto.MediumName))
+            {
+                if (extractedWord.Contains(teamNameDto.MediumName))
+                {
+                    allAbbreviationMatches.Add(teamNameDto.MediumName);
+                    youtubeDto.IncrementCount("Medium", 1);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(teamNameDto.LongName))
+            {
+                if (extractedWord.Contains(teamNameDto.LongName))
+                {
+                    allAbbreviationMatches.Add(teamNameDto.LongName);
+                    youtubeDto.IncrementCount("Long", 1);
+                }
+            }
+
+            if (teamNameDto.FormattedInputs != null && teamNameDto.FormattedInputs.Count > 0)
+            {
+                foreach (var input in teamNameDto.FormattedInputs)
+                {
+                    if (extractedWord.Contains(input))
                     {
-                        titleMatch.MediumNameCount++;
-                        titleMatch.MediumNameMatches.Add(word);
+                        allAbbreviationMatches.Add(input);
+                        youtubeDto.IncrementCount("Inputs", 1);
                     }
                 }
             }
+            if (allAbbreviationMatches.Count > 0)
+            {
+                _appLogger.Info($"Matches added for {youtubeDto.YoutubeTitle}, team: {teamNameDto.LongName}, total matches: {allAbbreviationMatches.Count}.");
+                return allAbbreviationMatches;
+            }
+            return allAbbreviationMatches;
         }
 
-        public void IncrementLongNameMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches)
-        {
-            string[] words = ExtractAllWordsFromYoutubeTitle(youtubeTitle);
-            foreach (var titleMatch in listOfTitleMatches)
-            {
-                foreach (var word in words)
-                {
-                    if (!string.IsNullOrEmpty(titleMatch.TeamNameDto.LongName) &&
-                        word.Equals(titleMatch.TeamNameDto.LongName, StringComparison.OrdinalIgnoreCase) &&
-                        !titleMatch.LongNameMatches.Contains(word))
-                    {
-                        titleMatch.LongNameCount++;
-                        titleMatch.LongNameMatches.Add(word);
-                    }
-                }
-            }
-        }
-
-        public void AddFormattedInputMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches)
-        {
-            string[] words = ExtractAllWordsFromYoutubeTitle(youtubeTitle);
-            foreach (var titleMatch in listOfTitleMatches)
-            {
-                if (titleMatch.TeamNameDto.FormattedInputs != null)
-                {
-                    foreach (var word in words)
-                    {
-                        foreach (var input in titleMatch.TeamNameDto.FormattedInputs)
-                        {
-                            if (!string.IsNullOrEmpty(input) &&
-                                word.Equals(input, StringComparison.OrdinalIgnoreCase) &&
-                                !titleMatch.MatchingInputs.Contains(input))
-                            {
-                                titleMatch.MatchingInputs.Add(input);
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }

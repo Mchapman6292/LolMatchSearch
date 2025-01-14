@@ -2,6 +2,7 @@
 
 // Ignore Spelling: Youtube
 
+using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
@@ -9,6 +10,7 @@ using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 
 namespace Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
@@ -37,6 +39,24 @@ public class Import_TeamNameService : IImport_TeamNameService
 
     }
 
+    // Calls the build method in TeamNameDTOBuilder to build all DTOS from list of Import_TeamnameEntity
+    public List<TeamNameDTO> BuildTeamNameDTOFromImport_TeamNameEntites(List<Import_TeamnameEntity> teamNameEntities) 
+    {
+        List<TeamNameDTO> teamNameDTOs = new List<TeamNameDTO>();
+
+        foreach (var teamNameEntity in teamNameEntities)
+        {
+            teamNameDTOs.Add(_teamNameDTOBuilder.BuildTeamNameDTO(
+                 teamNameEntity.TeamnameId,
+                 teamNameEntity.Longname,
+                 teamNameEntity.Medium,
+                 teamNameEntity.Short,
+                 teamNameEntity.Inputs
+                 ));
+        }
+        return teamNameDTOs;
+    }
+
 
     public List<TeamNameDTO> ReturnImport_TeamNameAllNames()
     {
@@ -50,24 +70,18 @@ public class Import_TeamNameService : IImport_TeamNameService
 
     // Retrieves all team names from repository and transforms them into DTOs, storing them in Import_TeamNameAllNames property.
     // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
-    public async Task PopulateImport_TeamNameAllNames()
+    public void PopulateImport_TeamNameAllNames(List<Import_TeamnameEntity> teamNamesEntities)
     {
-        var teamnames = await _teamnameRepository.GetAllTeamnamesAsync();
-        Import_TeamNameAllNames = teamnames.Select(t => _teamNameDTOBuilder.BuildTeamnameDTO(
+        Import_TeamNameAllNames = teamNamesEntities.Select(t => _teamNameDTOBuilder.BuildTeamNameDTO(
             t.TeamnameId,
             t.Longname,
             t.Short,
             t.Medium,
             t.Inputs
-
         )).ToList();
 
         _appLogger.Info($"Import_TeamNameAllNames count: {Import_TeamNameAllNames.Count}");
     }
-
-
-
-
 
 
 
@@ -111,12 +125,12 @@ public class Import_TeamNameService : IImport_TeamNameService
             return true;
         }
 
-        if (!string.IsNullOrEmpty(dto.Medium) && teamName.Equals(dto.Medium, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(dto.MediumName) && teamName.Equals(dto.MediumName, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
 
-        if (!string.IsNullOrEmpty(dto.Short) && teamName.Equals(dto.Short, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(dto.ShortName) && teamName.Equals(dto.ShortName, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
@@ -132,19 +146,6 @@ public class Import_TeamNameService : IImport_TeamNameService
 
 
 
-    public async Task TESTLogTeamNameAbbreviations()
-    {
-        await PopulateImport_TeamNameAllNames();
-
-        var firstTeamDTO = Import_TeamNameAllNames.FirstOrDefault();
-
-
-        var lastTeamDTO = Import_TeamNameAllNames.LastOrDefault();
-
-        _objectLogger.LogTeamnameDTO(firstTeamDTO);
-        _objectLogger.LogTeamnameDTO(lastTeamDTO);
-
-    }
 }
 
 

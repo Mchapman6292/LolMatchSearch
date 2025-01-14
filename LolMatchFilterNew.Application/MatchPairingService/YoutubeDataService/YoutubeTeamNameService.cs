@@ -1,12 +1,18 @@
-﻿using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
-using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
-using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
+﻿using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
+using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
-using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
-using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
+using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
+using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
@@ -30,10 +36,29 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
         private readonly IYoutubeDataWithTeamsDTOBuilder _processed_YoutubeDataDTOBuilder;
         private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
-        
+        private readonly IYoutubeTeamNameValidator _youtubeTeamNameValidator;
+        private readonly IYoutubeTitleTeamMatchCountFactory _youtubeTitleTeamMatchCountFactory;
+        private readonly IImport_TeamNameService _importTeamNameService;
+        private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
+
+        private List<YoutubeTitleTeamNameOccurrenceCountDTO> _youtubeTitleTeamMatchCounts { get; }
 
 
-        public YoutubeTeamNameService(IAppLogger appLogger, IImport_YoutubeDataRepository import_YoutubeDataRepository, IStoredSqlFunctionCaller storedSqlFunctionCaller, IYoutubeDataWithTeamsDTOBuilder processed_YoutubeDataDTOBuilder, IYoutubeTeamExtractor youtubeTeamExtractor, IObjectLogger objectLogger)
+
+        public YoutubeTeamNameService(
+         IAppLogger appLogger,
+         IImport_YoutubeDataRepository import_YoutubeDataRepository,
+         IStoredSqlFunctionCaller storedSqlFunctionCaller,
+         IYoutubeDataWithTeamsDTOBuilder processed_YoutubeDataDTOBuilder,
+         IYoutubeTeamExtractor youtubeTeamExtractor,
+         IObjectLogger objectLogger,
+         IYoutubeTeamNameValidator youtubeTeamNameValidator,
+         IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory,
+         IImport_TeamNameService importTeamNameService,
+         IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder
+
+
+         )
         {
             _appLogger = appLogger;
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
@@ -41,7 +66,45 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _processed_YoutubeDataDTOBuilder = processed_YoutubeDataDTOBuilder;
             _youtubeTeamExtractor = youtubeTeamExtractor;
             _objectLogger = objectLogger;
+            _youtubeTeamNameValidator = youtubeTeamNameValidator;
+            _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
+            _importTeamNameService = importTeamNameService;
+            _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
+            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameOccurrenceCountDTO>();
+      
+
         }
+
+        public void PopulateYoutubeTitleTeamMatchCountList(List<TeamNameDTO> teamNames)
+        {
+            foreach (var teamName in teamNames)
+            {
+                _youtubeTitleTeamMatchCounts.Add(_youtubeTitleTeamMatchCountFactory.CreateNewYoutubeTitleOccurenceDTO(teamName,string.Empty));
+            }
+        }
+
+        public List<YoutubeTitleTeamNameOccurrenceCountDTO> ReturnYoutubeTitleTeamMatchCounts()
+        {
+            return _youtubeTitleTeamMatchCounts;
+        }
+
+
+
+        public YoutubeDataWithTeamsDTO MatchTeamsAroundVsKeyWord(Import_YoutubeDataEntity youtubeData)
+        {
+
+            List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
+
+
+            _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
+
+            string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
+            string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
+
+            return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
+        }
+
+
 
 
 
@@ -93,8 +156,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
 
 
 
-
-
         public YoutubeDataWithTeamsDTO ExtractAndBuildYoutubeDataWithTeamsDTO(Import_YoutubeDataEntity youtubeData)
         {
 
@@ -105,12 +166,16 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
             string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
 
-    
+
 
             return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
         }
 
-  
+
+
+
+
+
 
 
         public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> YoutubeDataWithTeamsDTO)

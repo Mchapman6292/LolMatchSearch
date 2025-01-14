@@ -13,12 +13,11 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
     {
         Task<List<YoutubeDataWithTeamsDTO>> TESTGetAllProcessedForEuAndNaTeams();
 
+       Task TESTFindTeamNameMatchesInYoutubeTitleAsync();
+
         Task TESTCheckExtractedTeamsAsync(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames);
 
         void CONTROLLERValidateWesternMatches(HashSet<string> distinctTeamNames, List<TeamNameDTO> import_TeamNameAllNames);
 
-        void TESTCreateTenYoutubeTitleOccurence(List<Import_YoutubeDataEntity> youtubeEntities);
-        
-
-        }
+    }
 }

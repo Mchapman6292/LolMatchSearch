@@ -33,12 +33,12 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameVali
 
         public bool MatchesTeamShortName(string teamName, List<TeamNameDTO> teamNamesAndAbbreviations)
         {
-            return teamNamesAndAbbreviations.Any(t => string.Equals(t.Short, teamName, StringComparison.OrdinalIgnoreCase));
+            return teamNamesAndAbbreviations.Any(t => string.Equals(t.ShortName, teamName, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool MatchesTeamMediumName(string teamName, List<TeamNameDTO> teamNamesAndAbbreviations)
         {
-            return teamNamesAndAbbreviations.Any(t => string.Equals(t.Medium, teamName, StringComparison.OrdinalIgnoreCase));
+            return teamNamesAndAbbreviations.Any(t => string.Equals(t.MediumName, teamName, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool MatchesTeamInputs(string teamName, List<TeamNameDTO> teamNamesAndAbbreviations)

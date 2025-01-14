@@ -5,16 +5,48 @@ namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
 {
     public class YoutubeTitleTeamNameOccurrenceCountDTO
     {
-        public TeamNameDTO? TeamNameDto { get; set; }
 
-        public string YoutubeTitle { get; set; } = string.Empty; 
+        public string YoutubeTitle { get; set; } = string.Empty;
+        public Dictionary<string, List<string>> MatchingTeamNameIds { get; set; }
 
         public int LongNameCount { get; set; } = 0;
-        public List<string>? LongNameMatches {  get; set; }  
         public int MediumNameCount { get; set; } = 0;
-        public List<string>? MediumNameMatches { get; set; }
         public int ShortNameCount { get; set; } = 0;
-        public List<string>? ShortNameMatches { get; set; }
+        public int MatchingInputsCount { get; set; } = 0;   
         public List<string>? MatchingInputs { get; set; }
+
+
+        public void UpdateYoutubeTitle(string title)
+        {
+            YoutubeTitle = title;
+        }
+
+
+        public void IncrementCount(string countType, int increment)
+        {
+            switch (countType.ToLower())
+            {
+                case "Short":
+                    ShortNameCount += increment;
+                    break;
+                case "Medium":
+                    MediumNameCount += increment;
+                    break;
+                case "Long":
+                    LongNameCount += increment;
+                    break;
+                case "Inputs":
+                    MatchingInputsCount += increment;
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid count type: {countType}");
+            }
+        }
+
+
+        public void UpdateMatchingTeamNameIds(string teamNameId, List<string> allAbbreviations)
+        {
+            MatchingTeamNameIds.Add(teamNameId, allAbbreviations);
+        }
     }
 }

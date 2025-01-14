@@ -107,7 +107,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["action"] = "cargoquery";
             query["format"] = "json";
             query["tables"] = "Teams=T";
-            query["fields"] = "T._pageName=PageName,T.Name,T.OverviewPage,T.Short,T.Location,T.TeamLocation,T.Region,T.OrganizationPage,T.Image," +
+            query["fields"] = "T._pageName=PageName,T.Name,T.OverviewPage,T.ShortName,T.Location,T.TeamLocation,T.Region,T.OrganizationPage,T.Image," +
                                "T.Twitter,T.Youtube,T.Facebook,T.Instagram,T.Bluesky,T.Discord,T.Snapchat,T.Vk,T.Subreddit,T.Website,T.RosterPhoto," +
                                "T.IsDisbanded,T.RenamedTo,T.IsLowercase";
             query["limit"] = queryLimit.ToString();
@@ -125,7 +125,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["format"] = "json";
             query["tables"] = "Teams,TeamRedirects";// Need to join to redirects to ensure names/duplicates tracked properly
             query["join_on"] = "Teams.Name=TeamRedirects.AllName"; 
-            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.Short,Teams.Location,
+            query["fields"] = @"Teams.Name,Teams.OverviewPage,Teams.ShortName,Teams.Location,
                        Teams.TeamLocation,Teams.Region,Teams.OrganizationPage,
                        Teams.Image,Teams.Twitter,Teams.Youtube,Teams.Facebook,
                        Teams.Instagram,Teams.Discord,Teams.Snapchat,Teams.Vk,
@@ -146,7 +146,7 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
             query["action"] = "cargoquery";
             query["format"] = "json";
             query["tables"] = "Teamnames";
-            query["fields"] = "TeamnameId,Longname,Short,Medium,FormattedInputs";
+            query["fields"] = "TeamnameId,Longname,ShortName,MediumName,FormattedInputs";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";

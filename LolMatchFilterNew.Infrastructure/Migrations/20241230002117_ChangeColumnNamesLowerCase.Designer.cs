@@ -158,11 +158,11 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Medium")
+                    b.Property<string>("MediumName")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Short")
+                    b.Property<string>("ShortName")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -223,7 +223,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 
-                    b.Property<string>("Short")
+                    b.Property<string>("ShortName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 

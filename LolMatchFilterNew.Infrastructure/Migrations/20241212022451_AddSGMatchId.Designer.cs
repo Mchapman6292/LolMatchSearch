@@ -200,7 +200,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasMaxLength(2083)
                         .HasColumnType("character varying(2083)");
 
-                    b.Property<string>("Short")
+                    b.Property<string>("ShortName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 

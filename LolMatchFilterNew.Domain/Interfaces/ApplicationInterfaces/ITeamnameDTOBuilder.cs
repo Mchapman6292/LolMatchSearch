@@ -11,7 +11,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders
     public interface ITeamNameDTOBuilder
     {
 
-        TeamNameDTO BuildTeamnameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs);
+        TeamNameDTO BuildTeamNameDTO(string teamNameId, string? longname, string? mediumName, string? shortname, List<string>? inputs);
 
 
         Task<List<TeamNameDTO>> BuildTeamNameDTOListFromGetWesternMatchesAsync(List<WesternMatchDTO> westernMatches);

@@ -7,11 +7,9 @@ namespace Domain.DTOs.TeamnameDTOs
         public string TeamNameId { get; set; } 
         public string? LongName { get; set; }
 
-        
+        public string? MediumName { get; set; }
 
-        public string? Medium { get; set; }
-
-        public string? Short { get; set; }
+        public string? ShortName { get; set; }
 
 
         // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
@@ -19,10 +17,5 @@ namespace Domain.DTOs.TeamnameDTOs
 
         public List<string>? FormattedInputs { get; set; }
 
-   
-        public bool SharesNameWithOtherTeam {  get; set; }
-
-        // In cases where the team is a duplicate the region is used to separate them.
-        public string? Region { get; set; }  
     }
 }

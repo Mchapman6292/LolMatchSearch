@@ -9,14 +9,8 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders
 {
     public interface IYoutubeTitleTeamNameFinder
     {
-        void IncrementAllCountsForMatchesInTitle(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamMatchCounts);
 
-        void IncrementShortNameMatchesInTitle(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches);
+        void UpdateDTOWithTeamMatchesFromTitle(YoutubeTitleTeamNameOccurrenceCountDTO youtubeTitleMatchDTO);
 
-        void IncrementMediumNameMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches);
-
-        void IncrementLongNameMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches);
-
-        void AddFormattedInputMatches(string youtubeTitle, List<YoutubeTitleTeamNameOccurrenceCountDTO> listOfTitleMatches);
     }
 }

@@ -8,6 +8,10 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices
     {
         HashSet<string> CONTROLLERGetAllDistinctNamesForWestern(List<Import_YoutubeDataEntity> youtubeData);
 
+        void CONTROLLERUpdateAllYoutubeTitleDTO(List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamDTOs);
+
+        void PopulateYoutubeTitleTeamMatchCountList(List<Import_YoutubeDataEntity> teamNames);
+
         List<YoutubeTitleTeamNameOccurrenceCountDTO> ReturnYoutubeTitleTeamMatchCounts();
         YoutubeDataWithTeamsDTO ExtractAndBuildYoutubeDataWithTeamsDTO(Import_YoutubeDataEntity youtubeData);
         List<YoutubeDataWithTeamsDTO> BuildYoutubeDataWithTeamsDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities);

@@ -218,7 +218,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 newName: "snapchat");
 
             migrationBuilder.RenameColumn(
-                name: "Short",
+                name: "ShortName",
                 table: "import_teamstable",
                 newName: "short");
 
@@ -343,12 +343,12 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                 newName: "page_name");
 
             migrationBuilder.RenameColumn(
-                name: "Short",
+                name: "ShortName",
                 table: "import_teamname",
                 newName: "short");
 
             migrationBuilder.RenameColumn(
-                name: "Medium",
+                name: "MediumName",
                 table: "import_teamname",
                 newName: "medium");
 
@@ -681,7 +681,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "short",
                 table: "import_teamstable",
-                newName: "Short");
+                newName: "ShortName");
 
             migrationBuilder.RenameColumn(
                 name: "region",
@@ -806,12 +806,12 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "short",
                 table: "import_teamname",
-                newName: "Short");
+                newName: "ShortName");
 
             migrationBuilder.RenameColumn(
                 name: "medium",
                 table: "import_teamname",
-                newName: "Medium");
+                newName: "MediumName");
 
             migrationBuilder.RenameColumn(
                 name: "longname",

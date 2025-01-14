@@ -218,7 +218,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             var entity = new Processed_LeagueTeamEntity
                             {
                                 TeamName = teamName,
-                                NameShort = _apiHelper.GetNullableStringValue(titleData, "Short"),
+                                NameShort = _apiHelper.GetNullableStringValue(titleData, "ShortName"),
                                 Region = _apiHelper.GetNullableStringValue(titleData, "Region")
                             };
 
@@ -375,7 +375,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             {
                                 Name = name,
                                 OverviewPage = overviewPage,
-                                Short = _apiHelper.GetNullableStringValue(teamData, "Short"),
+                                Short = _apiHelper.GetNullableStringValue(teamData, "ShortName"),
                                 Location = _apiHelper.GetNullableStringValue(teamData, "Location"),
                                 TeamLocation = _apiHelper.GetNullableStringValue(teamData, "TeamLocation"),
                                 Region = _apiHelper.GetNullableStringValue(teamData, "Region"),
@@ -460,8 +460,8 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             {
                                 TeamnameId = teamnameId,
                                 Longname = _apiHelper.GetNullableStringValue(titleData, "Longname"),
-                                Short = _apiHelper.GetNullableStringValue(titleData, "Short"),
-                                Medium = _apiHelper.GetNullableStringValue(titleData, "Medium"),
+                                Short = _apiHelper.GetNullableStringValue(titleData, "ShortName"),
+                                Medium = _apiHelper.GetNullableStringValue(titleData, "MediumName"),
                                 Inputs = _apiHelper.GetValuesAsList(titleData, "FormattedInputs")
                             };
 

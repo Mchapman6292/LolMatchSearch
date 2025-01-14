@@ -7,16 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 
 namespace Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices
 {
     public interface IImport_TeamNameService
     {
-        Task PopulateImport_TeamNameAllNames();
+        List<TeamNameDTO> BuildTeamNameDTOFromImport_TeamNameEntites(List<Import_TeamnameEntity> teamNameEntities);
+        void PopulateImport_TeamNameAllNames(List<Import_TeamnameEntity> teamnames);
 
-        Task TESTLogTeamNameAbbreviations();
+
         List<TeamNameDTO> ReturnImport_TeamNameAllNames();
+
 
 
         void TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(HashSet<string> distinctTeamNames, List<TeamNameDTO> teamNameDTOs);

@@ -19,6 +19,10 @@ using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.Tea
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
+using Domain.DTOs.Western_MatchDTOs;
+using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers
 {
@@ -28,15 +32,19 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         private readonly IObjectLogger _objectLogger;
         private readonly IMatchComparisonResultBuilder _matchBuilder;
         private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
-        private readonly ITeamNameDTOBuilder _teamnameDTOBuilder;
+        private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
         private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
+        private readonly IImport_TeamnameRepository _import_TeamNameRepository;
         private readonly IYoutubeDataWithTeamsDTOBuilder _processed_YoutubeDataDTOBuilder;
-        private readonly IImport_TeamNameService _import_TeamNameService;
+
+
         private readonly IYoutubeTeamNameService _youtubeTeamNameService;
+        private readonly IImport_TeamNameService _importTeamNameService;
+
+
         private readonly IYoutubeTeamNameValidator _youtubeTeamNameValidator;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
-        private readonly IImport_TeamNameService _importTeamNameService;
         private readonly IYoutubeTitleTeamMatchCountFactory _youtubeTitleTeamMatchCountFactory;
 
 
@@ -54,6 +62,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             IImport_TeamNameService import_TeamnNameService,
             IYoutubeTeamExtractor youtubeTeamExtractor,
             IYoutubeTeamNameService youtubeTeamNameService,
+            IImport_TeamnameRepository import_TeamnameRepository,
 
             IYoutubeTeamNameValidator youtubeTeamNameValidator,
             IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory
@@ -65,9 +74,9 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             _objectLogger = objectLogger;
             _matchBuilder = matchComparisonResultBuilder;
 
-            _teamnameDTOBuilder = teamnameDTOBuilder;
-            _import_TeamNameService = import_TeamnNameService;
+            _teamNameDTOBuilder = teamnameDTOBuilder;
             _import_YoutubeDataRepository = import_YoutubeDataRepository;
+            _import_TeamNameRepository = import_TeamnameRepository;
             _storedSqlFunctionCaller = storedSqlFunctionCaller;
             _processed_YoutubeDataDTOBuilder = proccessed_YoutubeDataDTOBuilder;
             _youtubeTeamExtractor = youtubeTeamExtractor;
@@ -87,16 +96,50 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             return _youtubeTeamNameService.BuildYoutubeDataWithTeamsDTOList(allvideos);
         }
 
-        
+
+        public async Task TESTFindTeamNameMatchesInYoutubeTitleAsync()
+        {
+            List<Import_TeamnameEntity> teamnNameEntities = await _import_TeamNameRepository.GetAllTeamnamesAsync();
+
+            List<Import_TeamnameEntity> nullEntities = teamnNameEntities
+             .Where(t => t.TeamnameId == null)
+             .ToList();
+
+            _appLogger.Info($"null entities: {nullEntities.Count}");    
+
+            List<Import_YoutubeDataEntity> importYoutubeEntities = await _import_YoutubeDataRepository.GetAllImport_YoutubeData();
+
+
+
+            List<TeamNameDTO> teamNameDTOs = _importTeamNameService.BuildTeamNameDTOFromImport_TeamNameEntites(teamnNameEntities);
+
+            _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(importYoutubeEntities);
+            _importTeamNameService.PopulateImport_TeamNameAllNames(teamnNameEntities);
+
+
+            List<YoutubeTitleTeamNameOccurrenceCountDTO> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
+
+            _youtubeTeamNameService.CONTROLLERUpdateAllYoutubeTitleDTO(teamNameOccurences);
+
+
+
+
+
+            _objectLogger.LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(teamNameOccurences);
+
+        }
+
+
 
 
 
 
         public async Task TESTCheckExtractedTeamsAsync(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames)
         {
-            await _import_TeamNameService.PopulateImport_TeamNameAllNames();
 
-            List<TeamNameDTO> import_TeamNameAllNames = _import_TeamNameService.ReturnImport_TeamNameAllNames();
+
+            List<TeamNameDTO> import_TeamNameAllNames = _importTeamNameService.ReturnImport_TeamNameAllNames();
+
             List<YoutubeDataWithTeamsDTO> processedYoutubeDataList = _youtubeTeamNameService.BuildYoutubeDataWithTeamsDTOList(import_YoutubeDataEntities);
 
             int matchingTeams = 0;
@@ -149,118 +192,12 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         }
 
 
-        public YoutubeDataWithTeamsDTO ExtractAndBuildYoutubeDataWithTeamsDTO(Import_YoutubeDataEntity youtubeData)
-        {
-            List<TeamNameDTO> importTeamNameAllNames = _importTeamNameService.ReturnImport_TeamNameAllNames();
-
-            List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamMatchCounts = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
-
-            string finalTeam1 = string.Empty;
-            string finalTeam2 = string.Empty;
-
-            List<string?> extractedTeams = _youtubeTeamExtractor.ExtractTeamNamesAroundVsKeyword(youtubeData.VideoTitle);
-
-
-            string? team1 = extractedTeams.Count > 0 ? extractedTeams[0] : null;
-            string? team2 = extractedTeams.Count > 1 ? extractedTeams[1] : null;
-
-            bool teamOneMatchFound = false;
-            bool teamTwoMatchFound = false;
-
-            if (team1 != null)
-            {
-                teamOneMatchFound = _youtubeTeamNameValidator.ValidateTeamName(team1, importTeamNameAllNames);
-            }
-
-            if (team2 != null)
-            {
-                teamTwoMatchFound = _youtubeTeamNameValidator.ValidateTeamName(team2, importTeamNameAllNames);
-            }
-
-            if (teamOneMatchFound == false || teamTwoMatchFound == false)
-            {
-                _youtubeTitleTeamNameFinder.IncrementAllCountsForMatchesInTitle(youtubeData.VideoTitle, youtubeTitleTeamMatchCounts);
-            }
-
-            return _processed_YoutubeDataDTOBuilder.BuildYoutubeDataWithTeamsDTO(youtubeData, team1, team2);
-        }
-
-
-        public void TESTCreateTenYoutubeTitleOccurence(List<Import_YoutubeDataEntity> youtubeEntities)
-        {
-   
-            List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamMatchCounts = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
-            List<YoutubeTitleTeamNameOccurrenceCountDTO> tenCounts = youtubeTitleTeamMatchCounts.Take(10).ToList();
-            List<Import_YoutubeDataEntity> tenYoutubeEntities = youtubeEntities.Take(10).ToList();
-
-            for (int i = 0; i < tenCounts.Count && i < tenYoutubeEntities.Count; i++)
-            {
-                _youtubeTitleTeamMatchCountFactory.UpdateYoutubeTitle(tenCounts[i], tenYoutubeEntities[i].VideoTitle);
-            }
-            foreach (var youtubeDto in tenYoutubeEntities)
-            {
-                _youtubeTitleTeamNameFinder.IncrementAllCountsForMatchesInTitle(youtubeDto.VideoTitle, tenCounts);
-            }
-            foreach (var countDto in tenCounts)
-            {
-                _objectLogger.LogYoutubeTitleTeamNameOccurrenceCountDTO(countDto);
-            }
-        }
-
-
-
-
-        public List<YoutubeDataWithTeamsDTO> BuildYoutubeDataWithTeamsDTOList(List<Import_YoutubeDataEntity> youtubeDataEntities)
-        {
-            List<YoutubeDataWithTeamsDTO> processed = new List<YoutubeDataWithTeamsDTO>();
-
-            int teamNullCount = 0;
-
-            List<YoutubeDataWithTeamsDTO> YoutubeVideosWithNoMatch = new List<YoutubeDataWithTeamsDTO>();
-
-            foreach (var video in youtubeDataEntities)
-            {
-
-                YoutubeDataWithTeamsDTO newDto = ExtractAndBuildYoutubeDataWithTeamsDTO(video);
-
-                processed.Add(newDto);
-
-                if (newDto.Team1 == null || newDto.Team1 == string.Empty)
-                {
-                    teamNullCount++;
-                }
-                if (newDto.Team2 == null || newDto.Team2 == string.Empty)
-                {
-                    teamNullCount++;
-                }
-                if (newDto.Team1 == null || newDto.Team1 == string.Empty && newDto.Team2 == null || newDto.Team2 == string.Empty)
-                {
-                    YoutubeVideosWithNoMatch.Add(newDto);
-
-                }
-            }
-            if (YoutubeVideosWithNoMatch.Count > 0)
-            {
-                foreach (var video in YoutubeVideosWithNoMatch)
-                {
-                    _objectLogger.LogProcessedYoutubeDataDTO(video);
-                }
-            }
-            _appLogger.Info($"NUMBER OF TEAM EXTRACTIONS FAILED: {teamNullCount}");
-            return processed;
-
-        }
-
 
 
 
         public void TESTIncrementMatchesCount(List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleDTOs)
         {
-            var first10Items = youtubeTitleDTOs.Take(10);
-            foreach (var item in first10Items)
-            {
-
-            }
+            throw new NotImplementedException();
         }
 
 

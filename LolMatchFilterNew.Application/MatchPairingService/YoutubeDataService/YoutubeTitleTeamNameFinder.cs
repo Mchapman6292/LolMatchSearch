@@ -72,7 +72,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
             if (!string.IsNullOrEmpty(teamNameDto.ShortName))
             {
-                if (extractedWord.Contains(teamNameDto.ShortName))
+                if (extractedWord.Equals(teamNameDto.ShortName))
                 {
                     allAbbreviationMatches.Add(teamNameDto.ShortName);
                     youtubeDto.IncrementCount("Short", 1);
@@ -80,7 +80,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
             }
             if (!string.IsNullOrEmpty(teamNameDto.MediumName))
             {
-                if (extractedWord.Contains(teamNameDto.MediumName))
+                if (extractedWord.Equals(teamNameDto.MediumName))
                 {
                     allAbbreviationMatches.Add(teamNameDto.MediumName);
                     youtubeDto.IncrementCount("Medium", 1);
@@ -89,7 +89,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
             if (!string.IsNullOrEmpty(teamNameDto.LongName))
             {
-                if (extractedWord.Contains(teamNameDto.LongName))
+                if (extractedWord.Equals(teamNameDto.LongName))
                 {
                     allAbbreviationMatches.Add(teamNameDto.LongName);
                     youtubeDto.IncrementCount("Long", 1);
@@ -100,7 +100,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
             {
                 foreach (var input in teamNameDto.FormattedInputs)
                 {
-                    if (extractedWord.Contains(input))
+                    if (extractedWord.Equals(input))
                     {
                         allAbbreviationMatches.Add(input);
                         youtubeDto.IncrementCount("Inputs", 1);

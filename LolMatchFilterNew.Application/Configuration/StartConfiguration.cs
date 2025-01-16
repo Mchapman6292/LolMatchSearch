@@ -90,7 +90,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 {
     public class StartConfiguration 
     {
-        private static  IAppLogger _appLogger;
 
 
         public StartConfiguration()
@@ -100,9 +99,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
 
         public static async Task<IHost> InitializeApplicationAsync(string[] args)
         {
-            _appLogger = new AppLogger();
-           
-            _appLogger.Info($"Starting {nameof(InitializeApplicationAsync)}");
 
             var host = CreateHostBuilder(args).Build();
 
@@ -113,15 +109,10 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
             using (var scope = host.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<MatchFilterDbContext> ();
-                try
-                {
+    
                     await dbContext.Database.OpenConnectionAsync();
-                     _appLogger.Info("Successfully connected to the database.");
-                }
-                catch (Exception ex)
-                {
-                     _appLogger.Info($"Failed to connect to the database: {ex.Message}");
-                }
+
+      
             }
 
             return host;
@@ -145,7 +136,10 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<ActivitySource>(new ActivitySource("LolMatchFilterNew"));
                   services.AddSingleton<ITeamNameHistoryFormatter, TeamNameHistoryFormatter>();
                   services.AddSingleton<IYoutubeTeamNameValidator, YoutubeTeamNameValidator>();
-         
+                  services.AddSingleton<IImport_TeamNameService, Import_TeamNameService>();
+                  services.AddSingleton<IYoutubeTeamNameService, YoutubeTeamNameService>();
+                  services.AddSingleton<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
+
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
                   services.AddTransient<ILeaguepediaDataFetcher, LeaguepediaDataFetcher>();
@@ -172,10 +166,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
-                  services.AddTransient<IImport_TeamNameService, Import_TeamNameService>();
-                  services.AddTransient<IYoutubeTeamNameService, YoutubeTeamNameService>();
+ 
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
-                  services.AddTransient<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
+
 
 
 

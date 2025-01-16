@@ -5,6 +5,7 @@
 using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
+using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
@@ -23,7 +24,7 @@ public class Import_TeamNameService : IImport_TeamNameService
     private readonly IImport_TeamnameRepository _teamnameRepository;
     private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
 
-    public List<TeamNameDTO> Import_TeamNameAllNames = new List<TeamNameDTO>();
+    private  List<TeamNameDTO> Import_TeamNameAllNames = new List<TeamNameDTO>();
 
 
 
@@ -38,6 +39,8 @@ public class Import_TeamNameService : IImport_TeamNameService
         _teamNameDTOBuilder = teamNameDTOBuilder;
 
     }
+
+
 
     // Calls the build method in TeamNameDTOBuilder to build all DTOS from list of Import_TeamnameEntity
     public List<TeamNameDTO> BuildTeamNameDTOFromImport_TeamNameEntites(List<Import_TeamnameEntity> teamNameEntities) 
@@ -70,17 +73,10 @@ public class Import_TeamNameService : IImport_TeamNameService
 
     // Retrieves all team names from repository and transforms them into DTOs, storing them in Import_TeamNameAllNames property.
     // Inputs in database need to be trimmed & formatted correctly to remove quotation marks etc, example: {"1 trick ponies;1tp"}
-    public void PopulateImport_TeamNameAllNames(List<Import_TeamnameEntity> teamNamesEntities)
+    public void PopulateImport_TeamNameAllNames(List<TeamNameDTO> teamNameDtos)
     {
-        Import_TeamNameAllNames = teamNamesEntities.Select(t => _teamNameDTOBuilder.BuildTeamNameDTO(
-            t.TeamnameId,
-            t.Longname,
-            t.Short,
-            t.Medium,
-            t.Inputs
-        )).ToList();
-
-        _appLogger.Info($"Import_TeamNameAllNames count: {Import_TeamNameAllNames.Count}");
+        Import_TeamNameAllNames = teamNameDtos;
+        _appLogger.Info($" Number of DTOS in ImportTeamNameALLNames: {Import_TeamNameAllNames.Count}.");
     }
 
 
@@ -142,6 +138,24 @@ public class Import_TeamNameService : IImport_TeamNameService
 
         return false;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

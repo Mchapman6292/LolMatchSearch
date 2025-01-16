@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using Domain.DTOs.TeamnameDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 
 namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
 {
@@ -52,8 +53,16 @@ namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
         public async Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeamsAsync()
         {
             return await _matchFilterDbContext.Import_YoutubeData
-                            .FromSqlRaw("SELECT * FROM get_euna_videos_by_playlist_title()")
+                            .FromSqlRaw("select * from youtube_functions.get_euna_videos_by_playlist_title();")
                             .ToListAsync();
+        }
+
+
+        public async Task<List<Import_TeamnameEntity>> GetAllWesternTeamsAsync()
+        {
+            return await _matchFilterDbContext.Import_Teamname
+                        .FromSqlRaw("select * from region_functions.get_western_teams()")
+                        .ToListAsync();
         }
 
 

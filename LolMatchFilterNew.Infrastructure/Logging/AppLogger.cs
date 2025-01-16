@@ -3,37 +3,40 @@ using Serilog.Context;
 using System;
 using System.Diagnostics;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.DTOs.TeamnameDTOs; 
+using Domain.DTOs.TeamnameDTOs;
+using Serilog.Events;
 
 namespace LolMatchFilterNew.Infrastructure.Logging.AppLoggers
 {
     public class AppLogger : IAppLogger
     {
-        private static readonly Serilog.ILogger _logger;
-
-        static AppLogger()
-        {
-            _logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File(@"C:\LolMatchFilterNewLogs\LolMatchFilterNewLogs.txt",
-                        rollingInterval: RollingInterval.Day, 
-                        retainedFileCountLimit: 10, 
-                        shared: true)
-                .WriteTo.Seq("http://localhost:5341")
-                .CreateLogger();
-        }
-
+        private readonly Serilog.ILogger _logger;
         public AppLogger()
         {
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
+            Directory.CreateDirectory(@"C:\LolMatchFilterNewLogs");
+
+            _logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    path: $@"C:\LolMatchFilterNewLogs\Run_{timestamp}.txt",
+                    shared: true)
+                .WriteTo.Seq("http://localhost:5341")
+                .CreateLogger();
+
+            Log.Logger = _logger;
         }
+    
 
 
 
-        // Method overloading, allows multiple methods with same name but different parameter lists. 
-        public void Info(string message) => _logger.Information(message); // General information regarding app operations, e.g user login.
+
+    // Method overloading, allows multiple methods with same name but different parameter lists. 
+    public void Info(string message) => _logger.Information(message); // General information regarding app operations, e.g user login.
         public void Info(string message, params object[] propertyValues) => _logger.Information(message, propertyValues);
 
         public void Debug(string message) => _logger.Debug(message); // Detailed info used for debugging, e.g loaded X variables from database in 200ms/

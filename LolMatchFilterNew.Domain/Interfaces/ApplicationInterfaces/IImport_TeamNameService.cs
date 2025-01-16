@@ -15,7 +15,6 @@ namespace Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_Team
     public interface IImport_TeamNameService
     {
         List<TeamNameDTO> BuildTeamNameDTOFromImport_TeamNameEntites(List<Import_TeamnameEntity> teamNameEntities);
-        void PopulateImport_TeamNameAllNames(List<Import_TeamnameEntity> teamnames);
 
 
         List<TeamNameDTO> ReturnImport_TeamNameAllNames();
@@ -23,5 +22,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_Team
 
 
         void TESTCheckAllProcessedEuAndNaAgainstKnownAbbreviations(HashSet<string> distinctTeamNames, List<TeamNameDTO> teamNameDTOs);
+
+        void PopulateImport_TeamNameAllNames(List<TeamNameDTO> teamNameDtos);
     }
 }

@@ -72,7 +72,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _importTeamNameService = importTeamNameService;
             _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
             _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameOccurrenceCountDTO>();
-      
+
 
         }
 
@@ -83,24 +83,17 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
                 var dto = _youtubeTitleTeamMatchCountFactory.CreateNewYoutubeTitleOccurenceDTO(teamName.VideoTitle);
                 _youtubeTitleTeamMatchCounts.Add(dto);
             }
+            _appLogger.Info($"Total count for _youtubeTitleTeamMatchCounts: {_youtubeTitleTeamMatchCounts.Count()}.");
         }
 
         public List<YoutubeTitleTeamNameOccurrenceCountDTO> ReturnYoutubeTitleTeamMatchCounts()
         {
-            if(!_youtubeTitleTeamMatchCounts.Any())
+            if (!_youtubeTitleTeamMatchCounts.Any())
             {
                 throw new InvalidOperationException($"YouTube title team match counts list has not been initialized. This list should be populated during service initialization by calling.{nameof(PopulateYoutubeTitleTeamMatchCountList)}.");
             }
             return _youtubeTitleTeamMatchCounts;
         }
-
-
-
-
-
-
-
-
 
 
 
@@ -239,6 +232,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
                 _youtubeTitleTeamNameFinder.UpdateDTOWithTeamMatchesFromTitle(dto);
             }
         }
+
+
 
     }
 }

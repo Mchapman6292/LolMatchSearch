@@ -12,5 +12,9 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders
 
         void UpdateDTOWithTeamMatchesFromTitle(YoutubeTitleTeamNameOccurrenceCountDTO youtubeTitleMatchDTO);
 
+
+
+        void ProcessYoutubeTitle(YoutubeTitleTeamNameOccurrenceCountDTO occurrenceDTO);
+
     }
 }

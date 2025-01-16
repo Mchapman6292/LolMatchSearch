@@ -24,7 +24,7 @@ namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
 
         public void IncrementCount(string countType, int increment)
         {
-            switch (countType.ToLower())
+            switch (countType)
             {
                 case "Short":
                     ShortNameCount += increment;

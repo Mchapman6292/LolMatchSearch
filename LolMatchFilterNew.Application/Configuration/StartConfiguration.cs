@@ -138,6 +138,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IYoutubeTeamNameValidator, YoutubeTeamNameValidator>();
                   services.AddSingleton<IImport_TeamNameService, Import_TeamNameService>();
                   services.AddSingleton<IYoutubeTeamNameService, YoutubeTeamNameService>();
+                  services.AddSingleton<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
@@ -167,7 +168,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
-                  services.AddTransient<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
+
 
 
 

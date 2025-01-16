@@ -27,7 +27,6 @@ namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
             switch (countType)
             {
                 case "Short":
-                    []
                     ShortNameCount += increment;
                     break;
                 case "Medium":

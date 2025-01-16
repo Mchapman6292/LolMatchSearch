@@ -64,6 +64,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             IYoutubeTeamNameService youtubeTeamNameService,
             IImport_TeamnameRepository import_TeamnameRepository,
 
+            IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder,
             IYoutubeTeamNameValidator youtubeTeamNameValidator,
             IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory
             
@@ -82,6 +83,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             _youtubeTeamExtractor = youtubeTeamExtractor;
             _youtubeTeamNameService = youtubeTeamNameService;
             _youtubeTeamNameValidator = youtubeTeamNameValidator;
+            _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
             _importTeamNameService = import_TeamnNameService;
 
@@ -100,20 +102,31 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
         public async Task TESTFindTeamNameMatchesInYoutubeTitleAsync()
         {
-            List<Import_TeamnameEntity> teamnNameEntities = await _import_TeamNameRepository.GetAllTeamnamesAsync();
-            List<Import_YoutubeDataEntity> importYoutubeEntities = await _import_YoutubeDataRepository.GetAllImport_YoutubeData();
+            List<Import_TeamnameEntity> teamnNameEntities = await _storedSqlFunctionCaller.GetAllWesternTeamsAsync();
+            List<Import_YoutubeDataEntity> importYoutubeEntities = await _storedSqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
             List<TeamNameDTO> teamNameDtos = _importTeamNameService.BuildTeamNameDTOFromImport_TeamNameEntites(teamnNameEntities);
 
             _appLogger.Info($"TeamNameDTO list build with count: {teamNameDtos.Count}.");
 
-            _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
+            var youtubeEntitiesSample = importYoutubeEntities
+                .OrderBy(x => Guid.NewGuid())
+                .Take(100)
+                .ToList();
 
-            _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(importYoutubeEntities);
+
+
+            _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
+            _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(youtubeEntitiesSample);
 
             List<YoutubeTitleTeamNameOccurrenceCountDTO> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
 
-            _youtubeTeamNameService.CONTROLLERUpdateAllYoutubeTitleDTO(teamNameOccurences);
+            foreach(var youtubeOccurenceDto in teamNameOccurences)
+            {
+                _youtubeTitleTeamNameFinder.ProcessYoutubeTitle(youtubeOccurenceDto);
+            }
+
+
 
             _objectLogger.LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(teamNameOccurences);
 

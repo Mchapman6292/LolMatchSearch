@@ -105,11 +105,17 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             List<Import_TeamnameEntity> teamnNameEntities = await _storedSqlFunctionCaller.GetAllWesternTeamsAsync();
             List<Import_YoutubeDataEntity> importYoutubeEntities = await _storedSqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
+            var startDate = new DateTime(2015, 1, 1);
+
+            var filteredYoutubeEntities = importYoutubeEntities
+                .Where(x => x.PublishedAt_utc.HasValue && x.PublishedAt_utc.Value > startDate)
+                .ToList();
+
             List<TeamNameDTO> teamNameDtos = _importTeamNameService.BuildTeamNameDTOFromImport_TeamNameEntites(teamnNameEntities);
 
             _appLogger.Info($"TeamNameDTO list build with count: {teamNameDtos.Count}.");
 
-            var youtubeEntitiesSample = importYoutubeEntities
+            var youtubeEntitiesSample = filteredYoutubeEntities
                 .OrderBy(x => Guid.NewGuid())
                 .Take(100)
                 .ToList();

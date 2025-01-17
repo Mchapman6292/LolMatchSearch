@@ -19,5 +19,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamNameOccurrenceCountDTO> matchResults);
 
+        void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamNameOccurrenceCountDTO> matchResults);
+
     }
 }

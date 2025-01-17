@@ -22,13 +22,16 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
         private readonly HashSet<string> _commonExclusions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "vs",
-        "na", 
-        "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", // Seasons
-        "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10", // Weeks
-        "d1", "d2", "d3", "d4", "d5", "d6", "d7"  // Days
-    };
+        {
+            "vs",
+            "na", 
+            "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", // Seasons
+            "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10", // Weeks
+            "d1", "d2", "d3", "d4", "d5", "d6", "d7"  // Days
+        };
+
+
+
 
 
 
@@ -180,10 +183,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 }
             }
         }
-
-
-
-
 
 
 

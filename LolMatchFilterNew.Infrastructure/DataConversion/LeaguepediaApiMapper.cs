@@ -490,7 +490,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
-        public async Task<IEnumerable<Import_TournamentEntity>> MapToImport_Tournaments(IEnumerable<JObject> tournamentData)
+        public async Task<List<Import_TournamentEntity>> MapToImport_Tournaments(IEnumerable<JObject> tournamentData)
         {
             if (tournamentData == null || !tournamentData.Any())
             {
@@ -510,7 +510,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     {
                         var entity = new Import_TournamentEntity
                         {
-                            Name = _apiHelper.GetStringValue(tournament, "Name"),  // Required field
+                            TournamentName = _apiHelper.GetStringValue(tournament, "TournamentName"),  // Required field
                             OverviewPage = _apiHelper.GetNullableStringValue(tournament, "OverviewPage"),
                             DateStart = _apiHelper.GetNullableDateTimeFromJobject(tournament, "DateStart"),
                             Date = _apiHelper.GetNullableDateTimeFromJobject(tournament, "Date"),
@@ -533,9 +533,9 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             Tags = string.Join(',', _apiHelper.GetValuesAsList(tournament, "Tags"))
                         };
 
-                        if (string.IsNullOrEmpty(entity.Name) && !string.IsNullOrEmpty(entity.OverviewPage))
+                        if (string.IsNullOrEmpty(entity.TournamentName) && !string.IsNullOrEmpty(entity.OverviewPage))
                         {
-                            entity.Name = _apiHelper.NormalizeOverviewPageToName(entity.OverviewPage);
+                            entity.TournamentName = _apiHelper.NormalizeOverviewPageToName(entity.OverviewPage);
                         }
 
                         results.Add(entity);

@@ -8,7 +8,7 @@ namespace Domain.Entities.Imported_Entities.Import_TournamentEntities
 {
     public class Import_TournamentEntity
     {
-        public string Name { get; set; }
+        public string TournamentName { get; set; }
         public string? OverviewPage { get; set; }
         public DateTime? DateStart { get; set; }
         public DateTime? Date { get; set; }

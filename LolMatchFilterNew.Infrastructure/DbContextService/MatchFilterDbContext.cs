@@ -161,8 +161,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             modelBuilder.Entity<Import_TournamentEntity>(entity =>
             {
                 entity.ToTable("import_tournament");
-                entity.HasKey(e => e.Name);
-                entity.Property(e => e.Name).HasColumnName("name").IsRequired();
+                entity.HasKey(e => e.TournamentName);
+                entity.Property(e => e.TournamentName).HasColumnName("tournament_name").IsRequired();
                 entity.Property(e => e.OverviewPage).HasColumnName("overview_page");
                 entity.Property(e => e.DateStart).HasColumnName("date_start");
                 entity.Property(e => e.Date).HasColumnName("date");

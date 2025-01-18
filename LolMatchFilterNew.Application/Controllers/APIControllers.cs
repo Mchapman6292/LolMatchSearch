@@ -272,17 +272,22 @@ namespace LolMatchFilterNew.Application.Controllers
                 throw new ArgumentException($"No data from api.");
             }
 
-            IEnumerable<Import_TournamentEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Tournaments(tournaments);
+            List<Import_TournamentEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Tournaments(tournaments);
 
-            await _generic_Import_TournamentEntity.AddRangeWithTransactionAsync(mappedEntites);
+            List<Import_TournamentEntity> distinctEntities = mappedEntites
+                .GroupBy(x => x.TournamentName)
+                .Select(group => group.First())
+                .ToList();
+
+            await _generic_Import_TournamentEntity.AddRangeWithTransactionAsync(distinctEntities);
         }
 
 
 
 
-        public async Task DeleteAllTeamRedirects()
+        public async Task DeleteAllTournaments()
         {
-            await _generic_Import_TeamRedirectEntity.RemoveAllEntitiesAsync();
+            await _generic_Import_TournamentEntity.RemoveAllEntitiesAsync();
         }
 
 

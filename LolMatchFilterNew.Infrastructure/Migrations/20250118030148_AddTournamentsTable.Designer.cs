@@ -162,7 +162,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Imported_Entities.Import_TournamentEntities.Import_TournamentEntity", b =>
                 {
-                    b.Property<string>("Name")
+                    b.Property<string>("TournamentName")
                         .HasColumnType("text")
                         .HasColumnName("name");
 
@@ -246,7 +246,7 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("year");
 
-                    b.HasKey("Name");
+                    b.HasKey("TournamentName");
 
                     b.ToTable("import_tournament", (string)null);
                 });

@@ -1,6 +1,6 @@
 ﻿using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
-using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
@@ -42,7 +42,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         private readonly IImport_TeamNameService _importTeamNameService;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
 
-        private List<YoutubeTitleTeamNameOccurrenceCountDTO> _youtubeTitleTeamMatchCounts { get; }
+        private List<YoutubeTitleTeamNameMatchResult> _youtubeTitleTeamMatchCounts { get; }
 
 
 
@@ -71,7 +71,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
             _importTeamNameService = importTeamNameService;
             _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
-            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameOccurrenceCountDTO>();
+            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameMatchResult>();
 
 
         }
@@ -86,7 +86,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _appLogger.Info($"Total count for _youtubeTitleTeamMatchCounts: {_youtubeTitleTeamMatchCounts.Count()}.");
         }
 
-        public List<YoutubeTitleTeamNameOccurrenceCountDTO> ReturnYoutubeTitleTeamMatchCounts()
+        public List<YoutubeTitleTeamNameMatchResult> ReturnYoutubeTitleTeamMatchCounts()
         {
             if (!_youtubeTitleTeamMatchCounts.Any())
             {
@@ -220,18 +220,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         }
 
 
-        // Used for Testing YoutubeTitleFinder class methods 14/01/2025
-        public void CONTROLLERUpdateAllYoutubeTitleDTO(List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleTeamDTOs)
-        {
-            foreach (var dto in youtubeTitleTeamDTOs)
-            {
-                if (string.IsNullOrEmpty(dto.YoutubeTitle))
-                {
-                    throw new ArgumentException($"YoutubeTitle not set for {nameof(CONTROLLERUpdateAllYoutubeTitleDTO)}.");
-                }
-                _youtubeTitleTeamNameFinder.UpdateDTOWithTeamMatchesFromTitle(dto);
-            }
-        }
+
+
 
 
 

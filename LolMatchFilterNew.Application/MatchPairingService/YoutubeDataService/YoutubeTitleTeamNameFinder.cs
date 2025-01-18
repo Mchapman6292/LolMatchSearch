@@ -1,5 +1,5 @@
 ﻿using Domain.DTOs.TeamnameDTOs;
-using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
@@ -7,6 +7,7 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Microsoft.Extensions.ObjectPool;
 using OfficeOpenXml.Packaging.Ionic.Zip;
+using System.Text.RegularExpressions;
 
 
 
@@ -14,22 +15,13 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 {
     public class YoutubeTitleTeamNameFinder : IYoutubeTitleTeamNameFinder
     {
-        private readonly char[] Separators = new char[] { ' ', '-', '_', '|' };
 
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
         private readonly IImport_TeamNameService _importTeamNameService;
 
 
-        private readonly HashSet<string> _commonExclusions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "vs",
-        "na", 
-        "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", // Seasons
-        "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10", // Weeks
-        "d1", "d2", "d3", "d4", "d5", "d6", "d7"  // Days
-    };
-
+        private static readonly Regex G2_Game2_FalsePositive = new Regex(@"[Gg]2$", RegexOptions.Compiled);
 
 
 
@@ -41,105 +33,21 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         }
 
 
-        public string[] ExtractAllWordsFromYoutubeTitle(string youtubeTitle)
-        {
-            string formattedTitled = youtubeTitle.ToLower();
-            return formattedTitled.Split(Separators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        }
 
 
-
-
-        public void UpdateDTOWithTeamMatchesFromTitle(YoutubeTitleTeamNameOccurrenceCountDTO youtubeTitleMatchDTO)
-        {
-            string[] extractedWords = ExtractAllWordsFromYoutubeTitle(youtubeTitleMatchDTO.YoutubeTitle);
-            foreach (var teamNameDto in _importTeamNameService.ReturnImport_TeamNameAllNames())
-            {
-                var allTeamMatches = new List<string>();
-
-                foreach (string word in extractedWords)
-                {
-                    var wordMatches = GetTeamNameMatchesInExtractedWord(teamNameDto, youtubeTitleMatchDTO, word);
-                    allTeamMatches.AddRange(wordMatches);
-                }
-
-                if (allTeamMatches.Any())
-                {
-                    youtubeTitleMatchDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, allTeamMatches);
-                }
-            }
-        }
-
-
-        private List<string> GetTeamNameMatchesInExtractedWord(TeamNameDTO teamNameDto, YoutubeTitleTeamNameOccurrenceCountDTO youtubeDto, string extractedWord)
-        {
-            List<string> allAbbreviationMatches = new List<string>();
-
-            if (!string.IsNullOrEmpty(teamNameDto.ShortName))
-            {
-                if (extractedWord.Equals(teamNameDto.ShortName))
-                {
-                    allAbbreviationMatches.Add(teamNameDto.ShortName);
-                    youtubeDto.IncrementCount("Short", 1);
-                }
-            }
-            if (!string.IsNullOrEmpty(teamNameDto.MediumName))
-            {
-                if (extractedWord.Equals(teamNameDto.MediumName))
-                {
-                    allAbbreviationMatches.Add(teamNameDto.MediumName);
-                    youtubeDto.IncrementCount("Medium", 1);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(teamNameDto.LongName))
-            {
-                if (extractedWord.Equals(teamNameDto.LongName))
-                {
-                    allAbbreviationMatches.Add(teamNameDto.LongName);
-                    youtubeDto.IncrementCount("Long", 1);
-                }
-            }
-
-            if (teamNameDto.FormattedInputs != null && teamNameDto.FormattedInputs.Count > 0)
-            {
-                foreach (var input in teamNameDto.FormattedInputs)
-                {
-                    if (extractedWord.Equals(input))
-                    {
-                        allAbbreviationMatches.Add(input);
-                        youtubeDto.IncrementCount("Inputs", 1);
-                    }
-                }
-            }
-            if (allAbbreviationMatches.Count > 0)
-            {
-                _appLogger.Info($"Matches added for {youtubeDto.YoutubeTitle}, team: {teamNameDto.LongName}, total matches: {allAbbreviationMatches.Count}.");
-                return allAbbreviationMatches;
-            }
-            return allAbbreviationMatches;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public void ProcessYoutubeTitle(YoutubeTitleTeamNameOccurrenceCountDTO occurrenceDTO)
+        public void ProcessYoutubeTitle(YoutubeTitleTeamNameMatchResult occurrenceDTO)
         {
             string normalizedTitle = occurrenceDTO.YoutubeTitle.ToLower();
+
+            // Check if title ends with G2
+            bool endsWithG2 = G2_Game2_FalsePositive.IsMatch(normalizedTitle);
+
+            // If it does, create a temporary version without G2 for matching
+            string titleForMatching = endsWithG2
+                ? normalizedTitle.Substring(0, normalizedTitle.Length - 2).Trim()
+                : normalizedTitle;
+
+
 
             foreach (var teamNameDto in _importTeamNameService.ReturnImport_TeamNameAllNames())
             {
@@ -164,7 +72,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
             }
         }
 
-        private void CheckNameMatch(string? nameToCheck, string nameType, string normalizedTitle,YoutubeTitleTeamNameOccurrenceCountDTO occurrenceDTO, List<string> matchesForTeam)
+        private void CheckNameMatch(string? nameToCheck, string nameType, string normalizedTitle,YoutubeTitleTeamNameMatchResult occurrenceDTO, List<string> matchesForTeam)
         {
             if (string.IsNullOrEmpty(nameToCheck)) return;
 
@@ -184,10 +92,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
 
-
-
-
-
         private bool IsWholeWord(string text, string word)
         {
 
@@ -201,6 +105,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
             return validStart && validEnd;
         }
+
+ 
 
 
 

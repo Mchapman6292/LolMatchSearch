@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.TeamnameDTOs;
+﻿
 
 
-namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
+namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults
 {
-    public class YoutubeTitleTeamNameOccurrenceCountDTO
+    public class YoutubeTitleTeamNameMatchResult
     {
 
         public string YoutubeTitle { get; set; } = string.Empty;
@@ -14,6 +14,8 @@ namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
         public int ShortNameCount { get; set; } = 0;
         public int MatchingInputsCount { get; set; } = 0;   
         public List<string>? MatchingInputs { get; set; }
+
+        public List<string>? Exclusions { get; set; }   
 
 
         public void UpdateYoutubeTitle(string title)
@@ -44,9 +46,20 @@ namespace Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs
         }
 
 
-        public void UpdateMatchingTeamNameIds(string teamNameId, List<string> allAbbreviations)
+        public void UpdateMatchingTeamNameIds(string teamNameId, List<string> matches)
         {
-            MatchingTeamNameIds.Add(teamNameId, allAbbreviations);
+            MatchingTeamNameIds.Add(teamNameId, matches);
         }
+
+
+        public Dictionary<string, List<string>> GetTopTwoTeamMatches()
+        {
+            return MatchingTeamNameIds
+                .OrderByDescending(kvp => kvp.Value.Count)
+                .Take(2)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+
     }
 }

@@ -9,6 +9,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRenameEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
+using Domain.Entities.Imported_Entities.Import_TournamentEntities;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
@@ -36,6 +37,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
         public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
         public DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+        public DbSet<Import_TournamentEntity> Import_Tournament { get; set; }
  
 
 
@@ -70,6 +72,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.YoutubeResultHyperlink).HasColumnName("youtube_result_hyperlink").HasMaxLength(2083);
                 entity.Property(e => e.ThumbnailUrl).HasColumnName("thumbnail_url").HasMaxLength(2083);
             });
+
+
             modelBuilder.Entity<Import_ScoreboardGamesEntity>(entity =>
             {
                 entity.ToTable("import_scoreboardgames");
@@ -88,6 +92,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.WinTeam).HasColumnName("win_team").HasMaxLength(100);
                 entity.Property(e => e.LossTeam).HasColumnName("loss_team").HasMaxLength(100);
             });
+
 
             modelBuilder.Entity<Import_TeamRenameEntity>(entity =>
             {
@@ -130,7 +135,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             });
 
 
-
             modelBuilder.Entity<Import_TeamRedirectEntity>(entity =>
             {
                 entity.ToTable("import_teamredirect");
@@ -140,6 +144,8 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.OtherName).HasColumnName("other_name").HasMaxLength(255);
                 entity.Property(e => e.UniqueLine).HasColumnName("unique_line").HasMaxLength(255);
             });
+
+
             modelBuilder.Entity<Import_TeamnameEntity>(entity =>
             {
                 entity.ToTable("import_teamname");
@@ -150,6 +156,42 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.Medium).HasColumnName("medium").HasMaxLength(100);
                 entity.Property(e => e.Inputs).HasColumnName("inputs").HasMaxLength(1000);
             });
+
+
+            modelBuilder.Entity<Import_TournamentEntity>(entity =>
+            {
+                entity.ToTable("import_tournament");
+                entity.HasKey(e => e.Name);
+                entity.Property(e => e.Name).HasColumnName("name").IsRequired();
+                entity.Property(e => e.OverviewPage).HasColumnName("overview_page");
+                entity.Property(e => e.DateStart).HasColumnName("date_start");
+                entity.Property(e => e.Date).HasColumnName("date");
+                entity.Property(e => e.DateStartFuzzy).HasColumnName("date_start_fuzzy");
+                entity.Property(e => e.League).HasColumnName("league");
+                entity.Property(e => e.Region).HasColumnName("region");
+                entity.Property(e => e.Country).HasColumnName("country");
+                entity.Property(e => e.ClosestTimezone).HasColumnName("closest_timezone");
+                entity.Property(e => e.EventType).HasColumnName("event_type");
+                entity.Property(e => e.StandardName).HasColumnName("standard_name");
+                entity.Property(e => e.Split).HasColumnName("split");
+                entity.Property(e => e.SplitNumber).HasColumnName("split_number");
+                entity.Property(e => e.SplitMainPage).HasColumnName("split_main_page");
+                entity.Property(e => e.TournamentLevel).HasColumnName("tournament_level");
+                entity.Property(e => e.IsQualifier).HasColumnName("is_qualifier");
+                entity.Property(e => e.IsPlayoffs).HasColumnName("is_playoffs");
+                entity.Property(e => e.IsOfficial).HasColumnName("is_official");
+                entity.Property(e => e.Year).HasColumnName("year");
+                entity.Property(e => e.AlternativeNames).HasColumnName("alternative_names");
+                entity.Property(e => e.Tags).HasColumnName("tags");
+            });
+        
+
+
+
+
+
+
+
 
 
 

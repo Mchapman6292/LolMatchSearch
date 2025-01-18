@@ -125,10 +125,12 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                             ? Math.Min(queryLimit, totalLimit.Value - allMatches.Count)
                         : queryLimit;
 
-                        string rawQuery = _leaguepediaQueryService.BuildQueryStringTeamnames(queryLimit, offset);
+                        string rawQuery = _leaguepediaQueryService.BuildQueryStringTournaments(queryLimit, offset);
 
 
                         string urlQuery = _leaguepediaQueryService.FormatCargoQuery(rawQuery, currentQueryLimit, offset);
+
+                        _appLogger.Info("Query used:  {rawQuery}", rawQuery);
 
                         _appLogger.Info($"Fetching page with offset {offset}, limit {currentQueryLimit}");
                         _appLogger.Debug($"Generated URL: {urlQuery}");
@@ -199,7 +201,7 @@ namespace LolMatchFilterNew.Domain.Apis.LeaguepediaDataFetcher
                 }
                 throw;
             }
-
+            _appLogger.Info("{MethodName} complete", nameof(FetchAndExtractMatches));
             return allMatches;
         }
 

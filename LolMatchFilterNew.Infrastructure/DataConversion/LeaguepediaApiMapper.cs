@@ -19,6 +19,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEnti
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.DTOs.TeamnameDTOs;
+using Domain.Entities.Imported_Entities.Import_TournamentEntities;
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
     public class LeaguepediaApiMapper : ILeaguepediaApiMapper
@@ -485,6 +486,72 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                 return results;
             });
         }
+
+
+
+
+        public async Task<IEnumerable<Import_TournamentEntity>> MapToImport_Tournaments(IEnumerable<JObject> tournamentData)
+        {
+            if (tournamentData == null || !tournamentData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToImport_Tournaments)}.");
+                throw new ArgumentNullException(nameof(tournamentData), "Input data cannot be null or empty.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<Import_TournamentEntity>();
+                int processedCount = 0;
+
+                foreach (var tournament in tournamentData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        var entity = new Import_TournamentEntity
+                        {
+                            Name = _apiHelper.GetStringValue(tournament, "Name"),  // Required field
+                            OverviewPage = _apiHelper.GetNullableStringValue(tournament, "OverviewPage"),
+                            DateStart = _apiHelper.GetNullableDateTimeFromJobject(tournament, "DateStart"),
+                            Date = _apiHelper.GetNullableDateTimeFromJobject(tournament, "Date"),
+                            DateStartFuzzy = _apiHelper.GetNullableStringValue(tournament, "DateStartFuzzy"),
+                            League = _apiHelper.GetNullableStringValue(tournament, "League"),
+                            Region = _apiHelper.GetNullableStringValue(tournament, "Region"),
+                            Country = _apiHelper.GetNullableStringValue(tournament, "Country"),
+                            ClosestTimezone = _apiHelper.GetNullableStringValue(tournament, "ClosestTimezone"),
+                            EventType = _apiHelper.GetNullableStringValue(tournament, "EventType"),
+                            StandardName = _apiHelper.GetNullableStringValue(tournament, "StandardName"),
+                            Split = _apiHelper.GetNullableStringValue(tournament, "Split"),
+                            SplitNumber = _apiHelper.GetNullableInt32Value(tournament, "SplitNumber"),
+                            SplitMainPage = _apiHelper.GetNullableStringValue(tournament, "SplitMainPage"),
+                            TournamentLevel = _apiHelper.GetNullableStringValue(tournament, "TournamentLevel"),
+                            IsQualifier = _apiHelper.GetNullableInt32Value(tournament, "IsQualifier") == 1,
+                            IsPlayoffs = _apiHelper.GetNullableInt32Value(tournament, "IsPlayoffs") == 1,
+                            IsOfficial = _apiHelper.GetNullableInt32Value(tournament, "IsOfficial") == 1,
+                            Year = _apiHelper.GetNullableStringValue(tournament, "Year"),
+                            AlternativeNames = string.Join(',', _apiHelper.GetValuesAsList(tournament, "AlternativeNames")),
+                            Tags = string.Join(',', _apiHelper.GetValuesAsList(tournament, "Tags"))
+                        };
+
+                        if (string.IsNullOrEmpty(entity.Name) && !string.IsNullOrEmpty(entity.OverviewPage))
+                        {
+                            entity.Name = _apiHelper.NormalizeOverviewPageToName(entity.OverviewPage);
+                        }
+
+                        results.Add(entity);
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing tournament data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {tournament}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} tournament entities out of {processedCount} processed.");
+                return results;
+            });
+        }
+
 
 
 

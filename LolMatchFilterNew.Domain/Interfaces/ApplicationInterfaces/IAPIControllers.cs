@@ -25,6 +25,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
         Task ControllerAddTeamsTableToDatabase();
 
+        Task ControllerAddTournamentToDatabase();
+
 
         Task ControllerAddTeamnameToDatabase();
 

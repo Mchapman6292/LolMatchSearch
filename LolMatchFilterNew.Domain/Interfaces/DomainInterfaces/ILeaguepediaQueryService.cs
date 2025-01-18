@@ -20,6 +20,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
         string BuildQueryStringTeams(int queryLimit = 0, int offset = 0);
         string BuildQueryStringTeamnames(int queryLimit, int offset = 0);
 
+        string BuildQueryStringTournaments(int queryLimit, int offset = 0);
+
 
 
 

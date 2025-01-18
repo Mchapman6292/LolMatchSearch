@@ -18,6 +18,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Youtu
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
+using Domain.Entities.Imported_Entities.Import_TournamentEntities;
 
 
 
@@ -47,6 +48,7 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IGenericRepository<Import_YoutubeDataEntity> _generic_Import_YoutubeDataEntity;
         private readonly IGenericRepository<Import_TeamRedirectEntity> _generic_Import_TeamRedirectEntity;
         private readonly IGenericRepository<Import_TeamnameEntity> _generic_Import_TeamnameEntity;
+        private readonly IGenericRepository<Import_TournamentEntity> _generic_Import_TournamentEntity;  
 
 
         private readonly IGenericRepository<Processed_LeagueTeamEntity> _generic_Processed_LeagueTeam;
@@ -77,6 +79,7 @@ namespace LolMatchFilterNew.Application.Controllers
         IGenericRepository<Import_TeamRedirectEntity> genericImport_TeamRedirectEntity,
         IGenericRepository<Import_ScoreboardGamesEntity> genericImport_ScoreboardGamesEntity,
         IGenericRepository<Import_TeamnameEntity> genericImport_TeamnameEntity,
+        IGenericRepository<Import_TournamentEntity> genericImport_TournamentEntity,
 
         IGenericRepository<Processed_LeagueTeamEntity> genericProcessed_leagueTeamRepository
         )
@@ -101,6 +104,7 @@ namespace LolMatchFilterNew.Application.Controllers
             _generic_Import_TeamRedirectEntity = genericImport_TeamRedirectEntity;
             _generic_Import_ScoreboardGamesEntity = genericImport_ScoreboardGamesEntity;
             _generic_Import_TeamnameEntity = genericImport_TeamnameEntity;
+            _generic_Import_TournamentEntity = genericImport_TournamentEntity;
 
 
             _generic_Processed_LeagueTeam = genericProcessed_leagueTeamRepository;
@@ -235,8 +239,6 @@ namespace LolMatchFilterNew.Application.Controllers
 
             await _Import_ScoreboardGames.BulkAddScoreboardGames(MappedSGEntities);
 
-
-
         }
 
 
@@ -258,6 +260,21 @@ namespace LolMatchFilterNew.Application.Controllers
             IEnumerable<Import_TeamnameEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Teamname(teamnames);
 
             await _generic_Import_TeamnameEntity.AddRangeWithTransactionAsync(mappedEntites);
+        }
+
+
+        public async Task ControllerAddTournamentToDatabase()
+        {
+            IEnumerable<JObject> tournaments = await _leaguepediaDataFetcher.FetchAndExtractMatches();
+
+            if(!tournaments.Any())
+            {
+                throw new ArgumentException($"No data from api.");
+            }
+
+            IEnumerable<Import_TournamentEntity> mappedEntites = await _leaguepediaApiMapper.MapToImport_Tournaments(tournaments);
+
+            await _generic_Import_TournamentEntity.AddRangeWithTransactionAsync(mappedEntites);
         }
 
 

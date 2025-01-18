@@ -5,7 +5,7 @@
 using Application.MatchPairingService.ScoreboardGameService.TeamnameDTOBuilders;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
-using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;

@@ -1,4 +1,4 @@
-﻿using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+﻿using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders
 {
     public interface IYoutubeTitleTeamNameFinder
     {
-
-        void UpdateDTOWithTeamMatchesFromTitle(YoutubeTitleTeamNameOccurrenceCountDTO youtubeTitleMatchDTO);
-
-
-
-        void ProcessYoutubeTitle(YoutubeTitleTeamNameOccurrenceCountDTO occurrenceDTO);
+        void ProcessYoutubeTitle(YoutubeTitleTeamNameMatchResult occurrenceDTO);
 
     }
 }

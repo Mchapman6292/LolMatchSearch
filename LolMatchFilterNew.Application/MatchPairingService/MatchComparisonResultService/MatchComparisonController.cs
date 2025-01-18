@@ -17,7 +17,7 @@ using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameValidato
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
-using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
@@ -125,7 +125,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
             _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(youtubeEntitiesSample);
 
-            List<YoutubeTitleTeamNameOccurrenceCountDTO> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
+            List<YoutubeTitleTeamNameMatchResult> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
 
             foreach(var youtubeOccurenceDto in teamNameOccurences)
             {
@@ -133,8 +133,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             }
 
 
-
-            _objectLogger.LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(teamNameOccurences);
+            _objectLogger.LogTopYoutubeTeamNameOccurenceMatches(teamNameOccurences);
 
         }
 
@@ -204,7 +203,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-        public void TESTIncrementMatchesCount(List<YoutubeTitleTeamNameOccurrenceCountDTO> youtubeTitleDTOs)
+        public void TESTIncrementMatchesCount(List<YoutubeTitleTeamNameMatchResult> youtubeTitleDTOs)
         {
             throw new NotImplementedException();
         }

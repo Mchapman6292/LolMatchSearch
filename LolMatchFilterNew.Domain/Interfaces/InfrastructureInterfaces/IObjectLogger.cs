@@ -2,7 +2,7 @@
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
 using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
-using Domain.DTOs.YoutubeTitleTeamNameOccurrenceCountDTOs;
+using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 
 namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 {
@@ -17,9 +17,11 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogListForCONTROLLERValidateWesternMatches(List<string> noMatchesList);
 
-        void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamNameOccurrenceCountDTO> matchResults);
+        void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamNameMatchResult> matchResults);
 
-        void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamNameOccurrenceCountDTO> matchResults);
+        void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamNameMatchResult> matchResults);
+
+        void LogTopYoutubeTeamNameOccurenceMatches(List<YoutubeTitleTeamNameMatchResult> occurrenceDto);
 
     }
 }

@@ -510,7 +510,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                     {
                         var entity = new Import_TournamentEntity
                         {
-                            TournamentName = _apiHelper.GetStringValue(tournament, "TournamentName"),  // Required field
+                            TournamentName = _apiHelper.GetStringValue(tournament, "Name"),  
                             OverviewPage = _apiHelper.GetNullableStringValue(tournament, "OverviewPage"),
                             DateStart = _apiHelper.GetNullableDateTimeFromJobject(tournament, "DateStart"),
                             Date = _apiHelper.GetNullableDateTimeFromJobject(tournament, "Date"),
@@ -533,10 +533,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             Tags = string.Join(',', _apiHelper.GetValuesAsList(tournament, "Tags"))
                         };
 
-                        if (string.IsNullOrEmpty(entity.TournamentName) && !string.IsNullOrEmpty(entity.OverviewPage))
-                        {
-                            entity.TournamentName = _apiHelper.NormalizeOverviewPageToName(entity.OverviewPage);
-                        }
+             
 
                         results.Add(entity);
                     }

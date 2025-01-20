@@ -55,4 +55,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MatchPairingService\YoutubeDataService\TeamIdentifiers\" />
+  </ItemGroup>
+
 </Project>

@@ -34,7 +34,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
 
-
+        // EXCLUSION LOGIC MUST CHANGE
         public void ProcessYoutubeTitle(YoutubeTitleTeamNameMatchResult occurrenceDTO)
         {
             string normalizedTitle = occurrenceDTO.YoutubeTitle.ToLower();
@@ -72,6 +72,9 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
             }
         }
 
+
+
+
         private void CheckNameMatch(string? nameToCheck, string nameType, string normalizedTitle,YoutubeTitleTeamNameMatchResult occurrenceDTO, List<string> matchesForTeam)
         {
             if (string.IsNullOrEmpty(nameToCheck)) return;
@@ -92,7 +95,12 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
 
-        private bool IsWholeWord(string text, string word)
+        /*
+         Checks if a given word exists as a standalone term in a text string by verifying it's surrounded by either spaces, punctuation, or string boundaries. 
+         Prevents partial matches like finding "SK" within "SKT".
+        */
+
+        public bool IsWholeWord(string text, string word)
         {
 
             if (string.IsNullOrEmpty(word)) return false;

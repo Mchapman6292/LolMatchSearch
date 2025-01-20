@@ -50,8 +50,6 @@ using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameValidators;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 
 
 
@@ -170,7 +168,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IYoutubeDataWithTeamsDTOBuilder, YoutubeDataWithTeamsDTOBuilder>();
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
-                  services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
                   services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
                   services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
 

@@ -1,7 +1,6 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceControllers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchComparisonResultBuilders;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
@@ -142,33 +141,6 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-        public async Task TESTCheckExtractedTeamsAsync(List<Import_YoutubeDataEntity> import_YoutubeDataEntities, HashSet<string> distinctTeamNames)
-        {
-
-
-            List<TeamNameDTO> import_TeamNameAllNames = _importTeamNameService.ReturnImport_TeamNameAllNames();
-
-            List<YoutubeDataWithTeamsDTO> processedYoutubeDataList = _youtubeTeamNameService.BuildYoutubeDataWithTeamsDTOList(import_YoutubeDataEntities);
-
-            int matchingTeams = 0;
-            int noMatch = 0;
-
-
-
-            foreach (string teamName in _youtubeTeamNameService.GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(processedYoutubeDataList))
-            {
-                if (_youtubeTeamNameValidator.ValidateTeamName(teamName, import_TeamNameAllNames))
-                {
-                    matchingTeams++;
-                }
-                else
-                {
-                    noMatch++;
-                }
-            }
-
-            _appLogger.Debug($"Matching teams: {matchingTeams}, No matches {noMatch}.");
-        }
 
 
 

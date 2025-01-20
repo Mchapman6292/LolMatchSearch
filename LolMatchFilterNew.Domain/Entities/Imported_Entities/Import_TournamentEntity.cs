@@ -12,7 +12,7 @@ namespace Domain.Entities.Imported_Entities.Import_TournamentEntities
         public string? OverviewPage { get; set; }
         public DateTime? DateStart { get; set; }
         public DateTime? Date { get; set; }
-        public string? DateStartFuzzy { get; set; }
+        public int? DateStartFuzzy { get; set; } // Contains year only. 
         public string? League { get; set; }
         public string? Region { get; set; }
         public string? Country { get; set; }
@@ -23,7 +23,7 @@ namespace Domain.Entities.Imported_Entities.Import_TournamentEntities
         public int? SplitNumber { get; set; }
         public string? SplitMainPage { get; set; }
         public string? TournamentLevel { get; set; }
-        public bool? IsQualifier { get; set; }
+        public bool IsQualifier { get; set; }
         public bool? IsPlayoffs { get; set; }
         public bool? IsOfficial { get; set; }
         public string? Year { get; set; }

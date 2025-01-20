@@ -13,6 +13,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using Domain.Entities.Imported_Entities.Import_TournamentEntities;
 
 namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
 {
@@ -24,6 +25,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext
         DbSet<Import_TeamRenameEntity> Import_TeamRename { get; set; }
         DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
         DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
+        DbSet<Import_TournamentEntity> Import_Tournament { get; set; }
 
 
         DbSet<Processed_ProPlayerEntity> Processed_ProPlayer { get; set; }

@@ -83,6 +83,10 @@ using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMatchCo
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameFinders;
+using Application.DTOBuilders.ImportTournamentDTOFactories;
+using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IImportTournamentDTOFactories;
+using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_TournamentRepositories;
+using Infrastructure.Repositories.ImportRepositories.Import_TournamentRepositories;
 
 
 
@@ -139,6 +143,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IImport_TeamNameService, Import_TeamNameService>();
                   services.AddSingleton<IYoutubeTeamNameService, YoutubeTeamNameService>();
                   services.AddSingleton<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
+                  services.AddSingleton<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
@@ -166,6 +171,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
+                  services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
+                  services.AddTransient<ImportTournamentDTOFactory, ImportTournamentDTOFactory>();
+
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LolMatchFilterNew.Infrastructure.Migrations
 {
     [DbContext(typeof(MatchFilterDbContext))]
-    partial class MatchFilterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118055551_UpdateTournamentPrimaryKey")]
+    partial class UpdateTournamentPrimaryKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +162,9 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Imported_Entities.Import_TournamentEntities.Import_TournamentEntity", b =>
                 {
-                    b.Property<string>("TournamentName")
+                    b.Property<string>("OverviewPage")
                         .HasColumnType("text")
-                        .HasColumnName("tournament_name");
+                        .HasColumnName("overview_page");
 
                     b.Property<string>("AlternativeNames")
                         .HasColumnType("text")
@@ -207,10 +210,6 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("league");
 
-                    b.Property<string>("OverviewPage")
-                        .HasColumnType("text")
-                        .HasColumnName("overview_page");
-
                     b.Property<string>("Region")
                         .HasColumnType("text")
                         .HasColumnName("region");
@@ -239,11 +238,16 @@ namespace LolMatchFilterNew.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("tournament_level");
 
+                    b.Property<string>("TournamentName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tournament_name");
+
                     b.Property<string>("Year")
                         .HasColumnType("text")
                         .HasColumnName("year");
 
-                    b.HasKey("TournamentName");
+                    b.HasKey("OverviewPage");
 
                     b.ToTable("import_tournament", (string)null);
                 });

@@ -153,15 +153,15 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         }
 
 
+
+
         public string BuildQueryStringTournaments(int queryLimit, int offset = 0)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["action"] = "cargoquery";
             query["format"] = "json";
             query["tables"] = "Tournaments=T";
-            query["fields"] = "T.OverviewPage,T.DateStart,T.Date,T.DateStartFuzzy,T.League,T.Region,T.Country,T.ClosestTimezone,T.EventType,T.StandardName,T.Split,T.SplitNumber,T.SplitMainPage,T.TournamentLevel,T.IsQualifier,T.IsPlayoffs,T.IsOfficial,T.Year,T.AlternativeNames,T.Tags";
-            query["where"] = "T.IsOfficial = true";
-            query["order_by"] = "T.Year DESC, T.DateStart DESC";
+            query["fields"] = "T.Name ,T.OverviewPage,T.DateStart,T.Date,T.DateStartFuzzy,T.League,T.Region,T.Country,T.ClosestTimezone,T.EventType,T.StandardName,T.Split,T.SplitNumber,T.SplitMainPage,T.TournamentLevel,T.IsQualifier,T.IsPlayoffs,T.IsOfficial,T.Year,T.AlternativeNames,T.Tags";
             query["limit"] = queryLimit.ToString();
             query["offset"] = offset.ToString();
             return $"{BaseUrl}?{query}";

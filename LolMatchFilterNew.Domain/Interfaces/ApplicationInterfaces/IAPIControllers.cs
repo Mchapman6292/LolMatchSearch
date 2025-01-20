@@ -9,7 +9,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
     public interface IAPIControllers
     {
 
-        Task DeleteAllTeamRedirects();
+        Task DeleteAllTournaments();
         Task FetchAndAddLeaguepediaDataForLeagueName(string league);
 
         Task ControllerAddScoreboardGames();
@@ -24,6 +24,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
 
         Task ControllerAddTeamsTableToDatabase();
+
+        Task ControllerAddTournamentToDatabase();
 
 
         Task ControllerAddTeamnameToDatabase();

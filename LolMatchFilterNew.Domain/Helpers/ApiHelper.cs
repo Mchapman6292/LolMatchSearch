@@ -187,7 +187,6 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                 {
                     targetObj = titleObj;
                 }
-
                 var token = targetObj[key];
                 if (token == null)
                 {
@@ -195,21 +194,24 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                     return null;
                 }
 
-                if (token.Type != JTokenType.String && token.Type != JTokenType.Integer)
-                {
-                    _appLogger.Warning($"Unexpected token type for key '{key}'. Type: {token.Type}");
-                    throw new ArgumentException($"The value for key '{key}' is not a string or integer.");
-                }
+                _appLogger.Debug($"Token type for '{key}': {token.Type}, Raw value: {token.ToString()}");
 
-                string value = token.ToString();
-                if (int.TryParse(value, out int result))
+
+                switch (token.Type)
                 {
-                    return result;
-                }
-                else
-                {
-                    _appLogger.Error($"Failed to parse int value for key '{key}': '{value}'");
-                    throw new FormatException($"The value for key '{key}' ('{value}') is not a valid integer.");
+                    case JTokenType.Integer:
+                        return token.Value<int>();
+                    case JTokenType.String:
+                        if (int.TryParse(token.ToString(), out int result))
+                            return result;
+                        return null;
+                    case JTokenType.Float:
+                        return (int?)token.Value<double>();
+                    case JTokenType.Null:
+                        return null;
+                    default:
+                        _appLogger.Warning($"Unexpected token type for key '{key}'. Type: {token.Type}");
+                        return null;
                 }
             }
             catch (Exception ex)

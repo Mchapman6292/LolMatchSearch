@@ -3,6 +3,7 @@ using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
 using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+using Domain.DTOs.PlayListDateRangeDTOs;
 
 namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 {
@@ -22,6 +23,8 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
         void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamNameMatchResult> matchResults);
 
         void LogTopYoutubeTeamNameOccurenceMatches(List<YoutubeTitleTeamNameMatchResult> occurrenceDto);
+
+        void LogPlaylistDateRanges(List<PlayListDateRangeDTO> playlistDTOs);
 
     }
 }

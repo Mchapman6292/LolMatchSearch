@@ -144,6 +144,39 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
 
 
 
+        // Used for inital testing when creating PlayListDateRangeFactory 20/01/2025/
+        public async Task<List<Import_YoutubeDataEntity>> GetEuNaVideosByPlaylistAsync()
+        {
+            try
+            {
+                return await _matchFilterDbContext.Import_YoutubeData
+                    .Where(i => (i.PlaylistTitle.Contains("na lcs", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.Contains("eu lcs", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.StartsWith("LEC", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.StartsWith("LCS", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.Contains("LEC Spring", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.Contains("LEC Summer", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.Contains("LCS Spring", StringComparison.OrdinalIgnoreCase) ||
+                               i.PlaylistTitle.Contains("LCS Summer", StringComparison.OrdinalIgnoreCase)) &&
+                               !(i.PlaylistTitle.Contains("MSI", StringComparison.OrdinalIgnoreCase) ||
+                                 i.PlaylistTitle.Contains("Worlds", StringComparison.OrdinalIgnoreCase) ||
+                                 i.PlaylistTitle.Contains("World Championship", StringComparison.OrdinalIgnoreCase) ||
+                                 i.PlaylistTitle.Contains("International", StringComparison.OrdinalIgnoreCase) ||
+                                 i.PlaylistTitle.Contains("All-Star", StringComparison.OrdinalIgnoreCase) ||
+                                 i.PlaylistTitle.Contains("Rift Rivals", StringComparison.OrdinalIgnoreCase)))
+                    .OrderBy(i => i.PlaylistTitle)
+                    .ThenByDescending(i => i.PublishedAt_utc)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving EU/NA videos: {ex.Message}", ex);
+                throw;
+            }
 
+
+
+
+        }
     }
 }

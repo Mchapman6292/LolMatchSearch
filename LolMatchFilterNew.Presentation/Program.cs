@@ -69,8 +69,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await APIController.ControllerAddTournamentToDatabase();
-
+                await matchComparisonController.TestGetPlaylistDateRanges();
 
 
 

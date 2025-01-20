@@ -2,11 +2,15 @@
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace Application.MatchPairingService.TournamentService.YoutubeTitleTournamentIdentifiers
+namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.YoutubePlaylistDateRangeServices
 {
-    public class YoutubeTitleTournamentIdentifier
+    public class YoutubePlaylistDateRangeService
     {
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
@@ -14,8 +18,7 @@ namespace Application.MatchPairingService.TournamentService.YoutubeTitleTourname
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
 
 
-
-        public YoutubeTitleTournamentIdentifier(IAppLogger appLogger, IObjectLogger objectLogger, IImport_TournamentRepository importTournamentRepository, IImport_YoutubeDataRepository import_YoutubeDataRepository)
+        public YoutubePlaylistDateRangeService(IAppLogger appLogger, IObjectLogger objectLogger, IImport_TournamentRepository importTournamentRepository, IImport_YoutubeDataRepository import_YoutubeDataRepository)
         {
             _appLogger = appLogger;
             _objectLogger = objectLogger;

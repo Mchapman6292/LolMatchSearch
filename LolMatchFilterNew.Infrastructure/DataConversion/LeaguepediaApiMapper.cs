@@ -514,7 +514,7 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
                             OverviewPage = _apiHelper.GetNullableStringValue(tournament, "OverviewPage"),
                             DateStart = _apiHelper.GetNullableDateTimeFromJobject(tournament, "DateStart"),
                             Date = _apiHelper.GetNullableDateTimeFromJobject(tournament, "Date"),
-                            DateStartFuzzy = _apiHelper.GetNullableStringValue(tournament, "DateStartFuzzy"),
+                            DateStartFuzzy = _apiHelper.GetNullableInt32Value(tournament, "DateStartFuzzy"),
                             League = _apiHelper.GetNullableStringValue(tournament, "League"),
                             Region = _apiHelper.GetNullableStringValue(tournament, "Region"),
                             Country = _apiHelper.GetNullableStringValue(tournament, "Country"),

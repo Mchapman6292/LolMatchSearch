@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using LolMatchFilterNew.Tests.TestServiceFactories;
 using LolMatchFilterNew.Tests.TestLoggers;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTeamExtractors;
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.YoutubeTests.YoutubeTitleExtractorTests
 {
     public class YoutubeTitleExtractorTest : IClassFixture<TestServiceFactory>
     {
         private readonly TestLogger _testLogger;
-        private readonly YoutubeTeamExtractor _youtubeTeamExtractor;
         public static IEnumerable<object[]> YoutubeTitleTestData => new List<object[]>
         {
             new object[]

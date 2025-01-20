@@ -1,16 +1,9 @@
 ﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IGenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ITeamNameHistoryFormatters;
-using LolMatchFilterNew.Domain.Formatters.TeamNameHistoryFormatters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 using LolMatchFilterNew.Tests.TestLoggers;
 using LolMatchFilterNew.Tests.TestServiceFactories;
-using System.Collections;
+
 
 
 namespace LolMatchFilterNew.Tests.ApplicationTests.TeamRenameTests

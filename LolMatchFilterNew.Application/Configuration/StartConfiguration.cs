@@ -172,7 +172,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IYoutubeTeamExtractor, YoutubeTeamExtractor>();
                   services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
-                  services.AddTransient<ImportTournamentDTOFactory, ImportTournamentDTOFactory>();
+                  services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
 
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();

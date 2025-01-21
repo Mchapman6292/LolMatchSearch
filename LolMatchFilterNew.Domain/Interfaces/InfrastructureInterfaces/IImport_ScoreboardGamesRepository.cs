@@ -1,4 +1,5 @@
-﻿using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
+﻿using Domain.DTOs.Western_MatchDTOs;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_S
     public interface IImport_ScoreboardGamesRepository
     {
         Task<int> BulkAddScoreboardGames(IEnumerable<Import_ScoreboardGamesEntity> matchDetails);
-        Task<int> DeleteAllScoreboardGames();
+
+        Task<List<WesternMatchDTO>> GetEuNaMatchesAsync();
     }
 }

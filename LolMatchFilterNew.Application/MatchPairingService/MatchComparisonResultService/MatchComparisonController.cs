@@ -5,14 +5,12 @@ using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
-using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameValidators;
 using Application.MatchPairingService.YoutubeDataService.YoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameValidators;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Application.MatchPairingService.ScoreboardGameService.MatchDTOServices.TeamNameServices.Import_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
@@ -22,6 +20,8 @@ using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
+using Domain.DTOs.PlayListDateRangeDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IPlayListDateRangeDTOFactories;
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers
 {
@@ -30,19 +30,18 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
         private readonly IMatchComparisonResultBuilder _matchBuilder;
-        private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
         private readonly ITeamNameDTOBuilder _teamNameDTOBuilder;
         private readonly IStoredSqlFunctionCaller _storedSqlFunctionCaller;
         private readonly IImport_YoutubeDataRepository _import_YoutubeDataRepository;
         private readonly IImport_TeamnameRepository _import_TeamNameRepository;
         private readonly IYoutubeDataWithTeamsDTOBuilder _processed_YoutubeDataDTOBuilder;
+        private readonly IPlayListDateRangeDTOFactory _playListDateRangeDTOFactory;
 
 
         private readonly IYoutubeTeamNameService _youtubeTeamNameService;
         private readonly IImport_TeamNameService _importTeamNameService;
 
 
-        private readonly IYoutubeTeamNameValidator _youtubeTeamNameValidator;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
         private readonly IYoutubeTitleTeamMatchCountFactory _youtubeTitleTeamMatchCountFactory;
 
@@ -58,13 +57,13 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             IImport_YoutubeDataRepository import_YoutubeDataRepository,
             IStoredSqlFunctionCaller storedSqlFunctionCaller,
             IYoutubeDataWithTeamsDTOBuilder proccessed_YoutubeDataDTOBuilder,
+            IPlayListDateRangeDTOFactory playListDateRangeDTOFactory,
+
             IImport_TeamNameService import_TeamnNameService,
-            IYoutubeTeamExtractor youtubeTeamExtractor,
             IYoutubeTeamNameService youtubeTeamNameService,
             IImport_TeamnameRepository import_TeamnameRepository,
 
             IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder,
-            IYoutubeTeamNameValidator youtubeTeamNameValidator,
             IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory
             
 
@@ -79,9 +78,9 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             _import_TeamNameRepository = import_TeamnameRepository;
             _storedSqlFunctionCaller = storedSqlFunctionCaller;
             _processed_YoutubeDataDTOBuilder = proccessed_YoutubeDataDTOBuilder;
-            _youtubeTeamExtractor = youtubeTeamExtractor;
+            _playListDateRangeDTOFactory = playListDateRangeDTOFactory;
+
             _youtubeTeamNameService = youtubeTeamNameService;
-            _youtubeTeamNameValidator = youtubeTeamNameValidator;
             _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
             _importTeamNameService = import_TeamnNameService;
@@ -91,12 +90,6 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
         // 
-        public async Task<List<YoutubeDataWithTeamsDTO>> TESTGetAllProcessedForEuAndNaTeams()
-        {
-            List<Import_YoutubeDataEntity> allvideos = await _storedSqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
-
-            return _youtubeTeamNameService.BuildYoutubeDataWithTeamsDTOList(allvideos);
-        }
 
 
         public async Task TESTFindTeamNameMatchesInYoutubeTitleAsync()
@@ -137,37 +130,17 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         }
 
 
-
-
-
-
-
-
-
-        public void CONTROLLERValidateWesternMatches(HashSet<string> distinctTeamNames, List<TeamNameDTO> import_TeamNameAllNames)
+        public async Task TestGetPlaylistDateRanges()
         {
+            List<Import_YoutubeDataEntity> youtubeEntities = await _import_YoutubeDataRepository.GetEuNaVideosByPlaylistAsync();
 
-            int matchingTeams = 0;
-            List<string> matchingTeamList = new List<string>();
 
-            int noMatch = 0;
-            List<string> noMatchesList = new List<string>();
+            List<PlayListDateRangeResult> playListRangeDtos = _playListDateRangeDTOFactory.CreateListOfPlaylistDateRangeDTOs(youtubeEntities);
 
-            foreach (var teamName in distinctTeamNames)
-            {
-                if (_youtubeTeamNameValidator.ValidateTeamName(teamName, import_TeamNameAllNames))
-                {
-                    matchingTeams++;
-                    matchingTeamList.Add(teamName);
-                }
-                else
-                {
-                    noMatch++;
-                    noMatchesList.Add(teamName);
-                }
-            }
-            _appLogger.Debug($"Matching teams: {matchingTeams}, No matches {noMatch}.");
-            _objectLogger.LogListForCONTROLLERValidateWesternMatches(noMatchesList);
+            _objectLogger.LogPlaylistDateRanges(playListRangeDtos);
+
+
+
 
         }
 
@@ -175,10 +148,10 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
 
-        public void TESTIncrementMatchesCount(List<YoutubeTitleTeamNameMatchResult> youtubeTitleDTOs)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
+
 
 
 

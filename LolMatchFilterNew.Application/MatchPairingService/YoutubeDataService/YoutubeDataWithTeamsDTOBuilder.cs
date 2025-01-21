@@ -1,7 +1,6 @@
 ﻿using Domain.DTOs.YoutubeDataWithTeamsDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
-using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamExtractors;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeDataWithTeamsDTOBuilders;
@@ -9,12 +8,10 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeDataWithTeam
 public class YoutubeDataWithTeamsDTOBuilder : IYoutubeDataWithTeamsDTOBuilder
 {
     private readonly IAppLogger _appLogger;
-    private readonly IYoutubeTeamExtractor _youtubeTeamExtractor;
 
-    public YoutubeDataWithTeamsDTOBuilder(IAppLogger appLogger, IYoutubeTeamExtractor youtubeTeamExtractor)
+    public YoutubeDataWithTeamsDTOBuilder(IAppLogger appLogger)
     {
         _appLogger = appLogger;
-        _youtubeTeamExtractor = youtubeTeamExtractor;
     }
 
 

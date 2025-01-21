@@ -7,6 +7,7 @@ using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using System.Collections.Generic;
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories
 {
@@ -144,6 +145,39 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
 
 
 
+        // Used for inital testing when creating PlayListDateRangeFactory 20/01/2025/
+        public async Task<List<Import_YoutubeDataEntity>> GetEuNaVideosByPlaylistAsync()
+        {
+            try
+            {
+                List<Import_YoutubeDataEntity> entities = await _matchFilterDbContext.Import_YoutubeData
+                    .Where(i => (EF.Functions.ILike(i.PlaylistTitle, "%na lcs%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%eu lcs%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "LEC%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "LCS%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LEC Spring%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LEC Summer%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LCS Spring%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LCS Summer%")) &&
+                                !(EF.Functions.ILike(i.PlaylistTitle, "%MSI%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%Worlds%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%World Championship%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%International%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%All-Star%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%Rift Rivals%")))
+                    .OrderBy(i => i.PlaylistTitle)
+                    .ThenByDescending(i => i.PublishedAt_utc)
+                    .ToListAsync();
 
+                _appLogger.Info("Method {MethodName} returned {Count} entities", nameof(GetEuNaVideosByPlaylistAsync),entities.Count);
+
+                return entities;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving EU/NA videos: {ex.Message}", ex);
+                throw;
+            }
+        }
     }
 }

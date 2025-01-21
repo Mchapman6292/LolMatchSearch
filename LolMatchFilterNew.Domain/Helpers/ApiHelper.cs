@@ -110,7 +110,7 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
                     string title = data switch
                     {
                         Dictionary<string, string> => "LoL DoesMatch Filter Playlist Names and IDs",
-                        IList<string> => "LoL DoesMatch Filter Playlist Videos",
+                        IList<string> => "LoL DoesMatch Filter Playlist VideosWithinRange",
                         _ => "LoL DoesMatch Filter Data"
                     };
                     document.InsertParagraph(title).Bold().FontSize(16);

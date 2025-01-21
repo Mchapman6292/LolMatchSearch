@@ -13,6 +13,8 @@ using System.Runtime.CompilerServices;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
+using Domain.DTOs.Western_MatchDTOs;
+using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
 
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesRepositories
@@ -21,12 +23,14 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
     {
         private readonly IAppLogger _appLogger;
         private readonly IMatchFilterDbContext _matchFilterDbContext;
+        private readonly IWesternMatchDTOFactory _westernMatchDTOFactory;
 
-        public Import_ScoreboardGamesRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger)
+        public Import_ScoreboardGamesRepository(IMatchFilterDbContext dbContext, IAppLogger appLogger, IWesternMatchDTOFactory westernMatchDtoFactory)
             : base(dbContext as MatchFilterDbContext, appLogger)
         {
             _appLogger = appLogger;
             _matchFilterDbContext = dbContext;
+            _westernMatchDTOFactory = westernMatchDtoFactory;
         }
 
         public async Task<int> BulkAddScoreboardGames(IEnumerable<Import_ScoreboardGamesEntity> matchDetails)
@@ -94,19 +98,82 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
             _appLogger.Info($"Number of tracked Import_ScoreboardGamesEntity: {trackedEntities.Count}");
         }
 
-        // Remove for generic?
 
-        public async Task<int> DeleteAllScoreboardGames()
+
+
+        public async Task<List<WesternMatchDTO>> GetEuNaMatchesAsync()
         {
+            try
+            {
+                var query = from sg in _matchFilterDbContext.Import_ScoreboardGames
+                            join team1Data in (
+                                from tm in _matchFilterDbContext.Import_Teamname
+                                join t in _matchFilterDbContext.Import_TeamsTable
+                                on tm.Longname equals t.Name
+                                select new
+                                {
+                                    TeamNameId = tm.TeamnameId,
+                                    Longname = tm.Longname,
+                                    Medium = tm.Medium,
+                                    Short = tm.Short,
+                                    Region = t.Region,
+                                    Inputs = tm.Inputs
+                                }
+                            ) on sg.Team1 equals team1Data.Longname
+                            join team2Data in (
+                                from tm in _matchFilterDbContext.Import_Teamname
+                                join t in _matchFilterDbContext.Import_TeamsTable
+                                on tm.Longname equals t.Name
+                                select new
+                                {
+                                    TeamNameId = tm.TeamnameId,
+                                    Longname = tm.Longname,
+                                    Medium = tm.Medium,
+                                    Short = tm.Short,
+                                    Region = t.Region,
+                                    Inputs = tm.Inputs
+                                }
+                            ) on sg.Team2 equals team2Data.Longname
+                            where team1Data.Region == "Americas" ||
+                                  team1Data.Region == "EMEA" ||
+                                  team1Data.Region == "North America" ||
+                                  team2Data.Region == "Americas" ||
+                                  team2Data.Region == "EMEA" ||
+                                  team2Data.Region == "North America"
+                            orderby sg.DateTime_utc descending
+                            select _westernMatchDTOFactory.CreateWesternMatchDTO(
+                                sg.GameId,
+                                sg.MatchId,
+                                sg.DateTime_utc,
+                                sg.Tournament,
+                                sg.Team1,
+                                team1Data.TeamNameId,
+                                sg.Team1Players,
+                                sg.Team1Picks,
+                                sg.Team2,
+                                team2Data.TeamNameId,
+                                sg.Team2Players,
+                                sg.Team2Picks,
+                                sg.WinTeam,
+                                sg.LossTeam,
+                                team1Data.Region,
+                                team1Data.Longname,
+                                team1Data.Medium,
+                                team1Data.Short,
+                                team1Data.Inputs,
+                                team2Data.Region,
+                                team2Data.Longname,
+                                team2Data.Medium,
+                                team2Data.Short,
+                                team2Data.Inputs);
 
-            var allRecords = await _matchFilterDbContext.Import_ScoreboardGames.ToListAsync();
-            int count = allRecords.Count;
-
-            _matchFilterDbContext.Import_ScoreboardGames.RemoveRange(allRecords);
-            await _matchFilterDbContext.SaveChangesAsync();
-
-            _appLogger.Info($"Successfully deleted {count} records from LeaguepediaMatchDetails.");
-            return count;
+                return await query.Distinct().ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Error retrieving EU/NA matches: {ex.Message}", ex);
+                throw;
+            }
         }
     }
 }

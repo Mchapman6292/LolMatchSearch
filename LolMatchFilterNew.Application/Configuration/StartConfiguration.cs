@@ -85,6 +85,10 @@ using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_Tou
 using Infrastructure.Repositories.ImportRepositories.Import_TournamentRepositories;
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IPlayListDateRangeDTOFactories;
 using Application.DTOFactories.PlayListDateRangeDTOFactories;
+using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.DateIdentifiers.IYoutubePlaylistDateRangeServices;
+using Application.MatchPairingService.YoutubeDataService.DateIdentifiers.YoutubePlaylistDateRangeServices;
+using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
+using Application.DTOFactories.WesternMatchDTOFactories;
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -140,6 +144,9 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IYoutubeTeamNameService, YoutubeTeamNameService>();
                   services.AddSingleton<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
                   services.AddSingleton<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
+                  services.AddSingleton<IYoutubePlaylistDateRangeService, YoutubePlaylistDateRangeService>();
+                  services.AddSingleton<IPlayListDateRangeDTOFactory, PlayListDateRangeDTOFactory>();
+                  services.AddSingleton<IWesternMatchDTOFactory, WesternMatchDTOFactory>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();

@@ -10,6 +10,6 @@ namespace Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IPlayListDateRang
 {
     public interface IPlayListDateRangeDTOFactory
     {
-        List<PlayListDateRangeDTO> CreateListOfPlaylistDateRangeDTOs(List<Import_YoutubeDataEntity> youtubeEntities);
+        List<PlayListDateRangeResult> CreateListOfPlaylistDateRangeDTOs(List<Import_YoutubeDataEntity> youtubeEntities);
     }
 }

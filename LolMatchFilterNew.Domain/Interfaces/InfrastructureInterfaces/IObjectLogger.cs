@@ -24,7 +24,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogTopYoutubeTeamNameOccurenceMatches(List<YoutubeTitleTeamNameMatchResult> occurrenceDto);
 
-        void LogPlaylistDateRanges(List<PlayListDateRangeDTO> playlistDTOs);
+        void LogPlaylistDateRanges(List<PlayListDateRangeResult> playlistDTOs);
 
     }
 }

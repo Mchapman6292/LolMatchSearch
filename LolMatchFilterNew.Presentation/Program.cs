@@ -28,6 +28,7 @@ using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamName
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
+using Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesRepositories;
 
 
 
@@ -68,8 +69,9 @@ namespace LolMatchFilterNew.Presentation
 
 
 
+                                        
 
-                await matchComparisonController.TestGetPlaylistDateRanges();
+
 
 
 

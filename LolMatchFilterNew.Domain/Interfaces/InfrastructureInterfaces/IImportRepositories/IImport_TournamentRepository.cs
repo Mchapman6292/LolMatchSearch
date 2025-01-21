@@ -10,5 +10,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport
     public interface IImport_TournamentRepository
     {
         Task<List<ImportTournamentDTO>> GetTournamentDTOsAsync();
+
+        Task<List<ImportTournamentDTO>> GetEuNaTournamentDTOsAsync();
     }
 }

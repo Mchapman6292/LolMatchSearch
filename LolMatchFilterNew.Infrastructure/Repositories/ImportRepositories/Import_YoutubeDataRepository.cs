@@ -7,6 +7,7 @@ using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using System.Collections.Generic;
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories
 {
@@ -149,34 +150,34 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
         {
             try
             {
-                return await _matchFilterDbContext.Import_YoutubeData
-                    .Where(i => (i.PlaylistTitle.Contains("na lcs", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.Contains("eu lcs", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.StartsWith("LEC", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.StartsWith("LCS", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.Contains("LEC Spring", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.Contains("LEC Summer", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.Contains("LCS Spring", StringComparison.OrdinalIgnoreCase) ||
-                               i.PlaylistTitle.Contains("LCS Summer", StringComparison.OrdinalIgnoreCase)) &&
-                               !(i.PlaylistTitle.Contains("MSI", StringComparison.OrdinalIgnoreCase) ||
-                                 i.PlaylistTitle.Contains("Worlds", StringComparison.OrdinalIgnoreCase) ||
-                                 i.PlaylistTitle.Contains("World Championship", StringComparison.OrdinalIgnoreCase) ||
-                                 i.PlaylistTitle.Contains("International", StringComparison.OrdinalIgnoreCase) ||
-                                 i.PlaylistTitle.Contains("All-Star", StringComparison.OrdinalIgnoreCase) ||
-                                 i.PlaylistTitle.Contains("Rift Rivals", StringComparison.OrdinalIgnoreCase)))
+                List<Import_YoutubeDataEntity> entities = await _matchFilterDbContext.Import_YoutubeData
+                    .Where(i => (EF.Functions.ILike(i.PlaylistTitle, "%na lcs%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%eu lcs%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "LEC%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "LCS%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LEC Spring%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LEC Summer%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LCS Spring%") ||
+                                EF.Functions.ILike(i.PlaylistTitle, "%LCS Summer%")) &&
+                                !(EF.Functions.ILike(i.PlaylistTitle, "%MSI%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%Worlds%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%World Championship%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%International%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%All-Star%") ||
+                                  EF.Functions.ILike(i.PlaylistTitle, "%Rift Rivals%")))
                     .OrderBy(i => i.PlaylistTitle)
                     .ThenByDescending(i => i.PublishedAt_utc)
                     .ToListAsync();
+
+                _appLogger.Info("Method {MethodName} returned {Count} entities", nameof(GetEuNaVideosByPlaylistAsync),entities.Count);
+
+                return entities;
             }
             catch (Exception ex)
             {
                 _appLogger.Error($"Error retrieving EU/NA videos: {ex.Message}", ex);
                 throw;
             }
-
-
-
-
         }
     }
 }

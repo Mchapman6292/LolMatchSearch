@@ -134,7 +134,8 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         {
             List<Import_YoutubeDataEntity> youtubeEntities = await _import_YoutubeDataRepository.GetEuNaVideosByPlaylistAsync();
 
-            List<PlayListDateRangeDTO> playListRangeDtos = _playListDateRangeDTOFactory.CreateListOfPlaylistDateRangeDTOs(youtubeEntities);
+
+            List<PlayListDateRangeResult> playListRangeDtos = _playListDateRangeDTOFactory.CreateListOfPlaylistDateRangeDTOs(youtubeEntities);
 
             _objectLogger.LogPlaylistDateRanges(playListRangeDtos);
 

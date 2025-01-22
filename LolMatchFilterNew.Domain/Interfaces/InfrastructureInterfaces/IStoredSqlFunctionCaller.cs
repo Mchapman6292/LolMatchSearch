@@ -6,7 +6,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers
 {
     public interface IStoredSqlFunctionCaller
     {
-        Task<List<WesternMatchDTO>> GetWesternMatches();
+        Task<List<WesternMatchDTO>> GetWesternMatchesAsync();
 
         Task<List<Import_YoutubeDataEntity>> GetYoutubeDataEntitiesForWesternTeamsAsync();
 

@@ -57,9 +57,9 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
                 int processedCount = 0;
                 foreach (var videoDetail in newVideos)
                 {
-                    if (videoDetail.PublishedAt_utc.HasValue && videoDetail.PublishedAt_utc.Value.Kind != DateTimeKind.Utc)
+                    if (videoDetail.PublishedAt_utc.Kind != DateTimeKind.Utc)
                     {
-                        videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc.Value, DateTimeKind.Utc);
+                        videoDetail.PublishedAt_utc = DateTime.SpecifyKind(videoDetail.PublishedAt_utc, DateTimeKind.Utc);
                     }
                     _matchFilterDbContext.Import_YoutubeData.Add(videoDetail);
                     processedCount++;

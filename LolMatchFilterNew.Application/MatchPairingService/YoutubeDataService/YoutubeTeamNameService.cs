@@ -26,7 +26,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
 
 
 
-
     public class YoutubeTeamNameService : IYoutubeTeamNameService
     {
         private readonly IAppLogger _appLogger;

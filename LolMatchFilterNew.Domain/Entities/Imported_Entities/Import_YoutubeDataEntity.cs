@@ -19,18 +19,18 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeData
         [MaxLength(255)]
         public string VideoTitle { get; set; }
 
-        public string? PlaylistId { get; set; }
+        public string PlaylistId { get; set; }
 
-        public string? PlaylistTitle { get; set; }
+        public string PlaylistTitle { get; set; }
 
 
-        public DateTime? PublishedAt_utc { get; set; }
+        public DateTime PublishedAt_utc { get; set; }
 
         [MaxLength(2083)]  // Max length of a URL
-        public string? YoutubeResultHyperlink { get; set; }
+        public string YoutubeResultHyperlink { get; set; }
 
         [MaxLength(2083)]
-        public string? ThumbnailUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
  
 
 

@@ -166,7 +166,6 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.OverviewPage).HasColumnName("overview_page");
                 entity.Property(e => e.DateStart).HasColumnName("date_start");
                 entity.Property(e => e.Date).HasColumnName("date");
-                entity.Property(e => e.DateStartFuzzy).HasColumnName("date_start_fuzzy");
                 entity.Property(e => e.League).HasColumnName("league");
                 entity.Property(e => e.Region).HasColumnName("region");
                 entity.Property(e => e.Country).HasColumnName("country");

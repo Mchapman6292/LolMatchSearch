@@ -11,8 +11,7 @@ namespace Domain.Entities.Imported_Entities.Import_TournamentEntities
         public string TournamentName { get; set; }
         public string? OverviewPage { get; set; }
         public DateTime? DateStart { get; set; }
-        public DateTime? Date { get; set; }
-        public int? DateStartFuzzy { get; set; } // Contains year only. 
+        public DateTime? Date { get; set; } 
         public string? League { get; set; }
         public string? Region { get; set; }
         public string? Country { get; set; }

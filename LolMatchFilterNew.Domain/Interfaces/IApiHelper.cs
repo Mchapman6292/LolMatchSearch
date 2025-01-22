@@ -29,6 +29,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.IApiHelper
         DateTime GetDateTimeFromJobject(JObject obj, string key);
         DateTime? GetNullableDateTimeFromJobject(JObject obj, string key);
 
+        DateOnly? GetNullableDateOnlyFromJobject(JObject obj, string key);
+
         public DateTime ConvertDateTimeOffSetToUTC(object inputDateTime);
         DateTime? ParseNullableDateTime(JObject obj, string key);
 

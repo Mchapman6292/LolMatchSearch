@@ -16,7 +16,6 @@ namespace Domain.DTOs.ImportTournamentDTOs
         public DateTime? DateStartUtc { get; set; }
 
         public DateTime? DateUtc { get; set; }
-        public int? Date_StartFuzzyUtc { get; set; }
         public string? League { get; set; }
 
         public string? Region { get; set; }

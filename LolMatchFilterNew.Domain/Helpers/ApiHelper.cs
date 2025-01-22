@@ -444,6 +444,78 @@ namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 
 
 
+
+
+
+
+
+
+
+        public DateOnly? GetNullableDateOnlyFromJobject(JObject obj, string key)
+        {
+            try
+            {
+                JToken targetObj = obj;
+                if (obj.ContainsKey("title") && obj["title"] is JObject titleObj)
+                {
+                    targetObj = titleObj;
+                }
+
+                var token = targetObj[key];
+                if (token == null)
+                {
+                    _appLogger.Warning(
+                        "Key '{Key}' does not exist in the JSON object",
+                        key
+                    );
+                    return null;
+                }
+
+                var rawValue = token.ToString();
+                if (string.IsNullOrEmpty(rawValue))
+                {
+                    _appLogger.Warning(
+                        "Value for key '{Key}' is null or empty",
+                        key
+                    );
+                    return null;
+                }
+                if (DateOnly.TryParse(rawValue, out DateOnly directResult))
+                {
+                    return directResult;
+                }
+
+                if (DateTime.TryParse(rawValue, out DateTime dateTimeResult))
+                {
+                    return DateOnly.FromDateTime(dateTimeResult);
+                }
+
+                _appLogger.Warning(
+                    "Failed to parse DateOnly for key '{Key}' with value: '{Value}'",
+                    key,
+                    rawValue
+                );
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _appLogger.Error($"Unexpected error while parsing DateOnly for key {key}", ex);
+                return null;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         public DateTime GetDateTimeFromJobject(JObject obj, string key)
         {
             try

@@ -46,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Interfaces\ApplicationInterfaces\YoutubeDataService\DateIdentifiers\" />
     <Folder Include="LeaguepediaService\" />
   </ItemGroup>
 

@@ -101,7 +101,7 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
 
 
 
-        public async Task<List<WesternMatchDTO>> GetEuNaMatchesAsync()
+        public async Task<List<WesternMatchDTO>> GetEuNaMatchesWithinDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             try
             {
@@ -139,7 +139,9 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
                                   team1Data.Region == "North America" ||
                                   team2Data.Region == "Americas" ||
                                   team2Data.Region == "EMEA" ||
-                                  team2Data.Region == "North America"
+                                  team2Data.Region == "North America" &&
+                                  sg.DateTime_utc >= startDate &&
+                                  sg.DateTime_utc <= endDate
                             orderby sg.DateTime_utc descending
                             select _westernMatchDTOFactory.CreateWesternMatchDTO(
                                 sg.GameId,
@@ -167,7 +169,15 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
                                 team2Data.Short,
                                 team2Data.Inputs);
 
-                return await query.Distinct().ToListAsync();
+                var results = await query.Distinct().ToListAsync();
+
+                _appLogger.Info(
+                    "{MethodName} complete with count: {Count} WesternMatchDTOs",
+                    nameof(GetEuNaMatchesWithinDateRangeAsync),
+                    results.Count
+
+                );
+                return results;
             }
             catch (Exception ex)
             {
@@ -175,5 +185,9 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesR
                 throw;
             }
         }
+
+
+
+
     }
 }

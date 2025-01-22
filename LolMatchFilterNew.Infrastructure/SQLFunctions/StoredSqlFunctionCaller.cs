@@ -23,10 +23,10 @@ namespace Infrastructure.SQLFunctions.StoredSqlFunctionCallers
 
 
 
-        public async Task<List<WesternMatchDTO>> GetWesternMatches()
+        public async Task<List<WesternMatchDTO>> GetWesternMatchesAsync()
         {
             var matches = await _matchFilterDbContext.WesternMatchesSet
-            .FromSqlRaw("SELECT * FROM get_western_matches()")
+            .FromSqlRaw("select * from region_functions.get_western_matches()")
             .ToListAsync();
 
             foreach (var match in matches)

@@ -9,7 +9,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IImportTournament
 {
     public interface IImportTournamentDTOFactory
     {
-        ImportTournamentDTO CreateTournamentDTO(string tournamentName, DateTime? dateStartUtc, DateTime? dateUtc, int? dateStartFuzzyUtc, string? league, string? region, string? country, string? split, string? tournamentLevel, bool isQualifier, string? alternativeNames);
+        ImportTournamentDTO CreateTournamentDTO(string tournamentName, DateTime? dateStartUtc, DateTime? dateUtc, string? league, string? region, string? country, string? split, string? tournamentLevel, bool isQualifier, string? alternativeNames);
 
     }
 }

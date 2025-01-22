@@ -83,12 +83,10 @@ using Application.DTOBuilders.ImportTournamentDTOFactories;
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IImportTournamentDTOFactories;
 using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_TournamentRepositories;
 using Infrastructure.Repositories.ImportRepositories.Import_TournamentRepositories;
-using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IPlayListDateRangeDTOFactories;
-using Application.DTOFactories.PlayListDateRangeDTOFactories;
-using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.DateIdentifiers.IYoutubePlaylistDateRangeServices;
-using Application.MatchPairingService.YoutubeDataService.DateIdentifiers.YoutubePlaylistDateRangeServices;
+using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.PlayListDateRangeServices;
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
 using Application.DTOFactories.WesternMatchDTOFactories;
+using Application.MatchPairingService.YoutubeDataService.DateIdentifiers.PlayListDateRangeServices;
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -144,8 +142,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IYoutubeTeamNameService, YoutubeTeamNameService>();
                   services.AddSingleton<IYoutubeTitleTeamNameFinder, YoutubeTitleTeamNameFinder>();
                   services.AddSingleton<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
-                  services.AddSingleton<IYoutubePlaylistDateRangeService, YoutubePlaylistDateRangeService>();
-                  services.AddSingleton<IPlayListDateRangeDTOFactory, PlayListDateRangeDTOFactory>();
+                  services.AddSingleton<IPlayListDateRangeService, PlayListDateRangeService>();
                   services.AddSingleton<IWesternMatchDTOFactory, WesternMatchDTOFactory>();
 
 
@@ -175,7 +172,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
                   services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
-                  services.AddTransient<IPlayListDateRangeDTOFactory, PlayListDateRangeDTOFactory>();
+                  services.AddTransient<IPlayListDateRangeService, PlayListDateRangeService>();
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
 

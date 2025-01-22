@@ -6,7 +6,6 @@ using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using Xceed.Document.NET;
 
 namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.PlayListDateRangeServices
 {
@@ -154,14 +153,6 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
 
 
 
-
-        private async Task UpdateSinglePlaylistRange(PlayListDateRangeResult dateRange)
-        {
-            List<WesternMatchDTO> matches = await _import_ScoreboardGamesRepository.GetEuNaMatchesWithinDateRangeAsync(dateRange.StartDate, dateRange.EndDate);
-            _appLogger.Info($"Searching for games within date range {dateRange.StartDate} - {dateRange.EndDate}.");
-
-            dateRange.AddGamesWithinDateRange(matches);
-        }
 
 
 

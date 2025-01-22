@@ -87,14 +87,9 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         }
 
 
-
-
-
         public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> YoutubeDataWithTeamsDTO)
         {
             HashSet<string> distinctTeamNames = new HashSet<string>();
-
-
 
             foreach (var dto in YoutubeDataWithTeamsDTO)
             {

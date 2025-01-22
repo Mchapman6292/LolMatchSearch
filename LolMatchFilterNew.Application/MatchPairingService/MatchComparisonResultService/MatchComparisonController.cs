@@ -97,7 +97,8 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             List<Import_TeamnameEntity> teamnNameEntities = await _storedSqlFunctionCaller.GetAllWesternTeamsAsync();
             List<Import_YoutubeDataEntity> importYoutubeEntities = await _storedSqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
-            var startDate = new DateTime(2015, 1, 1);
+            // Earlier youtube video = 20/06/2014, - 2 week leeway.
+            var startDate = new DateTime(2014, 6, 6);
 
             var filteredYoutubeEntities = importYoutubeEntities
                 .Where(x => x.PublishedAt_utc > startDate)
@@ -123,7 +124,6 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             {
                 _youtubeTitleTeamNameFinder.ProcessYoutubeTitle(youtubeOccurenceDto);
             }
-
 
             _objectLogger.LogTopYoutubeTeamNameOccurenceMatches(teamNameOccurences);
 

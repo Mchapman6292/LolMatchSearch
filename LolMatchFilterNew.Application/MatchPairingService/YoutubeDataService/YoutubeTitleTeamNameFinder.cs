@@ -93,8 +93,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         }
 
 
-
-
         /*
          Checks if a given word exists as a standalone term in a text string by verifying it's surrounded by either spaces, punctuation, or string boundaries. 
          Prevents partial matches like finding "SK" within "SKT".

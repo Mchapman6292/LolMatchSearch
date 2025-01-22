@@ -69,10 +69,6 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
 
 
 
-
-
-
-
         private Dictionary<string, List<Import_YoutubeDataEntity>> GroupVideosByPlaylist(List<Import_YoutubeDataEntity> youtubeEntities)
         {
             if (youtubeEntities == null)
@@ -127,7 +123,7 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
         {
             List<WesternMatchDTO> matches = await _storedSqlFunctionCaller.GetWesternMatchesAsync();
 
-            int DateRangeLeeway = 14;
+            int DateRangeLeeway = 2;
 
             DateTime rangeStartDate = dateRange.StartDate.AddDays(-DateRangeLeeway);
             DateTime rangeEndDate = dateRange.EndDate.AddDays(DateRangeLeeway);

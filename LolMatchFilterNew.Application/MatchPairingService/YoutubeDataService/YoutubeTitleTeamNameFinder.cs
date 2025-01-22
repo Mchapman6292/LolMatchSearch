@@ -67,7 +67,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
                 if (matchesForTeam.Any())
                 {
-                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, matchesForTeam);
+                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.LongName, matchesForTeam);
                 }
             }
         }

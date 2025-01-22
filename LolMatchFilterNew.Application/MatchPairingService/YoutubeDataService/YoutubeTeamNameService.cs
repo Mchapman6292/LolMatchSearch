@@ -1,17 +1,15 @@
-﻿using Domain.DTOs.TeamnameDTOs;
+﻿using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
-using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
-using Google.Apis.YouTube.v3.Data;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
@@ -86,7 +84,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             return _youtubeTitleTeamMatchCounts;
         }
 
-
+        // Needed?
         public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> YoutubeDataWithTeamsDTO)
         {
             HashSet<string> distinctTeamNames = new HashSet<string>();

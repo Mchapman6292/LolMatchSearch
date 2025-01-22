@@ -12,6 +12,5 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_S
     {
         Task<int> BulkAddScoreboardGames(IEnumerable<Import_ScoreboardGamesEntity> matchDetails);
 
-        Task<List<WesternMatchDTO>> GetEuNaMatchesWithinDateRangeAsync(DateTime startDate, DateTime endDate);
     }
 }

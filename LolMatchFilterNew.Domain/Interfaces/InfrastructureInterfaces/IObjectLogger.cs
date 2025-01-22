@@ -26,5 +26,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogPlaylistDateRanges(List<PlayListDateRangeResult> playlistDTOs);
 
+        void LogGameIdsInUpdatedPlaylistDateRangeResult(List<PlayListDateRangeResult> playlistDTOs);
+
     }
 }

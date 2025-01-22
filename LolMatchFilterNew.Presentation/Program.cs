@@ -58,7 +58,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await matchComparisonController.TESTGetPlaylistDateRanges();
+                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
 
 
 

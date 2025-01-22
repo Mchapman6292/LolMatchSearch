@@ -116,7 +116,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
 
             _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
-            _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(youtubeEntitiesSample);
+            _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(importYoutubeEntities);
 
             List<YoutubeTitleTeamNameMatchResult> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
 
@@ -134,15 +134,28 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         {
             List<Import_YoutubeDataEntity> youtubeEntities = await _import_YoutubeDataRepository.GetEuNaVideosByPlaylistAsync();
 
-            List<Import_YoutubeDataEntity> tenFirst = youtubeEntities.Take(10).ToList();  
+            List<Import_YoutubeDataEntity> tenFirst = youtubeEntities.OrderByDescending(e => e.PublishedAt_utc).Take(10).ToList();
 
-            _playListDateRangeService.PopulateGamesWithinPlaylistDates(tenFirst);
+            HashSet<string> playlistTitles = new HashSet<string>();   
+
+            foreach(var entity  in tenFirst)
+            {
+                playlistTitles.Add(entity.PlaylistTitle);
+            }
+
+            foreach(var title in playlistTitles)
+            {
+                _appLogger.Info($"PlaylistTitle: {title}");
+            }
+
+
+            _playListDateRangeService.PopulateGamesWithinPlaylistDates(youtubeEntities);
 
             await _playListDateRangeService.UpdateGamesWithinYoutubePlaylistDatesWithMatchesAsync();
 
             List<PlayListDateRangeResult> playlistResults = _playListDateRangeService.ReturngamesWithinYoutubePlaylistDates();
 
-            _objectLogger.LogPlaylistDateRanges(playlistResults);
+            _objectLogger.LogGameIdsInUpdatedPlaylistDateRangeResult(playlistResults);
         }
 
 

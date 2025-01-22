@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
+using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
-using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using Microsoft.EntityFrameworkCore;
-using LolMatchFilterNew.Infrastructure.DbContextService.LolMatchFilterDbContextFactory;
-using System.Runtime.CompilerServices;
-using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces;
 using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardGamesEntities;
-using Domain.DTOs.Western_MatchDTOs;
-using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
+using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_ScoreboardGamesRepositories

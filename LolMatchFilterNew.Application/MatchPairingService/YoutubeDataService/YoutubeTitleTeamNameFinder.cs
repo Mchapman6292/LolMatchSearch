@@ -6,6 +6,19 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using System.Text.RegularExpressions;
 
 
+// Edge cases Title: Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY
+/* INF] Title: Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY
+[07:37:16 INF]     Team ID: Splyce | Found matches: [SPY, Splyce, Splyce, splyce, spy]
+[07:37:16 INF]     Team ID: Szef+6 | Found matches: [S6, s6]
+LONGNAME =Team Vitality
+[07:37:16 INF] ----------------------------------------*/
+
+
+// Exclude date format to reduce 
+// Define Tournaments/Teams to narrow list of potential matches?
+// Get a Teams all known opponents from SG and use that as the search parameters?
+
+
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameFinders
 {
@@ -63,7 +76,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
                 if (matchesForTeam.Any())
                 {
-                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, matchesForTeam);
+                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.LongName, matchesForTeam);
                 }
             }
         }
@@ -94,7 +107,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
          Prevents partial matches like finding "SK" within "SKT".
         */
 
-        public bool IsWholeWord(string text, string word)
+public bool IsWholeWord(string text, string word)
         {
 
             if (string.IsNullOrEmpty(word)) return false;

@@ -1,6 +1,8 @@
 ﻿
 
 
+using Domain.DTOs.TeamnameDTOs;
+
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults
 {
     public class YoutubeTitleTeamNameMatchResult
@@ -17,6 +19,10 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         public List<string>? MatchingInputs { get; set; }
 
         public List<string>? Exclusions { get; set; }   
+
+        public string? MatchingTeam1LongName { get; set; }
+
+        public string? MatchingTeam2LongName { get; set; }
 
 
 
@@ -50,6 +56,10 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
         public void UpdateMatchingTeamNameIds(string teamNameId, List<string> matches)
         {
+            if(MatchingTeamNameIds.Keys.Contains(teamNameId))
+            {
+                return;
+            }
             MatchingTeamNameIds.Add(teamNameId, matches);
         }
 
@@ -60,6 +70,13 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 .OrderByDescending(kvp => kvp.Value.Count)
                 .Take(2)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+
+
+        public void SetMatchingTeamDTOS()
+        {
+
         }
 
 

@@ -38,10 +38,7 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_TeamsRepositorie
 
         public async Task<List<Import_TeamsTableDTO>> GetBasicTeamInfo(List<string> teamLongNames)
         {
-            return await _matchFilterDbContext.Import_TeamsTable
-                .Join(
-                _matchFilterDbContext.Import_Teamname,
-                team => team
+            throw new NotImplementedException();
 
         }
 

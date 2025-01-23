@@ -10,6 +10,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         public Dictionary<string, List<string>> MatchingTeamNameIds { get; set; }
 
         public int LongNameCount { get; set; } = 0;
+        
         public int MediumNameCount { get; set; } = 0;
         public int ShortNameCount { get; set; } = 0;
         public int MatchingInputsCount { get; set; } = 0;   

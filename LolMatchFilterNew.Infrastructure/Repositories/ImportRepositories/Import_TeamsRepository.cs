@@ -5,6 +5,7 @@ using LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext;
 using LolMatchFilterNew.Infrastructure.Repositories.GenericRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_TeamsRepositories;
 using Microsoft.EntityFrameworkCore;
+using Domain.DTOs.ImportDTOs.Import_TeamsTableDTOs;
 
 namespace Infrastructure.Repositories.ImportRepositories.Import_TeamsRepositories
 {
@@ -30,7 +31,18 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_TeamsRepositorie
                        team => team.Name,
                        teamName => teamName.Longname,
                        (team, teamName) => team)
+                   .AsNoTracking()
                    .ToListAsync();
+        }
+
+
+        public async Task<List<Import_TeamsTableDTO>> GetBasicTeamInfo(List<string> teamLongNames)
+        {
+            return await _matchFilterDbContext.Import_TeamsTable
+                .Join(
+                _matchFilterDbContext.Import_Teamname,
+                team => team
+
         }
 
     }

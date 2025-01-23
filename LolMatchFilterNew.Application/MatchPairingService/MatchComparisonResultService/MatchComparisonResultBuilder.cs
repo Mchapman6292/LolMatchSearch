@@ -60,13 +60,13 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
         {
             if (string.IsNullOrWhiteSpace(gameId))
                 throw new ArgumentException("Game ID cannot be empty", nameof(gameId));
-            _result.ScoreboardGames = gameId;
+            _result.GameID = gameId;
             return this;
         }
 
         public IMatchComparisonResultBuilder WithMatchDate(DateTime? matchDate)
         {
-            _result.MatchDate = matchDate;
+            _result.SGMatchDate = matchDate;
             _matchDateSet = true;
             return this;
         }
@@ -78,8 +78,8 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
             if (string.IsNullOrWhiteSpace(team2))
                 throw new ArgumentException("Team2 cannot be empty", nameof(team2));
 
-            _result.LeaguepediaTeam1 = team1;
-            _result.LeaguepediaTeam2 = team2;
+            _result.Team1TeamID = team1;
+            _result.Team2TeamID = team2;
             _teamsSet = true;
             return this;
         }
@@ -111,8 +111,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.MatchComp
 
         public IMatchComparisonResultBuilder WithExtractedTeamInfo(string extractedTeamInfo)
         {
-            _result.ExtractedTeamInfo = extractedTeamInfo;
-            return this;
+            throw new NotImplementedException();
         }
 
 

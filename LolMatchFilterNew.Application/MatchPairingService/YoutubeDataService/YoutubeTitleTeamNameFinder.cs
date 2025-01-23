@@ -1,12 +1,8 @@
-﻿using Domain.DTOs.TeamnameDTOs;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+﻿using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
-using Microsoft.Extensions.ObjectPool;
-using OfficeOpenXml.Packaging.Ionic.Zip;
 using System.Text.RegularExpressions;
 
 
@@ -67,7 +63,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
                 if (matchesForTeam.Any())
                 {
-                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.LongName, matchesForTeam);
+                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, matchesForTeam);
                 }
             }
         }

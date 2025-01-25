@@ -3,7 +3,7 @@ using Domain.DTOs.YoutubeVideoWithMatchedTeamDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.PlayListDateRangeServices;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 
 namespace Application.MatchPairingService.MatchComparisonResultService.YoutubeVideoWithMatchedTeamServices
 {
@@ -49,7 +49,7 @@ namespace Application.MatchPairingService.MatchComparisonResultService.YoutubeVi
         }
 
 
-        public List<YoutubeVideoWithMatchedTeamDTO> CreateListOfYoutubeVideoWithMatchedTeamDTOs(List<YoutubeTitleTeamNameMatchResult> youtubeTitleTeamNameMatches)
+        public List<YoutubeVideoWithMatchedTeamDTO> CreateListOfYoutubeVideoWithMatchedTeamDTOs(List<YoutubeTitleTeamOccurenceDTO> youtubeTitleTeamNameMatches)
         {
             throw new NotImplementedException();
 

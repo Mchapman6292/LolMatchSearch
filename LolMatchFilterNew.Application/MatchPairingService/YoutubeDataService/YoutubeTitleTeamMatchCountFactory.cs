@@ -1,4 +1,4 @@
-﻿using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+﻿using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
 
@@ -9,9 +9,9 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMat
     {
 
 
-        public YoutubeTitleTeamNameMatchResult CreateNewYoutubeTitleOccurenceDTO(string youtubeTitle, int longNameCount = 0, int mediumNameCount = 0, int shortNameCount = 0,int matchingInputsCount = 0 ,List<string> matchingInputs = null)
+        public YoutubeTitleTeamOccurenceDTO CreateNewYoutubeTitleOccurenceDTO(string youtubeTitle, int longNameCount = 0, int mediumNameCount = 0, int shortNameCount = 0,int matchingInputsCount = 0 ,List<string> matchingInputs = null)
         {
-            return new YoutubeTitleTeamNameMatchResult
+            return new YoutubeTitleTeamOccurenceDTO
             {
                 YoutubeTitle = youtubeTitle,
                 LongNameCount = longNameCount,

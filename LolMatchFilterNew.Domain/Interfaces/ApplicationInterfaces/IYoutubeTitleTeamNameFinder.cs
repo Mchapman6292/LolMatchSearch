@@ -4,7 +4,8 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders
 {
     public interface IYoutubeTitleTeamNameFinder
     {
-        void ProcessYoutubeTitle(YoutubeTitleTeamOccurenceDTO occurrenceDTO);
+        bool CheckNameMatch(string nameToCheck, string normalizedTitle);
+        bool IsExactWordOccurrence(string text, string word);
 
     }
 }

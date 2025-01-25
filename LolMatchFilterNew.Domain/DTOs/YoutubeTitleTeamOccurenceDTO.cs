@@ -1,6 +1,4 @@
 ﻿
-using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
-using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 
 
 namespace LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs
@@ -8,7 +6,9 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs
     public class YoutubeTitleTeamOccurenceDTO
     {
         public string YoutubeTitle { get; set; } = string.Empty;
-        public Dictionary<string, List<string>> MatchingTeamNameIds { get; set; }
+        public Dictionary<string, List<string>> AllMatchingTeamNameIds { get; set; }
+
+        public Dictionary<string, List<string>> TeamIdsWithMostMatches { get; set; }
 
         public int LongNameCount { get; set; } = 0;
 

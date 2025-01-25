@@ -65,6 +65,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
 
         }
 
+        // Creates the initial list of YoutubeTitleTeamOccurenceDTO with only the YoutubeTitle added, the other properties are updated once the methods in YoutubeTitleTeamOccurrenceService are called on the DTO.
+
         public void PopulateYoutubeTitleTeamMatchCountList(List<Import_YoutubeDataEntity> teamNames)
         {
             foreach (var teamName in teamNames)

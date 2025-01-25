@@ -29,6 +29,10 @@ using Microsoft.Extensions.Hosting;
  * TEAMNAME VS LONGNAME MISMATCH
   - Team abbreviation in database but not in Youtube video -   Solved, match was occuring but other false positives had more hits
 
+  - IsExactWordOccurrence only returns the first occurrence of a team input. 
+    Can return an incorrect team name if matched too soon.
+    
+
 
  * e.g Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY, Database name = Team Vitality
   - Solutions

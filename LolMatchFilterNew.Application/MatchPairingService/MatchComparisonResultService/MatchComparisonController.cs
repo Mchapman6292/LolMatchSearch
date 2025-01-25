@@ -19,6 +19,7 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceCon
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
 
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
@@ -35,6 +36,7 @@ public class MatchComparisonController : IMatchComparisonController
     private readonly IYoutubeDataWithTeamsDTOBuilder _processed_YoutubeDataDTOBuilder;
     private readonly IPlayListDateRangeService _playListDateRangeService;
     private readonly IImport_ScoreboardGamesRepository _import_ScoreboardGamesRepository;
+    private readonly IYoutubeTitleTeamOccurenceService _youtubeTitleTeamOccurenceService;
 
 
     private readonly IYoutubeTeamNameService _youtubeTeamNameService;
@@ -64,7 +66,8 @@ public class MatchComparisonController : IMatchComparisonController
         IImport_TeamnameRepository import_TeamnameRepository,
 
         IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder,
-        IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory
+        IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory,
+        IYoutubeTitleTeamOccurenceService youtubeTitleTeamOccurenceService
         
 
     )
@@ -85,6 +88,7 @@ public class MatchComparisonController : IMatchComparisonController
         _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
         _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
         _importTeamNameService = import_TeamnNameService;
+        _youtubeTitleTeamOccurenceService = youtubeTitleTeamOccurenceService;
 
 
     }
@@ -119,14 +123,23 @@ public class MatchComparisonController : IMatchComparisonController
         _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
         _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(importYoutubeEntities);
 
+
+        // This needs to update the list held in YoutubeTeamService instead of local variables.
+
         List<YoutubeTitleTeamOccurenceDTO> teamNameOccurences = _youtubeTeamNameService.ReturnYoutubeTitleTeamMatchCounts();
+
+        List<YoutubeTitleTeamOccurenceDTO> updatedOccurences = new List<YoutubeTitleTeamOccurenceDTO>();
 
         foreach(var youtubeOccurenceDto in teamNameOccurences)
         {
-            _youtubeTitleTeamNameFinder.ProcessYoutubeTitle(youtubeOccurenceDto);
+            _youtubeTitleTeamOccurenceService.TallyTeamNameOccurrences(youtubeOccurenceDto);
+            Dictionary<string, List<string>>  teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(youtubeOccurenceDto);
+            _youtubeTitleTeamOccurenceService.PopulateTeamIdsWithMostMatches(youtubeOccurenceDto, teamIdWithMostMatches);
+
+            updatedOccurences.Add(youtubeOccurenceDto);
+
         }
-
-
+          _objectLogger.LogTopMatchesInOccurrenceDTOs(updatedOccurences);
     }
 
 

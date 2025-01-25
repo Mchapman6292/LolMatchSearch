@@ -49,7 +49,7 @@ using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
-using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurenceServices;
+using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
 using Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.YoutubeTitleTeamOccurenceServices;
 
 
@@ -149,7 +149,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
                   services.AddSingleton<IPlayListDateRangeService, PlayListDateRangeService>();
                   services.AddSingleton<IWesternMatchDTOFactory, WesternMatchDTOFactory>();
-                  services.AddSingleton<IYoutubeTitleTeamOccurenceService, YoutubeTitleTeamOccurenceService>();
+                  services.AddSingleton<IYoutubeTitleTeamOccurenceService, YoutubeTitleTeamOccurrenceService>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();

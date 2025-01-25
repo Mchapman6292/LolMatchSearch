@@ -15,7 +15,8 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMat
             {
                 YoutubeTitle = youtubeTitle,
                 LongNameCount = longNameCount,
-                MatchingTeamNameIds = new Dictionary<string, List<string>>(),
+                AllMatchingTeamNameIds = new Dictionary<string, List<string>>(),
+                TeamIdsWithMostMatches = new Dictionary<string, List<string>>(),
                 MediumNameCount = mediumNameCount,
                 ShortNameCount = shortNameCount,
                 MatchingInputsCount = matchingInputsCount,

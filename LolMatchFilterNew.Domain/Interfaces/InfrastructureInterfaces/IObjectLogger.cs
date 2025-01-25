@@ -22,7 +22,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamOccurenceDTO> matchResults);
 
- 
+        void LogTopMatchesInOccurrenceDTOs(List<YoutubeTitleTeamOccurenceDTO> occurrenceDTOs);
 
         void LogPlaylistDateRanges(List<PlayListDateRangeResult> playlistDTOs);
 

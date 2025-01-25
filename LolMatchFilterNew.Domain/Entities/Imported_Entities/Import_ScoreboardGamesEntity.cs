@@ -23,7 +23,6 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_ScoreboardG
         public string? MatchId {  get; set; }
 
 
-
         public DateTime? DateTime_utc { get; set; } // ScoreboardPlayers
 
         public string? Tournament { get; set; } // ScoreboardPlayers

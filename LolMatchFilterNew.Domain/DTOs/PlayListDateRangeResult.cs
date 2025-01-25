@@ -48,7 +48,7 @@ namespace Domain.DTOs.PlayListDateRangeDTOs
 
             GamesWithinRange = scoreboardGames.OrderBy(game => game.DateTime_Utc).ToList();
 
-            
+
         }
 
 

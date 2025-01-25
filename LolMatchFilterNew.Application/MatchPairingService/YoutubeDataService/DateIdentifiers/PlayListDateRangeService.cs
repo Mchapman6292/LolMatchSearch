@@ -6,7 +6,6 @@ using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
-using Xceed.Document.NET;
 
 namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.PlayListDateRangeServices
 {
@@ -70,10 +69,6 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
 
 
 
-
-
-
-
         private Dictionary<string, List<Import_YoutubeDataEntity>> GroupVideosByPlaylist(List<Import_YoutubeDataEntity> youtubeEntities)
         {
             if (youtubeEntities == null)
@@ -128,7 +123,7 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
         {
             List<WesternMatchDTO> matches = await _storedSqlFunctionCaller.GetWesternMatchesAsync();
 
-            int DateRangeLeeway = 14;
+            int DateRangeLeeway = 2;
 
             DateTime rangeStartDate = dateRange.StartDate.AddDays(-DateRangeLeeway);
             DateTime rangeEndDate = dateRange.EndDate.AddDays(DateRangeLeeway);
@@ -154,14 +149,6 @@ namespace Application.MatchPairingService.YoutubeDataService.DateIdentifiers.Pla
 
 
 
-
-        private async Task UpdateSinglePlaylistRange(PlayListDateRangeResult dateRange)
-        {
-            List<WesternMatchDTO> matches = await _import_ScoreboardGamesRepository.GetEuNaMatchesWithinDateRangeAsync(dateRange.StartDate, dateRange.EndDate);
-            _appLogger.Info($"Searching for games within date range {dateRange.StartDate} - {dateRange.EndDate}.");
-
-            dateRange.AddGamesWithinDateRange(matches);
-        }
 
 
 

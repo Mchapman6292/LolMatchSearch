@@ -9,6 +9,8 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableE
         [Key]
         [Required]
         [MaxLength(255)]
+        
+        // Name == Import_TeamName LongName. 
         public string Name { get; set; }
 
         [MaxLength(2083)] 

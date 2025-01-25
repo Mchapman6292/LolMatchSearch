@@ -18,9 +18,31 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+/* Current Problems
+ 
+ * Move factory/builder classes with only one method to the service class?
+
+ * YoutubeTitleTeamOccurenceDTO NEEDS FIX/MOVED
+    - Change to DTO and service class instead of current YoutubeTitleTeamOccurenceDTO doing everything. 
 
 
+ * TEAMNAME VS LONGNAME MISMATCH
+  - Team abbreviation in database but not in Youtube video -   Solved, match was occuring but other false positives had more hits
 
+
+ * e.g Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY, Database name = Team Vitality
+  - Solutions
+     Exclude date format to reduce 
+    Define Tournaments/Teams to narrow list of potential matches?
+    Get a Teams all known opponents from SG and use that as the search parameters?
+    Define a new table in database, slowly add videos for each playlist, using smaller search window?
+
+
+* DTO Classes/Teams Data structure. 
+* Linking Matching Teams in YoutubeTitleTeamOccurenceDTO to Teams or TeamName?
+* Having different types of dtos used in Application for teams will cause confusion later.
+* Decide what data should be held within One/Two team classes/DTOs.
+ */
 
 
 
@@ -58,7 +80,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await matchComparisonController.TESTGetPlaylistDateRanges();
+                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
 
 
 

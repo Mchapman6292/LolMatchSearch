@@ -1,17 +1,15 @@
-﻿using Domain.DTOs.TeamnameDTOs;
+﻿using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
-using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
-using Google.Apis.YouTube.v3.Data;
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServices
 {
@@ -37,7 +35,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         private readonly IImport_TeamNameService _importTeamNameService;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
 
-        private List<YoutubeTitleTeamNameMatchResult> _youtubeTitleTeamMatchCounts { get; }
+        private List<YoutubeTitleTeamOccurenceDTO> _youtubeTitleTeamMatchCounts { get; }
 
 
 
@@ -62,7 +60,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
             _importTeamNameService = importTeamNameService;
             _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
-            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamNameMatchResult>();
+            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamOccurenceDTO>();
 
 
         }
@@ -77,7 +75,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _appLogger.Info($"Total count for _youtubeTitleTeamMatchCounts: {_youtubeTitleTeamMatchCounts.Count()}.");
         }
 
-        public List<YoutubeTitleTeamNameMatchResult> ReturnYoutubeTitleTeamMatchCounts()
+        public List<YoutubeTitleTeamOccurenceDTO> ReturnYoutubeTitleTeamMatchCounts()
         {
             if (!_youtubeTitleTeamMatchCounts.Any())
             {
@@ -86,15 +84,10 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             return _youtubeTitleTeamMatchCounts;
         }
 
-
-
-
-
+        // Needed?
         public HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> YoutubeDataWithTeamsDTO)
         {
             HashSet<string> distinctTeamNames = new HashSet<string>();
-
-
 
             foreach (var dto in YoutubeDataWithTeamsDTO)
             {

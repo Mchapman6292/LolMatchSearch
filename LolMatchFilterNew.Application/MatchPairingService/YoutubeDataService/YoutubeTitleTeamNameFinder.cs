@@ -1,13 +1,23 @@
-﻿using Domain.DTOs.TeamnameDTOs;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+﻿using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurenceServices;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
-using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
+using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
-using Microsoft.Extensions.ObjectPool;
-using OfficeOpenXml.Packaging.Ionic.Zip;
 using System.Text.RegularExpressions;
+
+
+// Edge cases Title: Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY
+/* INF] Title: Vitality vs Splyce Highlights | EU LCS Week 9 Day 2 Spring 2016 S6 | VIT vs SPY
+[07:37:16 INF]     Team ID: Splyce | Found matches: [SPY, Splyce, Splyce, splyce, spy]
+[07:37:16 INF]     Team ID: Szef+6 | Found matches: [S6, s6]
+LONGNAME =Team Vitality
+[07:37:16 INF] ----------------------------------------*/
+
+
+// Exclude date format to reduce 
+// Define Tournaments/Teams to narrow list of potential matches?
+// Get a Teams all known opponents from SG and use that as the search parameters?
 
 
 
@@ -19,6 +29,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         private readonly IAppLogger _appLogger;
         private readonly IObjectLogger _objectLogger;
         private readonly IImport_TeamNameService _importTeamNameService;
+        private readonly IYoutubeTitleTeamOccurenceService _youtubeTitleTeamNameMatchResultService;
 
 
         private static readonly Regex G2_Game2_FalsePositive = new Regex(@"[Gg]2$", RegexOptions.Compiled);
@@ -35,7 +46,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
         // EXCLUSION LOGIC MUST CHANGE
-        public void ProcessYoutubeTitle(YoutubeTitleTeamNameMatchResult occurrenceDTO)
+        public void ProcessYoutubeTitle(YoutubeTitleTeamOccurenceDTO occurrenceDTO)
         {
             string normalizedTitle = occurrenceDTO.YoutubeTitle.ToLower();
 
@@ -67,7 +78,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
                 if (matchesForTeam.Any())
                 {
-                    occurrenceDTO.UpdateMatchingTeamNameIds(teamNameDto.TeamNameId, matchesForTeam);
+                    _youtubeTitleTeamNameMatchResultService.UpdateMatchingTeamNameIds(occurrenceDTO,teamNameDto.LongName, matchesForTeam);
                 }
             }
         }
@@ -75,7 +86,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
 
 
 
-        private void CheckNameMatch(string? nameToCheck, string nameType, string normalizedTitle,YoutubeTitleTeamNameMatchResult occurrenceDTO, List<string> matchesForTeam)
+        private void CheckNameMatch(string? nameToCheck, string nameType, string normalizedTitle, YoutubeTitleTeamOccurenceDTO occurrenceDTO, List<string> matchesForTeam)
         {
             if (string.IsNullOrEmpty(nameToCheck)) return;
 
@@ -83,7 +94,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
             if (IsWholeWord(normalizedTitle, normalizedName))
             {
                 matchesForTeam.Add(nameToCheck);
-                occurrenceDTO.IncrementCount(nameType, 1);
+                _youtubeTitleTeamNameMatchResultService.IncrementCount(occurrenceDTO,nameType, 1);
 
                 if (nameType == "Inputs" && occurrenceDTO.MatchingInputs != null)
                 {
@@ -91,8 +102,6 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
                 }
             }
         }
-
-
 
 
         /*

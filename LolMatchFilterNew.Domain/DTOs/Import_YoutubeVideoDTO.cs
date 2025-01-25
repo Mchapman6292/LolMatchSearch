@@ -1,11 +1,4 @@
-﻿using Google.Apis.YouTube.v3.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xceed.Document.NET;
-
+﻿
 namespace LolMatchFilterNew.Domain.DTOs.YoutubeVideoDTOs
 {
     // Needed? Possible older version of Import_YoutubeDataEntity

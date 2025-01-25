@@ -2,7 +2,7 @@
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.Western_MatchDTOs;
 using LolMatchFilterNew.Domain.DTOs.MatchComparisonResultDTOs;
-using Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNameMatchResults;
+using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 using Domain.DTOs.PlayListDateRangeDTOs;
 
 namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
@@ -18,13 +18,15 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogListForCONTROLLERValidateWesternMatches(List<string> noMatchesList);
 
-        void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamNameMatchResult> matchResults);
+        void LogFinalizedYoutubeTitleTeamNameOccurrenceCountDTO(List<YoutubeTitleTeamOccurenceDTO> matchResults);
 
-        void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamNameMatchResult> matchResults);
+        void LogYoutubeTeamNameOccurenceWithOnlyOneMatch(List<YoutubeTitleTeamOccurenceDTO> matchResults);
 
-        void LogTopYoutubeTeamNameOccurenceMatches(List<YoutubeTitleTeamNameMatchResult> occurrenceDto);
+ 
 
         void LogPlaylistDateRanges(List<PlayListDateRangeResult> playlistDTOs);
+
+        void LogGameIdsInUpdatedPlaylistDateRangeResult(List<PlayListDateRangeResult> playlistDTOs);
 
     }
 }

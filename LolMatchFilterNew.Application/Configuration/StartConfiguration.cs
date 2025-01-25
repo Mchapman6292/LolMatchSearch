@@ -49,6 +49,9 @@ using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
 using Infrastructure.Logging.ObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 
+using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurenceServices;
+using Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.YoutubeTitleTeamOccurenceServices;
+
 
 
 using Microsoft.Extensions.Hosting;
@@ -87,6 +90,8 @@ using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.PlayListDateRangeServ
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.IWesternMatchDTOFactories;
 using Application.DTOFactories.WesternMatchDTOFactories;
 using Application.MatchPairingService.YoutubeDataService.DateIdentifiers.PlayListDateRangeServices;
+using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_TeamsRepositories;
+using Infrastructure.Repositories.ImportRepositories.Import_TeamsRepositories;
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -144,6 +149,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
                   services.AddSingleton<IPlayListDateRangeService, PlayListDateRangeService>();
                   services.AddSingleton<IWesternMatchDTOFactory, WesternMatchDTOFactory>();
+                  services.AddSingleton<IYoutubeTitleTeamOccurenceService, YoutubeTitleTeamOccurenceService>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
@@ -173,6 +179,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
                   services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
                   services.AddTransient<IPlayListDateRangeService, PlayListDateRangeService>();
+                  services.AddTransient<IImport_TeamsRepository, Import_TeamsRepository>();
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
 

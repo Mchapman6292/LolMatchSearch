@@ -1,4 +1,5 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
+﻿using Domain.Enums.TeamNameTypes;
+using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 
 namespace Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices
 {
@@ -7,12 +8,12 @@ namespace Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentif
 
 
         void UpdateYoutubeTitle(YoutubeTitleTeamOccurenceDTO matchDTO, string title);
-        void UpdateMatchingTeamNameIds(YoutubeTitleTeamOccurenceDTO matchResultDTO, string teamNameId, List<string> matches);
+        void UpdateMatchingTeamNameIds(YoutubeTitleTeamOccurenceDTO matchResultDTO, string teamNameId, List<(TeamNameType, string)> matches);
         void IncrementCount(YoutubeTitleTeamOccurenceDTO matchResultDTO, string countType, int increment);
-        Dictionary<string, List<string>> GetTeamIdsWithHighestOccurences(YoutubeTitleTeamOccurenceDTO matchDTO);
+        Dictionary<string, List<(TeamNameType, string)>> GetTeamIdsWithHighestOccurences(YoutubeTitleTeamOccurenceDTO matchDTO);
 
         void TallyTeamNameOccurrences(YoutubeTitleTeamOccurenceDTO occurrenceDTO);
-        void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO matchDTO, Dictionary<string, List<string>> teamIdWithMatches);
+        void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO matchDTO, Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
 
 
     }

@@ -1,14 +1,15 @@
 ﻿
 
+using Domain.Enums.TeamNameTypes;
 
 namespace LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs
 {
     public class YoutubeTitleTeamOccurenceDTO
     {
         public string YoutubeTitle { get; set; } = string.Empty;
-        public Dictionary<string, List<string>> AllMatchingTeamNameIds { get; set; }
+        public Dictionary<string, List<(TeamNameType, string)>> AllMatchingTeamNameIds { get; set; }
 
-        public Dictionary<string, List<string>> TeamIdsWithMostMatches { get; set; }
+        public Dictionary<string, List<(TeamNameType, string)>> TeamIdsWithMostMatches { get; set; }
 
         public int LongNameCount { get; set; } = 0;
 

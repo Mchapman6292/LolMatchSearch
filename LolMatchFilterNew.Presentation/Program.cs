@@ -18,7 +18,25 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-/* Current Problems
+/* Current
+ * How to narrow down potential matches 
+ * - Needed the TeamLongName to join to Teams table, as TeamNameId not used in TeamsTable
+ * 
+ * -- CURRENT  Also wanted to define types of matches to give weight to longNames over abbreviations etc. -- 
+ *              - Methods to give weight to longname etc.
+ *              - Current approach handling duplictes correctly? e.g tallying twice if longName appears in Inputs.
+ * 
+
+
+
+
+
+
+
+
+
+
+/*  Issues
  
  * Move factory/builder classes with only one method to the service class?
 
@@ -80,7 +98,6 @@ namespace LolMatchFilterNew.Presentation
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
                 var import_TeamNameService = scope.ServiceProvider.GetRequiredService<IImport_TeamNameService>();
                 var youtubeTeamNameService = scope.ServiceProvider.GetRequiredService<IYoutubeTeamNameService>();
-
 
 
 

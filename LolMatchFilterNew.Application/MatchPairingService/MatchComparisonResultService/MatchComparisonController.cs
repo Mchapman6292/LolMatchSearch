@@ -20,6 +20,7 @@ using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
 using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
+using Domain.Enums.TeamNameTypes;
 
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
@@ -121,7 +122,7 @@ public class MatchComparisonController : IMatchComparisonController
 
 
         _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
-        _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(importYoutubeEntities);
+        _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(youtubeEntitiesSample);
 
 
         // This needs to update the list held in YoutubeTeamService instead of local variables.
@@ -130,17 +131,24 @@ public class MatchComparisonController : IMatchComparisonController
 
         List<YoutubeTitleTeamOccurenceDTO> updatedOccurences = new List<YoutubeTitleTeamOccurenceDTO>();
 
+
+
         foreach(var youtubeOccurenceDto in teamNameOccurences)
         {
             _youtubeTitleTeamOccurenceService.TallyTeamNameOccurrences(youtubeOccurenceDto);
-            Dictionary<string, List<string>>  teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(youtubeOccurenceDto);
+            Dictionary<string, List<(TeamNameType, string)>> teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(youtubeOccurenceDto);
             _youtubeTitleTeamOccurenceService.PopulateTeamIdsWithMostMatches(youtubeOccurenceDto, teamIdWithMostMatches);
 
             updatedOccurences.Add(youtubeOccurenceDto);
 
         }
-          _objectLogger.LogTopMatchesInOccurrenceDTOs(updatedOccurences);
+       _objectLogger.LogTopMatchesInOccurrenceDTOs(updatedOccurences);
+
+
+
     }
+
+
 
 
     public async Task TESTGetPlaylistDateRanges()

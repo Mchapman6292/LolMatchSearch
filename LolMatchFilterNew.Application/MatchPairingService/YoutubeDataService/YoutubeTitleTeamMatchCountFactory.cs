@@ -13,6 +13,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMat
         {
             return new YoutubeTitleTeamOccurenceDTO
             {
+
                 YoutubeTitle = youtubeTitle,
                 LongNameCount = longNameCount,
                 AllMatchingTeamNameIds = new Dictionary<string, List<(TeamNameType, string)>>(),

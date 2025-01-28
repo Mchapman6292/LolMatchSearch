@@ -12,8 +12,12 @@ namespace Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentif
         void IncrementCount(YoutubeTitleTeamOccurenceDTO matchResultDTO, string countType, int increment);
         Dictionary<string, List<(TeamNameType, string)>> GetTeamIdsWithHighestOccurences(YoutubeTitleTeamOccurenceDTO matchDTO);
 
-        void TallyTeamNameOccurrences(YoutubeTitleTeamOccurenceDTO occurrenceDTO);
-        void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO matchDTO, Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
+        YoutubeTitleTeamOccurenceDTO TallyTeamNameOccurrences(YoutubeTitleTeamOccurenceDTO occurrenceDTO);
+        void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO, Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
+
+
+        void TESTPopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO,
+    Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
 
 
     }

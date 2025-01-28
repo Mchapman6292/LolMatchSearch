@@ -23,6 +23,15 @@ namespace Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepos
             _matchFilterDbContext = dbContext;
         }
 
+
+        public async Task<List<Import_YoutubeDataEntity>> GetByVideoId(List<string> videoIds)
+        {
+            return await _matchFilterDbContext.Import_YoutubeData
+                  .Where(e => videoIds.Contains(e.YoutubeVideoId))
+                  .ToListAsync();
+        }
+
+
         public async Task<int> BulkaddYoutubeDetails(IEnumerable<Import_YoutubeDataEntity> youtubeVideoDetails)
         {
             var distinctVideos = youtubeVideoDetails

@@ -12,6 +12,33 @@ LONGNAME =Team Vitality
 [07:37:16 INF] ----------------------------------------*/
 
 
+
+
+/*
+----------------------------------------
+Title: Giants vs Roccat Game 1 Highlights, EU LCS W9D2 Summer 2016 Season 6, GIA vs ROC G1
+youtube_video_id: IX--eOUe9Uw
+----------------------------------------
+            ALL MATCHES:
+            Team ID: Giants (Spanish Team)_71
+            Found matches: [Medium: Giants, Long: Giants, Input: giants]
+            Team ID: VIRUS (Greek Team)_8
+            Found matches: [Short: VS]
+
+            MOST FREQUENT MATCHES:
+            Team ID: Giants (Spanish Team)_71
+            Found matches: [Medium: Giants, Long: Giants, Input: giants]
+            Team ID: VIRUS (Greek Team)_8
+            Found matches: [Short: VS]
+
+    - MATCHING VS
+    - ShortNames not matching?
+
+*/
+
+
+
+
 // Exclude date format to reduce 
 // Define Tournaments/Teams to narrow list of potential matches?
 // Get a Teams all known opponents from SG and use that as the search parameters?

@@ -4,6 +4,7 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Y
 {
     public interface IImport_YoutubeDataRepository
     {
+        Task<List<Import_YoutubeDataEntity>> GetByVideoId(List<string> videoIds);
         Task<int> BulkaddYoutubeDetails(IEnumerable<Import_YoutubeDataEntity> youtubeVideoDetails);
 
         Task<int> DeleteAllImport_YoutubeData();

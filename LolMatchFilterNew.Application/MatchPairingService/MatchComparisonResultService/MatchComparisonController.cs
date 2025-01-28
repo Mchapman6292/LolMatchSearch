@@ -103,6 +103,12 @@ public class MatchComparisonController : IMatchComparisonController
         List<Import_TeamnameEntity> teamnNameEntities = await _storedSqlFunctionCaller.GetAllWesternTeamsAsync();
         List<Import_YoutubeDataEntity> importYoutubeEntities = await _storedSqlFunctionCaller.GetYoutubeDataEntitiesForWesternTeamsAsync();
 
+        string roccatVideoIdTest = "IX--eOUe9Uw";
+        List<string> listOfTestVideoIds = new List<string>();
+        listOfTestVideoIds.Add(roccatVideoIdTest);
+
+        List<Import_YoutubeDataEntity> teamRoccatVideo = await _import_YoutubeDataRepository.GetByVideoId(listOfTestVideoIds);
+
         // Earlier youtube video = 20/06/2014, - 2 week leeway.
         var startDate = new DateTime(2014, 6, 6);
 
@@ -116,13 +122,13 @@ public class MatchComparisonController : IMatchComparisonController
 
         var youtubeEntitiesSample = filteredYoutubeEntities
             .OrderBy(x => Guid.NewGuid())
-            .Take(100)
+            .Take(1)
             .ToList();
 
 
 
         _importTeamNameService.PopulateImport_TeamNameAllNames(teamNameDtos);
-        _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(youtubeEntitiesSample);
+        _youtubeTeamNameService.PopulateYoutubeTitleTeamMatchCountList(teamRoccatVideo);
 
 
         // This needs to update the list held in YoutubeTeamService instead of local variables.
@@ -135,15 +141,34 @@ public class MatchComparisonController : IMatchComparisonController
 
         foreach(var youtubeOccurenceDto in teamNameOccurences)
         {
-            _youtubeTitleTeamOccurenceService.TallyTeamNameOccurrences(youtubeOccurenceDto);
-            Dictionary<string, List<(TeamNameType, string)>> teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(youtubeOccurenceDto);
-            _youtubeTitleTeamOccurenceService.PopulateTeamIdsWithMostMatches(youtubeOccurenceDto, teamIdWithMostMatches);
+            _appLogger.Info($"Starting processing for DTO instance: {youtubeOccurenceDto.InstanceId}");
 
-            updatedOccurences.Add(youtubeOccurenceDto);
 
+            YoutubeTitleTeamOccurenceDTO occurrenceUpdatedWithAllMatches = _youtubeTitleTeamOccurenceService.TallyTeamNameOccurrences(youtubeOccurenceDto);
+
+            _appLogger.Info($"After TallyTeamNameOccurrences, using DTO instance: {occurrenceUpdatedWithAllMatches.InstanceId}");
+
+
+
+            Dictionary<string, List<(TeamNameType, string)>> teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(occurrenceUpdatedWithAllMatches);
+
+            _youtubeTitleTeamOccurenceService.TESTPopulateTeamIdsWithMostMatches(occurrenceUpdatedWithAllMatches, teamIdWithMostMatches);
+
+            _appLogger.Info($"Before adding to updatedOccurences, DTO instance: {occurrenceUpdatedWithAllMatches.InstanceId}");
+
+            updatedOccurences.Add(occurrenceUpdatedWithAllMatches);
         }
-       _objectLogger.LogTopMatchesInOccurrenceDTOs(updatedOccurences);
 
+        List<YoutubeTitleTeamOccurenceDTO> randomOccurences = updatedOccurences.Take(5).ToList(); 
+        
+        foreach(var occurence in randomOccurences)
+        {
+            int count = occurence.TeamIdsWithMostMatches.Keys.Count();
+
+            _appLogger.Info($"{occurence.YoutubeTitle}, match count: {count}"); 
+        }
+
+        _objectLogger.LogYoutubeTeamNameOccurenceWithOnlyOneMatch(updatedOccurences);
 
 
     }

@@ -7,7 +7,7 @@ namespace Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices
     public interface IYoutubeTeamNameService
     {
 
-        void PopulateYoutubeTitleTeamMatchCountList(List<Import_YoutubeDataEntity> teamNames);
+        void PopulateYoutubeTitleTeamNameOccurrencesList(List<Import_YoutubeDataEntity> teamNames);
 
         List<YoutubeTitleTeamOccurenceDTO> ReturnYoutubeTitleTeamMatchCounts();
         HashSet<string> GetDistinctYoutubeTeamNamesFromProcessed_YoutubeDataDTO(List<YoutubeDataWithTeamsDTO> processed_YoutubeDataDTOs);

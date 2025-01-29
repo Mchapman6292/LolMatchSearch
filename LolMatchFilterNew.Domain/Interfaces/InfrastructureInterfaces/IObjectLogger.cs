@@ -33,6 +33,9 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
         void TESTLogTeamIdsWithMostMatches(List<YoutubeTitleTeamOccurenceDTO> occurrenceDTOs);
 
 
+
+        void TESTLogAllMatchingTeamNameIds(List<YoutubeTitleTeamOccurenceDTO> occurrenceDtos);
+
         void TestBasicLogging();
 
     }

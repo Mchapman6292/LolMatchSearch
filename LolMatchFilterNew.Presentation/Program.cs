@@ -47,8 +47,19 @@ using Microsoft.Extensions.Hosting;
  * TEAMNAME VS LONGNAME MISMATCH
   - Team abbreviation in database but not in Youtube video -   Solved, match was occuring but other false positives had more hits
 
+  - Common false positives VS,G2,shortNames that match abbreviations 
+
   - IsExactWordOccurrence only returns the first occurrence of a team input. 
-    Can return an incorrect team name if matched too soon.
+    Can return an incorrect team name if matched too soon. 
+    Caused issues where a false match stopped searching the rest of the title for any other matches. 
+    e.g  
+    Giants vs Roccat Game 1 Highlights, EU LCS W9D2 Summer 2016 Season 6, GIA vs ROC G1, 
+    This meant that shortname would not match for Roc as it would return false after finding an occurence in Roccat
+    
+
+
+
+
     
 
 

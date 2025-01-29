@@ -6,7 +6,7 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs
 {
     public class YoutubeTitleTeamOccurenceDTO
     {
-        public Guid InstanceId { get; } = Guid.NewGuid();
+
 
         public string YoutubeTitle { get; set; } = string.Empty;
 

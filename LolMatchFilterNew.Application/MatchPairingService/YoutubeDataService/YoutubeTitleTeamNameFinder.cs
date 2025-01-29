@@ -80,26 +80,25 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamNam
         //Checks if a given teamName exists as a standalone term in a youtubeTitle string by verifying it's surrounded by either spaces, punctuation, or string boundaries. Prevents partial matches like finding "SK" within "SKT".
         // This returns the first occurrence only but since we are going through every property in the list of TeamNameDTOs if we miss a match with one variation, we'll catch it with another.
 
-
         public bool IsExactWordOccurrence(string youtubeTitle, string teamName)
         {
-
             if (string.IsNullOrEmpty(teamName)) return false;
 
-            int index = youtubeTitle.IndexOf(teamName);
-            if (index == -1) return false;
+            int startIndex = 0;
+            while (true)
+            {
+                int index = youtubeTitle.IndexOf(teamName, startIndex, StringComparison.OrdinalIgnoreCase);
+                if (index == -1) return false;  
 
-            bool validStart = index == 0 || !char.IsLetterOrDigit(youtubeTitle[index - 1]);
-            bool validEnd = index + teamName.Length == youtubeTitle.Length || !char.IsLetterOrDigit(youtubeTitle[index + teamName.Length]);
+                bool validStart = index == 0 || !char.IsLetterOrDigit(youtubeTitle[index - 1]);
+                bool validEnd = index + teamName.Length == youtubeTitle.Length ||
+                               !char.IsLetterOrDigit(youtubeTitle[index + teamName.Length]);
 
-            return validStart && validEnd;
+                if (validStart && validEnd) return true; 
+
+                startIndex = index + 1;  
+            }
         }
-
-
-
-
-
-
 
     }
 

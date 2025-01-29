@@ -28,7 +28,7 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void LogGameIdsInUpdatedPlaylistDateRangeResult(List<PlayListDateRangeResult> playlistDTOs);
 
-        void LogTeamIdsWithMostMatches(List<YoutubeTitleTeamOccurenceDTO> occurrenceDTOs);
+        void LogTeamIdsWithMostMatchesProperty(List<YoutubeTitleTeamOccurenceDTO> occurrenceDTOs);
 
         void TESTLogTeamIdsWithMostMatches(List<YoutubeTitleTeamOccurenceDTO> occurrenceDTOs);
 
@@ -36,7 +36,8 @@ namespace Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers
 
         void TESTLogAllMatchingTeamNameIds(List<YoutubeTitleTeamOccurenceDTO> occurrenceDtos);
 
-        void TestBasicLogging();
+
+        void LogTeamMatches(YoutubeTitleTeamOccurenceDTO dto);
 
     }
 }

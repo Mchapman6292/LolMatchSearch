@@ -1,6 +1,6 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs; 
-using Domain.DTOs.PlayListDateRangeDTOs;
+﻿using Domain.DTOs.PlayListDateRangeDTOs;
 using Domain.DTOs.TeamnameDTOs;
+using Domain.Enums.TeamNameTypes;
 using Domain.Interfaces.ApplicationInterfaces.IDTOBuilders.PlayListDateRangeServices;
 using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.ITeamNameDTOBuilders;
@@ -8,6 +8,7 @@ using Domain.Interfaces.ApplicationInterfaces.IYoutubeDataWithTeamsDTOBuilders;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
+using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
 using Domain.Interfaces.InfrastructureInterfaces.IImport_TeamnameRepositories;
 using Domain.Interfaces.InfrastructureInterfaces.IObjectLoggers;
 using Domain.Interfaces.InfrastructureInterfaces.IStoredSqlFunctionCallers;
@@ -19,11 +20,6 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceCon
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
-using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
-using Domain.Enums.TeamNameTypes;
-using Infrastructure.Repositories.ImportRepositories.Import_YoutubeDataRepositories;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
@@ -138,22 +134,15 @@ public class MatchComparisonController : IMatchComparisonController
             {
                 occurencesWithLessThanTwoMatches.Add(occurrenceUpdatedWithAllMatches);
             }
-
-
             updatedOccurences.Add(occurrenceUpdatedWithAllMatches);
         }
 
-        _objectLogger.LogTeamIdsWithMostMatches(updatedOccurences);
-
-        if(occurencesWithLessThanTwoMatches.Any())
+        foreach(var occurence in updatedOccurences)
         {
-            _objectLogger.LogTeamIdsWithMostMatches(occurencesWithLessThanTwoMatches);
+            _objectLogger.LogTeamMatches(occurence);
         }
 
-        if(occurencesWithLessThanTwoMatches.Count == 0)
-        {
-            _appLogger.Debug($" No videos with less than two matches found");
-        }    
+
 
     }
 

@@ -19,6 +19,7 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Newtonsoft.Json.Linq;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.Entities.Imported_Entities.Import_TournamentEntities;
+using Domain.Entities.Imported_Entities.Import_LeagueEntities;
 
 
 
@@ -48,7 +49,8 @@ namespace LolMatchFilterNew.Application.Controllers
         private readonly IGenericRepository<Import_YoutubeDataEntity> _generic_Import_YoutubeDataEntity;
         private readonly IGenericRepository<Import_TeamRedirectEntity> _generic_Import_TeamRedirectEntity;
         private readonly IGenericRepository<Import_TeamnameEntity> _generic_Import_TeamnameEntity;
-        private readonly IGenericRepository<Import_TournamentEntity> _generic_Import_TournamentEntity;  
+        private readonly IGenericRepository<Import_TournamentEntity> _generic_Import_TournamentEntity;
+        private readonly IGenericRepository<Import_LeagueEntity> _generic_Import_LeagueEntity;
 
 
         private readonly IGenericRepository<Processed_LeagueTeamEntity> _generic_Processed_LeagueTeam;
@@ -80,6 +82,7 @@ namespace LolMatchFilterNew.Application.Controllers
         IGenericRepository<Import_ScoreboardGamesEntity> genericImport_ScoreboardGamesEntity,
         IGenericRepository<Import_TeamnameEntity> genericImport_TeamnameEntity,
         IGenericRepository<Import_TournamentEntity> genericImport_TournamentEntity,
+        IGenericRepository<Import_LeagueEntity> genericImport_LeagueEntity,
 
         IGenericRepository<Processed_LeagueTeamEntity> genericProcessed_leagueTeamRepository
         )
@@ -105,6 +108,7 @@ namespace LolMatchFilterNew.Application.Controllers
             _generic_Import_ScoreboardGamesEntity = genericImport_ScoreboardGamesEntity;
             _generic_Import_TeamnameEntity = genericImport_TeamnameEntity;
             _generic_Import_TournamentEntity = genericImport_TournamentEntity;
+            _generic_Import_LeagueEntity = genericImport_LeagueEntity;
 
 
             _generic_Processed_LeagueTeam = genericProcessed_leagueTeamRepository;
@@ -280,6 +284,18 @@ namespace LolMatchFilterNew.Application.Controllers
                 .ToList();
 
             await _generic_Import_TournamentEntity.AddRangeWithTransactionAsync(distinctEntities);
+        }
+
+
+
+        public async Task ControllerAddLeagueToDatabase()
+        {
+            IEnumerable<JObject> leagues = await _leaguepediaDataFetcher.FetchAndExtractMatches();
+
+            List<Import_LeagueEntity> mappedEntities = await _leaguepediaApiMapper.MapToImport_Leagues(leagues);
+
+
+            await _generic_Import_LeagueEntity.AddRangeWithTransactionAsync(mappedEntities);
         }
 
 

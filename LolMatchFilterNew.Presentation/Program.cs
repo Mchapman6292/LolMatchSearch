@@ -112,7 +112,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
+                await APIController.ControllerAddLeagueToDatabase();
 
 
 

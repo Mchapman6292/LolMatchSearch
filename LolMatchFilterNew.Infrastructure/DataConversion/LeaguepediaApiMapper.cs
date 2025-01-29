@@ -20,6 +20,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamE
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.Entities.Imported_Entities.Import_TournamentEntities;
+using Domain.Entities.Imported_Entities.Import_LeagueEntities;
 namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 {
     public class LeaguepediaApiMapper : ILeaguepediaApiMapper
@@ -550,6 +551,53 @@ namespace LolMatchFilterNew.Infrastructure.DataConversion.LeaguepediaApiMappers
 
 
 
+
+
+
+
+
+
+
+        public async Task<List<Import_LeagueEntity>> MapToImport_Leagues(IEnumerable<JObject> leagueData)
+        {
+            if (leagueData == null || !leagueData.Any())
+            {
+                _appLogger.Error($"Input data cannot be null or empty for {nameof(MapToImport_Leagues)}.");
+                throw new ArgumentNullException(nameof(leagueData), "Input data cannot be null or empty.");
+            }
+
+            return await Task.Run(() =>
+            {
+                var results = new List<Import_LeagueEntity>();
+                int processedCount = 0;
+
+                foreach (var league in leagueData)
+                {
+                    processedCount++;
+                    try
+                    {
+                        var entity = new Import_LeagueEntity
+                        {
+                            LeagueName = _apiHelper.GetStringValue(league, "League"),            
+                            LeagueShortName = _apiHelper.GetNullableStringValue(league, "LeagueShort"),  
+                            Region = _apiHelper.GetNullableStringValue(league, "Region"),       
+                            Level = _apiHelper.GetNullableStringValue(league, "Level"),        
+                            IsOfficial = _apiHelper.GetNullableStringValue(league, "IsOfficial") 
+                        };
+
+                        results.Add(entity);
+                    }
+                    catch (Exception ex)
+                    {
+                        _appLogger.Error($"Error processing league data {processedCount}: {ex.Message}");
+                        _appLogger.Error($"Raw data: {league}");
+                    }
+                }
+
+                _appLogger.Info($"Deserialized {results.Count} league entities out of {processedCount} processed.");
+                return results;
+            });
+        }
 
 
 

@@ -1,6 +1,6 @@
-﻿using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
-using Domain.DTOs.TeamnameDTOs;
+﻿using Domain.Enums.TeamNameTypes;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamMatchCountFactories;
+using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 
 
 namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMatchCountFactories
@@ -13,10 +13,11 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTitleTeamMat
         {
             return new YoutubeTitleTeamOccurenceDTO
             {
+
                 YoutubeTitle = youtubeTitle,
                 LongNameCount = longNameCount,
-                AllMatchingTeamNameIds = new Dictionary<string, List<string>>(),
-                TeamIdsWithMostMatches = new Dictionary<string, List<string>>(),
+                AllMatchingTeamNameIds = new Dictionary<string, List<(TeamNameType, string)>>(),
+                TeamIdsWithMostMatches = new Dictionary<string, List<(TeamNameType, string)>>(),
                 MediumNameCount = mediumNameCount,
                 ShortNameCount = shortNameCount,
                 MatchingInputsCount = matchingInputsCount,

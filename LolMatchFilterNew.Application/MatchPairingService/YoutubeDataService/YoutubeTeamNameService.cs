@@ -35,8 +35,7 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
         private readonly IImport_TeamNameService _importTeamNameService;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
 
-        private List<YoutubeTitleTeamOccurenceDTO> _youtubeTitleTeamMatchCounts { get; }
-
+        public List<YoutubeTitleTeamOccurenceDTO> _youtubeTitleTeamNameOccurrencesList { get; private set; }
 
 
         public YoutubeTeamNameService(
@@ -60,30 +59,36 @@ namespace Application.MatchPairingService.YoutubeDataService.YoutubeTeamNameServ
             _youtubeTitleTeamMatchCountFactory = youtubeTitleTeamMatchCountFactory;
             _importTeamNameService = importTeamNameService;
             _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
-            _youtubeTitleTeamMatchCounts = new List<YoutubeTitleTeamOccurenceDTO>();
+            _youtubeTitleTeamNameOccurrencesList = new List<YoutubeTitleTeamOccurenceDTO>();
 
 
         }
 
         // Creates the initial list of YoutubeTitleTeamOccurenceDTO with only the YoutubeTitle added, the other properties are updated once the methods in YoutubeTitleTeamOccurrenceService are called on the DTO.
 
-        public void PopulateYoutubeTitleTeamMatchCountList(List<Import_YoutubeDataEntity> teamNames)
+        public void PopulateYoutubeTitleTeamNameOccurrencesList(List<Import_YoutubeDataEntity> teamNames)
         {
             foreach (var teamName in teamNames)
             {
                 var dto = _youtubeTitleTeamMatchCountFactory.CreateNewYoutubeTitleOccurenceDTO(teamName.VideoTitle);
-                _youtubeTitleTeamMatchCounts.Add(dto);
+                _youtubeTitleTeamNameOccurrencesList.Add(dto);
             }
-            _appLogger.Info($"Total count for _youtubeTitleTeamMatchCounts: {_youtubeTitleTeamMatchCounts.Count()}.");
+            _appLogger.Info($"Total count for _youtubeTitleTeamNameOccurrencesList: {_youtubeTitleTeamNameOccurrencesList.Count()}.");
         }
 
         public List<YoutubeTitleTeamOccurenceDTO> ReturnYoutubeTitleTeamMatchCounts()
         {
-            if (!_youtubeTitleTeamMatchCounts.Any())
+            if (!_youtubeTitleTeamNameOccurrencesList.Any())
             {
-                throw new InvalidOperationException($"YouTube title team match counts list has not been initialized. This list should be populated during service initialization by calling.{nameof(PopulateYoutubeTitleTeamMatchCountList)}.");
+                throw new InvalidOperationException($"YouTube title team match counts list has not been initialized. This list should be populated during service initialization by calling.{nameof(PopulateYoutubeTitleTeamNameOccurrencesList)}.");
             }
-            return _youtubeTitleTeamMatchCounts;
+            return _youtubeTitleTeamNameOccurrencesList;
+        }
+
+        // Has no use currently,  used to hold updated list of occurence dtos to share throughout solution if needed later. 
+        public void UpdateYoutubeTitleTeamOccurrences(List<YoutubeTitleTeamOccurenceDTO> occurenceDTOs)
+        {
+            _youtubeTitleTeamNameOccurrencesList = occurenceDTOs;
         }
 
         // Needed?

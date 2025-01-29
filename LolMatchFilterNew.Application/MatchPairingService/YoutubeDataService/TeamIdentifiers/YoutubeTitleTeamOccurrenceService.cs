@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
+﻿using Domain.DTOs.TeamnameDTOs;
+using Domain.Enums.TeamNameTypes;
+using Domain.Interfaces.ApplicationInterfaces.IMatchDTOServices.IImport_TeamNameServices;
 using Domain.Interfaces.ApplicationInterfaces.IYoutubeTitleTeamNameFinders;
 using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers.IYoutubeTitleTeamOccurrenceServices;
 using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
@@ -17,39 +19,46 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
 
 
 
-        public void TallyTeamNameOccurrences(YoutubeTitleTeamOccurenceDTO occurrenceDTO)
+        // EXCLUSION LOGIC MUST CHANGE
+
+
+        public YoutubeTitleTeamOccurenceDTO FindAllTeamNameMatchesInTitle(YoutubeTitleTeamOccurenceDTO occurrenceDTO)
         {
             string normalizedTitle = occurrenceDTO.YoutubeTitle.ToLower();
 
             // Check if title ends with G2
             bool endsWithG2 = G2_Game2_FalsePositive.IsMatch(normalizedTitle);
 
+
             // If it does, create a temporary version without G2 for matching
             string titleForMatching = endsWithG2
                 ? normalizedTitle.Substring(0, normalizedTitle.Length - 2).Trim()
                 : normalizedTitle;
 
+            List<TeamNameDTO> allTeamNAmes = _importTeamNameService.ReturnImport_TeamNameAllNames();
 
 
-            foreach (var teamNameDto in _importTeamNameService.ReturnImport_TeamNameAllNames())
+
+            foreach (var teamNameDto in allTeamNAmes)
             {
-                var matchesForTeam = new List<string>();
+                var matchesForTeam = new List<(TeamNameType, string)>();
 
-                if (teamNameDto.ShortName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.ShortName, normalizedTitle))
+                if (teamNameDto.ShortName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.ShortName, titleForMatching))
                 {
                     IncrementCount(occurrenceDTO, "Short", 1);
+                    matchesForTeam.Add((TeamNameType.Short, teamNameDto.ShortName));
                 }
 
-                if (teamNameDto.MediumName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.MediumName, normalizedTitle))
+                if (teamNameDto.MediumName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.MediumName, titleForMatching))
                 {
                     IncrementCount(occurrenceDTO, "Medium", 1);
-                    matchesForTeam.Add(teamNameDto.MediumName);
+                    matchesForTeam.Add((TeamNameType.Medium, teamNameDto.MediumName));
                 }
 
-                if (teamNameDto.LongName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.LongName, normalizedTitle))
+                if (teamNameDto.LongName != null && _youtubeTitleTeamNameFinder.CheckNameMatch(teamNameDto.LongName, titleForMatching))
                 {
                     IncrementCount(occurrenceDTO, "Long", 1);
-                    matchesForTeam.Add(teamNameDto.LongName);
+                    matchesForTeam.Add((TeamNameType.Long, teamNameDto.LongName));
                 }
 
 
@@ -57,20 +66,25 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
                 {
                     foreach (var input in teamNameDto.FormattedInputs)
                     {
-                        if (_youtubeTitleTeamNameFinder.CheckNameMatch(input, normalizedTitle))
+                        if (_youtubeTitleTeamNameFinder.CheckNameMatch(input, titleForMatching))
                         {
                             IncrementCount(occurrenceDTO, "Inputs", 1);
-                            matchesForTeam.Add(input);
+                            matchesForTeam.Add((TeamNameType.Input, input));
                         }
                     }
                 }
 
                 if (matchesForTeam.Any())
                 {
-                    UpdateMatchingTeamNameIds(occurrenceDTO, teamNameDto.LongName, matchesForTeam);
+                    UpdateMatchingTeamNameIds(occurrenceDTO, teamNameDto.TeamNameId, matchesForTeam);
                 }
             }
+            return occurrenceDTO;
+
+
         }
+
+
 
 
 
@@ -88,19 +102,15 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
             matchResultDTO.YoutubeTitle = title;
         }
 
+        // 
 
-
-        public void UpdateMatchingTeamNameIds(YoutubeTitleTeamOccurenceDTO matchResultDTO, string teamNameId, List<string> matches)
+        public void UpdateMatchingTeamNameIds(YoutubeTitleTeamOccurenceDTO occurrenceDTO, string teamNameId, List<(TeamNameType, string)> matches)
         {
-            if (matchResultDTO.AllMatchingTeamNameIds.Keys.Contains(teamNameId))
-            {
-                return;
-            }
-            matchResultDTO.AllMatchingTeamNameIds.Add(teamNameId, matches);
+            occurrenceDTO.AllMatchingTeamNameIds.Add(teamNameId, matches);
         }
 
 
-        public void IncrementCount(YoutubeTitleTeamOccurenceDTO matchResultDTO, string countType, int increment)
+        public void IncrementCount(YoutubeTitleTeamOccurenceDTO OccurrenceDTO, string countType, int increment)
         {
             if (countType != "Short" && countType != "Medium" && countType != "Long" && countType != "Inputs")
             {
@@ -110,26 +120,32 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
             switch (countType)
             {
                 case "Short":
-                    matchResultDTO.ShortNameCount += increment;
+                    OccurrenceDTO.ShortNameCount += increment;
                     break;
                 case "Medium":
-                    matchResultDTO.MediumNameCount += increment;
+                    OccurrenceDTO.MediumNameCount += increment;
                     break;
                 case "Long":
-                    matchResultDTO.LongNameCount += increment;
+                    OccurrenceDTO.LongNameCount += increment;
                     break;
                 case "Inputs":
-                    matchResultDTO.MatchingInputsCount += increment;
+                    OccurrenceDTO.MatchingInputsCount += increment;
                     break;
             }
         }
 
 
 
-        public Dictionary<string, List<string>> GetTeamIdsWithHighestOccurences(YoutubeTitleTeamOccurenceDTO matchDTO)
+        public Dictionary<string, List<(TeamNameType,string)>> GetTeamIdsWithHighestOccurences(YoutubeTitleTeamOccurenceDTO matchDTO)
         {
             // Dict to hold counts of all potential matches. 
             Dictionary<string, int> teamIdsWithCountsOfMatches = new Dictionary<string, int>();
+
+            // Create result dictionary to store matches with top counts
+            Dictionary<string, List<(TeamNameType, string)>> result = new Dictionary<string, List<(TeamNameType, string)>>();
+
+            int numberOfTeamsAdded = 0;
+
 
             foreach (var teamidMatch in matchDTO.AllMatchingTeamNameIds)
             {
@@ -144,12 +160,11 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
                 .Take(2)
                 .ToList();
 
-            // Create result dictionary to store matches with top counts
-            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
 
             // Get the actual count values from top two entries
             int firstCount = topTwoCounts[0].Value;
             int secondCount = topTwoCounts.Count > 1 ? topTwoCounts[1].Value : firstCount;
+
 
             // Add all teams that match either of the top two counts
             foreach (var teamMatch in matchDTO.AllMatchingTeamNameIds)
@@ -158,19 +173,37 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
                 if (currentCount == firstCount || currentCount == secondCount)
                 {
                     result.Add(teamMatch.Key, teamMatch.Value);
+                    numberOfTeamsAdded++;
                 }
             }
-
             return result;
         }
 
-        public void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO matchDTO, Dictionary<string, List<string>> teamIdWithMatches)
+
+        // This may be incorrect/not needed. 
+        public void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO, Dictionary<string, List<(TeamNameType,string)>> teamIdWithMatches)
         {
-            matchDTO.TeamIdsWithMostMatches = teamIdWithMatches;
+            if(occurrenceDTO.AllMatchingTeamNameIds.Keys.Count <= 2)
+            {
+                occurrenceDTO.TeamIdsWithMostMatches = occurrenceDTO.AllMatchingTeamNameIds;
+            }
+
+            var result =  occurrenceDTO.AllMatchingTeamNameIds
+                    .Where(kvp => kvp.Value.Any(tuple => tuple.Item1 == TeamNameType.Long))
+                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            occurrenceDTO.TeamIdsWithMostMatches = result;
         }
 
 
-        // EXCLUSION LOGIC MUST CHANGE
+
+        public void TESTPopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO,
+    Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches)
+        {
+            occurrenceDTO.TeamIdsWithMostMatches = teamIdWithMatches;
+        }
+
+
 
 
 

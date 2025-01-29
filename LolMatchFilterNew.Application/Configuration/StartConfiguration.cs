@@ -150,6 +150,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddSingleton<IPlayListDateRangeService, PlayListDateRangeService>();
                   services.AddSingleton<IWesternMatchDTOFactory, WesternMatchDTOFactory>();
                   services.AddSingleton<IYoutubeTitleTeamOccurenceService, YoutubeTitleTeamOccurrenceService>();
+                  services.AddSingleton<IMatchComparisonController, MatchComparisonController>();
 
 
                   services.AddTransient<IYoutubeApi, YoutubeApi>();
@@ -175,7 +176,6 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IObjectLogger, ObjectLogger>();
                   services.AddTransient<IYoutubeDataWithTeamsDTOBuilder, YoutubeDataWithTeamsDTOBuilder>();
                   services.AddTransient<IMatchComparisonResultBuilder, MatchComparisonResultBuilder>();
-                  services.AddTransient<IMatchComparisonController, MatchComparisonController>();
                   services.AddTransient<IImport_TournamentRepository, Import_TournamentRepository>();
                   services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
                   services.AddTransient<IPlayListDateRangeService, PlayListDateRangeService>();

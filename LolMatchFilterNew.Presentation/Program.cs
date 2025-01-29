@@ -18,7 +18,25 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaA
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-/* Current Problems
+/* Current
+ * How to narrow down potential matches 
+ * - Needed the TeamLongName to join to Teams table, as TeamNameId not used in TeamsTable
+ * 
+ * -- CURRENT  Also wanted to define types of matches to give weight to longNames over abbreviations etc. -- 
+ *              - Methods to give weight to longname etc.
+ *              - Current approach handling duplictes correctly? e.g tallying twice if longName appears in Inputs.
+ * 
+
+
+
+
+
+
+
+
+
+
+/*  Issues
  
  * Move factory/builder classes with only one method to the service class?
 
@@ -29,8 +47,19 @@ using Microsoft.Extensions.Hosting;
  * TEAMNAME VS LONGNAME MISMATCH
   - Team abbreviation in database but not in Youtube video -   Solved, match was occuring but other false positives had more hits
 
+  - Common false positives VS,G2,shortNames that match abbreviations 
+
   - IsExactWordOccurrence only returns the first occurrence of a team input. 
-    Can return an incorrect team name if matched too soon.
+    Can return an incorrect team name if matched too soon. 
+    Caused issues where a false match stopped searching the rest of the title for any other matches. 
+    e.g  
+    Giants vs Roccat Game 1 Highlights, EU LCS W9D2 Summer 2016 Season 6, GIA vs ROC G1, 
+    This meant that shortname would not match for Roc as it would return false after finding an occurence in Roccat
+    
+
+
+
+
     
 
 
@@ -80,7 +109,6 @@ namespace LolMatchFilterNew.Presentation
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
                 var import_TeamNameService = scope.ServiceProvider.GetRequiredService<IImport_TeamNameService>();
                 var youtubeTeamNameService = scope.ServiceProvider.GetRequiredService<IYoutubeTeamNameService>();
-
 
 
 

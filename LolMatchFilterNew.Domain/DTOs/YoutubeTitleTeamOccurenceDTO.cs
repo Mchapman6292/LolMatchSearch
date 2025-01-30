@@ -7,7 +7,6 @@ namespace LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs
     public class YoutubeTitleTeamOccurenceDTO
     {
 
-
         public string YoutubeTitle { get; set; } = string.Empty;
 
         // When a LongName, Medium etc is matched within a youtube title,the TeamNameId is added as a key with all the types of matches added as values

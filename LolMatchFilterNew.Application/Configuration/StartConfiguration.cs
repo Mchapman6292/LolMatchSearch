@@ -53,7 +53,7 @@ using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers
 using Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.YoutubeTitleTeamOccurenceServices;
 
 
-
+using Infrastructure.Repositories.MultipleTableRepositories.CrossTableRepositories;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using LolMatchFilterNew.Domain.Interfaces.IMatchFilterDbContext;
@@ -92,6 +92,7 @@ using Application.DTOFactories.WesternMatchDTOFactories;
 using Application.MatchPairingService.YoutubeDataService.DateIdentifiers.PlayListDateRangeServices;
 using Domain.Interfaces.InfrastructureInterfaces.IImportRepositories.IImport_TeamsRepositories;
 using Infrastructure.Repositories.ImportRepositories.Import_TeamsRepositories;
+using Domain.Interfaces.InfrastructureInterfaces.Repositories.MultipleTableRepositories.ICrossTableRepositories;
 
 
 namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
@@ -180,6 +181,7 @@ namespace LolMatchFilterNew.Application.Configuration.StartConfiguration
                   services.AddTransient<IImportTournamentDTOFactory, ImportTournamentDTOFactory>();
                   services.AddTransient<IPlayListDateRangeService, PlayListDateRangeService>();
                   services.AddTransient<IImport_TeamsRepository, Import_TeamsRepository>();
+                  services.AddTransient<ICrossTableRepository, CrossTableRepository>();
  
                   services.AddTransient<IYoutubeTitleTeamMatchCountFactory, YoutubeTitleTeamMatchCountFactory>();
 

@@ -20,6 +20,10 @@ using LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServiceCon
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_ScoreboardGamesRepositories;
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_YoutubeDataRepositories;
+using Domain.Enums.TournamentsInRegionEnums;
+using Application.DatabaseMappingReferences.TournamentsInRegions;
+using Domain.Interfaces.InfrastructureInterfaces.Repositories.MultipleTableRepositories.ICrossTableRepositories;
+
 
 
 namespace Application.MatchPairingService.MatchComparisonResultService.MatchComparisonControllers;
@@ -37,6 +41,7 @@ public class MatchComparisonController : IMatchComparisonController
     private readonly IPlayListDateRangeService _playListDateRangeService;
     private readonly IImport_ScoreboardGamesRepository _import_ScoreboardGamesRepository;
     private readonly IYoutubeTitleTeamOccurenceService _youtubeTitleTeamOccurenceService;
+    private readonly ICrossTableRepository _crossTableRepository;
 
 
     private readonly IYoutubeTeamNameService _youtubeTeamNameService;
@@ -64,6 +69,7 @@ public class MatchComparisonController : IMatchComparisonController
         IImport_TeamNameService import_TeamnNameService,
         IYoutubeTeamNameService youtubeTeamNameService,
         IImport_TeamnameRepository import_TeamnameRepository,
+        ICrossTableRepository crossTableRepository,
 
         IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder,
         IYoutubeTitleTeamMatchCountFactory youtubeTitleTeamMatchCountFactory,
@@ -83,6 +89,7 @@ public class MatchComparisonController : IMatchComparisonController
         _processed_YoutubeDataDTOBuilder = proccessed_YoutubeDataDTOBuilder;
         _playListDateRangeService = playListDateRangeService;
         _import_ScoreboardGamesRepository = import_ScoreboardGamesRepository;
+        _crossTableRepository = crossTableRepository;
 
         _youtubeTeamNameService = youtubeTeamNameService;
         _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
@@ -93,7 +100,20 @@ public class MatchComparisonController : IMatchComparisonController
 
     }
 
+    public async Task TESTCallCrossTableRepository()
+    {
+        TournamentsInRegion tir = new TournamentsInRegion();
 
+        List<string> tournaments = tir.LeagueNameByRegion[TournamentsInRegionEnum.Europe].ToList();
+
+        var teams = await _crossTableRepository.GetTeamLeagueHistoryAsync(tournaments);
+
+        foreach(var team in teams)
+        {
+            _appLogger.Info($"Team retrieved {team.TeamName}");
+        }
+        
+    }
 
 
 

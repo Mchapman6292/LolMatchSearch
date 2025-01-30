@@ -168,6 +168,19 @@ namespace LolMatchFilterNew.Application.QueryBuilders.LeaguepediaQueryService
         }
 
 
+        public string BuildQueryStringLeagues(int queryLimit, int offset = 0)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["action"] = "cargoquery";
+            query["format"] = "json";
+            query["tables"] = "Leagues=L";
+            query["fields"] = "L.League=League,L.League_Short=LeagueShort,L.Region=Region,L.Level=Level,L.IsOfficial=IsOfficial";
+            query["limit"] = queryLimit.ToString();
+            query["offset"] = offset.ToString();
+            return $"{BaseUrl}?{query}";
+        }
+
+
 
 
 

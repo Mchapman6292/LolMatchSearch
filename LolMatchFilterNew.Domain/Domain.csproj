@@ -48,7 +48,6 @@
   <ItemGroup>
     <Folder Include="DTOs\ApplicationDTO\" />
     <Folder Include="DTOs\DomainDTO\" />
-    <Folder Include="DTOs\InfrastructureDTO\" />
     <Folder Include="DTOs\PresentationDTO\" />
     <Folder Include="Interfaces\ApplicationInterfaces\YoutubeDataService\DateIdentifiers\" />
     <Folder Include="LeaguepediaService\" />

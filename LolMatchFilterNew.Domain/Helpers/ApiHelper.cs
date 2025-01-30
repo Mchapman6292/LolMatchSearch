@@ -1,13 +1,10 @@
-﻿using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
-using Xceed.Words.NET;
-using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
-using Activity = System.Diagnostics.Activity;
+﻿using LolMatchFilterNew.Domain.Interfaces.IApiHelper;
+using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using Microsoft.Extensions.Configuration;
-using Google.Apis.YouTube.v3.Data;
 using Newtonsoft.Json.Linq;
-using Xceed.Document.NET;
 using Npgsql;
-using System.Text;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 namespace LolMatchFilterNew.Domain.Helpers.ApiHelper
 {

@@ -17,6 +17,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IMatchServic
 
         Task TESTGetPlaylistDateRanges();
 
+        Task TESTCallCrossTableRepository();
+
 
 
     }

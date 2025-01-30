@@ -22,6 +22,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.DomainInterfaces.ILeaguepediaQuery
 
         string BuildQueryStringTournaments(int queryLimit, int offset = 0);
 
+        string BuildQueryStringLeagues(int queryLimit, int offset = 0);
+
 
 
 

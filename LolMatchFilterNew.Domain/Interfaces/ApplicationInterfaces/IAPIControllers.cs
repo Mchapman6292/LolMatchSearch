@@ -30,6 +30,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.ApplicationInterfaces.IAPIControll
 
         Task ControllerAddTeamnameToDatabase();
 
+        Task ControllerAddLeagueToDatabase();
+
 
 
     }

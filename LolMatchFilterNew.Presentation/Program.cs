@@ -17,6 +17,9 @@ using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.IImport_Youtu
 using LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Domain.Interfaces.InfrastructureInterfaces.Repositories.MultipleTableRepositories.ICrossTableRepositories;
+using Domain.Enums.TournamentsInRegionEnums;
+using Application.DatabaseMappingReferences.TournamentsInRegions;
 
 /* Current
  * How to narrow down potential matches 
@@ -26,6 +29,7 @@ using Microsoft.Extensions.Hosting;
  *              - Methods to give weight to longname etc.
  *              - Current approach handling duplictes correctly? e.g tallying twice if longName appears in Inputs.
  * 
+
 
 
 
@@ -69,6 +73,11 @@ using Microsoft.Extensions.Hosting;
     Define Tournaments/Teams to narrow list of potential matches?
     Get a Teams all known opponents from SG and use that as the search parameters?
     Define a new table in database, slowly add videos for each playlist, using smaller search window?
+    
+
+    - Create a new query get all teamIds that have played a game in each of the primary leagues,
+    - Include date to narrow window. 
+
 
 
 * DTO Classes/Teams Data structure. 
@@ -109,14 +118,11 @@ namespace LolMatchFilterNew.Presentation
                 var matchComparisonController = scope.ServiceProvider.GetRequiredService<IMatchComparisonController>();
                 var import_TeamNameService = scope.ServiceProvider.GetRequiredService<IImport_TeamNameService>();
                 var youtubeTeamNameService = scope.ServiceProvider.GetRequiredService<IYoutubeTeamNameService>();
+                var crossTableRepository = scope.ServiceProvider.GetRequiredService<ICrossTableRepository>();
 
 
 
-                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
-
-
-
-
+                await matchComparisonController.TESTCallCrossTableRepository();
 
 
 

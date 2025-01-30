@@ -10,6 +10,7 @@ using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamsTableEntit
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_YoutubeDataEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.Entities.Imported_Entities.Import_TournamentEntities;
+using Domain.Entities.Imported_Entities.Import_LeagueEntities;
 
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamEntities;
 using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_ProPlayerEntities;
@@ -19,6 +20,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_YoutubeData
 using Domain.DTOs.Western_MatchDTOs;
 using Domain.DTOs.TeamnameDTOs;
 using Domain.DTOs.YoutubeDataWithTeamsDTOs;
+using Domain.DTOs.InfrastructureDTO.TeamsInLeagueDTOS;
 
 namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
 {
@@ -38,6 +40,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<Import_TeamRedirectEntity> Import_TeamRedirect { get; set; }
         public DbSet<Import_TeamnameEntity> Import_Teamname { get; set; }
         public DbSet<Import_TournamentEntity> Import_Tournament { get; set; }
+        public DbSet<Import_LeagueEntity> Import_League { get; set; }
  
 
 
@@ -50,6 +53,7 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
         public DbSet<WesternMatchDTO> WesternMatchesSet { get; set; }
         public DbSet<TeamNameDTO> TeamnamesSet { get; set; }
         public DbSet<YoutubeDataWithTeamsDTO> YoutubeSet { get; set; }
+        public DbSet<TeamsInLeagueDTO> teamsInLeague { get; set ;}
 
 
 
@@ -183,6 +187,17 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
                 entity.Property(e => e.AlternativeNames).HasColumnName("alternative_names");
                 entity.Property(e => e.Tags).HasColumnName("tags");
             });
+
+            modelBuilder.Entity<Import_LeagueEntity>(entity =>
+            {
+                entity.ToTable("import_leagues");
+                entity.HasKey(l => l.LeagueName);
+                entity.Property(l => l.LeagueName).HasColumnName("league_name").IsRequired();
+                entity.Property(l => l.LeagueShortName).HasColumnName("league_short_name");
+                entity.Property(l => l.Region).HasColumnName("region");
+                entity.Property(l => l.Level).HasColumnName("level");
+                entity.Property(l => l.IsOfficial).HasColumnName("is_official");
+            });
         
 
 
@@ -255,6 +270,11 @@ namespace LolMatchFilterNew.Infrastructure.DbContextService.MatchFilterDbContext
             modelBuilder.Entity<YoutubeDataWithTeamsDTO>(entity =>
             {
                 entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<TeamsInLeagueDTO>(entity =>
+            { 
+                entity.HasNoKey(); 
             });
 
 

@@ -13,6 +13,7 @@ using LolMatchFilterNew.Domain.Entities.Processed_Entities.Processed_LeagueTeamE
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_TeamRedirectEntities;
 using LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames;
 using Domain.Entities.Imported_Entities.Import_TournamentEntities;
+using Domain.Entities.Imported_Entities.Import_LeagueEntities;
 
 namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepediaApiMappers
 {
@@ -33,5 +34,8 @@ namespace LolMatchFilterNew.Domain.Interfaces.InfrastructureInterfaces.ILeaguepe
         Task<IEnumerable<Import_TeamnameEntity>> MapToImport_Teamname(IEnumerable<JObject> apiData);
 
         Task<List<Import_TournamentEntity>> MapToImport_Tournaments(IEnumerable<JObject> tournamentData);
+
+
+        Task<List<Import_LeagueEntity>> MapToImport_Leagues(IEnumerable<JObject> leagueData);
     }
 }

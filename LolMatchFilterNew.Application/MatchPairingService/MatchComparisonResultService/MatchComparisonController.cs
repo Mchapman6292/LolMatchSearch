@@ -110,7 +110,8 @@ public class MatchComparisonController : IMatchComparisonController
 
         foreach(var team in teams)
         {
-            _appLogger.Info($"Team retrieved {team.TeamName}");
+            _appLogger.Info($"Team retrieved {team.TeamName} \n             Year: {team.Year}.");
+            _appLogger.Info($"----------------------------------------------------");
         }
         
     }
@@ -148,7 +149,7 @@ public class MatchComparisonController : IMatchComparisonController
             YoutubeTitleTeamOccurenceDTO occurrenceUpdatedWithAllMatches = _youtubeTitleTeamOccurenceService.FindAllTeamNameMatchesInTitle(youtubeOccurenceDto);
             Dictionary<string, List<(TeamNameType, string)>> teamIdWithMostMatches = _youtubeTitleTeamOccurenceService.GetTeamIdsWithHighestOccurences(occurrenceUpdatedWithAllMatches);
 
-            _youtubeTitleTeamOccurenceService.TESTPopulateTeamIdsWithMostMatches(occurrenceUpdatedWithAllMatches, teamIdWithMostMatches);
+            _youtubeTitleTeamOccurenceService.PopulateTeamIdsWithMostMatches(occurrenceUpdatedWithAllMatches, teamIdWithMostMatches);
 
             if(youtubeOccurenceDto.TeamIdsWithMostMatches.Count < 2)
             {

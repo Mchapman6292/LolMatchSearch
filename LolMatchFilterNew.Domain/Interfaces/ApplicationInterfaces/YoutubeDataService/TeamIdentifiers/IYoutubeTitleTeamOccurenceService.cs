@@ -16,8 +16,6 @@ namespace Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentif
         void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO, Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
 
 
-        void TESTPopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO,
-    Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches);
 
 
     }

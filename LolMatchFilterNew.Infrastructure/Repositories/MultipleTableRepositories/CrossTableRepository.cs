@@ -29,17 +29,22 @@ namespace Infrastructure.Repositories.MultipleTableRepositories.CrossTableReposi
         {
             var tournaments = await _matchFilterDbContext.Import_Tournament
                 .Where(t => targetLeagues.Contains(t.League) && t.Year != null)
-                .Select(t => new { t.TournamentName, t.League, t.Year })
+                .Select(t => new
+                {
+                    t.TournamentName,
+                    t.League,
+                    t.Year
+                })
                 .ToListAsync();
 
             var games = await _matchFilterDbContext.Import_ScoreboardGames
-                .Where(sg => tournaments.Select(t => t.TournamentName).Contains(sg.Tournament)
-                       && sg.Team1 != null && sg.Team2 != null)
+                .Where(sg => tournaments.Select(t => t.TournamentName).Contains(sg.Tournament) &&
+                             sg.Team1 != null && sg.Team2 != null)
                 .Select(sg => new
                 {
                     sg.Team1,
                     sg.Team2,
-                    Tournament = sg.Tournament,
+                    Tournament = sg.Tournament
                 })
                 .ToListAsync();
 
@@ -54,8 +59,8 @@ namespace Infrastructure.Repositories.MultipleTableRepositories.CrossTableReposi
                     })
                 .SelectMany(x => new[]
                 {
-           new { TeamName = x.Game.Team1, League = x.Tournament.League, Year = x.Tournament.Year },
-           new { TeamName = x.Game.Team2, League = x.Tournament.League, Year = x.Tournament.Year }
+            new { TeamName = x.Game.Team1, League = x.Tournament.League, Year = x.Tournament.Year },
+            new { TeamName = x.Game.Team2, League = x.Tournament.League, Year = x.Tournament.Year }
                 })
                 .Where(x => !x.TeamName.Contains("TBD", StringComparison.OrdinalIgnoreCase))
                 .GroupBy(x => new { x.TeamName, x.Year })
@@ -72,6 +77,7 @@ namespace Infrastructure.Repositories.MultipleTableRepositories.CrossTableReposi
 
             return results;
         }
+
 
 
 

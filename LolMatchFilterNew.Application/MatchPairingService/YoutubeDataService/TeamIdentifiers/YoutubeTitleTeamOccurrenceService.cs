@@ -6,6 +6,7 @@ using Domain.Interfaces.ApplicationInterfaces.YoutubeDataService.TeamIdentifiers
 using LolMatchFilterNew.Domain.DTOs.YoutubeTitleTeamOccurrenceDTOs;
 using LolMatchFilterNew.Domain.Interfaces.IAppLoggers;
 using System.Text.RegularExpressions;
+using Domain.Interfaces.InfrastructureInterfaces.Repositories.MultipleTableRepositories.ICrossTableRepositories;
 
 
 namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.YoutubeTitleTeamOccurenceServices
@@ -16,10 +17,21 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
         private readonly IAppLogger _appLogger;
         private readonly IYoutubeTitleTeamNameFinder _youtubeTitleTeamNameFinder;
         private readonly IImport_TeamNameService _importTeamNameService;
+        private readonly ICrossTableRepository _crossTableRepository;
 
 
+        public YoutubeTitleTeamOccurrenceService(IAppLogger appLogger, IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder, IImport_TeamNameService importTeamNameService, ICrossTableRepository crossTableRepository)
+        {
+            _appLogger = appLogger;
+            _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
+            _importTeamNameService = importTeamNameService;
+            _crossTableRepository = crossTableRepository;
+        }
 
         // EXCLUSION LOGIC MUST CHANGE
+
+
+
 
 
         public YoutubeTitleTeamOccurenceDTO FindAllTeamNameMatchesInTitle(YoutubeTitleTeamOccurenceDTO occurrenceDTO)
@@ -81,19 +93,18 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
             }
             return occurrenceDTO;
 
-
         }
 
 
 
 
 
-        public YoutubeTitleTeamOccurrenceService(IAppLogger appLogger, IYoutubeTitleTeamNameFinder youtubeTitleTeamNameFinder, IImport_TeamNameService importTeamNameService)
-        {
-            _appLogger = appLogger;
-            _youtubeTitleTeamNameFinder = youtubeTitleTeamNameFinder;
-            _importTeamNameService = importTeamNameService;
-        }
+
+
+
+
+
+
 
 
 
@@ -180,24 +191,9 @@ namespace Application.MatchPairingService.YoutubeDataService.TeamIdentifiers.You
         }
 
 
-        // This may be incorrect/not needed. 
-        public void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO, Dictionary<string, List<(TeamNameType,string)>> teamIdWithMatches)
-        {
-            if(occurrenceDTO.AllMatchingTeamNameIds.Keys.Count <= 2)
-            {
-                occurrenceDTO.TeamIdsWithMostMatches = occurrenceDTO.AllMatchingTeamNameIds;
-            }
-
-            var result =  occurrenceDTO.AllMatchingTeamNameIds
-                    .Where(kvp => kvp.Value.Any(tuple => tuple.Item1 == TeamNameType.Long))
-                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-            occurrenceDTO.TeamIdsWithMostMatches = result;
-        }
 
 
-
-        public void TESTPopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO,Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches)
+        public void PopulateTeamIdsWithMostMatches(YoutubeTitleTeamOccurenceDTO occurrenceDTO,Dictionary<string, List<(TeamNameType, string)>> teamIdWithMatches)
         {
             occurrenceDTO.TeamIdsWithMostMatches = teamIdWithMatches;
         }

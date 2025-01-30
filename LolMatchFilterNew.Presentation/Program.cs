@@ -122,7 +122,7 @@ namespace LolMatchFilterNew.Presentation
 
 
 
-                await matchComparisonController.TESTCallCrossTableRepository();
+                await matchComparisonController.TESTFindTeamNameMatchesInYoutubeTitleAsync();
 
 
 

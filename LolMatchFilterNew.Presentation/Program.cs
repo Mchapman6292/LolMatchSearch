@@ -80,11 +80,19 @@ using Application.DatabaseMappingReferences.TournamentsInRegions;
 
 
 
-* DTO Classes/Teams Data structure. 
-* Linking Matching Teams in YoutubeTitleTeamOccurenceDTO to Teams or TeamName?
-* Having different types of dtos used in Application for teams will cause confusion later.
-* Decide what data should be held within One/Two team classes/DTOs.
- */
+    * DTO Classes/Teams Data structure. 
+    * Linking Matching Teams in YoutubeTitleTeamOccurenceDTO to Teams or TeamName?
+    * Having different types of dtos used in Application for teams will cause confusion later.
+    * Decide what data should be held within One/Two team classes/DTOs.
+     */
+
+ /*
+  *  Joining teams to names in database
+  *  - 
+
+
+
+
 
 
 

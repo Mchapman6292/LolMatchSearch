@@ -59,8 +59,8 @@ namespace Infrastructure.Repositories.MultipleTableRepositories.CrossTableReposi
                     })
                 .SelectMany(x => new[]
                 {
-            new { TeamName = x.Game.Team1, League = x.Tournament.League, Year = x.Tournament.Year },
-            new { TeamName = x.Game.Team2, League = x.Tournament.League, Year = x.Tournament.Year }
+                    new { TeamName = x.Game.Team1, League = x.Tournament.League, Year = x.Tournament.Year },
+                    new { TeamName = x.Game.Team2, League = x.Tournament.League, Year = x.Tournament.Year }
                 })
                 .Where(x => !x.TeamName.Contains("TBD", StringComparison.OrdinalIgnoreCase))
                 .GroupBy(x => new { x.TeamName, x.Year })

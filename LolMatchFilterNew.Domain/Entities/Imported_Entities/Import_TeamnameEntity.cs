@@ -22,5 +22,6 @@ namespace LolMatchFilterNew.Domain.Entities.Imported_Entities.Import_Teamnames
         // E.g  Cerberus eSports, Inputs: {"cerberus esports (filipino team);cerberus esports ph;crbl ladies;cerberus ph;cerberus esports philippines;cer;cerberus esports (philippines)"}
 
         public List<string>? Inputs { get; set; }
+
     }
 }
